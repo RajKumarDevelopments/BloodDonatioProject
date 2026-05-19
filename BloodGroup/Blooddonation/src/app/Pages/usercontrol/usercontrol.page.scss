@@ -1,0 +1,86 @@
+
+.comm-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 95%;
+  max-height: 50%;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: _ngcontent-ng-c2884879356_slideUp 0.3s ease-in-out;
+  right: 0;
+  scrollbar-width: none;
+}
+
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  padding: 12px;
+  background-color: #ececec;
+  /*border-radius: 8px;*/
+  margin: 10px;
+}
+
+.selected {
+  font-weight: bold;
+  text-align: end;
+  margin-right: .5rem;
+}
+.ion-no-margin {
+  margin-left: -.56rem!important;
+  margin-right: 1rem!important;
+  h3{
+      white-space: nowrap;
+  }
+}
+.custom-toast {
+  --background: #000000;
+  --color: #ffffff;
+}
+ion-footer{
+    position:fixed;
+    bottom:0;
+}
+ion-button::part(native) {
+  background: #ff0000 !important;
+  text-transform: none;
+  font-family: Helvetica !important;
+  font-size: 13px !important;
+      border-radius: 25px;
+      padding: 15px 0!important;
+}
+.card{
+    margin-top: 1rem;
+}
+.disabled-icon {
+  pointer-events: none;
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+ 

@@ -1,0 +1,253 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" *ngIf="val==1"><ion-icon name="chevron-back-outline" (click)="back()"></ion-icon></ion-col>
+      <ion-col size="2" *ngIf="val!=1"></ion-col>
+      <ion-col size="8">
+        <ion-title>GALLERY</ion-title>
+      </ion-col>
+      <ion-col size="2">
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="tab-wrap" *ngIf="val!=1">
+    <!-- Open Tab -->
+    <input type="radio" name="tabs" id="tab1" checked>
+    <input type="radio" name="tabs" id="tab2">
+  </div>
+
+
+  <!---All-->
+  <ion-row>
+    <div *ngIf="myid==1" style="display: flex;justify-content: center;align-items: center; width: 100%;">
+      <!-- No Records Found for All Gallery -->
+      <div *ngIf="(val!=1 || val==2) && (!otherimgs || otherimgs.length === 0)" class="ion-margin-top">
+        <ion-row>
+          <ion-col size="12">
+            <div class="center">
+              <div class="card">
+                <h4>No Records Found</h4>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div *ngIf="(val!=1 || val==2) && otherimgs && otherimgs.length > 0" class="gallery_imagess">
+        <div class="grid-img-wrap" *ngFor="let item of otherimgs">
+          <div (click)="change(item)">
+            <img src="{{HomeUrl+item.GalleryImages}}" alt="Framed Image" class="img1" />
+            <img src="{{item.GalleryImages}}" alt="Framed Image" class="img1" />
+          </div>
+          <ion-icon name="download-outline" class="grid-download-btn"
+            (click)="$event.stopPropagation(); downloadImage(item.GalleryImages)"></ion-icon>
+        </div>
+      </div>
+
+      <div *ngIf="val==1">
+        <ion-row>
+          <ion-col size="2"></ion-col>
+
+          <ion-col size="8">
+
+            <img src="{{mygallery}}" alt="Framed Image" class="img2" />
+
+          </ion-col>
+          <ion-col size="2"></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <ion-button fill="clear" (click)="downloadImage(mygallery)">
+              <ion-icon name="download-outline" slot="icon-only"
+                style="font-size: 30px; color: var(--ion-color-primary);"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+
+      </div>
+
+    </div>
+
+
+
+  </ion-row>
+
+  <ion-row>
+    <!---Self-->
+
+    <div *ngIf="myid==2" style="display: flex;justify-content: center;align-items: center; width: 100%;">
+      <!-- No Records Found for Self Gallery -->
+      <div *ngIf="(val!=1 || val==2) && (!selfimgs || selfimgs.length === 0)" class="ion-margin-top">
+        <ion-row>
+          <ion-col size="12">
+            <div class="center">
+              <div class="card">
+                <h4>No Records Found</h4>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div *ngIf="(val!=1 || val==2) && selfimgs && selfimgs.length > 0" class="gallery_imagess">
+        <div class="grid-img-wrap" *ngFor="let item of selfimgs">
+          <div (click)="change(item)">
+            <img src="{{item.GalleryImages}}" alt="Framed Image" class="img1" />
+          </div>
+          <ion-icon name="download-outline" class="grid-download-btn"
+            (click)="$event.stopPropagation(); downloadImage(item.GalleryImages)"></ion-icon>
+        </div>
+      </div>
+
+      <div *ngIf="val==1">
+        <ion-row>
+          <ion-col size="12" class="ion-justify-content-end ion-padding-top" style="display:flex">
+            <ion-icon name="arrow-redo-circle" class="iconn_contain"
+              (click)="shareCardViaWhatsApp(mygallery)"></ion-icon>
+            <ion-icon name="download-outline" class="iconn_contain" style="margin-right: 15px;"
+              (click)="downloadImage(mygallery)"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="2"></ion-col>
+
+          <ion-col size="8">
+            <div class="image-container">
+              <img src="{{mygallery}}" alt="Framed Image" class="img2" />
+              <!--<ion-icon name="arrow-redo-circle" class="icon-top-right iconn_contain" (click)="shareCardViaWhatsApp(mygallery)"></ion-icon>-->
+            </div>
+
+            <!--<img src="{{mygallery}}" alt="Framed Image" class="img2" />-->
+
+          </ion-col>
+          <ion-col size="2"></ion-col>
+
+        </ion-row>
+
+
+      </div>
+    </div>
+
+
+  </ion-row>
+  <ion-row>
+    <!---Leader-->
+
+    <div *ngIf="myid==3" style="display: flex;justify-content: center;align-items: center; width: 100%;">
+      <!-- No Records Found for Leaders Gallery -->
+      <div *ngIf="(val!=1 || val==2) && (!leaderimgs || leaderimgs.length === 0) " class="ion-margin-top">
+        <ion-row>
+          <ion-col size="12">
+            <div class="center">
+              <div class="card">
+                <h4>No Records Found</h4>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div *ngIf="(val!=1 || val==2) && leaderimgs && leaderimgs.length > 0" class="gallery_imagess">
+        <div class="grid-img-wrap" *ngFor="let item of leaderimgs">
+          <div (click)="change(item)">
+            <img src="{{item.GalleryImages}}" alt="Framed Image" class="img1" />
+          </div>
+          <ion-icon name="download-outline" class="grid-download-btn"
+            (click)="$event.stopPropagation(); downloadImage(item.GalleryImages)"></ion-icon>
+        </div>
+      </div>
+
+      <div *ngIf="val==1">
+        <ion-row>
+          <ion-col size="2"></ion-col>
+
+          <ion-col size="8">
+
+            <img src="{{mygallery}}" alt="Framed Image" class="img2" />
+
+          </ion-col>
+          <ion-col size="2"></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <ion-button fill="clear" (click)="downloadImage(mygallery)">
+              <ion-icon name="download-outline" slot="icon-only"
+                style="font-size: 30px; color: var(--ion-color-primary);"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+
+      </div>
+    </div>
+
+
+
+
+  </ion-row>
+
+</ion-content>
+
+<!-- Download success banner -->
+<div *ngIf="showDownloadToast" class="download-toast" (click)="openImagePreview()">
+  <img [src]="downloadedImageUrl" class="toast-thumb" alt="Downloaded" />
+  <div class="toast-text">
+    <ion-icon name="checkmark-circle" class="toast-icon"></ion-icon>
+    <span>Download Successful – Click to View</span>
+  </div>
+  <ion-icon name="close" class="toast-dismiss" (click)="dismissDownloadToast(); $event.stopPropagation()"></ion-icon>
+</div>
+
+<!-- Fullscreen Image Preview Modal -->
+<div *ngIf="showImagePreview" class="image-preview-overlay" (click)="closeImagePreview()">
+  <ion-icon name="close-circle" class="image-preview-close" (click)="closeImagePreview()"></ion-icon>
+  <img [src]="previewImageUrl" class="image-preview-img" alt="Preview" (click)="$event.stopPropagation()" />
+</div>
+
+<div class="footer_content">
+
+  <ion-row>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/home">
+        <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Home</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/needblood">
+        <!--<ion-icon name="person-outline" class="tabs_icon"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donatenowwhite.png" />
+        <div class="tabs_title">Find donor</div>
+
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/joincampaign">
+        <!--<ion-icon name="hand-right-outline" class="tabs_icon"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Join Campaign.png" />
+        <div class="tabs_title">Campaign</div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4" routerLink="/donorssearch">
+      <div class="border">
+        <!--<ion-icon name="egg-outline" class="tabs_icon"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donate now.png" />
+        <div class="tabs_title">Donate Now</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4" routerLink="/letshlpgallerry">
+      <div class="border" style="margin-left: 0.1rem;background-color:#a9b5cb;border:none">
+        <!--<ion-icon name="images-outline" class="tabs_icon" style="color:white;font-size:25px"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/letshlpgallerry.png" />
+        <div class="tabs_title"></div>
+      </div>
+
+    </ion-col>
+  </ion-row>
+</div>

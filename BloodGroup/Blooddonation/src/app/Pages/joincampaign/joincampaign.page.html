@@ -1,0 +1,189 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/home"><!--<ion-icon name="chevron-back-outline"></ion-icon>--></ion-col>
+      <ion-col size="8">
+        <ion-title>JOIN CAMPAIGN</ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <!--<ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>-->
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="row-spacing" >
+    <ion-col size="12">
+      <div class="center imgg">
+        <div class="card">
+          <div class="card_img">
+            <img src="../../../assets/Images/hand.png" class="" />
+          </div>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row class="row-spacing">
+    <ion-col size="12"  *ngIf="UserDetails[0].Rolestatus == false">
+      <div class="cards" routerLink="/leaderguide">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client images/All Icons/Join as a Leader.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Join as a leader</ion-label>
+            <p class="Arial font24 gray" style="margin-top:5px; font-size: 11px !important;">Lead the Way: Inspire and Drive</p>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+
+    <ion-col size="12"   *ngIf="UserDetails[0].Rolestatus == true">
+      <div class="cards" routerLink="/leaders">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client images/All Icons/Join as a Leader.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Leaders Page</ion-label>
+            <p class="Arial font24 gray" style="margin-top:5px; font-size: 11px !important;">Leader from front and protect your area</p>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+
+    <ion-col size="12">
+      <div class="cards" routerLink="/stickbrouchers">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client images/All Icons/Spread the cause.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Spread the Cause</ion-label>
+            <p class="Arial font24 gray" style="margin-top:5px; font-size: 11px !important;">With Let's help Brochure and Video.</p>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+
+    <ion-col size="12">
+      <div class="cards" (click)="InviteFrinds()">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client shared icons/Invite Friends.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Invite Friends</ion-label>
+            <p class="Arial font24 gray" style="margin-top:5px; font-size: 11px !important;">Spread the Gift of Life</p>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+
+
+  </ion-row>
+
+
+
+
+  <!--<ion-row class="row-spacing">
+    <ion-col size="12" routerLink="/leaderguide" *ngIf="UserDetails[0].Rolestatus == false">
+      <div class="card1">
+        <ion-card-content class="card-content">
+          <img class="card_icon" src="../../../assets/client images/All Icons/Join as a Leader.png" />
+          <div class="item-content">
+            <ion-label class="highlight" routerLink="/leaderguide">Join as a leader</ion-label>
+            <p>Leader from front and protect your area </p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+    <ion-col size="12" routerLink="/leaders" *ngIf="UserDetails[0].Rolestatus == true">
+      <div class="card1">
+        <ion-card-content class="card-content">
+          <img class="card_icon" src="../../../assets/client images/All Icons/Join as a Leader.png" />
+          <div class="item-content">
+            <ion-label class="highlight">Leaders Page</ion-label>
+            <p>Leader from front and protect your area </p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+    <ion-col size="12" routerLink="/stickbrouchers">
+      <div class="card1">
+        <ion-card-content class="card-content">
+          <img class="card_icon" src="../../../assets/client images/All Icons/Spread the cause.png" />
+          <div class="item-content">
+            <ion-label class="highlight">Spread the Cause</ion-label>
+            <p>Visited spots, shared online frequently.</p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+    <ion-col size="12">
+      <div class="card1" (click)="InviteFrinds()">
+        <ion-card-content class="card-content">
+          <img class="card_icon" src="../../../assets/client images/All Icons/Invite Friends.png" />
+          <div class="item-content">
+            <ion-label class="highlight">Invite Friends</ion-label>
+            <p>Send your invite code to earn points</p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+  </ion-row>-->
+
+
+
+
+</ion-content>
+<div class="footer_content">
+  <ion-row>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/home">
+        <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Home</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/needblood">
+        <!--<ion-icon name="person-outline" class="tabs_icon"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donatenowwhite.png" />
+
+        <div class="tabs_title">Find donor</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" style="background-color:#a9b5cb;border:none" routerLink="/joincampaign">
+        <!--<ion-icon name="hand-right-outline" class="tabs_icon" style="color:white;font-size:25px"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/joincampaign.png" />
+        <div class="tabs_title"></div>
+      </div>
+    </ion-col>
+
+    <ion-col size="2.4" routerLink="/donorssearch">
+      <div class="border">
+        <!--<ion-icon name="egg-outline" class="tabs_icon"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donate now.png" />
+
+        <div class="tabs_title">Donate Now</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4" routerLink="/letshlpgallerry">
+      <div class="border">
+        <!--<ion-icon name="images-outline" class="tabs_icon"></ion-icon>-->
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Gallery.png" />
+        <div class="tabs_title">Gallery</div>
+      </div>
+
+    </ion-col>
+  </ion-row>
+</div>

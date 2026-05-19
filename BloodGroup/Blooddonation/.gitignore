@@ -1,0 +1,101 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+#vs
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates 
+
+#vscode
+.vscode/
+
+
+
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
+
+*.log
+log.txt
+
+
+/.sourcemaps
+/.versions
+/coverage
+
+# Ionic
+/.ionic
+/www
+/platforms
+/plugins
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+
+# Miscellaneous
+/.angular
+/.angular/cache
+.sass-cache/
+/.nx
+/.nx/cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+.vs/slnx.sqlite
+.vs/Blooddonation/CopilotIndices/17.12.53.23981/CodeChunks.db
+.vs/Blooddonation/CopilotIndices/17.12.53.23981/SemanticSymbols.db
+.vs/Blooddonation/v17/.wsuo
+.vs/Blooddonation/v16/.suo
+.vs/Blooddonation/CopilotIndices/17.12.53.23981/SemanticSymbols.db-shm
+.vs/Blooddonation/CopilotIndices/17.12.53.23981/SemanticSymbols.db-wal
+.vs/Blooddonation/FileContentIndex/5fcd0561-1925-4c5a-8501-f4ac247c1da2.vsidx
+.vs/Blooddonation/FileContentIndex/7b852130-147a-437c-b11e-62a5cefe552e.vsidx
+.vs/Blooddonation/FileContentIndex/53cb0b4d-7192-4822-bd4d-bcb0d6ece5e6.vsidx
+.vs/Blooddonation/FileContentIndex/00413320-ff53-44d4-b72b-73f2461a7a10.vsidx
+.vs/Blooddonation/FileContentIndex/a6e3bd0a-2b8e-4b67-9479-d4866dec9d3a.vsidx
+.vs/Blooddonation/v17/workspaceFileList.bin
+/.vs/Blooddonation/v17/DocumentLayout.backup.json
+/.vs/Blooddonation/v17/DocumentLayout.json
+/.vs/Blooddonation/v17/workspaceFileList.bin
+/.vs/VSWorkspaceState.json
+.vscode/extensions.json
+.vscode/extensions.json

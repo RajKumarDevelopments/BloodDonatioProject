@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627806845646",
+    "project_id": "bloodgroup-94ed5",
+    "storage_bucket": "bloodgroup-94ed5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627806845646:android:fc65396fffe56e4389ee9f",
+        "android_client_info": {
+          "package_name": "com.gg.Bloodgroup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq9-5F1bEzCp2pprm2TifIE2ESrIZFAyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

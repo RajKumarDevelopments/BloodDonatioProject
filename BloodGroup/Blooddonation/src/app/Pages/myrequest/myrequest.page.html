@@ -1,0 +1,411 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="2" routerLink="/needblood"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title>REQUEST FOR BLOOD </ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <!--<ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>-->
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="2"></ion-col>
+    <ion-col size="8">
+      <div class="tab-wrap">
+        <!-- Open Tab -->
+        <input type="radio" name="tabs" id="tab1" checked>
+        <div class="tab-label-content" (click)="setTab('open')">
+          <label for="tab1" [ngClass]="{'active': selectedTab === 'open'}">Open</label>
+        </div>
+        <!-- Closed Tab -->
+        <input type="radio" name="tabs" id="tab2">
+        <div class="tab-label-content" (click)="setTab('closed')">
+          <label for="tab2" [ngClass]="{'active': selectedTab === 'closed'}">Closed</label>
+        </div>
+      </div>
+    </ion-col>
+    <ion-col size="2"></ion-col>
+  </ion-row>
+
+  <div *ngIf="!closed">
+    <ion-row>
+      <ion-col size="12">
+        <div class="center">
+          <div class="card">
+            <h4>{{msg}}</h4>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <!-- Open Requests with Drawer -->
+  <div *ngIf="OpenFlag == 1">
+    <div *ngIf="selectedTab === 'open' && closed">
+      <div class="drawer-container">
+        <!-- Card Headers -->
+        <div *ngFor="let obj of opendata; let i = index" class="drawer-item">
+          <div class="drawer-header" *ngIf="!isDrawerOpenForItem(obj.UdId)" (click)="toggleDrawer(obj.UdId)">
+            <ion-row class="ion-align-items-center">
+              <ion-col size="2">
+                <img src="../../../assets/Images/mic.png" />
+              </ion-col>
+              <ion-col size="5">{{ obj.CityName }} ({{ obj.BLGName }})</ion-col>
+              <ion-col size="4" class="textend">
+                <p>{{ obj.BloodRequestDate | date:'dd/MM/yyyy'}}</p>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon [name]="isDrawerOpenForItem(obj.UdId) ? 'chevron-up-outline' : 'chevron-down-outline'"
+                          class="drawer-toggle-icon">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <!-- Drawer Content -->
+          <div class="drawer-content" [ngClass]="{'drawer-open': isDrawerOpenForItem(obj.UdId)}">
+            <div class="drawer-inner-content" *ngIf="isDrawerOpenForItem(obj.UdId)">
+              <ion-row class="ion-align-items-center" *ngFor="let obj of BloodRequestDetalis">
+                <!-- Patient Details -->
+                <ion-col size="5"><div>Patient Name</div></ion-col>
+                <ion-col size="7"><strong>{{obj.FullName}}</strong></ion-col>
+
+                <ion-col size="5" *ngIf="obj.Age != '' "><div>Age</div></ion-col>
+                <ion-col size="7" *ngIf="obj.Age != '' "><strong>{{obj.Age}} yrs</strong></ion-col>
+
+                <ion-col size="5"><div>Gender</div></ion-col>
+                <ion-col size="7"><strong>{{obj.Gender}}</strong></ion-col>
+
+                <ion-col size="5"><div>Blood Group</div></ion-col>
+                <ion-col size="7"><strong>{{obj.BLGName}}</strong></ion-col>
+
+                <ion-col size="5"><div>Blood Type</div></ion-col>
+                <ion-col size="7"><strong>{{obj.Typesofblood}}</strong></ion-col>
+
+                <ion-col size="5"><div>Number of Units</div></ion-col>
+                <ion-col size="7"><strong> {{ obj.UnitsofBlood }}</strong></ion-col>
+
+                <!--<ion-col size="5"><div>Required Date</div></ion-col>
+                <ion-col size="7"><strong>{{ obj.BloodRequestDate | date:'dd/MM/yyyy'}} {{ obj.RequestTime }}</strong></ion-col>-->
+                <ion-col size="5"><div>Required Date</div></ion-col>
+                <ion-col size="7">
+                  <strong>
+                    {{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }}
+                    {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}
+                  </strong>
+                </ion-col>
+
+
+                <ion-col size="5"><div>Reason</div></ion-col>
+                <ion-col size="7"><strong>{{obj.Purpose}}</strong></ion-col>
+
+                <ion-col size="5"><div>Contact Name</div></ion-col>
+                <ion-col size="7"><strong>{{obj.ContactPerson}}</strong></ion-col>
+
+                <ion-col size="5"><div>Contact Number</div></ion-col>
+                <ion-col size="7"><strong>{{obj.ContactMobile}}</strong></ion-col>
+
+                <ion-col size="5" *ngIf="obj.HospitalName != '' "><div>Hospital Name</div></ion-col>
+                <!--<ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName.split("|")[0].trim()}}</strong></ion-col>-->
+                <ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName}}</strong></ion-col>
+
+                <ion-col size="5"><div>Address</div></ion-col>
+                <!--<ion-col size="7"><strong>{{obj.HospitalName.split("|")[1].trim()}}</strong></ion-col>-->
+                <ion-col size="7"><strong>{{obj.HospitalAddress}}</strong></ion-col>
+              </ion-row>
+
+              <ion-row style="margin-top:20px" class="ion-align-items-center">
+                <ion-col size="4" style="color:red;" (click)="closereq(this.BloodRequestDetalis[0].BloodRequestID)">
+                  <span class="indicate">Close</span>
+                </ion-col>
+                <!--<ion-col size="3" id="open-modal" class="flexend" (click)="openModal(obj)">
+                  <ion-icon name="create-outline" class="colorback" style="color:red; font-size: 14px"></ion-icon>
+                </ion-col>-->
+                <!--<ion-col size="3" class="flexend">
+                  <ion-icon name="share-outline" class="colorback" style="color: red; font-size: 14px"></ion-icon>
+                </ion-col>-->
+                <ion-col size="4" class="flexend" (click)="shareRequest(obj)">
+                  <ion-icon name="share-outline" class="colorback" style="color: red; font-size: 14px"></ion-icon>
+                </ion-col>
+
+                <ion-col size="4" (click)="closeDrawer()">
+                  <div class="title"></div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal remains the same -->
+      <ion-modal [isOpen]="isModalOpen" [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <!--<ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>-->
+              </ion-buttons>
+              <ion-buttons slot="end">
+                <ion-button class="button1" (click)="upd()" style="">Confirm</ion-button>
+
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-list>
+            <ion-item>
+              <ion-input [(ngModel)]="Name" [ngModelOptions]="{standalone: true}"
+                         label="Full Name"
+                         labelPlacement="floating"
+                         [value]="Name">
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="Number"
+                         [ngModelOptions]="{standalone: true}"
+                         label="Contact number"
+                         labelPlacement="floating"
+                         inputmode="numeric"
+                         type="tel"
+                         (ionInput)="filterDigitsOnly($event)"
+                         maxlength="10"
+                         class="custom-input">
+              </ion-input>
+
+            </ion-item>
+          </ion-list>
+        </ng-template>
+      </ion-modal>
+    </div>
+  </div>
+
+  <!-- Closed Requests with Drawer -->
+  <!--<div *ngIf="ClosedFlag == 1">
+    <div *ngIf="selectedTab === 'closed'">
+      <div class="drawer-container" *ngIf="closed">-->
+  <!-- Card Headers -->
+  <!--<div *ngFor="let obj of ClosedData; let i = index" class="drawer-item">
+    <div class="drawer-header" *ngIf="!isDrawerOpenForItem(obj.UdId)" (click)="toggleDrawer(obj.UdId)">
+      <ion-row  class="ion-align-items-center">
+        <ion-col size="2">
+          <img src="../../../assets/Images/mic.png" />
+        </ion-col>
+        <ion-col size="5">{{ obj.CityName }} ({{ obj.BLGName }})</ion-col>
+        <ion-col size="4" class="textend">
+          <p>{{ obj.BloodRequestDate | date:'dd/MM/yyyy' }}</p>
+        </ion-col>
+        <ion-col size="1">
+          <ion-icon [name]="isDrawerOpenForItem(obj.UdId) ? 'chevron-up-outline' : 'chevron-down-outline'"
+                    class="drawer-toggle-icon">
+          </ion-icon>
+        </ion-col>
+      </ion-row>
+    </div>-->
+  <!-- Drawer Content -->
+  <!--<div class="drawer-content" [ngClass]="{'drawer-open': isDrawerOpenForItem(obj.UdId)}">
+    <div class="drawer-inner-content" *ngIf="isDrawerOpenForItem(obj.UdId)">
+      <ion-row class="suraj ion-align-items-center">
+        <ion-col size="5"><div>Patient Name</div></ion-col>
+        <ion-col size="7"><strong>{{obj.patientname}}</strong></ion-col>
+
+        <ion-col size="5" *ngIf="obj.Age != '' "><div>Age</div></ion-col>
+        <ion-col size="7" *ngIf="obj.Age != '' "><strong>{{obj.Age}} yrs</strong></ion-col>
+
+        <ion-col size="5"><div>Gender</div></ion-col>
+        <ion-col size="7"><strong>{{obj.Gender}}</strong></ion-col>
+
+        <ion-col size="5"><div>Blood Group</div></ion-col>
+        <ion-col size="7"><strong>{{obj.BLGName}} </strong></ion-col>
+
+        <ion-col size="5"><div>Blood Type</div></ion-col>
+        <ion-col size="7"><strong>{{obj.Typesofblood}}</strong></ion-col>
+
+        <ion-col size="5"><div>Number of Units</div></ion-col>
+        <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+          <strong>{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</strong>
+        </ion-col>
+        <ion-col size="7" *ngIf="!BloodRequestDetalis || BloodRequestDetalis.length === 0">
+          <strong>Not Available</strong>
+        </ion-col>
+
+        <ion-col size="5"><div>Required Date</div></ion-col>
+        <ion-col size="7"><strong>{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</strong></ion-col>
+
+        <ion-col size="5"><div>Reason</div></ion-col>
+        <ion-col size="7"><strong>{{obj.Purpose}}</strong></ion-col>
+
+        <ion-col size="5"><div>Contact Person</div></ion-col>
+        <ion-col size="7"><strong>{{obj.ContactPerson}}</strong></ion-col>
+
+        <ion-col size="5"><div>Contact Number</div></ion-col>
+        <ion-col size="7"><strong>{{obj.ContactMobile}}</strong></ion-col>
+
+        <ion-col size="5" *ngIf="obj.HospitalName != '' "><div>Hospital Name</div></ion-col>-->
+  <!--<ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName.split("|")[0].trim()}}</strong></ion-col>-->
+  <!--<ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName}}</strong></ion-col>
+
+  <ion-col size="5"><div>Address</div></ion-col>-->
+  <!--<ion-col size="7"><strong>{{obj.HospitalName.split("|")[1].trim()}}</strong></ion-col>-->
+  <!--<ion-col size="7"><strong>{{obj.HospitalAddress}}</strong></ion-col>
+                <ion-col size="5"></ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6" class="flexcenter" style="color:red;" (click)="repostdata()">
+                  <span class="indicate">Repost</span>
+                </ion-col>
+                <ion-col size="3"></ion-col>
+                <ion-col size="3" (click)="closeDrawer()">
+                  <div class="title"></div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>-->
+  <!-- Closed Requests with Drawer -->
+  <div *ngIf="ClosedFlag == 1">
+    <div *ngIf="selectedTab === 'closed'">
+      <div class="drawer-container" *ngIf="closed">
+        <!-- Card Headers -->
+        <div *ngFor="let obj of ClosedData; let i = index" class="drawer-item">
+          <div class="drawer-header" *ngIf="!isDrawerOpenForItem(obj.UdId)" (click)="toggleDrawer(obj.UdId)">
+            <ion-row class="ion-align-items-center">
+              <ion-col size="2">
+                <img src="../../../assets/Images/mic.png" />
+              </ion-col>
+              <ion-col size="5">{{ obj.CityName }} ({{ obj.BLGName }})</ion-col>
+              <ion-col size="4" class="textend">
+                <p>{{ obj.BloodRequestDate | date:'dd/MM/yyyy' }}</p>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon [name]="isDrawerOpenForItem(obj.UdId) ? 'chevron-up-outline' : 'chevron-down-outline'"
+                          class="drawer-toggle-icon">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <!-- Drawer Content -->
+          <div class="drawer-content" [ngClass]="{'drawer-open': isDrawerOpenForItem(obj.UdId)}">
+            <div class="drawer-inner-content" *ngIf="isDrawerOpenForItem(obj.UdId)">
+              <ion-row class="suraj ion-align-items-center">
+                <ion-col size="5"><div>Patient Name</div></ion-col>
+                <ion-col size="7"><strong>{{obj.patientname}}</strong></ion-col>
+
+                <ion-col size="5" *ngIf="obj.Age != '' "><div>Age</div></ion-col>
+                <ion-col size="7" *ngIf="obj.Age != '' "><strong>{{obj.Age}} yrs</strong></ion-col>
+
+                <ion-col size="5"><div>Gender</div></ion-col>
+                <ion-col size="7"><strong>{{obj.Gender}}</strong></ion-col>
+
+                <ion-col size="5"><div>Blood Group</div></ion-col>
+                <ion-col size="7"><strong>{{obj.BLGName}} </strong></ion-col>
+
+                <ion-col size="5"><div>Blood Type</div></ion-col>
+                <ion-col size="7"><strong>{{obj.Typesofblood}}</strong></ion-col>
+
+                <ion-col size="5"><div>Number of Units</div></ion-col>
+                <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+                  <strong>{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</strong>
+                </ion-col>
+                <ion-col size="7" *ngIf="!BloodRequestDetalis || BloodRequestDetalis.length === 0">
+                  <strong>Not Available</strong>
+                </ion-col>
+
+                <ion-col size="5"><div>Required Date</div></ion-col>
+                <ion-col size="7"><strong>{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</strong></ion-col>
+
+                <ion-col size="5"><div>Reason</div></ion-col>
+                <ion-col size="7"><strong>{{obj.Purpose}}</strong></ion-col>
+
+                <ion-col size="5"><div>Contact Person</div></ion-col>
+                <ion-col size="7"><strong>{{obj.ContactPerson}}</strong></ion-col>
+
+                <ion-col size="5"><div>Contact Number</div></ion-col>
+                <ion-col size="7"><strong>{{obj.ContactMobile}}</strong></ion-col>
+
+                <ion-col size="5" *ngIf="obj.HospitalName != '' "><div>Hospital Name</div></ion-col>
+                <ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName}}</strong></ion-col>
+
+                <ion-col size="5"><div>Address</div></ion-col>
+                <ion-col size="7"><strong>{{obj.HospitalAddress}}</strong></ion-col>
+                <ion-col size="5"></ion-col>
+              </ion-row>
+
+              <!-- Repost Calendar Section - Inside Drawer -->
+              <div *ngIf="rpd && openDrawerId === obj.UdId">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-item>
+                      <ion-label position="floating">Repost Date and Time</ion-label>
+                      <br />
+                      <ion-datetime [min]="today"
+                                    [(ngModel)]="RepostDate"
+                                    [ngModelOptions]="{ standalone: true }"
+                                    (ionChange)="onDateChange($event)"
+                                    displayFormat="MMM DD, YYYY HH:mm"
+                                    placeholder="Required Date and Time"
+                                    class="custom-input no-buttons">
+                      </ion-datetime>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <button expand="full"
+                            style="width:100%; margin-top: 10px;"
+                            class="red-button"
+                            *ngFor="let detail of BloodRequestDetalis"
+                            (click)="Repost(detail)"
+                            ripple>
+                      Submit
+                    </button>
+                  </ion-col>
+                </ion-row>
+              </div>
+
+              <!-- Action Buttons -->
+              <ion-row *ngIf="!rpd || openDrawerId !== obj.UdId">
+                <ion-col size="6" class="flexcenter" style="color:red;" (click)="repostdata()">
+                  <span class="indicate">Repost</span>
+                </ion-col>
+                <ion-col size="3"></ion-col>
+                <ion-col size="3" (click)="closeDrawer()">
+                  <div class="title"></div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+
+<div class="footer_content" style="background-color: #ffffff;" *ngIf="status">
+  <ion-row>
+    <ion-col size="12">
+      <div class="footer_card1" routerLink="/searchlocation">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client images/All Icons/Post a Blood request.png" />
+          </ion-col>
+          <ion-col size="10" class="footer_label_col">
+            <ion-label class="footer_label">Post a Blood Request</ion-label>
+          </ion-col>
+        </ion-row>
+
+      </div>
+    </ion-col>
+  </ion-row>
+</div>

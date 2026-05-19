@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Blooddonation",
+    "\\Blooddonation\\src",
+    "\\Blooddonation\\src\\app",
+    "\\Blooddonation\\src\\app\\Pages",
+    "\\Blooddonation\\src\\app\\Pages\\privacypolicy",
+    "\\Blooddonation\\src\\app\\Pages\\registerdonation",
+    "\\Blooddonation\\src\\app\\Pages\\registration",
+    "\\Blooddonation\\src\\app\\Pages\\requsetform",
+    "\\Blooddonation\\src\\app\\Pages\\rquestpresentation"
+  ],
+  "SelectedNode": "\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html",
+  "PreviewInSolutionExplorer": false
+}

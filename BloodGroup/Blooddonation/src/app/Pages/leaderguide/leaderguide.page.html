@@ -1,0 +1,51 @@
+
+<ion-header [translucent]="true">
+  <ion-toolbar style="margin-bottom: -2%;">
+    <ion-row>
+      <ion-col size="2" routerLink="/joincampaign" ><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="10">
+        <ion-title>Join as a leader</ion-title>
+      </ion-col>
+      <!--<ion-col size="2">
+        <ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+      </ion-col>-->
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="12" class="terms">
+      <p>
+        By joining as a Leader, you have the opportunity to make a real difference. As a Leader, you can actively recruit new blood donors to the cause, helping save lives while also earning referral points for every donor you add. Being a Leader is not just about donating blood, it’s about organizing and growing a network of lifesavers.
+      </p>
+
+      <h5>BENEFITS OF BECOMING A LEADER:</h5>
+      <strong>1. Add Donors to Your Network:</strong>
+      <p>
+        As a Leader, you can register new donors to our platform, expanding your impact in your community. The more donors you recruit, the larger your network grows.
+      </p>
+      <strong>2. Earn Referral Points:</strong>
+      <p>
+        For each donor you successfully add, you’ll earn valuable referral points that can be used towards special rewards and recognition within our platform. It’s our way of saying thank you for your commitment to the cause.
+      </p>
+      <strong>3. Donate Blood:</strong>
+      <p>
+        In addition to recruiting new donors, you can also participate as a donor yourself. Every donation you make helps save lives and serves as an example to those you recruit.
+      </p>
+      <h5>JOIN THE CAUSE:</h5>
+      <p>
+        Becoming a Leader isn’t just about volunteering, it’s about leading by example, creating a ripple effect that encourages others to do the same. Help us build a strong, self-sustaining community of blood donors and change lives through the power of giving.
+      </p>
+
+      <p class="thank">Thank you for considering joining as a Leader and making a difference!</p>
+    <p class="thank"> Thank you for visiting our site.</p>
+
+    </ion-col>
+  </ion-row>
+</ion-content>
+<ion-footer class="ftr" *ngIf="UserDetails != null">
+  <button expand="full" style="width:100%" class="red-button ftr" ripple (click)="Go()">Accept</button>
+</ion-footer>

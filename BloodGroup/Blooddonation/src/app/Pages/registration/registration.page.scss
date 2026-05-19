@@ -1,0 +1,33 @@
+.card {
+  padding: 8px;
+  color: black;
+  background-color: #d3d3d370;
+  width: 92%;
+  margin: 3% 0% 2% 5%;
+}
+.regright {
+  text-align: right;
+  //font-size: large !important;
+  font-weight: bold;
+  text-transform:capitalize;
+}
+ion-footer button {
+  padding: 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: red;
+  color: white;
+  width: 100%;
+  /*margin: 5%*/
+}
+.formvalidators {
+  padding-left: 5%;
+  margin-top: 2%;
+  color: red;
+}
+.centerimg {
+  img {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,186 @@
+.icon_imgs {
+  width: 60%;
+  font-size: 30px;
+  color: #d00e0e;
+}
+
+.icon_imgs1 {
+  width: 100%;
+  font-size: 30px;
+  color: #d00e0e;
+}
+
+ion-card p {
+  color: red;
+  float: right;
+  font-weight: bold;
+}
+
+ion-card {
+  padding: 10px
+}
+
+.item_center {
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+button {
+  padding: 10px;
+  border-radius: 20px;
+  width: 88%;
+  /*margin: 5%;*/
+  background-color: red;
+  color: white;
+  margin-top: 18px;
+  margin-left: 5%;
+}
+
+.bg {
+  /*background-color: floralwhite;*/
+  padding: 10px;
+  width: 100%;
+}
+
+body > div {
+  width: 90%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+details div {
+  padding: 1.5em;
+  border-top: 3px solid red;
+  background-color: white;
+}
+
+details div > * + * {
+  margin-top: 1.5em;
+}
+
+details + details {
+  margin-top: .5rem;
+}
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary1 {
+  padding: .75em 1.5em;
+  cursor: pointer;
+  position: relative;
+  padding-left: 1rem;
+  background: #f1f2f6;
+}
+
+.summary1:before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0rem;
+  font-size: 0.7rem;
+  line-height: 1; /* Ensures the symbol is vertically centered */
+  color: #f1f2f6;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+details[open] summary1:before {
+  content: "▲"; /* Upward triangle symbol */
+  color: #f1f2f6 !important;
+}
+
+
+
+
+summary {
+  padding: .75em 1.5em;
+  cursor: pointer;
+  position: relative;
+  padding-left: 1rem;
+  background: #f1f2f6;
+}
+
+summary:before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0rem;
+  content: "▼";
+  font-size: 0.7rem;
+  line-height: 1; /* Ensures the symbol is vertically centered */
+  color: red;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+details[open] summary:before {
+  content: "▲"; /* Upward triangle symbol */
+}
+
+details[open] summary {
+  background-color: #fff;
+}
+
+.accordionheader {
+  background: rgba(78, 78, 78, 0.1294117647);
+  padding: 0 3%;
+  border-bottom: 1px solid #9b9b9b;
+}
+
+.title {
+  text-align: right;
+  color: #c7200a;
+  font-weight: bold
+}
+
+.title::before {
+  content: "▲"; /* Unicode character for down arrow */
+  display: inline-block;
+  font-size: 12px;
+  color: red; /* Set the color of the content */
+  float: inline-end; /* Adjust alignment if needed */
+}
+
+
+summary:hover {
+  background-color: #eee;
+}
+
+a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 0 0;
+}
+
+a:hover {
+  box-shadow: 0 3px 0 0;
+}
+
+code {
+  font-family: monospace;
+  font-weight: 600;
+}
+
+.card {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px !important;
+  margin: 1.5rem 23px;
+}
+
+details {
+  margin: -9px 0px;
+}

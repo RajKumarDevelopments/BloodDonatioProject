@@ -1,0 +1,150 @@
+/*ion-content {
+  --background: transparent;
+  background: url('https://png.pngtree.com/background/20220731/original/pngtree-simple-red-curve-background-picture-image_1912762.jpg') no-repeat center center / cover;
+}*/
+
+ion-card {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-top: 2px solid red;
+  border-left: 2px solid red;
+  border-radius: 20px
+}
+
+.card {
+  /*box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;*/
+  border-radius: 150px;
+  width: 315px;
+  height: 315px;
+  background-color: #f1f2f6;
+  /*margin-top: 1rem*/
+}
+
+.card h4 {
+  padding: 15px;
+  text-align: center;
+  margin: 43% 0% 0% 0%;
+}
+
+.center {
+  align-items: center;
+  display: flex;
+  justify-content: center
+}
+
+
+.item-content p {
+  color: #a9b5cb;
+  font-weight: normal;
+  font-size: 10px
+}
+
+
+
+.item-content ion-label:not(.highlight) {
+  color: #6c757d; /* Gray color (adjust as needed) */
+}
+
+.tabs_title {
+  font-size: 9px;
+  text-align: center;
+  /*margin-left: -15%;*/
+  display: flex;
+  align-content: center;
+  justify-content: center
+}
+
+.tabs_icon {
+  margin-left: 0.5rem;
+  font-size: 20px;
+  padding: 5px;
+  display: flex;
+  align-content: center;
+  justify-content: center
+}
+
+.border {
+  border: 1px solid gray;
+  height: 50px;
+  width: 60px;
+  border-radius: 10px;
+  background-color: #d8dae396;
+  border: none;
+  padding: 5px;
+}
+
+.imgg {
+  margin: 1.5rem 0rem 0.5rem;
+}
+.search {
+  font-size: 13px!important;
+}
+//RambabuP
+.highlight {
+  color: rgb(65 67 88);
+  font-size: 14px;
+  font-weight: 600;
+}
+//=============
+/*footer button start gg-s*/ 
+.footer_label_col {
+  align-content: center;
+  text-align: center;
+  margin: 0 -25px;
+}
+.footer_card1 { 
+  padding: 1% 0%;
+}
+.footer_card1 img {
+  width: 35%;
+}
+/*footer button end gg-s*/
+/*input start gg-s*/
+::ng-deep .regright .native-input.sc-ion-input-md,
+::ng-deep .regright .native-input.sc-ion-input-ios {
+  padding-left: 3px;
+}
+/*input end gg-s*/
+/*::ng-deep .searchbar-input.sc-ion-searchbar-md {
+  padding-inline-start: 2.4375rem;
+  padding-inline-end: 3.4375rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  background-position: left 8px center;
+  height: auto;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 30px;
+  border-radius: 20px !important;
+}
+*/
+
+.search {
+  height: auto !important;
+  min-height: 60px !important;
+
+  .searchbar-input-container {
+    height: auto !important;
+    min-height: 50px !important;
+    align-items: flex-start !important;
+    padding: 8px 0 !important;
+  }
+
+  .searchbar-input {
+    white-space: normal !important;   
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    height: auto !important;
+    min-height: 40px !important;
+    line-height: 1.4 !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+  }
+  // Adjust icon positioning if needed
+  .searchbar-search-icon {
+    align-self: flex-start !important;
+    margin-top: 12px !important;
+  }
+}
+
+
+

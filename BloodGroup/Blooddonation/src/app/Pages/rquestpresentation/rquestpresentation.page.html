@@ -1,0 +1,338 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="2" routerLink="/multipledonors">
+        <ion-icon name="chevron-back-outline" style="font-size: 24px; margin-top: 8px;"></ion-icon>
+      </ion-col>
+      <ion-col size="8" *ngIf="!Rk">
+        <ion-title>REQUEST A PRESENTATION</ion-title>
+      </ion-col>
+
+      <ion-col size="8" *ngIf="Rk == 1 || Rk == 3 ">
+        <ion-title>Post Request</ion-title>
+      </ion-col>
+      <ion-col size="8" *ngIf="Rk == 2 || Rk == 4 ">
+        <ion-title>Your Request</ion-title>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Form Mode (RK 1 or 3) -->
+  <div *ngIf="Rk==1 || Rk==3">
+    <form [formGroup]="RequestForm">
+      <ion-row class="rows">
+        <ion-col size="12">
+          <ion-list>
+            <ion-item>
+              <ion-label class="text_left">Audiance</ion-label>
+              <ion-select formControlName="Audiance" class="text_right" slot="end"
+                (ionChange)="onAudienceChange($event.detail.value)">
+                <ion-select-option value="100+">100+</ion-select-option>
+                <ion-select-option value="50-100">50-100</ion-select-option>
+                <ion-select-option value="Less than 50">Less than 50</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label class="text_left">Mode</ion-label>
+              <ion-select formControlName="Mode" class="text_right" slot="end">
+                <ion-select-option *ngIf="showVirtual" value="Virtual">Virtual</ion-select-option>
+                <ion-select-option *ngIf="showInPerson" value="In-Person">In-Person</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item id="open-modal">
+              <ion-label class="text_left ">Venue Type </ion-label>
+              <ion-icon name="add-circle-outline" slot="end" style="color:red"
+                *ngIf="selectedPlace == null || selectedPlace =='' "></ion-icon>
+              <ion-input [value]="selectedPlace" class="regright text_right"
+                *ngIf="selectedPlace != null  || selectedPlace !='' "></ion-input>
+            </ion-item>
+            <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar style="--border-radius: 38px!important;">
+                    <ion-buttons slot="start">
+                      <ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>
+                    </ion-buttons>
+                    <ion-buttons slot="end">
+                      <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-list style="overflow-y: scroll;">
+                  <ng-container *ngFor="let obj of venueslist">
+                    <ion-item class="centered-text" style="text-align:center" *ngIf="obj.Status == 1">
+                      <div (click)="selectPlace(obj)">{{ obj.WorkPlace }}</div>
+                    </ion-item>
+                  </ng-container>
+                </ion-list>
+              </ng-template>
+            </ion-modal>
+
+            <ion-item id="open-modal4">
+              <ion-label class="text_left">Venue Name </ion-label>
+              <ion-input formControlName="Venue_name" class="text_right" type="text" readonly></ion-input>
+            </ion-item>
+
+            <ion-item id="open-modal4">
+              <ion-label class="text_left">Contact Name</ion-label>
+              <ion-input formControlName="Contact_name" class="text_right" type="text"></ion-input>
+            </ion-item>
+
+            <ion-item id="open-modal4">
+              <ion-label class="text_left">Contact Number</ion-label>
+              <ion-input class="text_right" formControlName="Contact_number" type="tel" [maxlength]="10" maxlength="10"
+                pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"></ion-input>
+            </ion-item>
+
+            <ion-item id="open-modal4">
+              <ion-label class="text_left">Address</ion-label>
+              <ion-input class="text_right" formControlName="Address" type="text" labelPlacement="floating"
+                placeholder="Enter Address" readonly></ion-input>
+            </ion-item>
+
+            <ion-item id="open-modal4">
+              <ion-label class="text_left">Pincode</ion-label>
+              <ion-input formControlName="Pincode" type="tel" class="text_right regright" placeholder="Enter Pincode"
+                pattern="^[0-9]{6}$" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)"
+                readonly></ion-input>
+            </ion-item>
+
+            <ion-item class="ion-justify-content-between">
+              <ion-label class="text_left">Required Date</ion-label>
+              <ion-input type="datetime-local" *ngIf="!RequiredDate" formControlName="RequiredDate" [min]="minDateTime"
+                placeholder="Required Date" class="custom-input text_right regright">
+              </ion-input>
+              <ion-label *ngIf="RequiredDate" class="text_right regright">
+                {{ RequestForm.get('RequiredDate')?.value | date: 'dd/MM/yyyy, HH:mm' }}
+              </ion-label>
+            </ion-item>
+
+            <ion-item id="open-modal4">
+              <ion-textarea formControlName="Message" type="text" label="Message" labelPlacement="floating"
+                placeholder="Enter Text Message" rows="1" autoGrow="true">
+              </ion-textarea>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+
+  <!-- List Mode (RK 2 or 4) -->
+  <div *ngIf="Rk == 2 || Rk == 4 ">
+    <ion-row>
+      <ion-col size="12">
+        <div class="tab-wrap">
+          <div class="tab-label-content">
+            <input type="radio" name="tabs" id="tab1" [checked]="selectedTab === 'open'" (change)="setTab('open')">
+            <label for="tab1" [ngClass]="{'active': selectedTab === 'open'}">Active</label>
+          </div>
+          <div class="tab-label-content">
+            <input type="radio" name="tabs" id="tab2" [checked]="selectedTab === 'closed'" (change)="setTab('closed')">
+            <label for="tab2" [ngClass]="{'active': selectedTab === 'closed'}">Closed</label>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Content Sections -->
+    <div>
+      <!-- ACTIVE TAB SECTION -->
+      <div *ngIf="opening">
+        <!-- No Records Found -->
+        <div *ngIf="!Myrequsest || Myrequsest.length === 0">
+          <ion-row>
+            <ion-col size="12">
+              <div class="center">
+                <div class="card">
+                  <h4>No Records Found</h4>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- Active Requests List -->
+        <div *ngIf="Myrequsest && Myrequsest.length > 0">
+          <ion-accordion-group #openAccordionGroup
+            [value]="activeAccordionOpen !== null ? activeAccordionOpen.toString() : null"
+            (ionChange)="onOpenAccordionChange($event)" mode="md">
+
+            <ion-accordion *ngFor="let item of Myrequsest; let i = index; trackBy: trackByRPId" [value]="i.toString()">
+              <div slot="header" color="light" class="accordionheader">
+                <ion-row class="ion-align-items-center" *ngIf="activeAccordionOpen !== i">
+                  <ion-col size="2">
+                    <img src="../../../assets/Images/mic.png" class="imgg" />
+                  </ion-col>
+                  <ion-col size="5" class="namee">
+                    <span class="namee">{{ item.Contact_name }}</span>                   
+                  </ion-col>
+                  <ion-col size="5" class="namee">                
+                    <span class="namee">Mode: {{ item.Mode }}</span>
+                  </ion-col>
+                </ion-row>
+              </div>
+
+              <div slot="content" class="content-wrapper" *ngIf="activeAccordionOpen === i">
+                <div class="card-details">
+                  <!-- Details Section (Two Column Layout) -->
+                  <div class="detail-section">
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+                    <div class="detail-row"><strong>Address:</strong> <span>{{ item.Address }}, {{ item.StateName }}, {{ item.Pincode }}</span></div>
+                    <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
+                    <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
+                    <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
+                    <div class="detail-row"><strong>Created Date:</strong> <span>{{ item.CreatedDate | date: 'dd-MM-yyyy hh:mm a' }}</span></div>
+                    <div class="detail-row"><strong>Presentation Date:</strong> <span>{{ item.RequestDate | date: 'dd-MM-yyyy hh:mm a' }}</span></div>
+                    <div class="detail-row"><strong>Contact Person:</strong> <span>{{ item.Contact_name }}</span></div>
+                    <div class="detail-row"><strong>Contact Number:</strong> <span>{{ item.Contact_number }}</span></div>
+                    <div class="detail-row"><strong>Message:</strong> <span>{{ item.Message }}</span></div>
+                    <div class="detail-row" *ngIf="item.AcceptedCount > 0">
+                      <strong>Accepted count:</strong>
+                      <span style="color: #0e51c9; text-decoration: underline; cursor: pointer; font-weight: bold;"
+                        (click)="goToDetails(item)">
+                        {{ item.AcceptedCount }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Action Footer -->
+                  <div class="footer-actions">
+                    <div class="close-text" (click)="closereqst(item)">Close</div>
+                    <div class="expand-toggle" (click)="closeAccordion('open')">
+                      <div class="triangle-up"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </div>
+      </div>
+
+      <!-- CLOSED TAB SECTION -->
+      <div *ngIf="closed && !opening">
+        <!-- No Records Found -->
+        <div *ngIf="!MyClosedrequsest || MyClosedrequsest.length === 0">
+          <ion-row>
+            <ion-col size="12">
+              <div class="center">
+                <div class="card">
+                  <h4>No Records Found</h4>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- Closed Requests List -->
+        <div *ngIf="MyClosedrequsest && MyClosedrequsest.length > 0">
+          <ion-accordion-group #closedAccordionGroup
+            [value]="activeAccordionClosed !== null ? activeAccordionClosed.toString() : null"
+            (ionChange)="onClosedAccordionChange($event)" mode="md">
+
+            <ion-accordion *ngFor="let item of MyClosedrequsest; let i = index; trackBy: trackByRPId"
+              [value]="i.toString()">
+              <div slot="header" color="light" class="accordionheader">
+                <ion-row class="ion-align-items-center" *ngIf="activeAccordionClosed !== i">
+                  <ion-col size="2">
+                    <img src="../../../assets/Images/mic.png" class="imgg" />
+                  </ion-col>
+                  <ion-col size="5" class="namee">
+                    <span class="namee">{{ item.Contact_name }}</span> <br />
+                  </ion-col>
+                  <ion-col size="5" class="namee">
+                    <span class="namee">Mode: {{ item.Mode }}</span> <br />                   
+                  </ion-col>
+                </ion-row>
+              </div>
+
+              <div slot="content" class="content-wrapper" *ngIf="activeAccordionClosed === i">
+                <div class="card-details">
+                  <!-- Details Section (Two Column Layout) -->
+                  <div class="detail-section">
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+
+                    <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
+                    <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
+                    <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
+                    <div class="detail-row"><strong>Created Date:</strong> <span>{{ item.CreatedDate | date: 'dd-MM-yyyy hh:mm a' }}</span></div>
+                    <div class="detail-row"><strong>Presentation Date:</strong> <span>{{ item.RequestDate | date: 'dd-MM-yyyy hh:mm a' }}</span></div>
+                    <div class="detail-row"><strong>Contact Person:</strong> <span>{{ item.Contact_name }}</span></div>
+                    <div class="detail-row"><strong>Contact Number:</strong> <span>{{ item.Contact_number }}</span></div>
+                    <div class="detail-row"><strong>Message:</strong> <span>{{ item.Message }}</span></div>
+                    <div class="detail-row">
+                      <strong>Address:</strong> <span>
+                        {{ item.Address }}, {{ item.StateName }}, {{item.Pincode}}                       
+                      </span>
+                    </div>
+                    <div class="detail-row" *ngIf="item.AcceptedCount > 0">
+                      <strong>Accepted count:</strong>
+                      <span style="color: #0e51c9; text-decoration: underline; cursor: pointer; font-weight: bold;"
+                            (click)="goToDetails(item)">
+                        {{ item.AcceptedCount }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Action Footer -->
+                  <div class="footer-actions">
+                    <div class="expand-toggle" (click)="closeAccordion('closed')">
+                      <div class="triangle-up"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Reschedule -->
+    <ion-modal [isOpen]="isModalOpen" [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button class="button1" (click)="res(selectedItem)">Confirm</ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end">
+              <ion-button class="button1" (click)="isModalOpen = false">Cancel</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-item>
+            <ion-input type="datetime-local" label="Required Date" [(ngModel)]="Reschedule"
+              [ngModelOptions]="{standalone: true}" label-placement="floating" fill="outline"
+              placeholder="Required Date" class="custom-input"></ion-input>
+          </ion-item>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </div>
+</ion-content>
+
+<!-- Footer for Form Mode -->
+<div class="footer_content" style="background-color: #ffffff;" *ngIf="Rk==1 || Rk==3">
+  <ion-row>
+    <ion-col size="12">
+      <div class="footer_card1" (click)="Requestdetails(RequestForm.value)">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client images/All Icons/Post a Blood request.png" />
+          </ion-col>
+          <ion-col size="10" class="footer_label_col">
+            <ion-label class="footer_label">Submit</ion-label>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+</div>

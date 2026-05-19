@@ -1,0 +1,184 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu side="end" contentId="main-content">
+      <ion-content (click)="alrt()">
+
+        <div class="wrapper">
+          <input type="radio" id="radioYour Account" name="accordion" checked="checked" />
+          <label class="item" for="radioYour Account">
+            <div class="title" (click)="opn(1)">
+              <ion-row>
+                <!--<ion-col size="2"><ion-icon name="cellular-outline" class="icon"></ion-icon></ion-col>-->
+                <ion-col size="2">
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/Progress Red.png"
+                    *ngIf="ids==1" />
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/Progress.png"
+                    *ngIf="ids!=1" />
+                </ion-col>
+
+                <ion-col size="10">
+                  <div class="dropp">Progress</div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <div class="content">
+              <ion-row routerLink="/dashboard" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Dashboard </ion-col>
+              </ion-row>
+              <ion-row routerLink="/registerdonation" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Share your service</ion-col>
+              </ion-row>
+              <ion-row *ngIf="Role && Role.length > 0; else defaultRole"
+                [routerLink]="Role[0]?.RoleId == 4 ? '/leaders' : '/leaderguide'" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">
+                  {{ Role[0]?.RoleId == 4 ? 'Leader Page' : 'Join as a Leader' }}
+                </ion-col>
+              </ion-row>
+
+              <ng-template #defaultRole>
+                <ion-row [routerLink]="'/leaderguide'" class="open_content line_text">
+                  <ion-col size="2"></ion-col>
+                  <ion-col size="10">Join as a Leader</ion-col>
+                </ion-row>
+              </ng-template>
+
+              <ion-row routerLink="/partners" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Partners</ion-col>
+              </ion-row>
+
+            </div>
+          </label>
+          <input type="radio" id="radioPayment &amp; Pricing" name="accordion" />
+          <label class="item" for="radioPayment &amp; Pricing">
+            <div class="title" (click)="opn(2)">
+              <ion-row>
+                <ion-col size="2">
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/Help Red.png"
+                    *ngIf="ids==2" />
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/Help.png"
+                    *ngIf="ids!=2" />
+                </ion-col>
+                <!--<ion-col size="2"><ion-icon name="help-outline" class="icon"></ion-icon></ion-col>-->
+
+                <ion-col size="10">
+                  <div class="dropp">Help</div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <div class="content">
+              <ion-row routerLink="/donorguide" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Guide</ion-col>
+              </ion-row>
+              <ion-row routerLink="/quiz" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Quiz</ion-col>
+              </ion-row>
+              <ion-row routerLink="/tutorial" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Tutorial</ion-col>
+              </ion-row>
+              <ion-row routerLink="/contact" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Contact</ion-col>
+              </ion-row>
+            </div>
+          </label>
+          <input type="radio" id="radioReturns &amp; Refunds" name="accordion" />
+          <label class="item" for="radioReturns &amp; Refunds">
+            <div class="title" (click)="opn(3)">
+              <ion-row>
+                <!-- <ion-col size="2"><ion-icon name="settings-outline" class="icon"></ion-icon></ion-col>-->
+                <ion-col size="2">
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/Settings Red.png"
+                    *ngIf="ids==3" />
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/Settings.png"
+                    *ngIf="ids!=3" />
+                </ion-col>
+                <ion-col size="10">
+                  <div class="dropp"> Settings</div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <div class="content">
+              <ion-row routerLink="/profiledetails" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Profile</ion-col>
+              </ion-row>
+              <ion-row routerLink="/usercontrol" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">User Controls</ion-col>
+              </ion-row>
+              <ion-row routerLink="/general" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">General</ion-col>
+              </ion-row>
+              <ion-row routerLink="/language" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Language</ion-col>
+              </ion-row>
+            </div>
+          </label>
+          <input type="radio" id="radioShipping &amp; Pickup" name="accordion" />
+          <label class="item" for="radioShipping &amp; Pickup">
+            <div class="title" (click)="opn(4)">
+              <ion-row>
+                <!-- <ion-col size="2"><ion-icon name="add-circle-outline" class="icon"></ion-icon></ion-col>-->
+                <ion-col size="2">
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/More Red.png"
+                    *ngIf="ids==4" />
+                  <img class="menu_img" src="../assets/client images/All Icons/Menu Bar Icons/More.png"
+                    *ngIf="ids!=4" />
+                </ion-col>
+                <ion-col size="10">
+                  <div class="dropp">More</div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <div class="content ">
+              <ion-row routerLink="/about" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">About Us</ion-col>
+              </ion-row>
+              <ion-row routerLink="/privacypolicyside" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Privacy Policy</ion-col>
+              </ion-row>
+              <ion-row routerLink="/termsandconditionsside" class="open_content line_text">
+                <ion-col size="2"></ion-col>
+                <ion-col size="10">Terms of use and disclaimer</ion-col>
+              </ion-row>
+              <ion-row class="open_content logout" (click)="Logout()">
+                <ion-col size="2">
+                  <!--<ion-icon name="log-out-outline" class="icon" style="color:#494b4a;"></ion-icon>-->
+                </ion-col>
+                <ion-col size="10"> Logout</ion-col>
+              </ion-row>
+
+            </div>
+          </label>
+
+        </div>
+        <ion-row>
+          <ion-col size="12">
+            <div class="psupport">A Project supported by</div>
+            <div class="footer_logo">
+              <img src="assets/Images/bg_logo.png" />
+            </div>
+
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div class="version">Version(i8-c6-a17-V155)</div>
+          </ion-col>
+        </ion-row>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

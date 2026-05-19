@@ -1,0 +1,147 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="1" *ngIf="id==1 || rd1" routerLink="/home"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <!--<ion-col size="1" *ngIf="setid==3" routerLink="/donatenow"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>-->
+      <ion-col size="11" >
+        <ion-title>REQUEST A PRESENTATION</ion-title>
+      </ion-col>
+     
+
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="12">
+      <div class="center imgg">
+        <div class="card">
+          <h4>Choose an option below</h4>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+
+
+  <br />
+
+  <ion-row class="row-spacing" *ngIf="id==0 && !rd1">
+    <ion-col size="12" *ngIf="status">
+      <div class="cards" (click)="routing(1)">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client shared icons/Search Donor.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 " style="font-size: 13px !important;">Post Request </ion-label>
+            <p class="gray" style="font-size: 12px !important;">Find out if your eligbile to donate </p>
+          </ion-col>
+
+
+        </ion-row>
+      </div>
+    </ion-col>
+
+    <ion-col size="12">
+      <div class="cards" (click)="routing(2)">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client shared icons/Request for Blood.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 " style="font-size: 13px !important;"> Your Request</ion-label>
+            <p class="gray" style="font-size: 12px !important;">Find out if your eligbile to donate </p>
+          </ion-col>
+
+
+        </ion-row>
+      </div>
+    </ion-col>
+
+  </ion-row>
+
+  <ion-row class="row-spacing" *ngIf="id!=0">
+    <ion-col size="12">
+      <div class="cards" (click)="routing(3)">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client shared icons/Search Donor.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 " style="font-size: 13px !important;">Post Request </ion-label>
+            <p class="gray" style="font-size: 12px !important;">Find out if your eligbile to donate </p>
+          </ion-col>
+
+
+        </ion-row>
+      </div>
+    </ion-col>
+
+    <ion-col size="12">
+      <div class="cards" (click)="routing(4)">
+        <ion-row>
+          <ion-col size="2" class="icon_img">
+            <img src="../../../assets/client shared icons/Request for Blood.png" class="icon_imgs" />
+          </ion-col>
+          <ion-col size="10">
+            <ion-label class="head1 " style="font-size: 13px !important;"> Your Request</ion-label>
+            <p class="gray" style="font-size: 12px !important;">Find out if your eligbile to donate </p>
+          </ion-col>
+
+
+        </ion-row>
+      </div>
+    </ion-col>
+
+  </ion-row>
+
+
+</ion-content>
+
+
+
+  <div class="footer_content" *ngIf="!rd1">
+    <ion-row>
+      <ion-col size="2.4">
+        <div class="border" routerLink="/home">
+          <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
+          <div class="tabs_title">Home</div>
+        </div>
+
+      </ion-col>
+
+      <ion-col size="2.4">
+          <div class="border" routerLink="/needblood">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donatenowwhite.png" />
+          <div class="tabs_title">Find donor</div>
+
+        </div>
+
+      </ion-col>
+      <ion-col size="2.4">
+        <div class="border" routerLink="/joincampaign">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Join Campaign.png" />
+          <div class="tabs_title">Campaign</div>
+        </div>
+      </ion-col>
+      <ion-col size="2.4" routerLink="/donorssearch">
+        <div  class="border"><img  src="../../../assets/client images/All Icons/Home page Icons/Donate now.png" class="ficons">
+          <div class="tabs_title">Donate Now</div></div>
+
+        <!-- <div class="border">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Home- Find Donor.png" />
+          <div class="tabs_title">Donate Now</div>
+        </div> -->
+
+      </ion-col>
+      <ion-col size="2.4" routerLink="/letshlpgallerry">
+        <div class="border">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Gallery.png" />
+          <div class="tabs_title">Gallery</div>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </div>

@@ -1,0 +1,146 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="headerhight">
+      <ion-row class="headerw-100">
+        <ion-col size="2" routerLink="/home">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-col>
+        <ion-col size="8">
+          <ion-title>CONTACT</ion-title>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="RequestForm">
+
+    <!-- Welcome Message -->
+    <ion-card>
+      <ion-card-content>
+        <p class="welcome-text">Welcome! Tell us about your issues or your feedback. We are here to help you!</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Full Name Field -->
+    <ion-item class="form-item">
+      <ion-label position="stacked">Full Name <span class="spancol">*</span></ion-label>
+      <ion-input formControlName="Fullname"
+                 placeholder="Enter your full name"
+                 [readonly]="true">
+      </ion-input>
+    </ion-item>
+
+    <!-- Email Field -->
+    <ion-item class="form-item">
+      <ion-label position="stacked">Email  <span class="spancol">*</span></ion-label>
+      <ion-input formControlName="email"
+                 type="email"
+                 placeholder="Enter your email"
+                 [readonly]="true">
+      </ion-input>
+    </ion-item>
+
+    <!-- Select Reason Field -->
+    <ion-item class="form-item">
+      <ion-label position="stacked">Select Reason  <span class="spancol">*</span></ion-label>
+      <ion-select formControlName="selectedReason"
+                  placeholder="Choose a reason"
+                  (ionChange)="onReasonChange()">
+        <ion-select-option *ngFor="let item of reasons" [value]="item.value">
+          {{ item.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Message/Notes Field (Shows only when reason is selected) -->
+    <div *ngIf="isReasonSelected()">
+      <ion-item class="form-item">
+        <ion-label position="stacked">Message/Notes (Optional)</ion-label>
+        <ion-textarea formControlName="Message"
+                      placeholder="Describe your issue or feedback in detail..."
+                      rows="5"
+                      autoGrow="true">
+        </ion-textarea>
+      </ion-item>
+
+      <!-- Image Upload Section -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon class="atticon" name="image-outline"></ion-icon>
+            <ion-label class="attimg">Attach Image (Optional)</ion-label>
+</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <!-- Image Preview -->
+        
+          <div *ngIf="selectedImage" class="image-preview">
+            <img [src]=" URL + selectedImage"
+                 alt="Selected image"
+                 class="preview-image">
+            <ion-button fill="clear" color="danger" class="remove-image-btn" (click)="removeImage()">
+              <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+
+
+
+          <!-- Upload Buttons -->
+          <div class="upload-buttons">
+            <!-- For Mobile (Capacitor) -->
+            <ion-button expand="block"
+                        fill="outline"
+                        (click)="selectImageSource()"
+                        class="upload-btn">
+              <ion-icon name="camera" slot="start"></ion-icon>
+              {{ selectedImage ? 'Change Image' : 'Add Image' }}
+            </ion-button>
+
+            <!-- For Web (File Input) -->
+            <input type="file"
+                   #fileInput
+                   accept="image/*"
+                   (change)="onFileSelected($event)"
+                   style="display: none;">
+
+            <ion-button expand="block"
+                        fill="clear"
+                        (click)="fileInput.click()"
+                        class="web-upload-btn">
+              <ion-icon name="cloud-upload" slot="start"></ion-icon>
+              {{ selectedImage ? 'Change Image' : 'Upload from Computer' }}
+            </ion-button>
+          </div>
+
+          <p class="upload-info">
+            <ion-text color="medium">
+              <small>Supported formats: JPEG, JPG, PNG, GIF</small>
+            </ion-text>
+          </p>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Submit Button -->
+      <ion-button expand="block"
+                  type="submit"
+                  (click)="SendEmail()"
+                  [disabled]="!RequestForm.get('selectedReason')?.value"
+                  class="submit-btn">
+        <ion-icon name="mail" slot="start"></ion-icon>
+        Send Mail
+      </ion-button>
+    </div>
+
+    <!-- Validation Message -->
+    <div *ngIf="!isReasonSelected()" class="validation-message">
+      <ion-text color="medium">
+        <p>Please select a reason to continue...</p>
+      </ion-text>
+    </div>
+
+  </form>
+</ion-content>

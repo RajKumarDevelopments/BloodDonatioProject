@@ -1,0 +1,205 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/leaders"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title>HOSPITAL DETAILS</ion-title>
+      </ion-col>
+      <ion-col size="2">
+
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="HsptalForm">
+
+    <ion-row class="rows">
+      <ion-col size="12">
+        <ion-list>
+          <h5> Verify/Add hospitals details </h5> 
+          <ion-col size="12">
+            <ion-icon name="HospitalAddress" class="input-icon"></ion-icon> 
+            <ion-searchbar class="search animated fadeInDown custom-searchbar"
+                           [ngModelOptions]="{ standalone: true }"
+                           [(ngModel)]="searchQuery"
+                           (ionInput)="onSearchInput()"
+                           search-icon="pin"
+                           debounce="500"
+                           placeholder="Search for a location"></ion-searchbar> 
+            <ion-list *ngIf="predictions?.length">
+              <ion-item *ngFor="let prediction of predictions" (click)="selectPrediction(prediction)" class="f-12">
+                {{ prediction.description }}
+              </ion-item>
+            </ion-list>
+
+            <div class="map-wrapper">
+              <div #map id="map"></div>
+            </div>
+          </ion-col>
+          <ion-row>
+            <ion-col size="12">
+              <ion-item id="open-modal103">
+                <ion-label class="text_left">Hospital Name </ion-label>
+                <ion-icon class="text_right" name="add-circle-outline" slot="end" style="color:red" *ngIf="hospitaname == null || hospitaname == ''"></ion-icon>
+                <ion-input class="text_right regright" formControlName="HospitalName" *ngIf="hospitaname != null && hospitaname != ''"></ion-input>
+              </ion-item>
+
+
+            </ion-col>
+
+            <ion-col size="12">
+
+              <ion-item id="open-modal13">
+                <ion-label class="text_left">Select State </ion-label>
+                <ion-icon class="text_right" name="add-circle-outline" slot="end" style="color:red" *ngIf="selectedDistrict == null || selectedDistrict == ''"></ion-icon>
+                <ion-input class="text_right regright" [value]="selectedState" type="text" label="" *ngIf="selectedState != null  || selectedState !='' "></ion-input>
+              </ion-item>
+              <ion-modal #modal2 trigger="open-modal10" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-buttons slot="start">
+                        <ion-button class="button1" (click)="modal2.dismiss()">Close</ion-button>
+                      </ion-buttons>
+                      <ion-buttons slot="end">
+                        <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-searchbar placeholder="Search District"
+                                 [ngModelOptions]="{ standalone: true }"
+                                 [(ngModel)]="searchValue"
+                                 (ionInput)="SearchStates()"></ion-searchbar>
+                  <ion-list style="overflow-y: scroll;">
+                    <ion-item class="centered-text" *ngFor="let obj of States">
+                      <div (click)="selectState(obj)">{{ obj.StateName }}</div>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
+
+            <ion-col size="12" *ngIf="selectedDistrict">
+
+              <ion-item id="open-modal13">
+
+                <ion-label class="text_left">Select District</ion-label>
+                <ion-icon class="text_right" name="add-circle-outline" slot="end" style="color:red" *ngIf="selectedDistrict == null || selectedDistrict == ''"></ion-icon>
+
+                <ion-input class="text_right" [value]="selectedDistrict" type="text" placeholder="Enter Pincode"
+                           *ngIf="selectedDistrict != null && selectedDistrict != ''"></ion-input>
+              </ion-item>
+
+
+
+              <ion-modal #modal2 trigger="open-modal13" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-buttons slot="start">
+                        <ion-button class="button1" (click)="modal2.dismiss()">Close</ion-button>
+                      </ion-buttons>
+                      <ion-buttons slot="end">
+                        <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-searchbar placeholder="Search District"
+                                 [ngModelOptions]="{ standalone: true }"
+                                 [(ngModel)]="searchValue"
+                                 (ionInput)="SearchDistricts()"></ion-searchbar>
+                  <ion-list style="overflow-y: scroll;">
+                    <ion-item class="centered-text" *ngFor="let obj of Districts">
+                      <div (click)="selectDistrict(obj)">{{ obj.DistrictName }}</div>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
+
+            <ion-col size="12" *ngIf="selectedCity">
+              <ion-item id="open-modal13">
+                <ion-label class="text_left">Select City </ion-label>
+                <ion-icon class="text_right" name="add-circle-outline" slot="end" style="color:red" *ngIf="selectedDistrict == null || selectedDistrict == ''"></ion-icon>
+                <ion-input class="text_right regright" [value]="selectedCity" *ngIf="selectedCity != null && selectedCity != ''"></ion-input>
+              </ion-item>
+
+              <ion-modal #modal3 trigger="open-modal14" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-buttons slot="start">
+                        <ion-button class="button1" (click)="modal3.dismiss()">Close</ion-button>
+                      </ion-buttons>
+                      <ion-buttons slot="end">
+                        <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-searchbar placeholder="Search City"
+                                 [ngModelOptions]="{ standalone: true }"
+                                 [(ngModel)]="searchValue"
+                                 (ionInput)="SearchCities()"></ion-searchbar>
+                  <ion-list style="overflow-y: scroll;">
+                    <ion-item class="centered-text" *ngFor="let obj of Cities">
+                      <div (click)="selectCity(obj)">{{ obj.CityName }}</div>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+
+
+            <ion-col size="12">
+              <ion-item id="open-modal13">
+                <ion-label class="text_left">Pincode </ion-label>
+                <ion-icon class="text_right" name="add-circle-outline" slot="end" style="color:red" *ngIf="pincode == null || pincode == ''"></ion-icon>
+                <ion-input class="text_right" formControlName="Pincode" type="text"
+                           pattern="^[0-9]{6}$" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)" *ngIf="pincode != null && pincode != ''"></ion-input>
+              </ion-item>
+
+              <ion-item id="open-modal4">
+
+                <ion-label class="text_left">Hospital Contact No </ion-label>
+                <ion-input class="text_right" formControlName="HsptPhNum" type="tel"
+                           maxlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"></ion-input>
+              </ion-item>
+
+              <ion-item id="open-modal4">
+                <!--<ion-icon slot="end"></ion-icon>-->
+                <ion-label class="text_left">Doctor Name</ion-label>
+                <ion-input class="text_right" formControlName="DoctorName" type="text" placeholder="Doctor Name "></ion-input>
+              </ion-item>
+
+              <ion-item id="open-modal4">
+                <!--<ion-icon slot="end"></ion-icon>-->
+                <ion-label class="text_left">Point Of Contact Name</ion-label>
+                <ion-input class="text_right" formControlName="POCName" type="text" placeholder="POC Name"></ion-input>
+              </ion-item>
+
+              <ion-item id="open-modal4">
+                <!-- <ion-icon slot="end"></ion-icon>-->
+                <ion-label class="text_left">POC_Contact Number</ion-label>
+                <ion-input class="text_right" formControlName="POC_ContactNumber" type="text" placeholder="POC_Contact Number"
+                           maxlength="10" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-row class="ion-justify-content-center">
+    <button expand="full" style="width:100%" class="red-button ftr" ripple (click)="hspatldetails(HsptalForm.value)">Submit</button>
+  </ion-row>
+</ion-footer>
+
+
+

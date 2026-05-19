@@ -1,0 +1,206 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="" icon="chevron-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">PROFILE</ion-title>
+    <ion-buttons slot="end" style="width: 48px;"></ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding-bottom">
+  <div></div>
+  <form [formGroup]="ProfileForm">
+    
+    <div class="section-heading">Personal Information</div>
+    <ion-list lines="none" class="ion-no-padding">
+      <!-- Full Name -->
+      <ion-item>
+        <ion-label>Full Name</ion-label>
+        <ion-input formControlName="firstName" placeholder="Enter Name"></ion-input>
+      </ion-item>
+
+      <!-- Email -->
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-input formControlName="email" placeholder="Enter Email"></ion-input>
+      </ion-item>
+
+      <!-- Date of Birth -->
+      <ion-item (click)="openPicker('dob')" button detail="false">
+        <ion-label>Date of Birth</ion-label>
+        <div class="value-display">{{formatDate(DOB || UserDetails[0]?.DOB) || 'Select Date'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="calendar-outline" style="color: var(--primary-red);"></ion-icon>
+        </div>
+      </ion-item>
+
+      <!-- Gender -->
+      <ion-item (click)="openPicker('gender')" button detail="false">
+        <ion-label>Gender</ion-label>
+        <div class="value-display">{{Gender || UserDetails[0]?.Gender || 'Select Gender'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </ion-item>
+
+      <!-- Weight -->
+      <ion-item>
+        <ion-label>Weight (Kgs)</ion-label>
+        <ion-input formControlName="weight" type="number" placeholder="0"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="section-heading">
+      Location Details
+      <ion-icon name="refresh-outline" (click)="GetCurrentLocation(true)" style="margin-left: auto; font-size: 20px; color: var(--primary-red); cursor: pointer;"></ion-icon>
+    </div>
+    <ion-list lines="none" class="ion-no-padding">
+      <!-- State -->
+      <ion-item>
+        <ion-label>State</ion-label>
+        <ion-input [(ngModel)]="selectedState" [ngModelOptions]="{standalone: true}" (ionInput)="StateID = 0" placeholder="Enter State"></ion-input>
+      </ion-item>
+
+      <!-- District -->
+      <ion-item>
+        <ion-label>District</ion-label>
+        <ion-input [(ngModel)]="selectedDistrict" [ngModelOptions]="{standalone: true}" (ionInput)="DistrictID = 0" placeholder="Enter District"></ion-input>
+      </ion-item>
+
+      <!-- City -->
+      <ion-item>
+        <ion-label>City</ion-label>
+        <ion-input [(ngModel)]="selectedCity" [ngModelOptions]="{standalone: true}" (ionInput)="CityID = 0" placeholder="Enter City"></ion-input>
+      </ion-item>
+
+      <!-- Area -->
+      <ion-item>
+        <ion-label>Area</ion-label>
+        <ion-input [(ngModel)]="Area" [ngModelOptions]="{standalone: true}" placeholder="Enter Area"></ion-input>
+      </ion-item>
+
+      <!-- Pincode -->
+      <ion-item>
+        <ion-label>Pincode</ion-label>
+        <ion-input [(ngModel)]="Pincode" [ngModelOptions]="{standalone: true}" type="tel" [maxlength]="6" placeholder="Enter Pincode"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="section-heading">Donation Preferences</div>
+    <ion-list lines="none" class="ion-no-padding">
+      <!-- Blood Type -->
+      <ion-item (click)="openPicker('blood')" button detail="false">
+        <ion-label>Blood Type</ion-label>
+        <div class="value-display">{{BloodType || UserDetails[0]?.BLGName || 'Select'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </ion-item>
+
+      <!-- Last Donation -->
+      <ion-item (click)="openPicker('lastDonation')" button detail="false">
+        <ion-label>Last Donation</ion-label>
+        <div class="value-display">{{formatDate(LastDonationValue || UserDetails[0]?.Lastdonatedate) || 'N/A'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <div class="section-heading">Account Status</div>
+    <ion-list lines="none" class="ion-no-padding">
+      <ion-item class="toggle-item">
+        <ion-label>Enable to become a Leader</ion-label>
+        <ion-toggle [(ngModel)]="Rolestatus" [ngModelOptions]="{standalone: true}" mode="ios" slot="end"></ion-toggle>
+      </ion-item>
+      <ion-item class="toggle-item">
+        <ion-label>Availability Status</ion-label>
+        <ion-toggle [(ngModel)]="Availablestatus" [ngModelOptions]="{standalone: true}" (ionChange)="availabilityChanged($event)" mode="ios" slot="end"></ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <!-- Save Button -->
+    <div class="items_button">
+      <button type="button" (click)="UserRegistration(ProfileForm.value)">Save Changes</button>
+    </div>
+
+    <div style="height: 30px;"></div>
+
+  </form>
+
+  <!-- Custom Bottom Drawer / Picker System -->
+  <div class="drawer-overlay" [class.active]="activePicker !== null" (click)="closePicker()"></div>
+  
+  <div class="bottom-drawer" [class.active]="activePicker !== null">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        {{ activePicker === 'dob' ? 'Date of Birth' : 
+           activePicker === 'gender' ? 'Select Gender' : 
+           activePicker === 'blood' ? 'Blood Type' : 
+           activePicker === 'lastDonation' ? 'Last Donation Date' : '' }}
+      </div>
+      <button class="drawer-close" (click)="closePicker()">Close</button>
+    </div>
+    
+    <div class="drawer-content">
+      <!-- Date Pickers -->
+      <div *ngIf="activePicker === 'dob'">
+        <ion-datetime 
+          presentation="date" 
+          [(ngModel)]="date" 
+          [max]="maxDate"
+          [ngModelOptions]="{standalone: true}" 
+          (ionChange)="DateofBirth($event)"
+          style="width: 100%;">
+        </ion-datetime>
+        <ion-button expand="block" (click)="closePicker()" style="margin-top: 20px; --background: var(--primary-red);">Confirm Date</ion-button>
+      </div>
+
+      <div *ngIf="activePicker === 'lastDonation'">
+        <div class="option-buttons ion-padding-horizontal">
+          <ion-button expand="block" fill="outline" (click)="setLastDonationOption('I Never Donate')" color="dark">I Never Donate</ion-button>
+          <ion-button expand="block" fill="outline" (click)="setLastDonationOption('I Don’t Remember')" color="dark">I Don’t Remember</ion-button>
+        </div>
+        
+        <div class="divider-text">OR SELECT DATE</div>
+
+        <ion-datetime 
+          presentation="date" 
+          [(ngModel)]="date" 
+          [max]="maxDate"
+          [ngModelOptions]="{standalone: true}" 
+          (ionChange)="LastDonationDateChanged($event)"
+          style="width: 100%;">
+        </ion-datetime>
+        <ion-button expand="block" (click)="closePicker()" style="margin-top: 20px; --background: var(--primary-red);">Confirm Date</ion-button>
+      </div>
+
+      <!-- Gender Selection -->
+      <div *ngIf="activePicker === 'gender'">
+        <ion-list lines="full">
+          <ion-item *ngFor="let obj of Genders" (click)="selectGender(obj.value)" detail="false" class="drawer-item">
+            <ion-label>{{obj.label}}</ion-label>
+            <ion-icon name="checkmark-circle" slot="end" *ngIf="Gender === obj.value" style="color: var(--primary-red);"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <!-- Blood Type Selection -->
+      <div *ngIf="activePicker === 'blood'">
+        <div style="max-height: 400px; overflow-y: auto;">
+          <ion-list lines="full">
+            <ion-item *ngFor="let obj of BloodGroups" (click)="selectBloodGroup(obj)" detail="false" class="drawer-item">
+              <ion-label>{{obj.BLGName}}</ion-label>
+              <ion-icon name="checkmark-circle" slot="end" *ngIf="BloodType === obj.BLGName" style="color: var(--primary-red);"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="BloodGroups.length === 0" class="ion-text-center">
+              <ion-label color="medium">No blood groups found</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

@@ -1,0 +1,210 @@
+
+.aligned-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.icon-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.input-icon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.select-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.funnel-icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.blood-select {
+  width: 100%;
+}
+
+.regright {
+  text-align: right;
+  //font-size: large !important;
+  font-weight: bold;
+}
+.imgclass {
+  width: 250px;
+  height: 250px;
+  border-radius: 8px;
+}
+.donor {
+  text-align: center;
+  margin-top:5%;
+}
+.submit {
+  color: black;
+  border: 1px solid #9b9b9b;
+  font-weight: bold;
+}
+ion-title {
+  text-align: center;
+  padding: 15px;
+  font-size: 13px;
+}
+.star {
+  color: red;
+}
+
+.gridd {
+  padding: 7%;
+}
+
+.inputt {
+  border: 1px solid gray;
+  padding: 10px;
+  border-radius: 50px;
+  width: 100% !important;
+  margin: 0% -1%;
+}
+ion-card {
+  background-color: #a7b5cb30;
+  margin: 0% 6%;
+}
+
+h2 {
+  color: #48495b !important;
+  font-size: 20px;
+  font-weight: bold;
+}
+.custom_item {
+  background-color: transparent !important;
+  /*margin-top: -38px !important;*/
+}
+.transparent-item {
+  --background: transparent; /* Set background to transparent */
+  --ion-item-background: transparent; /* For Ionic specific background */
+  --ion-item-border-color: transparent; /* Set the border to transparent if needed */
+}
+
+/* Optional: Adjust the hover and active states */
+.transparent-item:hover {
+  --background: rgba(255, 255, 255, 0.1); /* Slightly visible on hover */
+}
+
+.transparent-item:active {
+  --background: rgba(255, 255, 255, 0.2); /* Slightly visible when active */
+}
+.card-content-md h3, .card-content-md h4, .card-content-md h5, .card-content-md h6 {
+  font-size: 13px !important;
+}
+.ts{
+  color:#e50046
+}
+.retakes, camm {
+  float: inline-end;
+  font-size: 22px;
+  padding: 8px;
+  margin-top: -9px;
+}
+
+
+.custom-card {
+  margin: 12px 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.secondary-card {
+  margin-top: 8px;
+  background-color: #f9f9f9;
+}
+
+.side-by-side-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clickable-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/*.retakes {
+  font-size: 20px;
+}*/
+.retakes[_ngcontent-ng-c3824807776], camm[_ngcontent-ng-c3824807776] {
+  float: inline-end;
+  font-size: 22px;
+  padding: 8px;
+  margin-top: 0px;
+}
+
+.camm1 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.cardss {
+  background-color: white;
+  border: 1px solid transparent;
+  margin: 0% 0% 0% 0%;
+  padding: 1.5% 0%;
+}
+.nopadbot { 
+  padding-bottom: 0px; 
+}
+ion-searchbar.readonly {
+  pointer-events: none !important;
+}
+
+
+/* Top header container */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+
+/* Title text (left side) */
+.title-text {
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* No request message (right side) */
+.no-req {
+  font-size: 13px;
+  color: red;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Funnel + select box wrapper */
+.select-box {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Space between icon and select */
+  min-width: 120px;
+}
+
+/* Funnel icon styling */
+.funnel-icon {
+  font-size: 16px;
+}
+
+/* Make ion-select not overflow */
+ion-select {
+  max-width: 160px; /* Prevent overlap */
+  font-size: 13px;
+}

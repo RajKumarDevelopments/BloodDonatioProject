@@ -1,0 +1,71 @@
+import { Component, OnInit, Inject } from '@angular/core';
+import { LanguageTranslatorService } from '../../Services/LanguageServices/language-translator.service';
+import { TranslateService } from "@ngx-translate/core";
+import { HttpClient } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
+import { NavController } from '@ionic/angular';
+
+
+
+@Component({
+  selector: 'app-language',
+  templateUrl: './language.page.html',
+  styleUrls: ['./language.page.scss'],
+})
+export class LanguagePage implements OnInit {
+
+ 
+  selectedLanguage: string = 'en';  // Default language code for selection
+  currentLanguage = 'English';
+  userdetail: any;
+  UserDetails: any;
+  constructor(
+    
+    private translateService: LanguageTranslatorService, public navCtrl: NavController,
+    
+  ) {
+    this.userdetail = localStorage.getItem("UserDetails");
+    this.UserDetails = JSON.parse(this.userdetail); }
+
+  ngOnInit() {
+    if (!this.UserDetails || this.UserDetails.length === 0 || this.UserDetails[0] === "") {
+
+    }
+    else {
+      this.translateService.initGoogleTranslate(); // Initialize Google Translate
+    }
+  }
+
+  // Initialize Google Translate service (optional)
+  mylang(lag: any) {
+    if (lag) {
+      this.navCtrl.navigateForward('/login')
+
+    }
+}
+
+  // Prevent page reload on dropdown click
+  preventDropdownRefresh() {
+    document.addEventListener('click', (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (target.closest('.goog-te-menu-frame') || target.classList.contains('goog-te-menu2-item')) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    });
+  }
+
+  // Translate text using Google Translate
+  gotohome() {
+    debugger;
+
+    // Ensure LoginDetails is initialized
+    if (!this.UserDetails || this.UserDetails.length === 0 || this.UserDetails[0] === "") {
+      this.navCtrl.navigateForward('/login');
+    } else {
+      this.navCtrl.navigateForward('/home');
+    }
+  }
+}

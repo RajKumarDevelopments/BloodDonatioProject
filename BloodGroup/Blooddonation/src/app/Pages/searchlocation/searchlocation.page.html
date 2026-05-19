@@ -1,0 +1,208 @@
+ <!--Hospital details-->
+ <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/myrequest"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title>SEARCH LOCATION</ion-title>
+      </ion-col>
+      <ion-col size="2">
+      </ion-col>
+    </ion-row>
+    </ion-toolbar>
+ </ion-header>
+<ion-content fullscreen #content>
+  <ion-grid>
+    <ion-row style="padding: 3%;">
+
+      <form [formGroup]="BloodRequestForm">
+        <ion-col size="12">
+          <ion-icon name="HospitalAddress" class="input-icon"></ion-icon>
+
+          <ion-searchbar class="search animated fadeInDown custom-searchbar"
+                         [ngModelOptions]="{ standalone: true }"
+                         [(ngModel)]="searchQuery"
+                         (ionInput)="onSearchInput()"
+                         search-icon="pin"
+                         debounce="500"
+                         placeholder="Search for a location"></ion-searchbar>
+
+          <ion-list *ngIf="predictions.length">
+            <ion-item *ngFor="let prediction of predictions" class="f-12" (click)="selectPrediction(prediction)">
+              {{ prediction.description }}
+            </ion-item>
+          </ion-list>
+
+          <div class="map-wrapper">
+            <div #map id="map"></div>
+          </div>
+        </ion-col>
+        <ion-row>
+          <ion-col size="12">
+            <ion-icon name="HospitalName" class="input-icon"></ion-icon>
+            <ion-input label="Hospital Name"
+                       formControlName="HospitalName"
+                       label-placement="floating"
+                       fill="outline"
+                       placeholder="Hospital Name"
+                       class="custom-input"readonly></ion-input>
+          </ion-col>
+
+          <ion-col size="12">
+            <ion-icon name="add-circle-outline" class="input-icon" slot="end" style="color: red"></ion-icon>
+            
+
+            <ion-input label="State"
+                       label-placement="floating"
+                       fill="outline"
+                       [value]="selectedState"
+                       placeholder="State"
+                       class="custom-input"
+                       readonly>
+            </ion-input>
+
+            <ion-modal #modal2 trigger="open-modal10" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-buttons slot="start">
+                      <ion-button class="button1" (click)="modal2.dismiss()">Close</ion-button>
+                    </ion-buttons>
+                    <ion-buttons slot="end">
+                      <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-searchbar placeholder="Search District"
+                               [ngModelOptions]="{ standalone: true }"
+                               [(ngModel)]="searchValue"
+                               (ionInput)="SearchStates()"></ion-searchbar>
+                <ion-list style="overflow-y: scroll;">
+                  <ion-item class="centered-text f-12" *ngFor="let obj of States">
+                    <div (click)="selectState(obj)">{{ obj.StateName }}</div>
+                  </ion-item>
+                </ion-list>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+
+          <ion-col size="12" *ngIf="selectedDistrict">
+            <ion-icon name="add-circle-outline" class="input-icon" slot="end" style="color: red"></ion-icon>
+            <ion-input label="District"
+                       label-placement="floating"
+                       fill="outline"
+                       [value]="selectedDistrict"
+                       placeholder="District"
+                       class="custom-input"
+                       readonly>
+            </ion-input>
+
+            <ion-modal #modal2 trigger="open-modal13" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-buttons slot="start">
+                      <ion-button class="button1" (click)="modal2.dismiss()">Close</ion-button>
+                    </ion-buttons>
+                    <ion-buttons slot="end">
+                      <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-searchbar placeholder="Search District"
+                               [ngModelOptions]="{ standalone: true }"
+                               [(ngModel)]="searchValue"
+                               (ionInput)="SearchDistricts()"></ion-searchbar>
+                <ion-list style="overflow-y: scroll;">
+                  <ion-item class="centered-text" *ngFor="let obj of Districts">
+                    <div (click)="selectDistrict(obj)">{{ obj.DistrictName }}</div>
+                  </ion-item>
+                </ion-list>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+
+          <ion-col size="12" *ngIf="selectedCity">
+            <ion-icon name="add-circle-outline" class="input-icon" slot="end" style="color: red"></ion-icon>
+            <ion-input label="City"
+                       label-placement="floating"
+                       fill="outline"
+                       [value]="selectedCity"
+                       placeholder="City"
+                       class="custom-input"
+                       readonly>
+            </ion-input>
+
+            <ion-modal #modal3 trigger="open-modal14" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-buttons slot="start">
+                      <ion-button class="button1" (click)="modal3.dismiss()">Close</ion-button>
+                    </ion-buttons>
+                    <ion-buttons slot="end">
+                      <ion-button class="button1" (click)="reg()">Okay</ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-searchbar placeholder="Search City"
+                               [ngModelOptions]="{ standalone: true }"
+                               [(ngModel)]="searchValue"
+                               (ionInput)="SearchCities()"></ion-searchbar>
+                <ion-list style="overflow-y: scroll;">
+                  <ion-item class="centered-text" *ngFor="let obj of Cities">
+                    <div (click)="selectCity(obj)">{{ obj.CityName }}</div>
+                  </ion-item>
+                </ion-list>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+
+          <ion-col size="12">
+            <ion-icon name="Pincode" class="input-icon"></ion-icon>
+            <ion-input label="Pincode"
+                       [maxlength]="6"
+                       formControlName="Pincode"
+                       label-placement="floating"
+                       fill="outline"
+                       placeholder="Enter pincode"
+                       class="custom-input"readonly></ion-input>
+          </ion-col>
+          <ion-row>
+
+            <!-- Upload Button -->
+            <ion-col size="10" class="borders" (click)="selectImage()">
+              Upload prescription/requisition slip
+            </ion-col>
+
+            <!-- Camera Icon -->
+            <ion-col size="2" (click)="selectImage()">
+              <ion-icon name="camera-outline"
+                        style="width: 30px; height: 25px; margin-top: 2px;">
+              </ion-icon>
+            </ion-col>
+
+            <!-- Preview Image -->
+            <ion-col size="12"
+                     *ngIf="selectedImage"
+                     (click)="Photozoom(HomeUrl + selectedImage)"
+                     style="margin-top: 10px;">
+              <img [src]="HomeUrl + selectedImage"
+                   alt="Receipt Image"
+                   style="width: 100%; height: auto; border-radius: 8px; border:1px solid #ccc;" />
+            </ion-col>
+
+          </ion-row>
+
+        </ion-row>
+
+      </form>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer style="padding: 3%;">
+  <button expand="full" style="width:100%" class="red-button ftr" ripple (click)="next()">Next</button>
+
+</ion-footer>

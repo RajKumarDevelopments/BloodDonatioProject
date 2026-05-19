@@ -1,0 +1,112 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="headerhight">
+      <ion-row class="headerw-100">
+        <ion-col size="2">
+          <ion-icon name="chevron-back-outline" routerLink="/home"></ion-icon>
+        </ion-col>
+        <ion-col size="8">
+          <ion-title>USER CONTROL</ion-title>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+
+    <ion-col size="12">
+      <div class="card">
+        <div class="card-header">
+          <ion-icon name="water" color="danger"></ion-icon>
+          <span>Blood Request Preferences</span>
+        </div>
+      </div>
+
+
+      <!-- Communication Options -->
+
+      <ion-item lines="none">
+        <ion-icon name="notifications-outline" class="ion-no-margin" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>Notifications</h3>
+        </ion-label>
+        <ion-input readonly [value]="selectedTypes.notification.name || 'Not Selected'" class="selected"></ion-input>
+        <ion-icon name="add-circle-outline" slot="end" color="danger" style="cursor: pointer;" (click)="getCommunications('notification')"></ion-icon>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="12">
+      <div class="card">
+        <div class="card-header">
+          <ion-icon name="people-circle-outline" color="secondary" style="font-size: 16px;"></ion-icon>
+          <span>Communication Preference</span>
+        </div>
+      </div>
+
+      <ion-col size="12" class="ion-justify-content-between ion-padding-horizontal" style="display: flex; align-items: center;">
+        <ion-label>
+          <h6 style="margin-left: -6px; width: 75%;">Disable phone and WhatsApp communication permanently</h6>
+        </ion-label>
+        <ion-toggle [checked]="toggleValue" (ionChange)="onToggleChange($event)"></ion-toggle>
+      </ion-col>
+
+      <!-- WhatsApp -->
+      <ion-item [disabled]="!toggleValue">
+        <ion-icon name="logo-whatsapp" slot="start" class="ion-no-margin" color="success"></ion-icon>
+        <ion-label>
+          <h3 style="white-space:nowrap">WhatsApp Messages</h3>
+        </ion-label>
+        <ion-input readonly [value]="selectedTypes.whatsapp.name || 'Not Selected'" class="selected"></ion-input>
+        <ion-icon name="add-circle-outline" slot="end" color="danger"
+                  style="cursor: pointer;"
+                  (click)="getCommunications('whatsapp')"
+                  [class.disabled-icon]="!toggleValue"></ion-icon>
+      </ion-item>
+
+      <!-- Phone Call -->
+      <ion-item [disabled]="!toggleValue">
+        <ion-icon name="call-outline" slot="start" class="ion-no-margin" color="warning"></ion-icon>
+        <ion-label>
+          <h3 style="white-space:nowrap">Phone Calls</h3>
+        </ion-label>
+        <ion-input readonly [value]="selectedTypes.call.name || 'Not Selected'" class="selected"></ion-input>
+        <ion-icon name="add-circle-outline" slot="end" color="danger"
+                  style="cursor: pointer;"
+                  (click)="getCommunications('call')"
+                  [class.disabled-icon]="!toggleValue"></ion-icon>
+      </ion-item>
+    </ion-col>
+
+
+    <!-- Action Buttons -->
+    <ion-footer class="ion-no-padding">
+      <ion-col size="12"  class="ion-no-padding">
+        <ion-button expand="block" (click)="savePreferences()">
+          <!--<ion-icon name="save-outline" slot="start"></ion-icon>-->
+          Save Preferences
+        </ion-button>
+      </ion-col>
+    </ion-footer>
+  </ion-row>
+
+  <!-- Bottom Drawer -->
+  <ion-card *ngIf="showCommDrawer" class="comm-drawer">
+    <ion-card-header>
+      <ion-card-title>Choose Preference</ion-card-title>
+      <ion-icon name="close-circle" class="close-icon" (click)="closeDrawer()"></ion-icon>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let item of Communication" (click)="selectCommunication(item)">
+          <ion-label>
+            <h3>{{ item.CommTypeName }}</h3>
+            <p>{{ item.Description }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

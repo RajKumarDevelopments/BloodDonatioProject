@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/home"><!--<ion-icon name="chevron-back-outline"></ion-icon>--></ion-col>
+      <ion-col size="8">
+        <ion-title> DONATE NOW</ion-title>
+      </ion-col>
+      <ion-col size="2">
+        
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row  >
+    <ion-col size="12">
+      <div class="center">
+        <div class="card">
+          <h4>Choose an option below</h4>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row  >
+    <ion-col size="12">
+      <div class="card1"(click)="back(3)">
+        <ion-card-content class="card-content">
+          <ion-icon name="git-pull-request-outline" slot="start" class="card_icon"></ion-icon>
+          <div class="item-content">
+            <ion-label class="highlight">Organise a Presentation</ion-label>
+            <p>Scan the QR code or add a donation</p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+    <ion-col size="12">
+      <div class="card1" routerLink="/registerdonation">
+        <ion-card-content class="card-content">
+          <ion-icon name="expand-outline" slot="start" class="card_icon"></ion-icon>
+          <div class="item-content">
+            <ion-label class="highlight">Register Donation</ion-label>
+            <p>Scan the QR code or add a donation</p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+    <ion-col size="12">
+      <div class="card1" (click)="InviteFrinds()">
+        <ion-card-content class="card-content">
+          <ion-icon name="person-add-outline" slot="start" class="card_icon"></ion-icon>
+          <div class="item-content">
+            <ion-label class="highlight">Invite Friends</ion-label>
+            <p>Send your invite code to earn points</p>
+          </div>
+        </ion-card-content>
+      </div>
+    </ion-col>
+   
+  </ion-row>
+</ion-content>
+<div class="footer_content">
+  <ion-row>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/home">
+        <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Home</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/needblood">
+        <ion-icon name="person-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Blood</div>
+      </div>
+
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/joincampaign">
+        <ion-icon name="hand-right-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Campaign</div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4" routerLink="/donatenow">
+      <div class="border" style="background-color:#a9b5cb;border:none">
+        <ion-icon name="egg-outline" class="tabs_icon" style="color:white;font-size:25px"></ion-icon>
+        <div class="tabs_title"></div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4" routerLink="/letshlpgallerry">
+      <div class="border">
+        <ion-icon name="images-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Gallery</div>
+      </div>
+
+    </ion-col>
+  </ion-row>
+</div>

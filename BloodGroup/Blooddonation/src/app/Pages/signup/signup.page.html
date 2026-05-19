@@ -1,0 +1,153 @@
+<ion-content>
+  <ion-row class="rows row-spacing" *ngIf="DonorFlag == 1">
+    <br />
+    <br /><br />
+  </ion-row>
+  <ion-row class="rows row-spacing" *ngIf="DonorFlag != 1">
+    <ion-col size="6"><p class="header_left" routerLink="/login">LOGIN</p></ion-col>
+    <ion-col size="6"><p class="header_right">SIGNUP</p></ion-col>
+
+  </ion-row>
+  <ion-row class="row-spacing" *ngIf="DonorFlag != 1">
+    <ion-col size="12">
+      <div class="items_center">
+        <img src="../../../assets/Images/bg_logo.png" />
+      </div>
+      <div class="items_center">
+        <h4 style="color:gray" *ngIf="OTPFlag != 1 && OTPVerified != 1">Create Account</h4>
+        <h4 style="color:gray" *ngIf="OTPFlag == 1 && OTPVerified != 1">Fill in the details</h4>
+        <h4 style="color:gray" *ngIf="OTPVerified == 1">Fill in the details</h4>
+      </div><br />
+      <div *ngIf="OTPFlag != 1 && OTPVerified != 1">
+        <div class="items_center">
+          <ion-icon name="call-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+        </div>
+      </div>
+      <div *ngIf="OTPFlag == 1 && OTPVerified != 1">
+        <div class="items_center">
+          <ion-icon name="call-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+        </div>
+      </div>
+      <div *ngIf="OTPVerified == 1">
+        <div class="items_center">
+          <ion-icon name="person-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter First and Last Name" [(ngModel)]="UserName" [minlength]="3" class="input_field" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="pencil-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Invite Code (optional)" [(ngModel)]="InviteCode" class="input_field" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="mail-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Email Id" [(ngModel)]="Email" class="input_field" />
+          <!--<div *ngIf="Email.invalid && (Email.dirty || Email.touched)" class="error-message">
+            <div *ngIf="Email.errors?.required">Email is required.</div>
+            <div *ngIf="Email.errors?.email">Invalid email address.</div>
+          </div>-->
+        </div>
+        <div class="items_center1" >
+          <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="Password" placeholder="Enter Password" class="input_field passwordd" />
+          <ion-icon slot="end"  name="{{ showPassword ? 'eye' : 'eye-off' }}" (click)="togglePassword()" class="input_icon1"></ion-icon>
+
+          <!--<ion-icon name="eye-outline" class="input_icon"></ion-icon>
+    <input type="text" placeholder="Enter Your password" [(ngModel)]="Password" class="input_field" />-->
+        </div>
+       
+        <div class="items_center1" >
+          <input type="{{ reshowPassword ? 'text' : 'password' }}" [(ngModel)]="ConformPassword" [ngModelOptions]="{standalone: true}" placeholder="Confirm password" class="input_field passwordd" />
+          <ion-icon slot="end"  name="{{ reshowPassword ? 'eye' : 'eye-off' }}" (click)="retogglePassword()" class="input_icon1"></ion-icon>
+          <!--<ion-icon name="eye-outline" class="input_icon"></ion-icon>
+    <input type="text" placeholder="Enter Your confirm password" [(ngModel)]="ConformPassword" class="input_field" />-->
+        </div>
+        <!--<ion-row style="padding-left:5%;margin-left: 15px;">
+    <ion-col size="1"><input type="checkbox" [(ngModel)]="TandC" [class.readonly]="TandC" /></ion-col>
+    <ion-col size="11"><div routerLink="/termsofusedisclaimer">Accept <a style="text-decoration:underline">terms of service</a></div></ion-col>
+    <ion-col size="1"><input type="checkbox" [(ngModel)]="Policy" [class.readonly]="Policy" /></ion-col>
+    <ion-col size="11"><div routerLink="/privacypolicy">Accept <a style="text-decoration:underline">confidentiality policy</a></div></ion-col>
+  </ion-row>-->
+
+        <ion-row style="margin-left:37px">
+          <ion-col size="1"><input type="checkbox" [(ngModel)]="TandC" [class.readonly]="TandC" /></ion-col>
+          <ion-col size="11"><div (click)="tac()">Accept <a style="text-decoration:underline">terms of service</a></div></ion-col>
+          <ion-col size="1"><input type="checkbox" [(ngModel)]="Policy" [class.readonly]="Policy" /></ion-col>
+          <ion-col size="11"><div (click)="policy()">Accept <a style="text-decoration:underline">confidentiality policy</a></div></ion-col>
+        </ion-row>
+      </div>
+
+    </ion-col>
+
+  </ion-row>
+  <ion-row class="row-spacing" *ngIf="DonorFlag == 1">
+    <ion-col size="12">
+      <div class="items_center">
+        <img src="../../../assets/Images/bg_logo.png" />
+      </div>
+      <div class="items_center">
+        <h4 style="color:gray" *ngIf="OTPFlag != 1 && OTPVerified != 1">Add Donor</h4>
+      </div><br />
+      <div *ngIf="OTPFlag != 1 && OTPVerified != 1">
+        <div class="items_center">
+          <ion-icon name="call-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+        </div>
+      </div>
+      <div *ngIf="OTPFlag == 1 && OTPVerified != 1">
+        <div class="items_center">
+          <ion-icon name="call-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <br />
+  <ion-row class="row-spacing" *ngIf="DonorFlag != 1">
+    <!--<ion-col size="12">-->
+      <!--<div class="items_center">
+        <div style="  color:gray">Already have an account?</div>
+      </div>-->
+      <!--<div class="items_center" routerLink="/login">
+        <div style="color:red">Login</div>
+      </div>-->
+    <!--</ion-col>-->
+  </ion-row>
+</ion-content>
+<ion-footer (click)="NextDetails()" *ngIf="OTPVerified == 1">
+  <button type="submit">Next</button>
+</ion-footer>
+<ion-footer (click)="CheckOTP()" *ngIf="OTPFlag == 1 && OTPVerified != 1">
+  <button type="submit">Verify OTP</button>
+</ion-footer>
+<ion-footer (click)="VerifyMobileEmail()" *ngIf="OTPFlag != 1 && OTPVerified != 1">
+  <button type="submit">Send OTP</button>
+</ion-footer>
+<!--<ion-footer>
+  <div class="items_center">
+    <button type="submit" (click)="NextDetails()" *ngIf="OTPFlag == 1">Next</button>
+    <button type="submit" (click)="SendOTPToMobile()" *ngIf="OTPFlag != 1">Send OTP</button>
+  </div>
+</ion-footer>-->
+<style>
+  .footer-md {
+    -webkit-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: none;
+  }
+</style>

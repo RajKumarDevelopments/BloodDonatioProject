@@ -1,0 +1,136 @@
+.imgg {
+  border-radius: 50px !important;
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.namee {
+  font-size: 13px !important;
+  color: gray !important;
+  text-transform: capitalize;
+  margin-left: 0 !important;
+}
+
+.pp {
+  text-align: start;
+  font-size: 13px !important;
+}
+
+.accordionheader {
+  background: #f1f2f6;
+  padding: 0 3%;
+  border-bottom: 2px solid #ffffff;
+}
+
+.searchmargin {
+  margin: 10px 0 0px;
+}
+
+/* Premium Card Layout for Details */
+.content-wrapper {
+  background: white;
+  padding: 12px;
+  border-bottom: 2px solid #ffffff;
+}
+
+.card-details {
+  background: white;
+  border-radius: 4px;
+  padding: 20px 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 96%;
+  margin: 0 auto;
+}
+
+.detail-section {
+  .detail-row {
+    margin-bottom: 8px;
+    font-size: 12.5px;
+    color: #444;
+    display: flex;
+    align-items: flex-start;
+
+    strong {
+      color: #000;
+      font-weight: 700;
+      flex: 0 0 120px;
+      margin-right: 10px;
+    }
+
+    span {
+      flex: 1;
+      line-height: 1.4;
+    }
+  }
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 15px;
+  padding: 10px 0 0;
+  gap: 15px;
+
+  .comm-btns {
+    display: flex;
+    gap: 15px;
+  }
+
+  .whatsapp-btn, .call-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+
+  .whatsapp-btn {
+    background-color: #25d366;
+  }
+
+  .call-btn {
+    background-color: #007bff;
+  }
+
+  .expand-toggle {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+}
+
+.triangle-up {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 12px solid red;
+}
+
+.center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+}
+
+.card {
+  border-radius: 150px;
+  width: 300px;
+  height: 300px;
+  background-color: #f1f2f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  h4 {
+    color: #736b6b;
+    margin: 0;
+  }
+}

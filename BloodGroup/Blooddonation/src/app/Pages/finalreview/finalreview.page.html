@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="1"><ion-icon name="chevron-back-outline" (click)="back()"></ion-icon></ion-col>
+      <ion-col size="11">
+        <ion-title>Final Review</ion-title>
+      </ion-col>
+
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-row>
+    <ion-col style=" margin-left:15px">
+      <h2>Donation and validation</h2>
+      You will recieve an certificate of Appriciation once your Donatin is validated
+
+    </ion-col>
+  </ion-row>
+  <h4 style="text-align:center">Final Review</h4>
+
+  <ion-row>
+    <br />
+    <ion-col class="image-container" >
+      <img [src]="MySelectedImage" alt="Framed Image" class="combined-image" />
+   
+    </ion-col>
+
+    
+   
+  </ion-row>
+  <ion-row class="rows">
+    <ion-col size="4"  > 
+    </ion-col>
+    <ion-col size="4" (click)="submit()">
+      <!--<button expand="full" class="red-button1" ripple>Submit</button>-->
+      <button expand="full" class="button-pushable" role="button">
+        <span class="button-shadow"></span>
+        <span class="button-edge"></span>
+        <span class="button-front text">
+          Submit
+        </span>
+      </button>
+    </ion-col>
+    <ion-col size="4"  > 
+    </ion-col>
+    <!--<ion-col size="6" (click)="submit()">
+    <button expand="full" class="red-button" ripple >Submit & Download</button>
+  </ion-col>
+  <ion-col size="6">
+    <button expand="full" class="white-button" ripple (click)="shareCardViaWhatsApp()">
+      <img src="../../../assets/Images/share1.png" class="sharee" />
+    </button>
+  </ion-col>-->
+  </ion-row>
+</ion-content>

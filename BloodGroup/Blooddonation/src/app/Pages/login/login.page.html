@@ -1,0 +1,209 @@
+<ion-content>
+ 
+  <ng-container *ngIf="!showForgotPassword">
+
+    <!-- Login/Signup Header -->
+    <ion-row class="rows row-spacing">
+      <ion-col size="6">
+        <p class="header_left">LOGIN</p>
+      </ion-col>
+      <ion-col size="6">
+        <p class="header_right" routerLink="/signup">SIGNUP</p>
+      </ion-col>
+    </ion-row>
+
+    <!-- Logo and Enter Account Section -->
+    <ion-row>
+      <ion-col size="12" class="row-spacing">
+        <div class="items_center">
+          <img src="../../../assets/Images/bg_logo.png" />
+        </div>
+        <div class="items_center">
+          <!--<h4 style="color:#6495ed59">Enter Account</h4>-->
+        </div><br />
+
+        <!-- Mobile/Email Input -->
+        <div>
+          <div class="items_center">
+            <ion-icon name="call-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Mobile or Email" [(ngModel)]="Mobile" class="input_field" />
+          </div>
+
+          <!-- OTP Input (Mobile = 10 digits) -->
+          <div class="items_center" *ngIf="Mobile?.length === 10">
+            <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+            <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          </div>
+
+          <!-- Password Input (Email login: length > 12) -->
+          <div class="items_center" *ngIf="Mobile?.length > 12">
+            <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Password" [(ngModel)]="MobileOTP" class="input_field" />
+          </div>
+        </div>
+
+        <!-- Forgot Password Link (shown whenever user is typing an email) -->
+        <div class="items_center" *ngIf="Mobile?.includes('@') && !isNumeric(Mobile)">
+          <span class="forgot-link" (click)="openForgotPassword()">Forgot Password?</span>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Signup and Register Section -->
+    <ion-row class="row-spacing">
+      <ion-col size="12">
+        <div class="items_center">
+          <div style="color:gray">Don't have an account?</div>
+        </div>
+        <div class="items_center">
+          <div style="color:red" (click)="signup()">Register and donate</div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+  </ng-container>
+
+  
+  <ng-container *ngIf="showForgotPassword">
+
+    <!-- Back Button + Title -->
+    <ion-row class="rows row-spacing">
+      <ion-col size="2">
+        <ion-icon name="arrow-back-outline" class="back-icon" (click)="closeForgotPassword()"></ion-icon>
+      </ion-col>
+      <ion-col size="10">
+        <p class="header_left">FORGOT PASSWORD</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="row-spacing">
+
+        <div class="items_center">
+          <img src="../../../assets/Images/bg_logo.png" />
+        </div>
+        <div class="items_center">
+          <!--<h4 class="fp-subtitle">Reset Your Password</h4>-->
+        </div>
+        <br />
+
+        <!-- ── STEP 1: Enter Email ── -->
+        <ng-container *ngIf="!forgotOTPFlag">
+          <!--<p class="step-label">Step 1: Enter your registered email</p>-->
+
+          <div class="items_center">
+            <ion-icon name="mail-outline" class="input_icon"></ion-icon>
+            <input type="email"
+                   placeholder="Enter your email"
+                   [(ngModel)]="forgotEmail"
+                   class="input_field" />
+          </div>
+        </ng-container>
+
+        <!-- ── STEP 2: Enter OTP ── -->
+        <ng-container *ngIf="forgotOTPFlag && !forgotOTPVerified">
+          <!--<p class="step-label">Step 2: Enter the OTP sent to <strong>{{ forgotEmail }}</strong></p>-->
+
+          <div class="items_center">
+            <ion-icon name="keypad-outline" class="input_icon"></ion-icon>
+            <input type="tel"
+                   placeholder="Enter 4-digit OTP"
+                   [(ngModel)]="forgotOTP"
+                   maxlength="4"
+                   class="input_field" />
+          </div>
+
+          <div class="items_center" style="margin-top: -4%;">
+            <span class="resend-link" (click)="sendForgotPasswordOTP()">Resend OTP</span>
+          </div>
+        </ng-container>
+
+        <!-- ── STEP 3: Set New Password ── -->
+        <ng-container *ngIf="forgotOTPVerified">
+          <!--<p class="step-label">Step 3: Set your new password</p>-->
+
+          <!-- New Password -->
+          <div class="items_center">
+            <ion-icon name="lock-closed-outline" class="input_icon"></ion-icon>
+            <input [type]="showNewPassword ? 'text' : 'password'"
+                   placeholder="New Password"
+                   [(ngModel)]="newPassword"
+                   class="input_field" />
+            <ion-icon [name]="showNewPassword ? 'eye-outline' : 'eye-off-outline'"
+                      class="eye_icon"
+                      (click)="toggleNewPassword()"></ion-icon>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="items_center">
+            <ion-icon name="lock-closed-outline" class="input_icon"></ion-icon>
+            <input [type]="showConfirmPassword ? 'text' : 'password'"
+                   placeholder="Confirm Password"
+                   [(ngModel)]="confirmPassword"
+                   class="input_field" />
+            <ion-icon [name]="showConfirmPassword ? 'eye-outline' : 'eye-off-outline'"
+                      class="eye_icon"
+                      (click)="toggleConfirmPassword()"></ion-icon>
+          </div>
+
+          <!-- Password match hint -->
+          <div class="items_center" *ngIf="confirmPassword && newPassword !== confirmPassword">
+            <span class="pwd-mismatch">Passwords do not match</span>
+          </div>
+          <div class="items_center" *ngIf="confirmPassword && newPassword === confirmPassword">
+            <span class="pwd-match">✓ Passwords match</span>
+          </div>
+        </ng-container>
+
+      </ion-col>
+    </ion-row>
+
+  </ng-container>
+
+</ion-content>
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTERS – Main Login Buttons
+═══════════════════════════════════════════════════════ -->
+<ng-container *ngIf="!showForgotPassword">
+  <!-- Mobile: OTP received → Login -->
+  <ion-footer *ngIf="isNumeric(Mobile) && OTPFlag === 1 && Mobile?.length === 10">
+    <button expand="full" class="red-button" (click)="MobileLogin()">Login</button>
+  </ion-footer>
+
+  <!-- Mobile: OTP not yet sent → Send OTP -->
+  <ion-footer *ngIf="isNumeric(Mobile) && OTPFlag != 1 && Mobile?.length === 10">
+    <button expand="full" class="red-button" (click)="VerifyMobileEmail()">Send OTP</button>
+  </ion-footer>
+
+  <!-- Email login → Login -->
+  <ion-footer *ngIf="Mobile?.length > 12 && !isNumeric(Mobile)">
+    <button expand="full" class="red-button" (click)="login()">Login</button>
+  </ion-footer>
+</ng-container>
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTERS – Forgot Password Buttons
+═══════════════════════════════════════════════════════ -->
+<ng-container *ngIf="showForgotPassword">
+  <!-- Step 1: Send OTP -->
+  <ion-footer *ngIf="!forgotOTPFlag">
+    <button expand="full" class="red-button" (click)="sendForgotPasswordOTP()">Continue</button>
+  </ion-footer>
+
+  <!-- Step 2: Verify OTP -->
+  <ion-footer *ngIf="forgotOTPFlag && !forgotOTPVerified">
+    <button expand="full" class="red-button" (click)="verifyForgotOTP()">Verify OTP</button>
+  </ion-footer>
+
+  <!-- Step 3: Reset Password -->
+  <ion-footer *ngIf="forgotOTPVerified">
+    <button expand="full" class="red-button" (click)="resetPassword()">Reset Password</button>
+  </ion-footer>
+</ng-container>
+
+<style>
+  .footer-md {
+    box-shadow: none;
+  }
+</style>

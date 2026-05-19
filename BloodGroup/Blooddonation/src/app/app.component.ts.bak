@@ -1,0 +1,190 @@
+import { Component } from '@angular/core';
+import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen/ngx'
+import { NavController } from '@ionic/angular';
+import { PushnotificationService } from '../app/Services/push/pushnotification.service'
+//RambabuP
+import { Platform, AlertController } from '@ionic/angular';
+import { register } from 'swiper/element/bundle';
+import { GeneralService } from './Services/Generalservice/generalservice.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import { PermissionService } from './Services/permission/permission.service';
+import { AndroidSettings, IOSSettings, NativeSettings } from 'capacitor-native-settings';
+import { GeolocationserviceService } from './Services/locationservice/geolocationservice.service'
+register();
+//==============
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
+})
+export class AppComponent {
+  //public appPages = [
+  //  //{ title: 'Login', url: '/login', icon: 'mail' },
+  //  //{ title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
+  //  //{ title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
+  //  //{ title: 'Archived', url: '/folder/archived', icon: 'archive' },
+  //  //{ title: 'Trash', url: '/folder/trash', icon: 'trash' },
+  //  //{ title: 'Spam', url: '/folder/spam', icon: 'warning' },
+  //];
+  //public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  UserDetails: any;
+  ids: any=1;
+
+  constructor(private alertController: AlertController,
+private geolocationService: GeolocationserviceService,private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
+    private menu: MenuController, private router: Router,
+    private push: PushnotificationService, private platform: Platform, private general: GeneralService) {
+    this.androidFullScreen.isImmersiveModeSupported()
+    //.then(() => this.androidFullScreen.immersiveMode())
+    //.catch(err => console.log(err));
+    this.initializeApp();
+    this.Navigation();
+
+    this.push.addListeners();
+    this.push.registerNotifications();
+    this.push.getDeliveredNotifications();
+
+    if (this.UserDetails != null) {
+      setInterval(() => {
+       // this.loadUserDetails();
+      }, 1000);
+    }
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.menu.close();  // Close the menu on navigation
+      }
+    });
+
+  }
+  activeMenu: string = 'settings';  // Set the default active menu
+
+  toggleActive(menu: string) {
+    this.activeMenu = this.activeMenu === menu ? '' : menu;
+  }
+
+  Logout() {
+    this.navCtrl.navigateForward('/login');
+    localStorage.removeItem("UserDetails");
+    window.location.reload();
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([path]);
+    this.menu.close();  // Ensure the menu closes when a link is clicked
+  }
+  opn(id:any) {
+    this.ids=id
+  }
+   ngOnInit() {
+    this.languageService.initGoogleTranslate();
+
+    this.languageService.languageChanged.subscribe((language: any) => {
+      this.currentLanguage = language;
+
+    });
+  }
+
+  async showLocationAlert() {
+    // Step 1: Show a custom alert asking for location permission
+    const alert = await this.alertController.create({
+      header: 'Location Access Required',
+      message: 'This app needs access to your location. Please enable location services to proceed.',
+      buttons: [
+        {
+          text: 'Deny',
+          role: 'cancel',
+          handler: () => {
+            console.log('Location permission denied');
+            this.general.presentToast('You have denied location access. Some features may not work.');
+          }
+        },
+        {
+          text: 'Allow',
+          handler: async () => {
+            console.log('Location permission allowed');
+            await this.checkLocationServices();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  async checkLocationServices() {
+    try {
+      const permissionStatus = await this.geolocationService.getCurrentLocation();
+      if (!permissionStatus) {
+        // Handle permission denied scenario, you can show an alert or a toast
+        this.general.presentToast('Location services are required for this app. Please enable them in settings.');
+      }
+    } catch (error) {
+      console.error('Error checking location services:', error);
+      this.general.presentToast('An error occurred while checking location services.');
+    }
+  }
+
+
+  Navigation() {
+    debugger
+    this.platform.ready().then(() => {
+      this.UserDetails = localStorage.getItem("UserDetails");
+      this.UserDetails = JSON.parse(this.UserDetails);
+      if (this.UserDetails == null) {
+        this.navCtrl.navigateForward('/language');
+      } else if (this.UserDetails != null) {
+        if (this.UserDetails[0].Status == false) {
+          this.navCtrl.navigateForward(['/registration', { RegFlag: 1 }]);
+          //this.showLocationAlert();
+        } else {
+          this.navCtrl.navigateForward('/home');
+          //this.showLocationAlert();
+        }
+        //this.navCtrl.navigateForward('/home');
+      }
+    });
+  }
+
+  loadUserDetails() {
+    debugger
+    let uploadFile = new FormData();
+    uploadFile.append("Mobile", this.UserDetails[0].Phonenumber);
+    var url = 'api/BG/checking_Mobile';
+    this.general.PostData(url, uploadFile).subscribe((result: any) => {
+      debugger
+      if (result != "NOTEXIST") {
+        localStorage.setItem("UserDetails", JSON.stringify(result));
+       // this.statusupdate();
+      }
+    })
+  }
+
+  statusupdate() {
+    if (this.UserDetails[0].Status == false) {
+      this.general.presentAlert("Alert", "Please activate the mail and proceed with the other operations in the application...");
+
+    }
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      // Ensure dark mode is turned off by removing any dark mode classes
+      document.body.classList.remove('dark');
+
+      // Optionally, you can ensure that light mode styles are always applied
+      document.body.style.setProperty('--ion-background-color', '#ffffff');
+      document.body.style.setProperty('--ion-text-color', '#000000');
+      // Add any other light mode styles you want to enforce
+    });
+  }
+
+  alrt() {
+    if (this.UserDetails[0].Status == false) {
+      //this.general.presentAlert("Alert", "Please activate the mail and proceed with the other operations in the application...");
+
+    }
+  }
+
+
+}
+

@@ -1,0 +1,515 @@
+<!--<ion-header [translucent]="true">
+  <ion-row>
+    <ion-col size="2" routerLink="/home">-->
+      <!--<ion-icon name="chevron-back-outline"></ion-icon>-->
+    <!--</ion-col>
+    <ion-col size="8">
+      <ion-title>DONATE NOW</ion-title>
+    </ion-col>
+    <ion-col size="2">-->
+      <!--<ion-buttons>
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>-->
+    <!--</ion-col>
+  </ion-row>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="2"></ion-col>
+    <ion-col size="8">
+      <div class="tab-wrap">
+        <input type="radio" name="tabs" id="tab1" [checked]="selectedTab === 'open'" (change)="setTab('open')">
+        <div class="tab-label-content" (click)="setTab('open')">
+          <label for="tab1" [class.active]="selectedTab === 'open'">In your location</label>
+        </div>
+        <input type="radio" name="tabs" id="tab2" [checked]="selectedTab === 'closed'" (change)="setTab('closed')">
+        <div class="tab-label-content" (click)="setTab('closed')">
+          <label for="tab2" [class.active]="selectedTab === 'closed'">Other location</label>
+        </div>
+      </div>
+    </ion-col>
+    <ion-col size="2"></ion-col>
+  </ion-row>
+
+  <div *ngIf="!curnt">
+    <ion-row class="ion-margin-top ion-padding-top">
+      <ion-col size="12" class="ion-padding-top">
+        <div class="center">
+          <div class="card" style="display: flex;justify-content: center;align-items: center;">
+            <h4 style="margin:0!important;padding:0!important">{{msg}}</h4>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>-->
+
+  <!-- In Your Location Tab -->
+  <!--<div *ngIf="selectedTab === 'open' && curnt">
+    <ion-accordion-group [multiple]="false" #openAccordionGroup
+      [value]="activeAccordionOpen !== null ? activeAccordionOpen.toString() : null"
+      (ionChange)="onOpenAccordionChange($event)">
+      <ion-accordion *ngFor="let obj of currentloc; let i = index" [value]="i.toString()"
+        [ngClass]="{'ion-accordion-active': activeAccordionOpen === i}">
+        <div slot="header" color="light" class="accordionheader"
+          [style.display]="activeAccordionOpen === i ? 'none' : ''">
+          <ion-row class="ion-justify-content-around">
+
+            <ion-col size="1">
+              <img src="../../../assets/Images/mic.png" style=" transform: translate(0px, 1.3rem) scale(1.8)" />
+            </ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'A+'">A+ Saviors come and donate!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'A-'">A- your champions, come and donate!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'B+'">B+ your lifesavers, we need you!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'B-'">B- your rarities, donate now!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'O+'">O+ your givers, save our lives!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'O-'">O- your universal donors, save our lives!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'AB+'">AB+ your helpers, come and donate!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'AB-'">AB- your protectors, come and donate!</ion-col>
+            <ion-col size="3" class="textend">
+              <p>{{obj.BloodRequestDate | date:'dd/MM/yyyy'}}</p>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+            <ion-col size="6">
+              <div class="hosp">{{obj.FullName}}</div>
+            </ion-col>
+            <ion-col size="4" *ngIf="obj.newCityname">
+              <div class="cti">{{obj.newCityname}}</div>
+            </ion-col>
+            <ion-col size="1" class="ion-text-end">
+              <ion-icon [name]="activeAccordionOpen === i ? 'chevron-up-outline' : 'chevron-down-outline'"
+                class="accordion-toggle-icon">
+              </ion-icon>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <div slot="content" class="content" style="margin-left:5px">
+          <ion-row class="ramm">
+            <ion-col size="2" style="width: 15%;">
+              <img src="../../../assets/Images/openmic2.png" />
+            </ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'A+'"><b>A+ donors, come donate!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'A-'"><b>A- donors, champions, step
+                up!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'B+'"><b>B+ donors, lifesavers, we need
+                you!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'B-'"><b>B- donors, rarities, donate
+                now!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'O+'"><b>O+ donors, givers, save
+                lives!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'O-'"><b>O- donors, universal donors, act
+                now!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'AB+'"><b>AB+ donors, helpers, make a
+                difference!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'AB-'"><b>AB- donors, protectors, your blood is
+                rare!</b></ion-col>
+          </ion-row>
+          <br />
+          <ion-row>
+
+            <ion-col size="5">
+              <div>Patient Name</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.FullName }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Gender</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.Gender }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Blood Group</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.BLGName }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Age</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].Age || 'Not Available' }} yrs</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Type</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.Typesofblood }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Number of Units</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Required Date</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].BloodRequestDate | date:'dd/MM/yyyy' }} {{
+                (BloodRequestDetalis[0].BloodRequestDate + 'T' + BloodRequestDetalis[0].RequestTime) | date: 'hh:mm a'
+                }}</strong>
+            </ion-col>-->
+            <!--{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}-->
+            <!--<ion-col size="5">
+              <div>Purpose</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.Purpose }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Contact Person</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].ContactPerson || 'Not Available' }}</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Contact Number</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].ContactMobile || 'Not Available' }}</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Hospital Name</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.HospitalName || 'Not Available' }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Address</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.HospitalAddress || 'Not Available' }}</strong></ion-col>
+
+          </ion-row>
+          <ion-row>
+            <ion-col size="2"></ion-col>
+            <ion-col size="8">
+              <ion-row>
+                <ion-col size="3">
+                  <div class="round" (click)="openmap(crntlatitude, crntlongitude)">
+                    <ion-icon name="location-outline" style="color:red"></ion-icon>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div class="round">
+                    <a href="tel:{{ obj.ContactMobile }}">
+                      <ion-icon name="call-outline" class="callicon"></ion-icon>
+                    </a>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div class="round">
+                    <a href="https://api.whatsapp.com/send?phone=+91{{ obj.ContactMobile }}&text=Hiii" target="_blank">
+                      <ion-icon name="logo-whatsapp" style="color:forestgreen"></ion-icon>
+                    </a>
+                  </div>
+                </ion-col>
+                <ion-col size="3" (click)="InviteFrinds(obj)">
+                  <div class="round">
+                    <ion-icon color="danger" name="share-social-outline"></ion-icon>
+                  </div>
+                </ion-col>-->
+                <!--<ion-col size="2.4">
+                  <div class="round" (click)="closeAccordion('open')">
+                    <ion-icon name="close-outline" style="color:gray"></ion-icon>
+                  </div>
+                </ion-col>-->
+              <!--</ion-row>
+            </ion-col>
+            <ion-col size="2"></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="9"></ion-col>
+            <ion-col size="3"></ion-col>
+            <ion-col size="3" *ngIf="obj.ApprovalStatus !== 5 && status">
+              <div class="accordionhead" (click)="acceptCheck(obj.CreatedByEmail)">Accept</div>-->
+              <!--<ion-icon name="triangle-outline" color="danger"></ion-icon>-->
+            <!--</ion-col>
+            <ion-col size="6">
+              <div class="accordionhead floatt" (click)="openModal()">
+                <img class="reportimg" src="../../../assets/Images/danger.png" />
+              </div>
+            </ion-col>
+            <ion-col size="3" (click)="closeAccordion('open')">
+              <div class="triangle-up f-end"></div>-->
+              <!--<ion-icon name="triangle-outline" color="danger"></ion-icon>-->
+            <!--</ion-col>
+          </ion-row>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+    <ion-modal #modal1 [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button class="button1" (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end" (click)="myreport()">
+              <ion-button class="button1">Okay</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <textarea [(ngModel)]="myrepots" placeholder="Write a message..."></textarea>
+      </ng-template>
+    </ion-modal>
+  </div>-->
+
+  <!-- Other Location Tab -->
+  <!--<div *ngIf="selectedTab === 'closed' && curnt">
+    <div class="filter">
+      <ion-icon name="filter-outline" (click)="toggleFilter()" class="filter-icon"></ion-icon>
+      <div *ngIf="showDropdown" class="dropdown-container">
+        <ion-item lines="none" style="border-bottom:1px solid #333; margin-bottom: 2px;">
+          <ion-input [(ngModel)]="searchQuery" (ionInput)="filterPincodes()" maxlength="6"
+            placeholder="Enter Pincode"></ion-input>
+          <div class="ion-activatable ripple-parent rectangle">
+            <ion-button (click)="Selectfilter(searchQuery)" class="buttonsubmit">Submit</ion-button>
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+        </ion-item>
+        <div *ngIf="selectedPincode.length === 0">
+          <p>No matching results found</p>
+        </div>
+      </div>
+    </div>
+
+    <ion-accordion-group [multiple]="false" #closedAccordionGroup
+      [value]="activeAccordionClosed !== null ? activeAccordionClosed.toString() : null"
+      (ionChange)="onClosedAccordionChange($event)">
+      <ion-accordion *ngFor="let obj of otherloc; let i = index" [value]="i.toString()"
+        [ngClass]="{'ion-accordion-active': activeAccordionClosed === i}">
+        <div slot="header" color="light" class="accordionheader"
+          [style.display]="activeAccordionClosed === i ? 'none' : ''">
+          <ion-row class="ion-justify-content-around">
+
+            <ion-col size="1">
+              <img src="../../../assets/Images/mic.png" style=" transform: translate(0px, 1.3rem) scale(1.8)" />
+            </ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'A+'">A+ Saviors come and donate!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'A-'">A- your champions, come and donate!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'B+'">B+ your lifesavers, we need you!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'B-'">B- your rarities, donate now!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'O+'">O+ your givers, save our lives!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'O-'">O- your universal donors, save our lives!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'AB+'">AB+ your helpers, come and donate!</ion-col>
+            <ion-col size="8" *ngIf="obj.BLGName == 'AB-'">AB- your protectors, come and donate!</ion-col>
+            <ion-col size="3" class="textend">
+              <p>{{obj.BloodRequestDate | date:'dd/MM/yyyy'}}</p>
+            </ion-col>
+            <ion-col size="1"></ion-col>
+            <ion-col size="6" >
+              <div class="hosp">{{obj.FullName}}</div>
+            </ion-col>
+            <ion-col size="4" *ngIf="obj.newCityname">
+              <div class="cti">{{obj.newCityname}}</div>
+            </ion-col>
+            <ion-col size="1" class="ion-text-end">
+              <ion-icon [name]="activeAccordionClosed === i ? 'chevron-up-outline' : 'chevron-down-outline'"
+                class="accordion-toggle-icon">
+              </ion-icon>
+            </ion-col>
+
+          </ion-row>
+        </div>
+
+        <div slot="content" class="content" style="margin-left:5px">
+          <ion-row class="ramm">
+            <ion-col size="2" style="width: 15%;">
+              <img src="../../../assets/Images/openmic2.png" />
+            </ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'A+'"><b>A+ donors, come donate!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'A-'"><b>A- donors, champions, step
+                up!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'B+'"><b>B+ donors, lifesavers, we need
+                you!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'B-'"><b>B- donors, rarities, donate
+                now!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'O+'"><b>O+ donors, givers, save
+                lives!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'O-'"><b>O- donors, universal donors, act
+                now!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'AB+'"><b>AB+ donors, helpers, make a
+                difference!</b></ion-col>
+            <ion-col size="10" class="surajjjjj" *ngIf="obj.BLGName == 'AB-'"><b>AB- donors, protectors, your blood is
+                rare!</b></ion-col>
+          </ion-row>
+          <br />
+          <ion-row>
+            <ion-col size="5">
+              <div>Patient Name</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.FullName }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Gender</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.Gender }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Blood Group</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.BLGName }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Age</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].Age || 'Not Available' }} yrs</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Type</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.Typesofblood }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Number of Units</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Required Date</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].BloodRequestDate | date:'dd/MM/yyyy' }} {{
+                BloodRequestDetalis[0].BloodRequestDate + 'T'+ BloodRequestDetalis[0].RequestTime | date: 'hh:mm a'
+                }}</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Purpose</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.Purpose }}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Contact Person</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].ContactPerson || 'Not Available' }}</strong>
+            </ion-col>
+
+            <ion-col size="5">
+              <div>Contact Number</div>
+            </ion-col>
+            <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
+              <strong>{{ BloodRequestDetalis[0].ContactMobile || 'Not Available' }}</strong>
+            </ion-col>
+
+
+            <ion-col size="5">
+              <div>Hospital Name</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.HospitalName || 'Not Available'}}</strong></ion-col>
+
+            <ion-col size="5">
+              <div>Address</div>
+            </ion-col>
+            <ion-col size="7"><strong>{{ obj.HospitalAddress || 'Not Available' }}</strong></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2"></ion-col>
+            <ion-col size="8">
+              <ion-row>
+                <ion-col size="3">
+                  <div class="round" (click)="openmap(crntlatitude, crntlongitude)">
+                    <ion-icon name="location-outline" style="color:red"></ion-icon>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div class="round">
+                    <a href="tel:{{ obj.ContactMobile }}">
+                      <ion-icon name="call-outline" class="callicon"></ion-icon>
+                    </a>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div class="round">
+                    <a href="https://api.whatsapp.com/send?phone=+91{{ obj.ContactMobile }}&text=Hiii" target="_blank">
+                      <ion-icon name="logo-whatsapp" style="color:forestgreen"></ion-icon>
+                    </a>
+                  </div>
+                </ion-col>
+                <ion-col size="3" (click)="InviteFrinds(obj)">
+                  <div class="round">
+                    <ion-icon color="danger" name="share-social-outline"></ion-icon>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col size="2"></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="9"></ion-col>
+            <ion-col size="3"></ion-col>
+            <ion-col size="3" *ngIf="obj.ApprovalStatus !== 5 && status">
+              <div class="accordionhead" (click)="acceptCheck(obj.CreatedByEmail)">Accept</div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="accordionhead floatt" (click)="openModal()">
+                <img class="reportimg" src="../../../assets/Images/danger.png" />
+              </div>
+            </ion-col>
+            <ion-col size="3" (click)="closeAccordion('closed')">
+              <div class="triangle-up f-end"></div>-->
+              <!--<ion-icon name="triangle-outline" color="danger"></ion-icon>-->
+            <!--</ion-col>
+          </ion-row>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+    <ion-modal #modal1 [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button class="button1" (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end" (click)="myreport()">
+              <ion-button class="button1">Okay</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <textarea [(ngModel)]="myrepots" placeholder="Write a message..."></textarea>
+      </ng-template>
+    </ion-modal>
+  </div>
+</ion-content>
+
+<div class="footer_content">
+  <ion-row>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/home">
+        <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
+        <div class="tabs_title">Home</div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/needblood">
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donatenowwhite.png" />
+        <div class="tabs_title">Find donor</div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4">
+      <div class="border" routerLink="/joincampaign">
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Join Campaign.png" />
+        <div class="tabs_title">Campaign</div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4" routerLink="/donatenow">
+      <div class="border" style="background-color:#a9b5cb;border:none">-->
+        <!--<ion-icon name="egg-outline" class="tabs_icon" style="color:white;font-size:25px"></ion-icon>-->
+        <!--<img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/donatenow.png" />
+        <div class="tabs_title"></div>
+      </div>
+    </ion-col>
+    <ion-col size="2.4" routerLink="/letshlpgallerry">
+      <div class="border">
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Gallery.png" />
+        <div class="tabs_title">Gallery</div>
+      </div>
+    </ion-col>
+  </ion-row>
+</div>-->

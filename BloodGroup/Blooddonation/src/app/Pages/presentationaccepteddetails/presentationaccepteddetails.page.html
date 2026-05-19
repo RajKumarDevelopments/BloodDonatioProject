@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" (click)="goBack()">
+        <ion-icon name="chevron-back-outline" style="font-size: 24px; margin-top: 8px;"></ion-icon>
+      </ion-col>
+      <ion-col size="8">
+        <ion-title>ACCEPTED PARTICIPANTS</ion-title>
+      </ion-col>
+      <ion-col size="2">
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-row class="searchmargin">
+    <ion-col size="12">
+      <ion-searchbar placeholder="Search Participant" [(ngModel)]="searchTerm" (ionInput)="onSearch()"></ion-searchbar>
+    </ion-col>
+   
+  </ion-row>
+
+  <!-- No Records Found -->
+  <div *ngIf="!isLoading && filteredParticipants.length === 0">
+    <ion-row>
+      <ion-col size="12">
+        <div class="center">
+          <div class="card">
+            <h4>No Records Found</h4>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="filteredParticipants.length > 0">
+    <!-- Using ionChange for stable state management while maintaining donordetails look -->
+    <ion-accordion-group 
+      [value]="activeAccordion !== null ? activeAccordion.toString() : null"
+      (ionChange)="activeAccordion = ($event.detail.value !== null && $event.detail.value !== undefined) ? +$event.detail.value : null"
+      mode="md">
+      
+      <ion-accordion *ngFor="let person of filteredParticipants; let i = index" [value]="i.toString()">
+        <div slot="header" color="light" class="accordionheader">
+          <!-- Simplified Header: Show only FullName and City -->
+          <ion-row class="ion-align-items-center" *ngIf="activeAccordion !== i">
+            <ion-col size="2">
+              <img src="../../../assets/Images/user.png" class="imgg" />
+            </ion-col>
+            <ion-col size="5" class="namee">
+              <span class="namee"> {{ person.FullName }} </span>              
+            </ion-col>
+
+            <ion-col size="5" class="namee">
+              <span class="namee"> {{ person.newCityname }} </span>           
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+          <div class="card-details">
+            <!-- Details Section (Two Column Layout) -->
+            <div class="detail-section">
+              <div class="detail-row"><strong>Full Name:</strong> <span>{{ person.FullName }}</span></div>
+              <div class="detail-row"><strong>Phone Number:</strong> <span>{{ person.Phonenumber }}</span></div>
+              <div class="detail-row"><strong>Location:</strong> <span>{{ person.newCityname }}</span></div>
+              <div class="detail-row"><strong>Accepted Date:</strong> <span>{{ person.RequestDate | date: 'dd-MM-yyyy hh:mm a' }}</span></div>
+              <div class="detail-row"><strong>Address:</strong> <span>{{ person.Address }}, {{ person.Area }}, {{ person.RegCity }}, {{ person.RegDistrict }}, {{ person.RegState }} - {{ person.RegPin }}</span></div>
+            </div>
+
+            <!-- Action Buttons Footer -->
+            <div class="footer-actions">
+              <div class="comm-btns">
+                <div class="whatsapp-btn" (click)="openWhatsApp(person.Phonenumber)">
+                  <ion-icon name="logo-whatsapp"></ion-icon>
+                </div>
+                <div class="call-btn" (click)="makeCall(person.Phonenumber)">
+                  <ion-icon name="call"></ion-icon>
+                </div>
+              </div>
+
+              <!-- Clicking triangle closes the accordion by resetting activeAccordion -->
+              <div class="expand-toggle" (click)="activeAccordion = null">
+                <div class="triangle-up"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </div>
+</ion-content>

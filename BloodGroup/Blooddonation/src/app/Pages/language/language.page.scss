@@ -1,0 +1,98 @@
+.home-row {
+  /*height: 30vh;*/
+  /* Full height */
+  padding: 0px 20px;
+  /*margin-top: 17%*/
+}
+
+.home-content {
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.red-button {
+  margin-left: -6px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  /* Full width on mobile */
+  //max-width: 300px; /* Limit max width */
+  transition: background-color 0.3s ease;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+/* Hide the down arrow next to the language text */
+.goog-te-gadget-icon {
+  display: none !important;
+}
+
+.goog-te-menu-value span:nth-child(3) {
+  display: none !important;
+}
+
+.red-button:hover {
+  background-color: #c0392b;
+}
+
+.language-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+
+  ion-chip {
+    margin: 5px;
+    cursor: pointer;
+  }
+}
+
+
+.language-dropdown {
+  border-radius: 8px !important;
+  color: black;
+  //padding: 4px 7px;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid red !important;
+
+  ion-select {
+    width: 100%;
+    padding-left: 10px;
+    --padding-start: 10px;
+  }
+}
+
+.trans {
+  opacity: 0.5;
+  /* Adjust the value between 0 (fully transparent) to 1 (fully opaque) */
+}
+
+.ftr {
+  width: 100%;
+}
+
+:host .language-dropdown {
+  --min-height: 0px !important;
+}
+
+.language-dropdown {
+  height: 25px !important;
+  font-size: 12px !important;
+}
+
+.language-dropdown::part(native) {
+  height: 25px !important;
+  font-size: 12px !important;
+}

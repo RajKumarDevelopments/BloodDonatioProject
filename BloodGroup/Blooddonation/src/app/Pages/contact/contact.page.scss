@@ -1,0 +1,266 @@
+// Header styles
+.headerhight {
+  padding: 10px 0;
+}
+
+.headerw-100 {
+  width: 100%;
+  align-items: center;
+}
+
+ion-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+ion-icon[name="chevron-back-outline"] {
+  font-size: 24px;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+// Content styles
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}
+
+// Welcome card
+.welcome-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ion-color-dark);
+  text-align: center;
+  margin: 0;
+}
+
+// Form styles
+.form-item {
+  --border-width: 0 0 1px 0;
+  --border-color: var(--ion-color-light-shade);
+  margin-bottom: 16px;
+
+  ion-label {
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    margin-bottom: 8px;
+    font-size: 16px !important;
+    letter-spacing: 1px;
+}
+
+  ion-input, ion-select, ion-textarea {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+}
+
+// Image upload section
+ion-card {
+  margin: 16px 0;
+  /*box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);*/
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  color: var(--ion-color-primary);
+}
+
+.image-preview {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+
+  .preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid var(--ion-color-light);
+  }
+
+  .remove-image-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    --border-radius: 50%;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    width: 32px;
+    height: 32px;
+
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.upload-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.upload-btn, .web-upload-btn {
+  --border-radius: 8px;
+  font-weight: 600;
+
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+.upload-btn {
+  /*--color: var(--ion-color-primary);*/
+  --color: #3d2e1f!important;
+  --border-color: var(--ion-color-danger);
+}
+
+.web-upload-btn {
+  --color: var(--ion-color-medium);
+  font-size: 14px;
+}
+
+.upload-info {
+  text-align: center;
+  margin: 0;
+
+  small {
+    font-size: 12px;
+  }
+}
+
+// Submit button
+.submit-btn {
+  --border-radius: 25px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  margin: 24px 0 16px 0;
+  font-weight: 400;
+  font-size: 16px;
+  --background: red;
+  font-size: 16px;
+  text-transform: capitalize; 
+
+  ion-icon {
+    font-size: 16px;
+  }
+
+  &[disabled] {
+    --opacity: 0.5;
+  }
+}
+
+// Validation message
+.validation-message {
+  text-align: center;
+  padding: 24px 16px;
+
+  p {
+    margin: 0;
+    font-size: 16px;
+    font-style: italic;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .upload-buttons {
+    .web-upload-btn {
+      display: none; // Hide web upload button on mobile
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .upload-btn {
+    display: none; // Hide camera button on desktop
+  }
+}
+
+// Legacy styles (keeping your existing styles that are still relevant)
+.item_center, .items_center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  padding: 10px;
+  border-radius: 20px;
+  width: 88%;
+  margin: 5%;
+  background-color: var(--ion-color-primary);
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.button_1 {
+  padding: 10px;
+  border-radius: 20px;
+  width: 80%;
+  margin: 0px;
+  background-color: var(--ion-color-primary);
+  color: white;
+}
+
+// Improved form field styling
+ion-item {
+  --inner-padding-end: 0;
+  --padding-start: 0;
+  margin-bottom: 16px;
+
+  &.item-has-focus {
+    --border-color: var(--ion-color-primary);
+  }
+}
+
+ion-textarea {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  min-height: 100px;
+}
+
+// Loading and error states
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 14px;
+  padding: 8px 12px;
+  background: var(--ion-color-danger-tint);
+  border-radius: 4px;
+  margin: 8px 0;
+}
+.attimg {
+  color: var(--ion-color-dark); 
+  letter-spacing: 1px;
+  font: 600 13px poppins;
+}
+.atticon {
+  color: #3d2e1f !important;
+  font: 600 18px poppins;
+}
+.spancol{
+    color:red!important;
+}

@@ -1,0 +1,211 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="headerhight">
+      <ion-row class="headerw-100">
+        <ion-col size="2" routerLink="/home"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+        <ion-col size="8">
+          <ion-title> DONOR GUIDE</ion-title>
+        </ion-col>
+        <ion-col size="2">
+         
+        </ion-col>
+      </ion-row>
+      </div>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content>
+  <ion-card class="card mt-3">
+    <div>We developed for you</div>
+    <div><strong>The Donor Guide as a Quiz</strong></div>
+    <p routerLink="/quiz">TAKE ME TO THE QUIZ</p>
+  </ion-card>
+
+  <div>
+    <ion-row class="row-spacing">
+      <!---Tabs1-->
+      <ion-col size="12">
+        <div class="cards" (click)="buton('EligibilityCriteria')">
+          <ion-row *ngIf="myval != 'EligibilityCriteria'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Eligibility Criteria- Alphabetical</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Unsure About Eligibility? Check Here!</p>
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngIf="myval == 'EligibilityCriteria'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Eligibility Criteria- Alphabetical</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Unsure About Eligibility? Check Here!</p>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+
+      <!---Tabs2-->
+     
+      <ion-col size="12">
+        <div class="cards" (click)="buton('Donatetypes')">
+          <ion-row *ngIf="myval !='Donatetypes'">
+            <ion-col size="2" class="icon_img">
+            
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Compatible Blood Types</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Discover Which Blood Types Match</p>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="myval =='Donatetypes'">
+            <ion-col size="2" class="icon_img">
+              
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Compatible Blood Types</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Discover Which Blood Types Match</p>
+            </ion-col>
+          </ion-row>
+
+        </div>
+      </ion-col>
+
+
+      <!---Tabs3-->
+      <ion-col size="12">
+        <div class="cards" (click)="buton('TypesofDonations')">
+          <ion-row *ngIf="myval != 'TypesofDonations'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Types of Donations</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">From Whole Blood to Platelets: Know Your Options</p>
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngIf="myval == 'TypesofDonations'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Types of Donations</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">From Whole Blood to Platelets: Know Your Options</p>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+
+      <!---Tabs4-->
+      <ion-col size="12">
+        <div class="cards" (click)="buton('BloodDonationProcess')">
+          <ion-row *ngIf="myval != 'BloodDonationProcess'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Blood Donation Process</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">From Start to Finish: Your Donation Journey</p>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="myval == 'BloodDonationProcess'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Blood Donation Process</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">From Start to Finish: Your Donation Journey</p>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+
+      <!---Tabs5-->
+      <ion-col size="12">
+        <div class="cards" (click)="buton('Mythfacts')">
+          <ion-row *ngIf="myval !='Mythfacts'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Myth & Facts</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Clarifying Myths and Facts</p>
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngIf="myval =='Mythfacts'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Myth & Facts</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Clarifying Myths and Facts</p>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+
+      <!---Tabs6-->
+      <ion-col size="12">
+        <div class="cards" (click)="buton('ComponentsBlood')">
+          <ion-row *ngIf="myval != 'ComponentsBlood'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Components Blood</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Components Blood Explained</p>
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngIf="myval == 'ComponentsBlood'">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/Images/bloodd.png" class="icon_imgs1" />
+              <!--<img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />-->
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13px !important;">Components Blood</ion-label>
+              <p class="Arial font24 gray" style="margin-top: 3px; font-size: 11px !important;">Components Blood Explained</p>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+
+
+
+    </ion-row>
+
+
+  </div>
+
+  <div>
+
+  </div>
+
+</ion-content>
+
+
+
+
+<style>
+</style>
+
+

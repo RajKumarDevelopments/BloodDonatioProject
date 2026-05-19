@@ -1,0 +1,209 @@
+.img{
+  width:35%;
+  height:38%;
+}
+
+.title {
+  text-align: center;
+  font-size: 19px;
+  /*color: #d5d0d0;*/
+  margin-top: 5%;
+}
+
+.item_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  background-color: white;
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 500px;
+  padding: 20px;
+  width: 320px;
+}
+
+
+.subtitle {
+  color: #eee;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+  height: 50px;
+}
+
+.icon-placeholder-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ic1 {
+  margin: 0% 0% 7% 0%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 22px;
+  color: #aaa;
+  font-size: 20px;
+  pointer-events: none;
+  top: 17px;
+}
+
+.custom-input {
+  --padding-start: 40px; /* Add padding to the left side of the input */
+}
+
+.custom-input::part(native)::-webkit-input-placeholder {
+  padding-left: 40px; /* Adjust the placeholder padding */
+  top: 10px; /* Adjust the vertical position of the placeholder */
+}
+
+.custom-input::part(native)::-moz-placeholder {
+  padding-left: 40px; /* Adjust the placeholder padding for Firefox */
+  top: 10px; /* Adjust the vertical position of the placeholder */
+}
+
+.custom-input::part(native):-ms-input-placeholder {
+  padding-left: 40px; /* Adjust the placeholder padding for IE */
+  top: 10px; /* Adjust the vertical position of the placeholder */
+}
+
+.custom-input::part(native):-moz-placeholder {
+  padding-left: 40px; /* Adjust the placeholder padding for old versions of Firefox */
+  top: 10px; /* Adjust the vertical position of the placeholder */
+}
+
+.input {
+  border: 1px solid gray;
+  border-radius: 50px;
+  outline: 0;
+  font-size: 18px;
+  color: black;
+  padding: 10px 10px 10px 40px; /* Adjust padding to accommodate the icon */
+  background-color: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+/*.cut {
+  background-color: white;
+  border-radius: 10px;
+  height: 20px;
+  left: 20px;
+  position: absolute;
+  top: -20px;
+  transform: translateY(0);
+  transition: transform 200ms;
+  width: 70%;
+}*/
+
+.cut-short {
+  width: 50px;
+}
+
+.cut {
+  background-color: white;
+  border-radius: 10px;
+  height: 20px;
+  left: 30px;
+  position: absolute;
+  top: -10px;
+  transform: translateY(0);
+  transition: transform 200ms;
+  width: 70px;
+}
+
+.placeholder {
+  position: absolute;
+  top: 10px;
+  left: 40px; /* Adjust to account for the icon */
+  font-size: 16px;
+  color: #aaa;
+  transition: 0.2s;
+  pointer-events: none;
+}
+
+.input:placeholder-shown + .placeholder {
+  font-size: 16px;
+  cursor: text;
+  top: 10px;
+  left: 40px; /* Adjust to account for the icon */
+}
+
+.input:focus + .placeholder,
+.input:not(:placeholder-shown) + .placeholder {
+  top: -10px;
+  left: 30px; /* Adjust to account for the icon */
+  font-size: 12px;
+  color: #777;
+}
+
+
+ion-footer {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background: white; /* Or any color you prefer */
+}
+
+.red-button {
+  background-color: red; /* Button color */
+  color: white; /* Text color */
+}
+/*.red-button {
+  padding: 13px;
+  position: sticky;
+  margin-top: -84px;
+}*/
+.input:focus ~ .cut,
+.input:not(:placeholder-shown) ~ .cut {
+  transform: translateY(10px);
+}
+
+.submit {
+  background-color: #08d;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 38px;
+  text-align: center;
+  width: 100%;
+}
+
+.submit:active {
+  background-color: #06b;
+}
+.star {
+  color: red;
+}
+
+ion-content {
+  flex-direction: column;
+  overflow: auto; /* Enable scrolling */
+  padding-bottom: 60px; /* Enable scrolling */
+}
+
+:host ::ng-deep .native-input.sc-ion-input-md {
+  padding-left: 5px!important;
+  padding-right: 0!important;
+  margin-right: 1px!important;
+}
+
+
+.red-button{
+  padding: 15px 0!important;
+  border-radius: 25px!important;
+}

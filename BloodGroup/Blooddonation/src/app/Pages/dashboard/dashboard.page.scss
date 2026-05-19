@@ -1,0 +1,393 @@
+ion-card {
+  --ion-margin: 10px;
+  text-align: center;
+  background-color: #ff0000c7;
+  margin-bottom: 16px
+}
+
+h2 {
+  margin-left: 11px;
+}
+
+.image {
+  margin-bottom: 10px;
+}
+
+ion-card-header {
+  //color: #fff;
+  padding: 16px;
+}
+
+.bg-Donation {
+  //background-color: red;
+}
+
+.bg-Donors {
+  //background-color: orangered;
+}
+
+.bg-Referral {
+ // background-color: green;
+}
+
+.bg-Brouchers {
+ // background-color: #0066ff;
+}
+.bg-Presentation {
+ // background-color: orange;
+}
+ion-card:hover{
+  background-color:red;
+}
+ion-card-title :hover {
+  color: white;
+}
+
+ion-card-title {
+  font-size: 14px;
+  color: #fff;
+}
+
+.count {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 10px;
+  color: white;
+}
+
+.edit {
+  border-radius: 50px;
+}
+
+.round {
+  margin: -4rem 3rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: red;
+  font-weight: bold;
+  padding: 13px 9px;
+  border-radius: 60px;
+  width: 35px;
+  height: 35px;
+  background: white;
+  font-size: 8px;
+}
+
+.card_icon {
+  font-size: 20px;
+  color: red;
+  margin: 0% 3% 1% -5%;
+  font-weight: bold;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  margin: 0px 12px;
+}
+
+.item-content p {
+  color: #abaeb3;
+  font-weight: normal;
+  font-size: 10px
+}
+
+.highlight {
+  color: rgb(65 67 88);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.item-content ion-label:not(.highlight) {
+  color: #6c757d; /* Gray color (adjust as needed) */
+}
+
+.img_border {
+  border: 2px solid red;
+  border-radius: 10px;
+  margin: 20% 0% -1% 0%;
+}
+
+.sub_circle {
+  background-color: white;
+  color: red;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px
+}
+
+.img_border img {
+  margin: -0% 0% -1% 0%;
+  border-radius: 10px;
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+}
+
+ion-menu-button {
+  /*color: red;
+  border: 1px solid red;
+  border-radius: 50px;
+  font-size: 30px;
+  margin-top: 20%;*/
+}
+
+.tabs_title {
+  font-size: 10px;
+  text-align: center;
+  /*margin-left: -15%;*/
+  display: flex;
+  align-content: center;
+  justify-content: center
+}
+
+.tabs_icon {
+  margin-left: 0.5rem;
+  font-size: 20px;
+  padding: 5px;
+  display: flex;
+  align-content: center;
+  justify-content: center
+}
+
+.main_img {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center
+}
+
+.main_img img {
+  width: 200px;
+  margin-bottom: 60%
+}
+
+p {
+  text-align: center;
+  color: #c7200a;
+  font-weight: bold
+}
+
+iframe {
+  margin-bottom: 5%;
+}
+
+.title {
+  text-align: right;
+  color: #c7200a;
+  font-weight: bold
+}
+
+.border {
+  border: 1px solid gray;
+  height: 50px;
+  width: 57px;
+  border-radius: 10px;
+  /*background-color: #f0f0f0;*/
+  border: none;
+  padding: 5px;
+}
+
+ion-content {
+  --background-color: #f0f0f052
+}
+
+.notif {
+  color: #c7200a;
+  font-weight: bold
+}
+
+ion-header ion-toolbar:first-of-type {
+  padding-top: var(--ion-safe-area-top, 0);
+  --background: none;
+  --color: black;
+  box-shadow: none;
+}
+
+.card {
+  padding: 10px;
+  background-color: white !important;
+  border-bottom-right-radius: 18%;
+  border-bottom-left-radius: 18%;
+}
+
+.card1 {
+  background-color: white !important;
+  border-radius: 50px;
+  /*margin-top: 1rem;*/
+  margin: 14px 10px 0px 10px;
+  /*box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;*/
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.headder {
+  font-size: 10px;
+  margin-top: -3.5rem;
+}
+
+.text_center {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex
+}
+
+span {
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.name {
+  margin-top: -1.5rem;
+}
+
+.name1 {
+  font-weight: 600;
+  color: #aabccb;
+  font-size: 12px;
+}
+
+.text_end {
+  background-color: gainsboro;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  float: inline-end;
+  margin-top: -1rem;
+}
+
+.text_end img {
+  width: 23px;
+  height: 23px
+}
+
+.imgcard {
+  padding: 8%;
+  border-radius: 50%;
+  margin-top: -35%;
+  background: #e7e7e7;
+  box-shadow: rgb(231 231 231 / 20%) -7px 20px 1px -2px, rgb(231 225 225 / 14%) 0px 2px 2px 0px, rgb(243 240 240 / 12%) 0px 1px 5px 0px;
+}
+
+
+.inner-scroll {
+  background-color: #e7e7e7 !important;
+}
+
+:host {
+  --ion-background-color: #f1f2f6; /* Replace with your desired color */
+}
+
+
+.circular-card {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /*margin-top: -3.5rem;*/
+  padding: 5px;
+  position: relative;
+  background-color: #d3d3d373;
+  margin-top: 1.5rem;
+}
+
+.username {
+  color: #6d6e7a;
+  font-weight: bold;
+  /*margin: -3% 0% 2% 0%;*/
+  margin: 2% 1% -4% 0%;
+}
+
+.footer_content {
+  height: 10vh;
+}
+
+.body_content {
+  height: 65vh;
+}
+
+.top_header {
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  border-bottom: none;
+  background-color: white;
+  position: relative;
+  height: 21vh;
+  border-radius: 0px 0px 25px 25px;
+  /*padding: 10px;*/
+}
+
+.sub_text {
+  background-color: white;
+  border-radius: 50px;
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+  color: red;
+  margin: -3rem 0px 0px 5rem;
+  position: relative;
+  font-weight: bold;
+}
+
+sub {
+  bottom: 0.1em;
+  left: 5px;
+  font-size: 64%;
+}
+
+hr {
+  margin-top: 2px;
+}
+
+.Arial {
+  font-family: Arial !important;
+}
+
+.gray {
+  color: lightgray;
+}
+
+.row-spacing {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+.title::before {
+  content: "▲"; /* Unicode character for down arrow */
+  display: inline-block;
+  font-size: 12px;
+  color: red; /* Set the color of the content */
+  float: inline-end; /* Adjust alignment if needed */
+}
+/*ion-card-title:hover {
+  color: white;
+}
+.count:hover {
+  color: white;
+}*/
+/*header height, title start gg-s*/
+.headerhight {
+  height: 25px;
+  display: flex;
+  align-items: center;
+
+  ion-title {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  } 
+}
+.headerw-100 {
+  width: 100%;
+}
+/*header height,title end gg-s*/
+/*content start gg-s*/
+.mt-3{
+    margin-top: 3px;
+}
+/*content start gg-s*/

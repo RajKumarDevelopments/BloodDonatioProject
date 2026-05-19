@@ -1,0 +1,188 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/searchdonors"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title> DONORS</ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <!--<ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>-->
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-row class="searchmargin">
+    <ion-col size="10">
+      <ion-searchbar placeholder="Search Donor" [(ngModel)]="searchValue" (ionInput)="SearchDonors()"></ion-searchbar>
+    </ion-col>
+    <ion-col size="2" routerLink="/searchdonors">
+      <img src="../../../assets/Images/filter.png" style="width: 50%; margin-top: 1rem;" />
+    </ion-col>
+    <ion-col size="12">
+    </ion-col>
+  </ion-row>
+
+  <!--<ion-item id="open-modal">
+    <ion-input label="Select Venue Type" placeholder=""></ion-input>
+    <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="selectedPlace == null || selectedPlace =='' "></ion-icon>
+    <ion-input formControlName="Place" [value]="selectedPlace" class="regright" *ngIf="selectedPlace != null  || selectedPlace !='' "></ion-input>
+  </ion-item>-->
+  
+
+  <!-- No Records Found -->
+  <div *ngIf="!FilterData || FilterData.length === 0">
+    <ion-row>
+      <ion-col size="12">
+        <div class="center">
+          <div class="card">
+            <h4>No Records Found</h4>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="FilterData && FilterData.length > 0">
+    <ion-accordion-group>
+      <ion-accordion value="{{obj.subIndexName}}" *ngFor="let obj of FilterData;let i = index" [value]="activeAccordion === i ? obj.UdId : null">
+        <div slot="header" color="light" class="accordionheader">
+          <ion-row (click)="toggleAccordion(i)" *ngIf="activeAccordion !== i">
+            <ion-col size="2">
+              <img src="../../../assets/Images/user.png" class="imgg" />
+            </ion-col>
+            <ion-col size="6" class="namee ">
+              <span class="namee">  {{obj.FullName}} </span> <br />
+              <span class="pp">Age &nbsp;{{obj.Age}}</span>
+            </ion-col>
+            <ion-col size="4" class="textend wht-now">
+              <p>
+                <strong> {{obj.BLGName}}    </strong>  <br />
+                <span class="namee">   {{obj.CityName}}  </span>
+                <!--<span class="black">   {{obj.CityName}}  </span>-->
+
+              </p>
+            </ion-col>
+          </ion-row>
+        </div>
+        <div slot="content" class="content" *ngIf="activeAccordion === i">
+          <ion-row>
+            <ion-col size="2">
+              <img src="../../../assets/Images/user.png" class="imgg" />
+            </ion-col>
+            <ion-col size="6" class="namee">
+              <span class="black"> <strong> {{obj.FullName}} </strong></span>      <br />
+              <span class="pp" *ngIf="obj.Age != '' ">Age &nbsp;{{obj.Age}}</span>
+            </ion-col>
+            <ion-col size="4" class="textend">
+              <p>
+                <strong> {{obj.BLGName}}</strong><br />
+                <span class="black"><strong> {{obj.CityName}} </strong></span>
+              </p>
+            </ion-col>
+
+
+
+            <!--<ion-col size="6" class="p1" id="open-custom-dialog">
+    <span class="pp" style="color: red; text-transform: uppercase; font-size: 9px !important; letter-spacing: .5px;">
+      Report
+    </span>
+  </ion-col>-->
+            <ion-col size="6" class="p1" id="open-custom-dialog"
+                     (click)="openReportModal(obj)">
+              <span class="pp">Report</span>
+            </ion-col>
+
+            <ion-modal id="example-modal" #modal trigger="open-custom-dialog">
+              <ng-template>
+                <div class="wrapper ion-padding">
+
+                  <ion-list lines="none">
+                    <!-- Custom dropdown -->
+                    <label for="observationSelect">Choose Observation</label>  <br />
+                    <select id="observationSelect" [(ngModel)]="selectedObservation" class=" mt-5 custom-dropdown">
+                      <option value="" disabled selected>Choose Observation</option>
+
+                      <ng-container *ngFor="let obj of Observationlist" class="dropdownss">
+                        <option *ngIf="obj.Status == 1" [ngValue]="obj">{{ obj.ObservationReason }}</option>
+                      </ng-container>
+                    </select>
+
+
+                    <br />
+                    <!-- Comments input -->
+                    <br />
+                    <ion-label position="stacked">Comments</ion-label>
+                    <ion-item lines="none" class="entercomments" style="
+                      border: 1px solid #333;
+                      border-radius: 5px;
+                      margin-top: 9px;
+                      width: 98%;
+                      height: 48px;
+                      margin-bottom: 18px;">
+                      <ion-input [(ngModel)]="comments"
+                                 placeholder="Enter your comments"
+                                 type="text"
+                                 clearInput="true">
+                      </ion-input>
+                    </ion-item>
+
+                    <!-- <ion-textarea [(ngModel)]="comments"  placeholder="Enter your comments" class="entercomments"style="padding: 12px;"></ion-textarea>
+          -->
+                    <!-- Submit button -->
+                    <ion-item>
+                      <ion-button expand="block" color="danger" slot="start" (click)="closeModal()">
+                        Cancel
+                      </ion-button>
+                      <ion-button expand="block" color="success" (click)="submitReport()" slot="end">
+                        Submit
+                      </ion-button>
+                    </ion-item>
+                  </ion-list>
+
+                </div>
+              </ng-template>
+            </ion-modal>
+            <ion-col size="6" class="m2">
+              <!-- Notification + Text + Email Icon -->
+              <ion-col class="flexicon">
+                <button ion-button fill="none" style="background: #fff !important;" (click)="Combinedchannel(obj)">
+                  <ion-ripple-effect></ion-ripple-effect>
+
+                  <img src="../../../assets/Images/mailicon.png" alt="Alternate Text" class="notification" />
+
+                </button>
+              </ion-col>
+
+              <!-- Call Icon -->
+              <ion-col *ngIf="isPastDate(obj.PhoneCallNext) && obj.Status == true">
+                <a href="tel:{{obj.Phonenumber}}" (click)="updateCommunicationChannel(obj.RegId, 1)">
+                  <ion-icon name="call" class="callclr"></ion-icon>
+                </a>
+              </ion-col>
+
+              <!-- WhatsApp Icon -->
+              <ion-col *ngIf="isPastDate(obj.WhatsAppNext) && obj.Status == true">
+                <a (click)="updateCommunicationChannel(obj.RegId, 2); $event.preventDefault(); openWhatsApp(obj.Phonenumber)">
+                  <ion-icon name="logo-whatsapp" style="color:forestgreen;font-size:22px;"></ion-icon>
+                </a>
+              </ion-col>
+
+              <!-- Title Click Area -->
+              <ion-col class="" (click)="open1(i)">
+                <div class="title"></div>
+              </ion-col>
+            </ion-col>
+
+          </ion-row>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </div>
+
+
+</ion-content>
+

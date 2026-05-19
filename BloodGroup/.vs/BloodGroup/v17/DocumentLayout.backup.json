@@ -1,0 +1,631 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform-routing.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\requsetform\\requsetform-routing.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.spec.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.spec.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.spec.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.spec.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\partners\\partners.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\partners\\partners.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\partners\\partners.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\partners\\partners.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\myrequest\\myrequest.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\myrequest\\myrequest.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration-routing.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration-routing.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow-routing.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donatenow\\donatenow-routing.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.module.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\contact\\contact.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\contact\\contact.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\aboutus\\aboutus.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\aboutus\\aboutus.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\about\\about.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\about\\about.page.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\about\\about.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Blooddonation\\src\\app\\Pages\\about\\about.page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "rquestpresentation.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.html",
+              "ViewState": "AgIAAGMAAAAAAAAAAAAAAGwAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T07:02:49.716Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "rquestpresentation.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\rquestpresentation\\rquestpresentation.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:02:47.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "requsetform-routing.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform-routing.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform-routing.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform-routing.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform-routing.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:02:43.434Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "requsetform.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:02:41.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "requsetform.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T07:02:40.238Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "requsetform.page.scss",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.scss",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.scss",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.scss",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.scss",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
+              "WhenOpened": "2026-05-01T07:02:39.207Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "requsetform.page.spec.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.spec.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.spec.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.spec.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.spec.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:02:37.77Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "requsetform.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\requsetform\\requsetform.page.ts",
+              "ViewState": "AgIAAIIEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:02:29.845Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "registerdonation.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.html",
+              "ViewState": "AgIAALcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T07:02:18.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "registerdonation.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.ts",
+              "ViewState": "AgIAALMCAAAAAAAAAAAgwFMBAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:58.026Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "registerdonation.page.spec.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.spec.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.spec.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.spec.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\registerdonation\\registerdonation.page.spec.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:56.448Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "postabloodrequest.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T07:01:46.886Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "postabloodrequest.page.scss",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.scss",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.scss",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.scss",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.scss",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
+              "WhenOpened": "2026-05-01T07:01:46.052Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "postabloodrequest.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:44.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "postabloodrequest.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\postabloodrequest\\postabloodrequest.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:42.923Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "partners.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\partners\\partners.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\partners\\partners.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\partners\\partners.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\partners\\partners.page.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T07:01:39.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "partners.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\partners\\partners.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\partners\\partners.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\partners\\partners.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\partners\\partners.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:34.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "notifications.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T07:01:30.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "notifications.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\notifications\\notifications.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:27.376Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "myrequest.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\myrequest\\myrequest.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\myrequest\\myrequest.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\myrequest\\myrequest.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\myrequest\\myrequest.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T07:01:17.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "donor-registration.page.scss",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.scss",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.scss",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.scss",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.scss",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
+              "WhenOpened": "2026-05-01T06:47:59.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "donor-registration-routing.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration-routing.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration-routing.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration-routing.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration-routing.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:47:58.04Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "donor-registration.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:47:56.699Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "donor-registration.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donor-registration\\donor-registration.page.ts",
+              "ViewState": "AgIAALcBAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:47:42.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "donatenow.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.html",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAAAGIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T06:47:25.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "donatenow-routing.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow-routing.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow-routing.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow-routing.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow-routing.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:47:24.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "donatenow.module.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.module.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.module.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.module.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.module.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:47:22.409Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "donatenow.page.scss",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.scss",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.scss",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.scss",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.scss",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
+              "WhenOpened": "2026-05-01T06:47:18.515Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "donatenow.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\donatenow\\donatenow.page.ts",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:47:15.895Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "dashboard.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.html",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAAFAAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T06:46:58.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "dashboard.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\dashboard\\dashboard.page.ts",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:46:53.29Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "contact.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\contact\\contact.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\contact\\contact.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\contact\\contact.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\contact\\contact.page.ts",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:46:42.034Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "aboutus.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\aboutus\\aboutus.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\aboutus\\aboutus.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\aboutus\\aboutus.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\aboutus\\aboutus.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:46:35.768Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "about.page.html",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\about\\about.page.html",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\about\\about.page.html",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\about\\about.page.html",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\about\\about.page.html",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-01T06:46:25.201Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "about.page.ts",
+              "DocumentMoniker": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\about\\about.page.ts",
+              "RelativeDocumentMoniker": "Blooddonation\\src\\app\\Pages\\about\\about.page.ts",
+              "ToolTip": "D:\\Asif\\2025_GITHUB\\MobileProjects\\BloodGroup\\Blooddonation\\src\\app\\Pages\\about\\about.page.ts",
+              "RelativeToolTip": "Blooddonation\\src\\app\\Pages\\about\\about.page.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-01T06:46:18.114Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

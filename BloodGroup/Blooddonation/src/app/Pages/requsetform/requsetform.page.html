@@ -1,0 +1,192 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/myrequest"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title> Blood Request</ion-title>
+      </ion-col>
+      <ion-col size="2">
+       
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="margin-top: -50%" class="scroll-content">
+  <form [formGroup]="BloodRequestForm">
+    <ion-row>
+
+      <ion-col size="12">
+        <div class="title">Patient Details </div>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="person" class="input-icon"></ion-icon>
+        <ion-input label="First & last name" formControlName="FullName" label-placement="floating" fill="outline" placeholder=" First & last name" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="calendar" class="input-icon"></ion-icon>
+        <ion-input label="Age" formControlName="Age" type="tel" inputmode="numeric" [maxlength]="3" label-placement="floating" fill="outline" placeholder=" Age" class="custom-input" (ionInput)="allowOnlyDigits($event)"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+
+      
+
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="medical" class="input-icon"></ion-icon>
+        <ion-input id="open-modal12" [value]="selectedGender" label="Gender" label-placement="floating" fill="outline" placeholder="Gender" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-modal #modal1 trigger="open-modal12" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>
+              </ion-buttons>
+              <ion-buttons slot="end">
+                <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-list>
+            <ion-item class="centered-text" *ngFor="let obj of Genders">
+              <ion-input label="{{obj.value}}" (click)="selectGender(obj.value)"></ion-input>
+            </ion-item>
+          </ion-list>
+        </ng-template>
+      </ion-modal>
+
+
+
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="medical" class="input-icon"></ion-icon>
+        <ion-input id="open-modal22" [value]="selectedBloodType" label="Blood Group" label-placement="floating" fill="outline" placeholder=" Blood Group" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-modal #modal1 trigger="open-modal22" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>
+              </ion-buttons>
+              <ion-buttons slot="end">
+                <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-list>
+            <ng-container *ngFor="let obj of BloodGroups">
+              <ion-item class="centered-text" *ngIf="obj.Status == 1">
+                <ion-label (click)="selectBloodGroup(obj)">{{obj.BLGName}}</ion-label>
+              </ion-item>
+            </ng-container>
+          </ion-list>
+
+        </ng-template>
+      </ion-modal>
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="male" class="input-icon"></ion-icon>
+        <ion-input id="open-modal02" [value]="selectedtype" label="Blood type" label-placement="floating" fill="outline" placeholder=" Gender" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-modal #modal trigger="open-modal02" [initialBreakpoint]="0.5" [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>
+              </ion-buttons>
+              <ion-buttons slot="end">
+                <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-list>
+            <ion-item class="centered-text" *ngFor="let obj of types">
+              <ion-input label="{{obj.value}}" (click)="selectblood(obj.value)"></ion-input>
+            </ion-item>
+          </ion-list>
+        </ng-template>
+      </ion-modal>
+
+
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="calculator" class="input-icon"></ion-icon>
+        <ion-input id="open-modal32" [value]="selectedBloodUnit" label="Number of units" label-placement="floating" fill="outline" placeholder=" Number of units" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-modal #modal2 trigger="open-modal32" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>
+              </ion-buttons>
+              <ion-buttons slot="end">
+                <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-list>
+            <ng-container *ngFor="let obj of BloodUnits">
+              <!-- Only show active units if Status === 1 -->
+              <ion-item class="centered-text" *ngIf="obj.Status == 1">
+                <ion-label (click)="selectBloodUnit(obj)">{{ obj.UnitsofBlood }}</ion-label>
+              </ion-item>
+            </ng-container>
+          </ion-list>
+
+        </ng-template>
+      </ion-modal>
+
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="chatbubble-ellipses" class="input-icon"></ion-icon>
+        <ion-input label="Reason" formControlName="Reason" label-placement="floating" fill="outline" placeholder=" Reason" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-icon name="calendar" class="input-icon"></ion-icon>
+        <ion-input type="datetime-local" *ngIf="flags !=3 " label="Required Date" formControlName="RequiredDate" label-placement="floating" fill="outline" placeholder=" Required Date" class="custom-input"></ion-input>
+        <ion-input label="Required Date" *ngIf="flags ==3 " [value]="Requireddate" label-placement="floating" fill="outline" placeholder=" Required Date" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+
+
+      <ion-col size="12">
+        <div class="title">Contact Info </div>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+
+      <ion-col size="10">
+        <ion-icon name="Contact Name" class="input-icon"></ion-icon>
+        <ion-input label="Contact First Name" formControlName="ContactName" label-placement="floating" fill="outline" placeholder=" Contact Name" class="custom-input"></ion-input>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-col size="1"></ion-col>
+
+      <ion-col size="10">
+        <ion-icon name="Contact Number" class="input-icon"></ion-icon>
+        <ion-input label="Contact Number" type="tel" inputmode="numeric" [maxlength]="10" formControlName="ContactNumber" label-placement="floating" fill="outline" placeholder=" Contact Number" class="custom-input" (ionInput)="allowOnlyDigits($event)"></ion-input>
+      </ion-col>
+        
+      <div>
+      </div>
+    </ion-row>
+  </form>
+  
+</ion-content>
+<ion-footer >
+  <button expand="full" class="red-button" ripple (click)="AddRequestForm()">Submit</button><br />
+</ion-footer>

@@ -1,0 +1,442 @@
+// Adjustment toolbar styles
+.adjustment-toolbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 10px 5px;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+}
+
+.card {
+  border-radius: 150px;
+  width: 315px;
+  height: 315px;
+  background-color: #f1f2f7;
+  margin-top: -1rem;
+}
+
+.card h4 {
+  padding: 15px;
+  text-align: center;
+  margin: 43% 0% 0% 0%;
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.control-label {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.control-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-value {
+  min-width: 50px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.position-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizontal-controls {
+  display: flex;
+  gap: 5px;
+}
+
+ion-button {
+  --color: white;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+// Adjustable image styles
+.adjustable-image {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transform-origin: center center;
+}
+
+// Hint text
+.hint-text {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  margin-top: 10px;
+  padding: 5px;
+
+  ion-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+    color: #e74c3c;
+  }
+}
+
+// Adjust icon
+.adjust-icon {
+  background: white;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+// Make camera container touch-enabled
+.camera-container {
+  touch-action: none;
+  overflow: hidden;
+  position: relative;
+}
+
+// Original styles from your existing code
+.retakes {
+  width: 42px;
+  height: 27px;
+  float: inline-end !important;
+  margin-right: 36px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1000;
+  color: #e74c3c;
+  font-size: 28px;
+}
+
+.image-container {
+  position: relative;
+  margin: 0 auto;
+}
+
+.posrelative {
+  position: relative;
+}
+
+.template-composite {
+  display: inline-block;
+  max-width: 300px;
+  width: 100%;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: auto;
+  display: flex;
+  overflow: hidden; /* Prevent image bleeding */
+}
+
+.base-image1 {
+  margin: auto;
+  display: flex !important;
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  border-radius: 8px;
+  object-fit: contain; 
+  position: relative;
+  z-index: 2; /* Template on top */
+  pointer-events: none; /* Allow clicks to pass through to image below */
+}
+
+.capture-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden;
+  border: none;
+  z-index: 1; /* Image behind template */
+}
+
+.camera-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden;
+  border: none; /* Remove the white border */
+  z-index: 1; /* Behind template */
+}
+
+.camera-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  padding: 0; /* Remove padding */
+  object-position: center; /* Center the image */
+}
+
+.camera-container22 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden;
+  border: none;
+  z-index: 1;
+}
+
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  margin: 10px 0;
+  display: flex;
+  padding: 10px;
+  scrollbar-width: none;
+}
+
+.template-row {
+  display: inline-flex;
+  flex-wrap: nowrap;
+}
+
+.template-col {
+  flex: 0 0 auto;
+  padding: 5px;
+  margin-right: 0px;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.base-image {
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: #e74c3c;
+  }
+}
+
+// Button styles (keep your existing button styles)
+.button-pushable {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+}
+
+.button-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+
+.button-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient( to left, hsl(340deg 100% 16%) 0%, hsl(340deg 100% 32%) 8%, hsl(340deg 100% 32%) 92%, hsl(340deg 100% 16%) 100% );
+}
+
+.button-front {
+  display: block;
+  position: relative;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: white;
+  background: #e74c3c;
+  will-change: transform;
+  transform: translateY(-4px);
+  transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+
+.button-pushable:hover {
+  filter: brightness(110%);
+}
+
+.button-pushable:hover .button-front {
+  transform: translateY(-6px);
+  transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.button-pushable:active .button-front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+
+.button-pushable:hover .button-shadow {
+  transform: translateY(4px);
+  transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.button-pushable:active .button-shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.button-pushable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// Loading and processing states
+.processing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .control-section {
+    padding: 5px;
+  }
+
+  .control-label {
+    font-size: 11px;
+  }
+
+  .control-value {
+    font-size: 12px;
+    min-width: 40px;
+  }
+
+  ion-button ion-icon {
+    font-size: 20px;
+  }
+}
+// NEW: Container for top icons
+.icon-header-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 15px 5px 0;
+  width: 100%;
+}
+
+// NEW: Retake camera icon styles
+.retake-camera-icon {
+  font-size: 32px;
+  color: #3498db; 
+  cursor: pointer;
+  z-index: 1000;
+  background: white;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin-right: 5px; /* Spacing from the right edge */
+  margin-top: 5px;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #2980b9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// NEW: Adjust icon position (renamed for clarity)
+.adjust-icon-position {
+  position: absolute;
+  right: 60px;
+  top: 10px;
+  font-size: 28px;
+  color: #e74c3c;
+  cursor: pointer;
+  z-index: 1000;
+  background: white;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #c0392b;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// Keep your existing retakes class for backward compatibility
+.retakes {
+  width: 42px;
+  height: 27px;
+  float: inline-end !important;
+  margin-right: 36px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1000;
+  color: #e74c3c;
+  font-size: 28px;
+}
+
+// ... rest of your existing SCSS styles ...

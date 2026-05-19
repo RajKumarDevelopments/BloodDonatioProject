@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/quiz"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title>Take Quiz</ion-title>
+      </ion-col>
+      <ion-col size="2">
+
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+
+
+ 
+
+    <div class="questionnaire-container">
+      <h2  style="font-size:33px !important; color:red;margin-top:4rem  " ><i> {{currentQuestionIndex}} . </i> </h2>
+      <div *ngIf="resultMessage">
+        <p style="font-size:22px !important;  " >{{ resultMessage }}</p>
+        <button *ngIf="resultMessage !== 'Congratulations! You’ve successfully passed all the eligibility requirements to donate blood.'" (click)="reset()">Restart</button>
+      </div>
+      <ion-row *ngIf="!resultMessage">
+        <ion-row class="ion-margin-top">
+          <ion-col size="12">
+            <p class="question ion-margin-top" style="font-size: 24px !important;">{{ Questions[currentQuestionIndex].question }}</p>
+          </ion-col>
+          <ion-col size="12" class="ion-text-left ">
+            <input type="radio" class=" mgtp mglft" (click)="answerQuestion('yes')" [checked]="getCurrentAnswer() === 'yes'" />Yes <br />
+          </ion-col>
+          <ion-col size="12" class="ion-text-left ">
+            <input type="radio" class=" mgbtm mglft" (click)="answerQuestion('no')" [checked]="getCurrentAnswer() === 'no'" />No
+          </ion-col>
+
+          <!-- Show Not Applicable button where necessary -->
+          <ion-col size="5"></ion-col>
+          
+
+
+          <ion-col size="12" class="iiii ion-text-left" (click)="nextQuestion()" *ngIf="!ans||!not">
+    <button class=" fixed-button custom-button" > <ion-icon name="arrow-forward-outline" style="margin-top: 2px;"></ion-icon> </button>
+  </ion-col>
+  <ion-col size="12" class="iiii ion-text-left" (click)="nextQuestion2()" *ngIf="ans||not">
+    <button class=" fixed-button2 custom-button1" > <ion-icon name="arrow-forward-outline" style="margin-top: 2px;"></ion-icon> </button>
+  </ion-col>
+ 
+          <ion-col size="2"></ion-col>
+        </ion-row>
+        
+       </ion-row>
+
+    </div>
+
+ 
+
+
+
+  </ion-content>
+ 
+
+<ion-footer>
+  <ion-row *ngIf="!resultMessage">
+    
+  
+
+   
+  </ion-row>
+</ion-footer>
+

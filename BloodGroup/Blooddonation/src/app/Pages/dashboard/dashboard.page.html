@@ -1,0 +1,104 @@
+<ion-header [translucent]="true">
+  <ion-toolbar style="background-color: #f1f2f6;">
+    <div class="headerhight">
+      <ion-row class="headerw-100" >
+        <ion-col size="2" routerLink="/home"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+        <ion-col size="8" class="ion-justify-content-center">
+          <ion-title> Dashboard</ion-title>
+        </ion-col>
+        <ion-col size="2"> 
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid *ngFor="let item of mydashboard">
+    <div *ngIf="UserDetails[0].RoleId==2 && UserDetails[0].Rolestatus == false" class="mt-3">
+      <ion-row>
+        <ion-col size="6" size-md="4">
+          <ion-card (click)="next(2)">
+            <ion-card-header class="bg-Donation">
+              <ion-card-title>Donation</ion-card-title>
+              <div class="count">{{item.Donorcount}}</div>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6" size-md="4">
+          <ion-card (click)="next(4)">
+            <ion-card-header class="bg-Referral">
+              <ion-card-title>Referral count</ion-card-title>
+              <div class="count">{{item.Referalcount}}</div>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="UserDetails[0].RoleId==4 && UserDetails[0].Rolestatus == true" class="mt-3">
+      <ion-row>
+        <ion-col size="6">
+          <ion-card (click)="next(2)">
+            <ion-card-header class="bg-Brouchers">
+              <ion-card-title>Donation</ion-card-title>
+              <div class="count">{{item.Dotationcount}}</div>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+
+        <ion-col size="6">
+          <ion-card (click)="next(1)">
+            <ion-card-header class="bg-Donors">
+              <ion-card-title>My Donors</ion-card-title>
+              <div class="count">{{item.Adddonorscount}}</div>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-card  (click)="next(7)">
+            <ion-card-header class="bg-Referral">
+              <ion-card-title>Referrals</ion-card-title>
+              <div class="count">{{item.Leaderreferalcount}}</div>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-card (click)="next(3)">
+            <ion-card-header class="bg-Presentation">
+              <ion-card-title>Presentation</ion-card-title>
+              <div class="count">{{item.Presentationcount}}</div>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+    </div>
+
+   
+
+    <ion-row>
+      <ion-col size="6" size-md="4">
+        <ion-card  (click)="next(5)">
+          <ion-card-header class="bg-Brouchers">
+            <ion-card-title>Banner</ion-card-title>
+            <div class="count">{{item.Bannercount}}</div>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+  
+      <ion-col size="6" size-md="4">
+        <ion-card (click)="next(6)">
+          <ion-card-header class="bg-Brouchers">
+            <ion-card-title>Accepted</ion-card-title>
+            <div class="count">{{item.Acceptedcount}}</div>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

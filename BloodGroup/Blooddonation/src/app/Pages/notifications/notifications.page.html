@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+
+    <ion-row>
+      <ion-col size="2"><ion-icon name="chevron-back-outline" (click)="navigate()"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title>Notifications</ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <ion-icon name="refresh-outline" (click)="getnotification()" style="cursor: pointer; font-size: 24px;"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header><br />
+
+
+
+
+<ion-content>
+  <ion-accordion-group [multiple]="false" #notificationAccordionGroup [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)">
+    <!-- Loop through each notification in the list -->
+    <ion-accordion *ngFor="let item of notification; let i = index" [value]="i.toString()" [ngClass]="{'ion-accordion-active': activeAccordion === i}">
+      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
+        <ion-row class="ion-padding-top">
+          <ion-col size="1">
+            <ion-icon name="notifications-outline" class="notif"></ion-icon>
+          </ion-col>
+          <ion-col size="6">
+            <p class="acordion_p singleline">{{item.NotificationsDesc}}</p>
+          </ion-col>
+          <ion-col size="4">
+            <div class="date-container">
+              <p class="acordion_p" style=" font-size: 11px !important; font-weight: 600; color: dimgrey;">{{item.CreatedDate | date:'dd/MM/YY hh:mm a'}}</p>
+            </div>
+            
+          </ion-col>
+          <ion-col size="1">
+            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
+            </ion-icon>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div slot="content" class="content" style="margin-left:5px">
+        <ion-row>
+          <ion-col size="1">
+            <ion-icon name="notifications-outline" class="iconn_bell"></ion-icon>
+          </ion-col>
+          <ion-col size="11">
+            <p class="acordion_p">{{item.NotificationsDesc}}</p>
+          </ion-col>
+          <!--<ion-col size="2">
+            <div class="date-container">
+              <p class="acordion_p">{{item.CreatedDate | date:'dd/MM hh:mm a'}}</p>
+            </div>
+          </ion-col>-->
+        </ion-row>
+        <!--<ion-row>
+          <ion-col size="12">
+            <p class="acordion_p">{{item.NotificationsDesc}}</p><br />
+          </ion-col>
+        </ion-row>-->
+        <ion-row>
+          <ion-col size="9"></ion-col>
+          <ion-col size="3"></ion-col>
+          <ion-col size="9"></ion-col>
+          <ion-col size="3" (click)="closeAccordion()">
+            <div class="triangle-up f-end"></div>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

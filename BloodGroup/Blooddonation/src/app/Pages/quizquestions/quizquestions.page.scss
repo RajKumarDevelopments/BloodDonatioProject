@@ -1,0 +1,102 @@
+.questionnaire-container {
+  max-width: 600px; /* Adjust as needed */
+  margin: 0 auto;
+  padding: 30px;
+  text-align: center;
+  //background-color: #f9f9f9;
+  background-color: #fff;
+  border-radius: 10px;
+  //box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  font-size: 24px;
+}
+
+button {
+  margin: 15px;
+  padding: 12px 25px;
+  background-color: #f40000; /* Use a more vibrant green */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add smooth transitions */
+}
+
+button:hover {
+  //background-color: #f40000; /* Darker green on hover */
+}
+
+input {
+  width: 100%; /* Make inputs full-width for better user experience */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.mgt {
+  margin-top: 4rem;
+}
+
+.iiii {
+  /* Removed unnecessary styles */
+}
+
+.fixed-button {
+  position: fixed;
+  bottom: 43px;
+  right: 8rem; /* Position to the bottom right */
+  background-color: #fff; /* Match button color */
+  color: #050505;
+  padding: 3px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mgtp {
+  margin-top: 10rem; /* Adjusted for better spacing */
+}
+
+.mgbtm {
+  margin-bottom: 10rem; /* Adjusted for better spacing */
+}
+
+.mglft {
+  margin-left: -28%;
+  margin-right: -41%;
+  margin-top: 17px;
+}
+
+.question {
+  font-size: 28px; /* Slightly larger font size */
+  height: auto; /* Removed fixed height for better adaptability */
+  position: relative; /* Removed fixed positioning */
+  text-align: center;
+  padding: 2% 5%;
+  margin-bottom: 20px; /* Added spacing below the question */
+  color: #323243;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.fixed-button {
+  width: 98px; /* Removed width restriction */
+  margin: 0; /* Removed unnecessary margin */
+  border: 1px solid black;
+  height: 36px;
+}
+
+.fixed-button2 {
+  background-color: #f40000; /* Original background color */
+  color: white;
+  width: 98px; /* Removed width restriction */
+  margin: 0; /* Removed unnecessary margin */
+  border: 1px solid black;
+  height: 36px;
+  position: fixed;
+  bottom: 43px;
+  right: 8rem; /* Position to the bottom right */
+  padding: 3px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+}

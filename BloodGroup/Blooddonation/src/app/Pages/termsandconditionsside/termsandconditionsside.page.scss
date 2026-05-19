@@ -1,0 +1,44 @@
+h3, h5, h6 {
+  text-align: center
+}
+
+strong {
+  color: black;
+}
+
+div {
+  text-align: center
+}
+
+.ftr {
+  width: 100%;
+}
+
+.tc {
+  width: 100%;
+}
+
+.items_center {
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+ion-footer button {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  background-color: red;
+  color: white;
+  width: 55%;
+  /*  margin: 5%
+*/
+}
+
+.thank {
+  text-align: center;
+}
+ion-title {
+  text-align: left !important;
+  padding: 20px 0px 0px !important;
+}

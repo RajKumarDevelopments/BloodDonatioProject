@@ -1,0 +1,100 @@
+<!--<ion-header>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" *ngIf="UserDetails">
+        <ion-icon name="chevron-back-outline" routerLink="/home"></ion-icon>
+      </ion-col>
+      <ion-col size="2" *ngIf="!UserDetails">
+      </ion-col>
+      <ion-col size="8">
+       
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>-->
+
+<ion-content>
+
+
+  <ion-row style="margin-top:10.5%">
+    <ion-col size="3"></ion-col>
+    <ion-col size="6">
+      <img src="../../../assets/Images/bg_logo.png" />
+    </ion-col>
+    <ion-col size="3"></ion-col>
+    <ion-col size="12">
+      <h3 style="white-space: nowrap;font-size: 16px;text-align: center;font-weight: 700;">Select Language</h3>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row class="home-row">
+    <ion-col size="3"></ion-col>
+    <ion-col size="6" class="ion-text-center2">
+      <ion-item lines="none" class="language-dropdown">
+        <ion-select interface="popover" [(ngModel)]="selectedLanguage" (ionChange)="onLanguageChange($event)"
+          [placeholder]="currentLanguage" class="notranslate">
+          <ion-select-option *ngFor="let lang of languages" [value]="lang.code" class="notranslate">
+            {{ lang.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col size="12" class="ion-text-center2" style="display: none;">
+      <div class="home-content trans" id="google_translate_element"></div>
+    </ion-col>
+
+  </ion-row>
+
+  <ion-row class="home-row">
+
+
+    <!--<ion-col size="12">
+
+    </ion-col>
+
+    <ion-col size="12" class="ion-text-center2" (click)="lan(1)">
+      <button class="buttonn" id="translateButton" (click)="lan(1)">Choose Language</button>
+    </ion-col>
+
+
+    <ion-col size="12" class="ion-text-center2">
+      <div class="home-content trans" id="google_translate_element"></div>
+    </ion-col>-->
+    <!-- Next Button -->
+    <!--<ion-col size="12" class="ion-text-center">
+      <button class="red-button" (click)="gotohome()">Next</button>
+    </ion-col>-->
+  </ion-row>
+
+
+
+
+</ion-content>
+<ion-footer>
+  <ion-col *ngIf="!UserDetails">
+    <button expand="full" style="width:100%" class="red-button ftr" ripple (click)="gotohome()">Next</button>
+
+  </ion-col>
+  <ion-col *ngIf="mylang==1 && UserDetails">
+    <button expand="full" style="width:100%" class="red-button ftr" ripple (click)="gotohome()">Next</button>
+  </ion-col>
+</ion-footer>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en', // Set default language
+      includedLanguages: 'en,es,fr,de,it,ja,zh-CN', // List languages you want to support
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+
+  (function () {
+    var gt = document.createElement('script');
+    gt.type = 'text/javascript';
+    gt.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gt, s);
+  })();
+</script>

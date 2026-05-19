@@ -1,0 +1,271 @@
+<ion-header>
+  <ion-toolbar>
+
+    <div class="headerhight">
+
+      <ion-row class="headerw-100 ion-align-items-center">
+
+        <ion-col size="2">
+          <ion-icon name="chevron-back-outline"
+                    routerLink="/home">
+          </ion-icon>
+        </ion-col>
+
+        <ion-col size="8" class="ion-text-center">
+          <ion-title>GENERAL</ion-title>
+        </ion-col>
+
+        <ion-col size="2"></ion-col>
+
+      </ion-row>
+
+    </div>
+
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+
+  <div class="general-con">
+
+    <!-- EMAIL -->
+    <ion-item>
+
+      <ion-grid class="width-100">
+
+        <ion-row class="ion-align-items-center">
+
+          <ion-col size="2">
+            <div class="left-label">
+              Email
+            </div>
+          </ion-col>
+
+          <ion-col size="9">
+            <div class="regright">
+              {{Email}}
+            </div>
+          </ion-col>
+
+          <ion-col size="1" class="ion-text-end">
+            <ion-icon name="pencil-outline"
+                      style="color:red; font-size:20px;"
+                      (click)="openEditModal('Email')">
+            </ion-icon>
+          </ion-col>
+
+        </ion-row>
+
+      </ion-grid>
+
+    </ion-item>
+
+
+
+    <!-- MOBILE -->
+    <ion-item>
+
+      <ion-grid class="width-100">
+
+        <ion-row class="ion-align-items-center">
+
+          <ion-col size="3">
+            <div class="left-label">
+              Mobile
+            </div>
+          </ion-col>
+
+          <ion-col size="8">
+            <div class="regright">
+              {{Phonenumber}}
+            </div>
+          </ion-col>
+
+          <ion-col size="1" class="ion-text-end">
+            <ion-icon name="pencil-outline"
+                      style="color:red; font-size:20px;"
+                      (click)="openEditModal('Mobile')">
+            </ion-icon>
+          </ion-col>
+
+        </ion-row>
+
+      </ion-grid>
+
+    </ion-item>
+
+
+
+    <!-- PASSWORD -->
+    <ion-item>
+
+      <ion-grid class="width-100">
+
+        <ion-row class="ion-align-items-center">
+
+          <ion-col size="3">
+
+            <div class="left-label">
+              Password
+            </div>
+
+          </ion-col>
+
+          <ion-col size="8">
+            <div class="regright">
+              {{maskpassword(Password)}}
+            </div>
+          </ion-col>
+
+          <ion-col size="1" class="ion-text-end">
+            <ion-icon name="pencil-outline"
+                      style="color:red; font-size:20px;"
+                      (click)="openEditModal('Password')">
+            </ion-icon>
+          </ion-col>
+
+        </ion-row>
+
+      </ion-grid>
+
+    </ion-item>
+
+
+
+    <!-- INVITE CODE -->
+    <ion-item>
+
+      <ion-grid class="width-100">
+
+        <ion-row class="ion-align-items-center">
+
+          <ion-col size="4">
+
+            <div class="left-label">
+              Invite Code
+            </div>
+
+          </ion-col>
+
+          <ion-col size="8">
+
+            <div class="regright">
+              {{UserDetails[0].Reffercode}}
+            </div>
+
+          </ion-col>
+
+        </ion-row>
+
+      </ion-grid>
+
+    </ion-item>
+
+
+
+    <!-- LOGOUT -->
+    <ion-item class="log">
+
+      <strong (click)="logout()">
+        Logout
+      </strong>
+
+    </ion-item>
+
+
+
+    <!-- DELETE ACCOUNT -->
+    <ion-item id="open-modal3"
+              (click)="confirmDelete()">
+
+      <strong>
+        Delete Account
+      </strong>
+
+    </ion-item>
+
+  </div>
+
+</ion-content>
+
+<ion-modal [isOpen]="showModal"
+           (didDismiss)="closeModal()"
+           backdropDismiss="true"
+           showBackdrop="true"
+           class="centered-modal">
+
+  <ng-template>
+
+    <div class="modal-wrapper">
+
+      <div class="modal-header">
+        <div class="modal-title">EDIT {{editType | uppercase}}</div>
+        <div class="close-btn"
+             (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- STEP 1: EDIT VALUE -->
+        <div *ngIf="!otpSent"
+             class="step-container">
+
+          <p class="modal-hint">Update your {{editType}} below.</p>
+
+          <ion-item lines="none"
+                    class="custom-input-item">
+            <ion-input [(ngModel)]="editValue"
+                       [type]="editType === 'Email' ? 'email' : (editType === 'Mobile' ? 'tel' : 'text')"
+                       [placeholder]="'Enter ' + editType">
+            </ion-input>
+          </ion-item>
+
+          <button class="red-button submit-btn"
+                  (click)="sendOtp()">
+              {{ editType === 'Password' ? 'SAVE' : 'SUBMIT' }}
+          </button>
+
+        </div>
+
+        <!-- STEP 2: VERIFY OTP -->
+        <div *ngIf="otpSent"
+             class="step-container">
+
+          <p class="otp-hint">Please enter the OTP sent to <br> <strong>{{editValue}}</strong></p>
+
+          <ion-item lines="none"
+                    class="custom-input-item otp-input">
+            <ion-input [(ngModel)]="enteredOtp"
+                       type="tel"
+                       maxlength="4"
+                       placeholder="Enter OTP"
+                       class="ion-text-center">
+            </ion-input>
+          </ion-item>
+
+          <button class="red-button submit-btn"
+                  (click)="verifyOtp()">
+            VERIFY
+          </button>
+
+          <div class="resend-link"
+               (click)="otpSent = false">
+            Change {{editType}} / Resend OTP
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+</ion-modal>
+
+
+

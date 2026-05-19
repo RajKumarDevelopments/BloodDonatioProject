@@ -1,0 +1,144 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="2" routerLink="/home"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
+      <ion-col size="8">
+        <ion-title>PARTNERS</ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <!--<ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>-->
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<!--<ion-content>
+  <div class="class_space">
+    <ion-row>
+      <ion-col size="12">
+        <p>Founder</p>
+      </ion-col>
+      <ion-col size="4">
+        <div class="card">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREgGZelqehDXSI_-j4DWn5DtzUsm60W2IwFw&s" />
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <div>Smart Society</div>
+        <label>https;//letshelp</label>
+      </ion-col>
+      <ion-col size="4">
+        <div class="card">
+          <ion-row>
+            <ion-col size="6">
+              <div class="border">
+                <img src="https://5.imimg.com/data5/VM/JO/MY-60786710/smart-society-software-solution.jpg" />
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="border">
+                <img src="https://www.iottechexpo.com/europe/wp-content/uploads/2016/05/smartsociety.jpg" />
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <div>Kaufland</div>
+        <label>https;//letshelp</label>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row>
+      <ion-col size="12">
+        <p>Unicorn Sponsor</p>
+      </ion-col>
+      <ion-col size="4">
+        <div class="card">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAABKVBMVEX///9tuDqKxGgANmnkAB8AL2UANGj/3QAAIl8ALWT/4gAAGVv/4AAAHl0AG1wAKmMAJWAAElnDy9UAI1++x9JofZkAEWGhl0CqtMNvgZyyrXpacZHw9Pfc4ec8WoEAFlr/5wB6iKCFlasAIm3z9ffn6+8ACVagrL0dRHLQ198AKmxQaIq0vcvg5epfdJLnLhzvdhX3rw30nBDM1ef2pQ4AAFaqokyXkENpb1SUorWssqhHYYUxUHqspl790AUUP2/MtgX7vwguSmHrVRntZhionD2rrpXpQRsAAE7ozhTZwADzkRLEsTCtrILqSRnubxX8yQb6uQoAAGDxhRTEsBd4ek2Hh1GIjGxPZnEZSX6zpTUZP10yTl1LYnqur48+VEXR58Xg79iopXIRoAmnAAAHdUlEQVR4nO2Ye5vaNhaHvauRsDGyDditvVwMDNcMMMzkVhI6dJp001yabbbd7W67t/b7f4g9smwQDMmz3TDpk+f5vf+M8chCen10dIRlAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBHRG2PwcFWrVG3EfXC/ubGLI7jmdGAPoaWNaE/Rgf9URxPth8HcU7YOvIkjsvg/icmqXTZ8kajcOUGDue+LZPCSjgM5HjbYlQN5Bn19nWQ9rZ342pw35h+7X6gqXtsdHA0zXkyP/xSPhx3Hzz41OThZ/yOUJPbYe4K5gT1ui+Eb9f0vdBmrL6xN6gyxht00eDC2T44Fvyx0U+NnuEKwYRsHxrPYOhUf+sYelTe0NF/Sg9PmdyNlMcB424Uh9Ml95moainKiXCLd/qY505qktlh8WDLNT5YmRM+j6JoviLJfuPAeAYek7+1k88rJUWlUr661Jelzqd3WGC26QbMaeeT73n0hrNr5YTx/GXHkuVOrLXgmzDrOoKbPZETV6+92YqzQwHRJCezm7c/JIMvKqVKp3R1fXF5ctEppHzJpZEYWynjq82nkWTOXF0oJ5zJWF33AyZ47mQUsLSIHp/5OxGnnDT1ZVMW/5tEY581dDh1E+om6nYTapV0k4k16K11q5Barc9GeTYbJUlstebCb6vvbyXj+rh7rDQUkoGLJycZ50+vy5mT8ld36tNtm8jJI0Mzd/ScyQlPHBaoOTYcMZ5z7aQvRSFiWmdp8y1OrLZwkqy/1FEZxsvyTuCoeHOcIX2D56e1lvSznDVYeVwIwQNHu5vbdm9apbTEvYjSu0P5yT/Wmvtjufz0JGfxbHF9VaK0UvniNIi3bTzhdI1HWh4LRtqJa/nCIRGhy9JJ19FOlMN8wbS5DqmDThrciVQbX9jjs7FNr5w+pWoNBlJ+TU4CEUxJhMptLZfTXWEHQlSzkUVcrAJbSp9az21fSpussOM4+aqzOHl9YnL+7Enp+amRGSeUNGvmM/S65tpJ1Zp6zA3pjp9YSeFk4jKZPTBL84uDTmhd0aa9tIU9zXoTkky3JjYLwllLvXISMOb2OqIuaL71UdPqK0fpLHPCuAj7g16dwsruDfq1tWDexDoCrRdXT16e7HGv/OI03S6WacC8naVKu+2qcKJWzTqhLdraOrFWQl/1fDG2dtjmWCvxmUuzdUVdh2QcZO+5ud136Ib2ZS0D5ur5DhzhnGknulmDM70E6dUFh0ueX0lcuTKVfLtYfLdYdCqvTo0ChZLCrhOK2/HGSZ98ONnstk7igEkVDb7YHyU5qYeTySRcUlpVexaFh8j/x7P3PNhxInVaGwu/qAPpDVWbagz5jhfWWb4frLeN3otvyhdPLjZrZ3Hxp2+v31yVOp99YkigecidoDzT49FOVC5hvnpTWye0LIJl1iDtWzuomq1u2zYVf8xnzSyUHtdCRW0lVBLbcSL0dtd0tyPo29lKjnie4yg8vGY+rOM4+bF8fbm/dN6UX/zZdDBI94LS1jk3d0L7kH7VhhOa6VoNUkf1npOsjvUDN/tfl8LF0zjcXu45yfevmWdEKiXbqeGkJYsM1TiOk7vPO4tnl08NIefnrzulL3c3tbXYSQu0lrIMXDjp+2mm0HAyc2kdUGZw93fHoo6NurGeSM9n63bBaj9O6jrTN1OjtvVZ/VadPCpfXLzRMp4tXl5cU7HS6bzYz1SU4epG5UWKsgNN4cSaRtkfwwlV+jwZ+fzGicbIsRrKrLtpeMdJsftx4ReDIgdq47k9J79UOtnS+e46O+xUqMIvfX73RjMqjdJNDdd2mJftFBsnOaaTUDIxFmbhpzH34gw6Ou4mq4NOEqp4cpVnOsHfmpPm95172d5bpgI/O/59/014oF1tyJgXqZH2p7TJBHrq73KiNFIWvdnTvhO1l7PsfNNsZ+FG66SogrdOyBxfZRklooODunlrTqiwPzl5XVIFfeXVX/76w9/+fjNGMuKhYI4U47EqJO388P9OJ0sqMA8M8aaTJm3GMhqN5jadvNUN2pGCVXvYNJ1YIzpyyQYdhnwms9x8a04elWnllPXBr/zjT73+W1tO1jZnQuG7xReHUgzNNonvbJ1QgmXpzUNZTYrdAxDlYxEIJwjoTNXOvn/pUYjxYV85kZuopSMNHYO44PkPVpHv5068oscz5xhOHpCT806m5Pk/+D/P2u/oM36celKm695moiEVl2aLhAvjB5HGcGj+mJRTy6s5k35PuNQzK05YPdqXq+pZWqXblTybS0963lmefKhmy53Uix4bwnl/J+p3gvOTe538LPzT8t2H7X5r0voVx/H+26PuBrPJxOy5NTv4LH3//97l/8lUqbg8f6l/HbgzmsZHOUN91PxLZZJyFibPX736t9eFEirsKwXlh70WBfDBkP3P7z4efn5PJYMf/mDwSxS/pd3Pv/94eF8nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAh+C8AzbX0z0y7xgAAAABJRU5ErkJggg==" />
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <div>OMV Petrom</div>
+        <label>https;//letshelp</label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <p>DonationPartner</p>
+      </ion-col>
+      <ion-col size="4">
+        <div class="card">
+          <img src="data:image/png;base64,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" />
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <div>Amicus</div>
+        <label>https;//letshelp</label>
+      </ion-col>
+      <ion-col size="4">
+        <div class="card">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHSYNvhv8wVWjUgOwYhuyR6wjd9FewtpGDCw&s" />
+        </div>
+      </ion-col>
+      <ion-col size="8">
+        <div>SSFB</div>
+        <label>https;//letshelp</label>
+      </ion-col>
+    </ion-row>
+
+
+  </div>
+
+</ion-content>-->
+<!--<ion-footer>
+  <button expand="full" class="red-button"id="open-modal" ripple>BecomePartner</button><br />
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.55" [breakpoints]="[0, 1]">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button class="button1">Close</ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button class="button1" (click)="modal.dismiss()">Okay</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-row>
+        <ion-col size="12">
+          <h5>ourParnter</h5>
+          <div class="partner">WhyPartner</div>
+          <div class="items_center">
+            <ion-icon name="call-outline" class="input_icon"></ion-icon>
+            <input type="tel" placeholder="Phone" class="input_field" />
+          </div>
+          <div class="partner">Message</div>
+          <div class="items_center">
+            <textarea></textarea>
+          </div>
+
+          <div class="items_center">
+            <button expand="full" class="red-button" ripple>Send</button><br />
+          </div>
+        </ion-col>
+      </ion-row>
+    </ng-template>
+      
+  </ion-modal>
+</ion-footer>-->
+<ion-content>
+  <ion-row>
+    <ion-col size="12">
+      <div class="center">
+        <div class="card">
+          <h4>Comming soon</h4>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

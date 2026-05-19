@@ -1,0 +1,158 @@
+.center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+ion-item ion-icon {
+  color: red;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgb(0, 0, 0, 2);
+  margin: 10px;
+  padding: 15px;
+  background-color: #d7d8da63;
+  margin-top: 35px;
+}
+
+.card1 {
+  background-color: #d7d8da;
+  color: black;
+}
+
+#mapElement {
+  height: 100%;
+  width: 100%;
+}
+
+ion-searchbar {
+  margin-top: 16px;
+}
+
+.red-button {
+  background: #e73638;
+  border: none;
+  color: #fff;
+  border-radius: 25px;
+  padding: 15px 0 !important;
+}
+
+.fixedbottom {
+  position: fixed;
+  bottom: 10%;
+  width: 92%;
+  margin-left: 16px;
+}
+
+.venuetype::part(native) {
+  padding-left: 16px !important;
+  background: #f1f1f1 !important;
+  margin-top: 10px;
+}
+
+/* Gray Notification Banner (Brochure Only Focus) */
+.download-toast {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #4b5563, #374151);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  z-index: 100000;
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 92%;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.toast-dismiss {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 8px;
+  padding: 4px;
+}
+
+.toast-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.toast-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Fullscreen Image Preview Modal */
+.image-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 99999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.image-preview-close {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  font-size: 45px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 100000000;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7));
+}
+
+.image-preview-img {
+  max-width: 95%;
+  max-height: 80vh;
+  border-radius: 8px;
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
