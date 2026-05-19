@@ -99,3 +99,5 @@ Thumbs.db
 /.vs/VSWorkspaceState.json
 .vscode/extensions.json
 .vscode/extensions.json
+# Firebase Secret Key
+BloodGroup/Blooddonation/bloodgroup-firebase-key.json
