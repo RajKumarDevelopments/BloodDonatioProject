@@ -16,6 +16,32 @@ import { Platform, AlertController } from '@ionic/angular';
   styleUrls: ['./registration.page.scss'],
 })
 export class RegistrationPage {
+  activePicker: 'dob' | 'gender' | 'blood' | 'lastDonation' | null = null;
+  maxDate: string = new Date().toISOString();
+  maxDOB: string = '';
+
+  openPicker(pickerType: any) {
+    this.activePicker = pickerType;
+  }
+
+  closePicker() {
+    this.activePicker = null;
+  }
+
+  formatDate(dateStr: any) {
+    if (!dateStr || dateStr === 'N/A' || dateStr === 'I Never Donate' || dateStr === 'I Don’t Remember' || dateStr === "I Dont Remember") return dateStr;
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
   @ViewChild('modal2') modal2: any;
   @ViewChild('modal3') modal3: any;
   @ViewChild('modal4') modal4: any;
@@ -80,6 +106,10 @@ export class RegistrationPage {
       pincode: ['']
     });
 
+    const todayDate = new Date();
+    const minAgeDate = new Date(todayDate.getFullYear() - 18, todayDate.getMonth(), todayDate.getDate());
+    this.maxDOB = minAgeDate.toISOString();
+
     this.UserDetails1 = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.UserDetails1);
     this.UserName = this.activeRoute.snapshot.paramMap.get("UserName");
@@ -105,6 +135,44 @@ export class RegistrationPage {
     this.checkAndGetLocation();
     this.GetBloodGroups();
     this.GetStates();
+  }
+
+  async GetCurrentLocation(forceOverwrite: boolean = false) {
+    if (forceOverwrite) {
+      this.general.present();
+    }
+    try {
+      const permission = await Geolocation.checkPermissions();
+      if (permission.location !== 'granted') {
+        const request = await Geolocation.requestPermissions();
+        if (request.location !== 'granted') {
+          if (forceOverwrite) this.general.dismiss();
+          return;
+        }
+      }
+
+      const position = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true
+      });
+
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+      
+      if (forceOverwrite) {
+        this.general.dismiss();
+      }
+      this.getCityAndArea(this.latitude, this.longitude);
+      
+      if (forceOverwrite) {
+        this.general.presentToast("Location fetched from GPS!");
+      }
+    } catch (error) {
+      if (forceOverwrite) {
+        this.general.dismiss();
+        this.general.presentToast("Error getting location. Please check GPS settings.");
+      }
+      console.error('Location error', error);
+    }
   }
 
   async checkAndGetLocation() {
@@ -182,7 +250,7 @@ export class RegistrationPage {
 
   confirmGender() {
     this.Gender = this.selectedGender;
-    this.modal3.dismiss();
+    this.closePicker();
   }
 
   GetBloodGroups() {
@@ -192,9 +260,28 @@ export class RegistrationPage {
     UploadFile.append("Flag", "4");
     var url = "api/BG/BloodGroupMaster_CRUD";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      this.BloodGroups = data;
+      console.log("BloodGroups Data in Registration:", data);
+      if (Array.isArray(data)) {
+        this.BloodGroups = data;
+      } else if (data && typeof data === 'object' && Array.isArray(data.data)) {
+        this.BloodGroups = data.data;
+      } else {
+        console.warn("Unexpected blood groups format in registration, using fallback");
+        this.BloodGroups = [
+          { BLGId: 1, BLGName: 'A+' }, { BLGId: 2, BLGName: 'A-' },
+          { BLGId: 3, BLGName: 'B+' }, { BLGId: 4, BLGName: 'B-' },
+          { BLGId: 5, BLGName: 'O+' }, { BLGId: 6, BLGName: 'O-' },
+          { BLGId: 7, BLGName: 'AB+' }, { BLGId: 8, BLGName: 'AB-' }
+        ];
+      }
     }, err => {
-      this.general.presentToast("something went wrong");
+      console.error("Error fetching blood groups in registration, using fallback:", err);
+      this.BloodGroups = [
+        { BLGId: 1, BLGName: 'A+' }, { BLGId: 2, BLGName: 'A-' },
+        { BLGId: 3, BLGName: 'B+' }, { BLGId: 4, BLGName: 'B-' },
+        { BLGId: 5, BLGName: 'O+' }, { BLGId: 6, BLGName: 'O-' },
+        { BLGId: 7, BLGName: 'AB+' }, { BLGId: 8, BLGName: 'AB-' }
+      ];
     })
   }
 
@@ -438,14 +525,15 @@ export class RegistrationPage {
 
     this.Gender = this.selectedGender;
     this.BloodType = this.selectedBloodType;
-    this.modal.dismiss();
-    this.modal2?.dismiss();
-    this.modal3?.dismiss();
-    this.modal4?.dismiss();
-    this.modal11?.dismiss();
-    this.modal6?.dismiss();
-    this.modal7?.dismiss();
-    this.modal8?.dismiss();
+    try { this.modal?.dismiss(); } catch(e){}
+    try { this.modal2?.dismiss(); } catch(e){}
+    try { this.modal3?.dismiss(); } catch(e){}
+    try { this.modal4?.dismiss(); } catch(e){}
+    try { this.modal11?.dismiss(); } catch(e){}
+    try { this.modal6?.dismiss(); } catch(e){}
+    try { this.modal7?.dismiss(); } catch(e){}
+    try { this.modal8?.dismiss(); } catch(e){}
+    this.closePicker();
   }
 
   selectBloodGroup(val: any) {
@@ -513,13 +601,28 @@ export class RegistrationPage {
   }
 
   calculateAge() {
-    const today = new Date();
-    const birthDate = new Date(this.DOB);
-    // Calculate age
-    const diff = today.getTime() - birthDate.getTime();
-    this.Age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-    if (this.Age < 18) {
-      this.general.presentAlert("Alert", "You are below 18 yrs. So you are not eligible to register.");
+    if (!this.DOB) return;
+    try {
+      const parts = this.DOB.split('-');
+      const birthYear = parseInt(parts[0], 10);
+      const birthMonth = parseInt(parts[1], 10) - 1;
+      const birthDay = parseInt(parts[2], 10);
+      
+      const today = new Date();
+      let age = today.getFullYear() - birthYear;
+      const monthDiff = today.getMonth() - birthMonth;
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+        age--;
+      }
+      
+      this.Age = age;
+      if (this.Age < 18) {
+        this.general.presentAlert("Alert", "You are below 18 yrs. So you are not eligible to register.");
+        this.DOB = null;
+        this.Age = null;
+      }
+    } catch (e) {
+      console.error("Error calculating age:", e);
     }
     this.reg();
   }
@@ -535,6 +638,26 @@ export class RegistrationPage {
       return;
     }
     // ─────────────────────────────────────────────────────────────────────────
+
+    // Recalculate/Ensure Age is set before submission
+    if (this.DOB) {
+      try {
+        const parts = this.DOB.split('-');
+        const birthYear = parseInt(parts[0], 10);
+        const birthMonth = parseInt(parts[1], 10) - 1;
+        const birthDay = parseInt(parts[2], 10);
+        
+        const today = new Date();
+        let age = today.getFullYear() - birthYear;
+        const monthDiff = today.getMonth() - birthMonth;
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+          age--;
+        }
+        this.Age = age;
+      } catch (e) {
+        console.error("Error parsing age in UserRegistration:", e);
+      }
+    }
 
     if (this.registrationForm.valid && this.selectedState && this.selectedDistrict && this.selectedCity && this.Area && this.Pincode) {
       if (this.Age >= 18) {

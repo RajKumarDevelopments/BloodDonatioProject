@@ -325,8 +325,33 @@ export class ProfiledetailsPage implements OnInit {
     if (modalId === 'modal5') this.openPicker('lastDonation');
   }
 
-  availabilityChanged(event: any) {
-    this.Availablestatus = event.detail.checked;
+  async availabilityChanged(event: any) {
+    if (event.detail.checked === false) {
+      const alert = await this.alertController.create({
+        header: 'Are you sure?',
+        message: 'Are you sure you want to stop availability? If you turn off availability, you will not receive any updates from the app until you turn availability back ON.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              // Revert the toggle back to its previous state (ON)
+              this.Availablestatus = true;
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              // Update and save the availability status (OFF)
+              this.Availablestatus = false;
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      this.Availablestatus = true;
+    }
   }
 
   UserRegistration(val: any) {

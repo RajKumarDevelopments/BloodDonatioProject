@@ -1,297 +1,200 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-row>
-      <ion-col size="2" routerLink="/home"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
-      <ion-col size="8">
-        <ion-title>PERSONAL DATA</ion-title>
-      </ion-col>
-      <ion-col size="2">       
-      </ion-col>
-    </ion-row>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="" icon="chevron-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">PERSONAL DATA</ion-title>
+    <ion-buttons slot="end" style="width: 48px;"></ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding-bottom">
   <form [formGroup]="registrationForm">
-    <ion-row>
-      <ion-col size="12">
-        <div class="card">
-          <div>identification</div>
+    
+    <div class="section-heading">Personal Information</div>
+    <ion-list lines="none" class="ion-no-padding">
+      <!-- First Name -->
+      <ion-item>
+        <ion-label>First Name</ion-label>
+        <ion-input formControlName="firstName" placeholder="Enter Name" (ionInput)="reg()"></ion-input>
+      </ion-item>
+      <div class="formvalidators" *ngIf="registrationForm.get('firstName')?.invalid && (registrationForm.get('firstName')?.dirty || registrationForm.get('firstName')?.touched)">
+        <div *ngIf="registrationForm.get('firstName')?.errors?.['required']">First Name is required.</div>
+        <div *ngIf="registrationForm.get('firstName')?.errors?.['minlength']">First Name should be at least 3 characters.</div>
+        <div *ngIf="registrationForm.get('firstName')?.errors?.['maxlength']">First Name should not exceed 50 characters.</div>
+      </div>
+
+      <!-- Date of Birth -->
+      <ion-item (click)="openPicker('dob')" button detail="false">
+        <ion-label>Date of Birth</ion-label>
+        <div class="value-display">{{formatDate(DOB) || 'Select Date'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="calendar-outline" style="color: var(--primary-red);"></ion-icon>
         </div>
-      </ion-col>
-      <ion-col size="12">
+      </ion-item>
 
-        <ion-item id="open-modal">
-          <ion-label>First Name</ion-label>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="FirstName == null || FirstName =='' "></ion-icon>
-          <div class="regright" *ngIf="FirstName != null  || FirstName !='' ">{{FirstName}}</div>
-        </ion-item>
-        <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="start">
-                  <ion-button class="button1" (click)="modal.dismiss()">Close</ion-button>
-                </ion-buttons>
-                <ion-buttons slot="end">
-                  <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-list>
-              <ion-item>
-                <ion-input label="Full Name" formControlName="firstName" labelPlacement="floating"></ion-input>
-              </ion-item>
-              <div class="formvalidators" *ngIf="registrationForm.get('firstName')?.invalid && (registrationForm.get('firstName')?.dirty || registrationForm.get('firstName')?.touched)">
-                <div *ngIf="registrationForm.get('firstName')?.errors?.['required']">first Name is required.</div>
-                <div *ngIf="registrationForm.get('firstName')?.errors?.['minlength']">first Name should be at least 3 character.</div>
-                <div *ngIf="registrationForm.get('firstName')?.errors?.['maxlength']">first Name should not exceed 50 characters.</div>
-              </div>
-            </ion-list>
-          </ng-template>
-        </ion-modal>
-
-        <ion-item (click)="openDOBModal()">
-          <ion-label>Date of Birth</ion-label>
-          <ion-icon name="calendar-outline" slot="end" *ngIf="!DOB"></ion-icon>
-          <div class="regright" *ngIf="DOB">{{DOB | date:'dd/MM/yyyy'}}</div>
-        </ion-item>
-        <ion-modal #modal2 [initialBreakpoint]="0.50" [breakpoints]="[0, 1]">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="end">
-                  <ion-button class="button1" (click)="closeDOBModal()" style="color:blue">okay</ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-item>
-              <ion-datetime presentation="date" [preferWheel]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="date" (ionChange)="DateofBirth($event)"></ion-datetime>
-            </ion-item>
-          </ng-template>
-        </ion-modal>
-
-  
-        <!-- Trigger Item -->
-        <ion-item id="open-modal3" button detail="false">
-          <ion-label>Gender</ion-label>
-
-          <ion-icon name="add-circle-outline"
-                    slot="end"
-                    color="danger"
-                    *ngIf="!Gender">
-          </ion-icon>
-
-          <div class="regright" *ngIf="Gender">
-            {{ Gender }}
-          </div>
-        </ion-item>
-
-        <!-- Bottom Sheet Modal -->
-        <ion-modal #modal3
-                   trigger="open-modal3"
-                   [initialBreakpoint]="0.45"
-                   [breakpoints]="[0, 0.45]"
-                   [backdropDismiss]="false">
-
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="start">
-                  <ion-button (click)="modal3.dismiss()">Close</ion-button>
-                </ion-buttons>               
-                <ion-buttons slot="end">
-                  <ion-button color="primary"
-                              [disabled]="!selectedGender"
-                              (click)="confirmGender()">
-                    Confirm
-                  </ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-
-            <ion-list>
-              <ion-item button
-                        lines="full"
-                        *ngFor="let obj of Genders"
-                        (click)="selectGender(obj.value)"
-                        [class.selected-item]="selectedGender === obj.value">
-
-                <ion-label>{{ obj.label }}</ion-label>
-
-                <ion-icon *ngIf="selectedGender === obj.value"
-                          name="checkmark-circle"
-                          slot="end"
-                          color="success">
-                </ion-icon>
-
-              </ion-item>
-            </ion-list>
-          </ng-template>
-        </ion-modal>
-
-
-        <ion-item id="open-modal11">
-          <ion-label>Weight</ion-label>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="Weight == null || Weight =='' "></ion-icon>
-          <div class="regright" *ngIf="Weight != null  || Weight !='' ">{{WeightKgs}}</div>
-        </ion-item>
-        <ion-modal #modal11 trigger="open-modal11" [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="start">
-                  <ion-button class="button1" (click)="modal11.dismiss()">Close</ion-button>
-                </ion-buttons>
-                <ion-buttons slot="end">
-                  <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-list>
-              <ion-item>
-                <ion-input label="Weight" formControlName="Weight" labelPlacement="floating" placeholder="Weight in kgs"></ion-input>
-              </ion-item>
-              <div class="formvalidators" *ngIf="registrationForm.get('Weight')?.invalid && (registrationForm.get('Weight')?.dirty || registrationForm.get('Weight')?.touched)">
-                <div *ngIf="registrationForm.get('Weight')?.errors?.['required']">Weight is required.</div>
-                <div *ngIf="registrationForm.get('Weight')?.errors?.['minlength']">Weight should be at least 2 digits.</div>
-                <div *ngIf="registrationForm.get('Weight')?.errors?.['maxlength']">Weight should not exceed 3 digits.</div>
-              </div>
-            </ion-list>
-          </ng-template>
-        </ion-modal>
-
-      </ion-col>
-
-      <ion-col size="12">
-        <div class="card">
-          <div>Donation</div>
+      <!-- Gender -->
+      <ion-item (click)="openPicker('gender')" button detail="false">
+        <ion-label>Gender</ion-label>
+        <div class="value-display">{{Gender || 'Select Gender'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
         </div>
-      </ion-col>
-      <ion-col size="12">
+      </ion-item>
 
-        <ion-item id="open-modal4">
-          <ion-label>Blood type</ion-label>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="BloodType == null || BloodType =='' "></ion-icon>
-          <div class="regright" *ngIf="BloodType != null  || BloodType !='' ">{{BloodType}}</div>
-        </ion-item>
-        <ion-modal #modal4 trigger="open-modal4" [initialBreakpoint]="0.75" [breakpoints]="[0, 1]">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="start">
-                  <ion-button class="button1" (click)="modal4.dismiss()">Close</ion-button>
-                </ion-buttons>
-                <ion-buttons slot="end">
-                  <ion-button class="button1" (click)="modal4.dismiss()" style="color:blue"></ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-list>
-              <ion-item class="centered-text" *ngFor="let obj of BloodGroups">
-                <ion-input label="{{obj.BLGName}}" (click)="selectBloodGroup(obj)"></ion-input>
-              </ion-item>
-            </ion-list>
-          </ng-template>
-        </ion-modal>
+      <!-- Weight -->
+      <ion-item>
+        <ion-label>Weight (Kgs)</ion-label>
+        <ion-input formControlName="Weight" type="number" placeholder="0" (ionInput)="reg()"></ion-input>
+      </ion-item>
+      <div class="formvalidators" *ngIf="registrationForm.get('Weight')?.invalid && (registrationForm.get('Weight')?.dirty || registrationForm.get('Weight')?.touched)">
+        <div *ngIf="registrationForm.get('Weight')?.errors?.['required']">Weight is required.</div>
+        <div *ngIf="registrationForm.get('Weight')?.errors?.['minlength']">Weight should be at least 2 digits.</div>
+        <div *ngIf="registrationForm.get('Weight')?.errors?.['maxlength']">Weight should not exceed 3 digits.</div>
+      </div>
+    </ion-list>
 
-        <!--<ion-item id="open-modal5">
-    <ion-label>Last donation</ion-label>
-    <ion-icon name="calendar-outline" slot="end" *ngIf="!LastDonationDate"></ion-icon>
-    <div class="regright" *ngIf="LastDonationDate">{{LastDonationDate}}</div>
-  </ion-item>-->
-        <ion-item id="open-modal5">
-          <ion-label>Last donation</ion-label>
+    <div class="section-heading">
+      Location Details
+      <ion-icon name="refresh-outline" (click)="GetCurrentLocation(true)" style="margin-left: auto; font-size: 20px; color: var(--primary-red); cursor: pointer;"></ion-icon>
+    </div>
+    <ion-list lines="none" class="ion-no-padding">
+      <!-- State -->
+      <ion-item>
+        <ion-label>State</ion-label>
+        <ion-input [(ngModel)]="selectedState" [ngModelOptions]="{standalone: true}" placeholder="Enter State"></ion-input>
+      </ion-item>
 
-          <!-- ADD THIS: red icon when empty -->
-          <ion-icon name="add-circle-outline" slot="end" style="color:red"
-                    *ngIf="!LastDonationDate">
-          </ion-icon>
+      <!-- District -->
+      <ion-item>
+        <ion-label>District</ion-label>
+        <ion-input [(ngModel)]="selectedDistrict" [ngModelOptions]="{standalone: true}" placeholder="Enter District"></ion-input>
+      </ion-item>
 
-          <!-- Keep existing calendar icon — REMOVE the old calendar icon and replace with above -->
-          <div class="regright" *ngIf="LastDonationDate">{{LastDonationDate}}</div>
-        </ion-item>
-        <ion-modal #modal5 trigger="open-modal5" [initialBreakpoint]="0.50" [breakpoints]="[0, 1]">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar>
-                <ion-buttons slot="end">
-                  <ion-button class="button1" (click)="modal5.dismiss()" style="color:blue">okay</ion-button>
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-            <ion-item class="scroll-content">
-              <div class="row" style="margin-top:20px;">
-                <div class="col-lg-12">
-                  <ion-button [(ngModel)]="date" [ngModelOptions]="{standalone: true}" (click)="donation('I Never Donate')">I Never Donate</ion-button>
-                </div>
-                <div class="col-lg-12">
-                  <ion-button [(ngModel)]="date" [ngModelOptions]="{standalone: true}" (click)="donation('I Dont Remember')">I Don't Remember</ion-button>
-                </div>
-                <ion-datetime presentation="date" [preferWheel]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="date" [min]="dateAfter18Years" (ionChange)="LastDonation($event)"></ion-datetime>
-              </div>
-            </ion-item>
+      <!-- City -->
+      <ion-item>
+        <ion-label>City</ion-label>
+        <ion-input [(ngModel)]="selectedCity" [ngModelOptions]="{standalone: true}" placeholder="Enter City"></ion-input>
+      </ion-item>
 
-          </ng-template>
-        </ion-modal>
+      <!-- Area -->
+      <ion-item>
+        <ion-label>Area</ion-label>
+        <ion-input [(ngModel)]="Area" [ngModelOptions]="{standalone: true}" placeholder="Enter Area" (ionInput)="onManualAreaInput($event)"></ion-input>
+      </ion-item>
 
-        <ion-item>
-          <ion-input [(ngModel)]="selectedState" [ngModelOptions]="{standalone: true}" label="State Name" placeholder="State" class="regright"></ion-input>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="!selectedState"></ion-icon>
-        </ion-item>
+      <!-- Pincode -->
+      <ion-item>
+        <ion-label>Pincode</ion-label>
+        <ion-input [(ngModel)]="Pincode" [ngModelOptions]="{standalone: true}" type="tel" [maxlength]="6" placeholder="Enter Pincode" (ionInput)="onManualPincodeInput($event)"></ion-input>
+      </ion-item>
+    </ion-list>
 
-        <ion-item>
-          <ion-input [(ngModel)]="selectedDistrict" [ngModelOptions]="{standalone: true}" label="District Name" placeholder="District" class="regright"></ion-input>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="!selectedDistrict"></ion-icon>
-        </ion-item>
+    <div class="section-heading">Donation Preferences</div>
+    <ion-list lines="none" class="ion-no-padding">
+      <!-- Blood Type -->
+      <ion-item (click)="openPicker('blood')" button detail="false">
+        <ion-label>Blood Type</ion-label>
+        <div class="value-display">{{BloodType || 'Select'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </ion-item>
 
-        <ion-item>
-          <ion-input [(ngModel)]="selectedCity" [ngModelOptions]="{standalone: true}" label="City Name" placeholder="City" class="regright"></ion-input>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="!selectedCity"></ion-icon>
-        </ion-item>
+      <!-- Last Donation -->
+      <ion-item (click)="openPicker('lastDonation')" button detail="false">
+        <ion-label>Last Donation</ion-label>
+        <div class="value-display">{{formatDate(LastDonationDate) || 'Select Date'}}</div>
+        <div class="icon-gap" slot="end">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
 
-        <!--<ion-item id="open-modal9">
-    <ion-label>Address</ion-label>
-    <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="UserAddress == null || UserAddress =='' "></ion-icon>
-    <div class="regright" *ngIf="UserAddress != null  || UserAddress !='' ">{{UserAddress}}</div>
-  </ion-item>
-  <ion-modal #modal9 trigger="open-modal9" [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button class="button1" (click)="modal9.dismiss()">Close</ion-button>
-          </ion-buttons>
-          <ion-buttons slot="end">
-            <ion-button class="button1" (click)="reg()" style="color:blue">Confirm</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-list>
-        <ion-item>
-          <ion-input label="Address" formControlName="address" labelPlacement="floating" placeholder="Enter address"></ion-input>
-        </ion-item>
-      </ion-list>
-    </ng-template>
-  </ion-modal>-->
+    <!-- Save Button inside ion-content to fix overlay layering -->
+    <div class="items_button" *ngIf="DonorFlag != 1">
+      <button type="button" (click)="UserRegistration()">Register</button>
+    </div>
 
-        <ion-item>
-          <ion-input [(ngModel)]="Area" [ngModelOptions]="{standalone: true}" label="Area" placeholder="Area" class="regright" (ionInput)="onManualAreaInput($event)"></ion-input>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="!Area"></ion-icon>
-        </ion-item>
+    <div style="height: 30px;"></div>
 
-        <ion-item>
-          <ion-input [(ngModel)]="Pincode" [ngModelOptions]="{standalone: true}" type="tel" [maxlength]="6" label="Pincode" placeholder="Pincode" class="regright" (ionInput)="onManualPincodeInput($event)"></ion-input>
-          <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="!Pincode"></ion-icon>
-        </ion-item>
-
-      </ion-col>
-    </ion-row>
   </form>
-</ion-content>
 
-<ion-footer>
-  <div class="items_button">
-    <button type="submit" (click)="UserRegistration()" *ngIf="DonorFlag != 1">Register</button>
+  <!-- Custom Bottom Drawer / Picker System -->
+  <div class="drawer-overlay" [class.active]="activePicker !== null" (click)="closePicker()"></div>
+  
+  <div class="bottom-drawer" [class.active]="activePicker !== null">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        {{ activePicker === 'dob' ? 'Date of Birth' : 
+           activePicker === 'gender' ? 'Select Gender' : 
+           activePicker === 'blood' ? 'Blood Type' : 
+           activePicker === 'lastDonation' ? 'Last Donation Date' : '' }}
+      </div>
+      <button class="drawer-close" (click)="closePicker()">Close</button>
+    </div>
+    
+    <div class="drawer-content">
+      <!-- Date Picker (DOB) -->
+      <div *ngIf="activePicker === 'dob'">
+        <ion-datetime 
+          presentation="date" 
+          [preferWheel]="true"
+          [(ngModel)]="date" 
+          [max]="maxDOB"
+          [ngModelOptions]="{standalone: true}" 
+          (ionChange)="DateofBirth($event)"
+          style="width: 100%;">
+        </ion-datetime>
+        <ion-button expand="block" (click)="closePicker(); calculateAge()" style="margin-top: 20px; --background: var(--primary-red);">Confirm Date</ion-button>
+      </div>
+
+      <!-- Last Donation Date Picker -->
+      <div *ngIf="activePicker === 'lastDonation'">
+        <div class="option-buttons ion-padding-horizontal">
+          <ion-button expand="block" fill="outline" (click)="donation('I Never Donate')" color="dark">I Never Donate</ion-button>
+          <ion-button expand="block" fill="outline" (click)="donation('I Dont Remember')" color="dark">I Don’t Remember</ion-button>
+        </div>
+        
+        <div class="divider-text">OR SELECT DATE</div>
+
+        <ion-datetime 
+          presentation="date" 
+          [preferWheel]="true"
+          [(ngModel)]="date" 
+          [max]="maxDate"
+          [ngModelOptions]="{standalone: true}" 
+          (ionChange)="LastDonation($event)"
+          style="width: 100%;">
+        </ion-datetime>
+        <ion-button expand="block" (click)="closePicker()" style="margin-top: 20px; --background: var(--primary-red);">Confirm Date</ion-button>
+      </div>
+
+      <!-- Gender Selection -->
+      <div *ngIf="activePicker === 'gender'">
+        <ion-list lines="full">
+          <ion-item *ngFor="let obj of Genders" (click)="selectGender(obj.value)" detail="false" class="drawer-item">
+            <ion-label>{{obj.label}}</ion-label>
+            <ion-icon name="checkmark-circle" slot="end" *ngIf="Gender === obj.value" style="color: var(--primary-red);"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <!-- Blood Type Selection -->
+      <div *ngIf="activePicker === 'blood'">
+        <div style="max-height: 400px; overflow-y: auto;">
+          <ion-list lines="full">
+            <ion-item *ngFor="let obj of BloodGroups" (click)="selectBloodGroup(obj)" detail="false" class="drawer-item">
+              <ion-label>{{obj.BLGName}}</ion-label>
+              <ion-icon name="checkmark-circle" slot="end" *ngIf="BloodType === obj.BLGName" style="color: var(--primary-red);"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="!BloodGroups || BloodGroups.length === 0" class="ion-text-center">
+              <ion-label color="medium">No blood groups found</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </div>
   </div>
-</ion-footer>
+
+</ion-content>

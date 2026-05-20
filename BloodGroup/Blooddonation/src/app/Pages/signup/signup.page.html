@@ -25,7 +25,7 @@
         </div>
         <div class="items_center">
           <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <input type="tel" autocomplete="one-time-code" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
         </div>
       </div>
       <div *ngIf="OTPFlag == 1 && OTPVerified != 1">
@@ -35,7 +35,7 @@
         </div>
         <div class="items_center">
           <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <input type="tel" autocomplete="one-time-code" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
         </div>
       </div>
       <div *ngIf="OTPVerified == 1">
@@ -102,7 +102,7 @@
         </div>
         <div class="items_center">
           <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <input type="tel" autocomplete="one-time-code" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
         </div>
       </div>
       <div *ngIf="OTPFlag == 1 && OTPVerified != 1">
@@ -112,7 +112,7 @@
         </div>
         <div class="items_center">
           <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <input type="tel" autocomplete="one-time-code" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
         </div>
       </div>
     </ion-col>

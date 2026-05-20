@@ -32,7 +32,7 @@
           <!-- OTP Input (Mobile = 10 digits) -->
           <div class="items_center" *ngIf="Mobile?.length === 10">
             <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-            <input type="tel" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+            <input type="tel" autocomplete="one-time-code" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
           </div>
 
           <!-- Password Input (Email login: length > 12) -->
@@ -107,6 +107,7 @@
           <div class="items_center">
             <ion-icon name="keypad-outline" class="input_icon"></ion-icon>
             <input type="tel"
+                   autocomplete="one-time-code"
                    placeholder="Enter 4-digit OTP"
                    [(ngModel)]="forgotOTP"
                    maxlength="4"

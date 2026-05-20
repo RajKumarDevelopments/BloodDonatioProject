@@ -247,10 +247,10 @@ export class SearchlocationPage implements OnInit {
         this.fetchNearbyPlaces(place.geometry.location);
 
         // Bind address components to form fields or handle them as needed
-
+        this.bindLocationDetails(place);
 
         // You can now pass the latitude and longitude to any other method if needed
-        this.getCityAndArea(latitude, longitude); // For example, passing it to your custom method
+        this.getCityAndArea(latitude, longitude, this.pincode, this.state, this.city); // For example, passing it to your custom method
       } else {
         console.error('Error fetching place details:', status);
       }
@@ -347,10 +347,13 @@ export class SearchlocationPage implements OnInit {
     this.country = this.getAddressComponent(addressComponents, 'country') || '';
 
     // Update the form fields with the extracted details
-    this.BloodRequestForm.controls['area'].setValue(this.area);
-    this.BloodRequestForm.controls['Pincode'].setValue(this.pincode);
-    this.BloodRequestForm.controls['state'].setValue(this.state);
-    this.BloodRequestForm.controls['city'].setValue(this.city);
+    if (this.BloodRequestForm.controls['area']) this.BloodRequestForm.controls['area'].setValue(this.area);
+    if (this.BloodRequestForm.controls['Pincode']) this.BloodRequestForm.controls['Pincode'].setValue(this.pincode);
+    if (this.BloodRequestForm.controls['state']) this.BloodRequestForm.controls['state'].setValue(this.state);
+    if (this.BloodRequestForm.controls['city']) this.BloodRequestForm.controls['city'].setValue(this.city);
+
+    this.selectedState = this.state;
+    this.selectedCity = this.city;
 
     console.log('Details:', {
       city: this.city,
@@ -366,7 +369,7 @@ export class SearchlocationPage implements OnInit {
 
 
 
-  getCityAndArea(lat: number, lng: number) {
+  getCityAndArea(lat: number, lng: number, existingPincode?: string, existingState?: string, existingCity?: string) {
    
     /*const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBPFXmwHMaoN_CVZ2K1w2kMLm5qpSXD_s8`; // Replace with your API key*/
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCr7yLGPltOafS-vwIMsoMNYE8J21szmGc`; // Replace with your API key
@@ -375,28 +378,40 @@ export class SearchlocationPage implements OnInit {
         const result = response.results[0];
         this.latitude = lat;
         this.longitude = lng;
-        this.city = this.getAddressComponent(result.address_components, 'locality');
-        this.selectedCity = this.city
+        
+        const revCity = this.getAddressComponent(result.address_components, 'locality') || this.getAddressComponent(result.address_components, 'administrative_area_level_2');
+        this.city = existingCity || revCity || this.city;
+        this.selectedCity = this.city;
+        
         this.area = this.getAddressComponent(result.address_components, 'sublocality') ||
-          this.getAddressComponent(result.address_components, 'sublocality_level_1');
-        this.selectedarea = this.area
-        this.pincode = this.getAddressComponent(result.address_components, 'postal_code');
-        this.selectedpincode = this.pincode
-        this.state = this.getAddressComponent(result.address_components, 'administrative_area_level_1');
-        this.selectedState = this.state
-        this.country = this.getAddressComponent(result.address_components, 'country');
-        //this.Distict = this.getAddressComponent(result.address_components, 'administrative_area_level_2');
-        this.Distict = this.getAddressComponent(result.address_components, 'administrative_area_level_3');
-        this.selectedDistrict = this.Distict
-        this.BloodRequestForm.controls['area'].setValue(this.area);
-        this.BloodRequestForm.controls['Pincode'].setValue(this.pincode);
+          this.getAddressComponent(result.address_components, 'sublocality_level_1') || this.area;
+        this.selectedarea = this.area;
+        
+        const reverseGeocodedPincode = this.getAddressComponent(result.address_components, 'postal_code');
+        this.pincode = existingPincode || reverseGeocodedPincode || this.pincode;
+        this.selectedpincode = this.pincode;
+        
+        const revState = this.getAddressComponent(result.address_components, 'administrative_area_level_1');
+        this.state = existingState || revState || this.state;
+        this.selectedState = this.state;
+        
+        this.country = this.getAddressComponent(result.address_components, 'country') || this.country;
+        
+        const revDistrict = this.getAddressComponent(result.address_components, 'administrative_area_level_3') || this.getAddressComponent(result.address_components, 'administrative_area_level_2');
+        this.Distict = revDistrict || this.Distict;
+        this.selectedDistrict = this.Distict;
+        
+        if (this.BloodRequestForm.controls['area']) this.BloodRequestForm.controls['area'].setValue(this.area);
+        if (this.BloodRequestForm.controls['Pincode']) this.BloodRequestForm.controls['Pincode'].setValue(this.pincode);
+        if (this.BloodRequestForm.controls['state']) this.BloodRequestForm.controls['state'].setValue(this.state);
+        if (this.BloodRequestForm.controls['city']) this.BloodRequestForm.controls['city'].setValue(this.city);
 
         this.StateID1 = this.States1.filter((id: any) => id.StateName == this.selectedState)
-        this.StateID = this.StateID1[0].StateId
+        this.StateID = this.StateID1[0]?.StateId
         this.distictids1 = this.Districts1.filter((id: any) => id.DistrictName == this.selectedDistrict)
-        this.distictids = this.distictids1[0].DistrictId
+        this.distictids = this.distictids1[0]?.DistrictId
         this.CityIDs1 = this.Cities1.filter((id: any) => id.CityName == this.selectedCity)
-        this.CityID1 = this.CityIDs1[0].CityId
+        this.CityID1 = this.CityIDs1[0]?.CityId
         console.log('Distict:', this.Distict, 'City:', this.city, 'Area:', this.area, 'Pincode:', this.pincode, 'State:', this.state, 'Country:', this.country);
       } else {
         console.log('No results found');
@@ -723,6 +738,11 @@ export class SearchlocationPage implements OnInit {
     // Check if hospital/location is selected
     if (!this.searchQuery || !this.latitude || !this.longitude) {
       this.general.presentToast("Please search and select the hospital / location where blood is needed.");
+      return;
+    }
+
+    if (!this.BloodRequestForm.value.Pincode || this.BloodRequestForm.value.Pincode.toString().trim() === '' || this.BloodRequestForm.value.Pincode.toString().length < 6) {
+      this.general.presentToast("Pincode is missing or invalid. Please enter a valid 6-digit pincode.");
       return;
     }
 
