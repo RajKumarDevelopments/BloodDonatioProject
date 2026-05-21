@@ -87,7 +87,6 @@ export class ProfiledetailsPage implements OnInit {
     // Initialize Form
     this.ProfileForm = this.formBuilder.group({
       firstName: [this.UserName || '', [Validators.required]],
-      email: [this.Email || '', [Validators.required, Validators.email]],
       weight: [this.UserDetails[0]?.Weight || '', [Validators.required]]
     });
 
@@ -359,7 +358,7 @@ export class ProfiledetailsPage implements OnInit {
       const obj = [{
         RegId: this.UserID,
         FullName: val.firstName,
-        Email: val.email,
+        Email: this.Email,
         Weight: val.weight ?? this.Weight,
         Gender: this.Gender,
         BloodGroupId: this.BloodGroupID,

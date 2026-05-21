@@ -23,6 +23,7 @@ export class RquestpresentationPage implements OnInit {
   activeAccordion: number | null = null;
   activeAccordionOpen: number | null = null;
   activeAccordionClosed: number | null = null;
+  activePicker: string | null = null;
   isModalOpen: boolean = false;
   Rescheduledate: any;
   message: any;
@@ -168,6 +169,7 @@ export class RquestpresentationPage implements OnInit {
     }
     this.RequestForm = this.Fb.group({
       Mode: ["",],
+      OrgPresentation: [this.Rk == 3 ? true : false,],
       Audiance: ["",],
       Venue: ["",],
       Venue_name: ["",],
@@ -333,6 +335,14 @@ export class RquestpresentationPage implements OnInit {
         this.closedAccordionGroup.value = null;
       }
     }
+  }
+
+  openPicker(pickerType: string) {
+    this.activePicker = pickerType;
+  }
+
+  closePicker() {
+    this.activePicker = null;
   }
 
   //async checkLocationServices() {
@@ -523,11 +533,12 @@ export class RquestpresentationPage implements OnInit {
     this.country = this.getAddressComponent(addressComponents, 'country') || '';
 
     // Update the form fields with the extracted details
-    this.RequestForm.controls['area'].setValue(this.area);
-    this.RequestForm.controls['Pincode'].setValue(this.pincode);
-    this.RequestForm.controls['state'].setValue(this.state);
-    this.RequestForm.controls['city'].setValue(this.city);
-
+    if (this.RequestForm.controls['Area']) {
+      this.RequestForm.controls['Area'].setValue(this.area);
+    }
+    if (this.RequestForm.controls['Pincode']) {
+      this.RequestForm.controls['Pincode'].setValue(this.pincode);
+    }
   }
 
   getCityAndArea(lat: number, lng: number) {
@@ -536,20 +547,20 @@ export class RquestpresentationPage implements OnInit {
       if (response && response.results && response.results.length > 0) {
         const result = response.results[0];
         this.city = this.getAddressComponent(result.address_components, 'locality');
-        this.selectedCity = this.city
+        this.selectedCity = this.city;
         this.area = this.getAddressComponent(result.address_components, 'sublocality');
-        //  this.RequestForm.controls['Area'].setValue(this.area);
+        this.RequestForm.controls['Area'].setValue(this.area);
 
         this.address = this.getAddressComponent(result.address_components, 'sublocality_level_1');
-        // this.RequestForm.controls['Address'].setValue(this.address);
+        this.RequestForm.controls['Address'].setValue(this.address);
 
         this.pincode = this.getAddressComponent(result.address_components, 'postal_code');
-        //this.RequestForm.controls['Pincode'].setValue(this.pincode);
-        this.mycurrentpincode = this.pincode
+        this.RequestForm.controls['Pincode'].setValue(this.pincode);
+        this.mycurrentpincode = this.pincode;
         this.state = this.getAddressComponent(result.address_components, 'administrative_area_level_1');
-        this.selectedState = this.state
+        this.selectedState = this.state;
         this.district = this.getAddressComponent(result.address_components, 'administrative_area_level_3');
-        this.selectedDistrict = this.district
+        this.selectedDistrict = this.district;
         this.country = this.getAddressComponent(result.address_components, 'country');
         //this.GetRequestpresantaions(this.mycurrentpincode);
 
@@ -740,9 +751,9 @@ export class RquestpresentationPage implements OnInit {
   }
 
   selectPlace(val: any) {
-    this.WorkID = val.WorkId;
+    this.WorkID = val.WorkID;
     this.selectedPlace = val.WorkPlace;
-    this.reg();
+    this.closePicker();
   }
 
 
@@ -815,7 +826,8 @@ export class RquestpresentationPage implements OnInit {
             RequestDate: val.RequiredDate,
             RequestAcceptStatus: null,
             Latitude: this.latitude,
-            Longitude: this.longitude
+            Longitude: this.longitude,
+            OrgPresentation: (this.Rk == 3 && val.OrgPresentation) ? true : false
           });
         }
 
@@ -849,7 +861,8 @@ export class RquestpresentationPage implements OnInit {
           RequestDate: val.RequiredDate,
           RequestAcceptStatus: null,
           Latitude: this.latitude,
-          Longitude: this.longitude
+          Longitude: this.longitude,
+          OrgPresentation: (this.Rk == 3 && val.OrgPresentation) ? true : false
         });
 
       }
@@ -863,22 +876,24 @@ export class RquestpresentationPage implements OnInit {
       this.general.PostData(url, UploadFile).subscribe((data: any) => {
 
         if (data === "SUCCESS") {
-          if (this.leadersonly && this.leadersonly.length > 0) {
-
-            if (this.UserDetails[0].RoleId !== 4) {
-
-              this.leadersPincode = [];
-
-              for (let i = 0; i < this.Alldet.length; i++) {
-                this.leadersPincode.push(this.Alldet[i].Pincode);
+          if (!(this.Rk == 3 && val.OrgPresentation === true)) {
+            if (this.leadersonly && this.leadersonly.length > 0) {
+  
+              if (this.UserDetails[0].RoleId !== 4) {
+  
+                this.leadersPincode = [];
+  
+                for (let i = 0; i < this.Alldet.length; i++) {
+                  this.leadersPincode.push(this.Alldet[i].Pincode);
+                }
+  
+                this.sendnotification(this.leadersPincode);
+  
+              } else {
+                this.sendnotification(val.Pincode);
               }
-
-              this.sendnotification(this.leadersPincode);
-
-            } else {
-              this.sendnotification(val.Pincode);
+  
             }
-
           }
 
           this.general.presentAlert(

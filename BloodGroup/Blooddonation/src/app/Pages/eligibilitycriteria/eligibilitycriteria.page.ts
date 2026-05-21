@@ -1206,7 +1206,7 @@ export class EligibilitycriteriaPage implements OnInit {
         notificationsUploadFile.append("Param", JSON.stringify(this.test));
         notificationsUploadFile.append("Flag", "1");
         this.general.present();
-        this.navCtrl.navigateForward(['/rquestpresentation'])
+        this.navCtrl.navigateForward(['/rquestpresentation', { id: 3 }])
         this.general.dismiss();
 
         this.general.PostData(notificationsUrl, notificationsUploadFile).subscribe(() => {
