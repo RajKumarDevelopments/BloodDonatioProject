@@ -55,10 +55,7 @@ export class NotificationsPage implements OnInit {
     var url = "api/BG/Get_Notification_basedon_UserId";
     
     this.general.PostData(url, uploadfile).subscribe(
-      (data: any) => {
-        console.log("Notifications retrieved:", data);
-        console.log("Total notifications:", data ? data.length : 0);
-        
+      (data: any) => {       
         this.notification = data || [];
         this.accordionState = Array(this.notification.length).fill(false);
         this.activeAccordion = null;
@@ -68,7 +65,6 @@ export class NotificationsPage implements OnInit {
         } else {
           // Log each notification
           this.notification.forEach((notif: any, index: number) => {
-            console.log(`Notification ${index + 1}:`, notif.NotificationsDesc);
           });
         }
       },

@@ -567,13 +567,17 @@ export class RquestpresentationPage implements OnInit {
         if (this.UserDetails[0].RoleId == 4) {
 
         }
-
+        this.updateTabView();
+        this.general.dismiss();
 
       } else {
         console.log('No results found');
+        this.updateTabView();
+        this.general.dismiss();
       }
-    }, error => {
-      console.error('Error getting geocode', error);
+    }, (error: any) => {
+      console.error("Error fetching presentation requests", error);
+      this.general.dismiss();
     });
   }
 
@@ -990,7 +994,10 @@ export class RquestpresentationPage implements OnInit {
 
       this.accordionState = Array(Math.max(maxLength + 10, 50)).fill(false);
 
-      setTimeout(() => this.updateTabView(), 50);
+      setTimeout(() => {
+        this.updateTabView();
+        this.general.dismiss();
+      }, 50);
     }, err => {
       this.Myrequsest = [];
       this.MyClosedrequsest = [];
@@ -1000,6 +1007,7 @@ export class RquestpresentationPage implements OnInit {
       this.expiredlist = [];
       this.curnt = false;
       this.general.presentToast("something went wrong");
+      this.general.dismiss();
     });
   }
 
@@ -1317,8 +1325,8 @@ export class RquestpresentationPage implements OnInit {
     }
   }
 
-  setTab(tab: string) {
-    // Update selected tab
+  async setTab(tab: string) {
+    // Update selected tab state first to avoid visual delay
     this.selectedTab = tab;
     localStorage.setItem('selectedTab', tab);
     this.activeAccordionOpen = null;
@@ -1329,6 +1337,8 @@ export class RquestpresentationPage implements OnInit {
     if (this.closedAccordionGroup) {
       this.closedAccordionGroup.value = null;
     }
+    
+    await this.general.present();
     this.GetRequestpresantaions();
   }
 

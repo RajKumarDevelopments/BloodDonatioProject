@@ -753,10 +753,14 @@ export class EligibilitycriteriaPage implements OnInit {
         this.message = "You don't have any requests in your location";
       }
       this.accordionState = Array(this.currentrequest?.length ?? 0).fill(false);
+      setTimeout(() => {
+        this.general.dismiss();
+      }, 50);
     }, err => {
       this.requests = [];
       this.closedrec = [];
       this.curnt = false;
+      this.general.dismiss();
       this.general.presentToast("something went wrong");
     });
   }
@@ -969,10 +973,8 @@ export class EligibilitycriteriaPage implements OnInit {
   }
 
  
-    setTab(tab: string) {
-      this.activeAccordion = null;
+    async setTab(tab: string) {
       this.selectedTab = tab;
-
       if (tab === 'open') {
         this.opening = true;
         this.closed = false;
@@ -980,9 +982,13 @@ export class EligibilitycriteriaPage implements OnInit {
         this.closed = true;
         this.opening = false;
       }
-
+      this.activeAccordion = null;
+      
       // Force change detection
       this.cdr.detectChanges();
+      
+      await this.general.present();
+      this.GetRequestpresantaions();
     }
   
 

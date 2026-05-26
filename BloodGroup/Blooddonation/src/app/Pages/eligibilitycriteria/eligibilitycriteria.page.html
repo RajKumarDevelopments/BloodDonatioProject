@@ -23,34 +23,18 @@
 
 
   <ion-row>
-    <ion-col size="2"></ion-col>
-    <ion-col size="8">
-
+    <ion-col size="12">
       <div class="tab-wrap">
-      <!-- Open Tab -->
-      <input type="radio" name="tabs" id="tab1" checked>
-
-  <div class="tab-label-content" (click)="setTab('open')">
-    <label for="tab1" [ngClass]="{'active': selectedTab === 'open'}">Active</label>
-  </div>
-       <!--Closed Tab--> 
-      <input type="radio" name="tabs" id="tab2">
-
-    <div class="tab-label-content" (click)="setTab('closed')">
-      <label for="tab2" [ngClass]="{'active': selectedTab === 'closed'}">Closed</label>
-    </div>
-  </div>
-
-      <!--<div class="tab-label-content" (click)="setTab('open')">
-        <label for="tab1" [ngClass]="{'active': selectedTab === 'open'}">Active</label>
+        <div class="tab-label-content">
+          <input type="radio" name="tabs" id="tab1" [checked]="selectedTab === 'open'" (change)="setTab('open')">
+          <label for="tab1" [ngClass]="{'active': selectedTab === 'open'}">Active</label>
+        </div>
+        <div class="tab-label-content">
+          <input type="radio" name="tabs" id="tab2" [checked]="selectedTab === 'closed'" (change)="setTab('closed')">
+          <label for="tab2" [ngClass]="{'active': selectedTab === 'closed'}">Closed</label>
+        </div>
       </div>
-
-      <div class="tab-label-content" (click)="setTab('closed')">
-        <label for="tab2" [ngClass]="{'active': selectedTab === 'closed'}">Closed</label>
-      </div>-->
-
     </ion-col>
-    <ion-col size="2"></ion-col>
   </ion-row>
 
   <div>
@@ -68,105 +52,75 @@
       </ion-row>
     </div>
 
-    <ion-col style="margin-top: 3rem;" *ngIf="opening && requests && requests.length > 0">
+    <div *ngIf="opening && requests && requests.length > 0">
       <ion-row>
         <ion-col size="12">
           <!--<ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
     <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">-->
           <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
             <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">
-              <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion == i ? 'none' : ''">
-                <ion-row class="ion-align-items-center">
+              <div slot="header" color="light" class="accordionheader">
+                <ion-row class="ion-align-items-center" *ngIf="activeAccordion != i">
                   <ion-col size="2">
-                    <img src="../../../assets/Images/mic.png" />
+                    <img src="../../../assets/Images/mic.png" class="imgg" />
                   </ion-col>
-                  <ion-col size="4">
-                    <p>{{ item.Contact_name }}</p>
+                  <ion-col size="5" class="namee" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+                    <span class="namee" style="margin:0;">{{ item.Contact_name }}</span>
                   </ion-col>
-                  <ion-col size="4" class="ion-text-end">
-                    <p>Mode: {{ item.Mode }}</p>
-                  </ion-col>
-                  <ion-col size="2" class="ion-text-end">
-                    <ion-icon [name]="activeAccordion == i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-                    </ion-icon>
+                  <ion-col size="5" class="namee">
+                    <span class="namee">Mode: {{ item.Mode }}</span> <br />                   
                   </ion-col>
                 </ion-row>
               </div>
 
-              <div slot="content" class="content" style="margin-left:5px">
-                <ion-row>
-                  <ion-col size="12">
-                    <ion-row class="ion-align-items-center">
-                      <ion-col size="2">
-                        <img src="../../../assets/Images/openmic2.png" />
-                      </ion-col>
-                      <ion-col size="3">Venue</ion-col>
-                      <ion-col size="7"><strong>{{item.Venue_name}} </strong></ion-col>
-                    </ion-row>
-                  </ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Name</ion-col>
-                  <ion-col size="7"><strong>{{item.Addedby}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Mode</ion-col>
-                  <ion-col size="7"><strong>{{item.Mode}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Audiance</ion-col>
-                  <ion-col size="7"><strong>{{item.Audiance}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Venue Type</ion-col>
-                  <ion-col size="7"><strong>{{item.Venue}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Date</ion-col>
-                  <ion-col size="7"><strong>{{ item.RequestDate | date: 'dd/MM/yyyy HH:mm' }}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Address</ion-col>
-                  <ion-col size="7"><strong>{{item.Address}}, {{item.StateName}}, {{item.Pincode}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Contact name</ion-col>
-                  <ion-col size="7"><strong>{{item.Contact_name}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Contact number</ion-col>
-                  <ion-col size="7"><strong>{{item.Contact_number}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-
-                  <ion-col size="3">Message</ion-col>
-                  <ion-col size="7"><strong>{{item.Message}}</strong></ion-col>
-
-                </ion-row>
-
-                <br />
-                <ion-row>
-                  <ion-col size="3">
-                    <div class="round" (click)="openmap(item.Latitude, item.Longitude, item.Address,item.StateName, item.Pincode)">
-                      <ion-icon name="location-outline" style="color:red"></ion-icon>
+              <div slot="content" class="content-wrapper" *ngIf="activeAccordion == i">
+                <div class="card-details">
+                  <div class="detail-section">
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+                    <div class="detail-row"><strong>Name:</strong> <span>{{ item.Addedby }}</span></div>
+                    <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
+                    <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
+                    <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
+                    <div class="detail-row"><strong>Date:</strong> <span>{{ item.RequestDate | date: 'dd/MM/yyyy HH:mm' }}</span></div>
+                    <div class="detail-row"><strong>Contact Person:</strong> <span>{{ item.Contact_name }}</span></div>
+                    <div class="detail-row"><strong>Contact Number:</strong> <span>{{ item.Contact_number }}</span></div>
+                    <div class="detail-row"><strong>Message:</strong> <span>{{ item.Message }}</span></div>
+                    <div class="detail-row">
+                      <strong>Address:</strong> <span>
+                        {{ item.Address }}, {{ item.StateName }}, {{item.Pincode}}                       
+                      </span>
                     </div>
-                  </ion-col>
+                  </div>
 
-                  <ion-col size="3" *ngIf="!item.RequestAcceptStatus">
-                    <button class="accept" (click)="Accept(item, 1)">Accept</button>
-                  </ion-col>
-                  <ion-col size="3" *ngIf="!item.RequestAcceptStatus">
-                    <button class="accept" (click)="Accept(item, 2)">Reject</button>
-                  </ion-col>
+                  <!-- Action Footer -->
+                  <div class="footer-actions">
+                    <div class="close-text" (click)="openmap(item.Latitude, item.Longitude, item.Address,item.StateName, item.Pincode)" style="color: red; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                      <ion-icon name="location-outline"></ion-icon> Location
+                    </div>
+                    
+                    <div *ngIf="!item.RequestAcceptStatus" style="display: flex; gap: 10px;">
+                      <button class="accept" (click)="Accept(item, 1)">Accept</button>
+                      <button class="accept" (click)="Accept(item, 2)">Reject</button>
+                    </div>
 
+                    <div *ngIf="item.RequestAcceptStatus == 1">
+                      <button class="acceptt">Accepted</button>
+                    </div>
+                    <div *ngIf="item.RequestAcceptStatus == 2">
+                      <button class="acceptt">Rejected</button>
+                    </div>
 
-                  <ion-col size="6" *ngIf="item.RequestAcceptStatus == 1" style=" display: flex;" class="ion-justify-content-end">
-                    <button class="acceptt">Accepted</button>
-                  </ion-col>
-                  <ion-col size="6" *ngIf="item.RequestAcceptStatus == 2" style=" display: flex;" class="ion-justify-content-end">
-                    <button class="acceptt">Rejected</button>
-                  </ion-col>
-                  <ion-col size="3" class="ion-text-end ion-padding-top" style="display: flex;justify-content: center;" (click)="closeAccordion()">
-                    <div class="triangle-up f-end" style="margin:0!important;"></div>
-                  </ion-col>
-                </ion-row>
+                    <div class="expand-toggle" (click)="closeAccordion()">
+                      <div class="triangle-up"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ion-accordion>
           </ion-accordion-group>
         </ion-col>
       </ion-row>
-    </ion-col>
+    </div>
 
     <!-- CLOSED TAB -->
     <!-- No Records Found for Closed Tab -->
@@ -182,85 +136,57 @@
       </ion-row>
     </div>
 
-    <ion-col style="margin-top: 3rem;" *ngIf="closed && !opening && closedrec && closedrec.length > 0">
+    <div *ngIf="closed && !opening && closedrec && closedrec.length > 0">
       <ion-row>
         <ion-col size="12">
           <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
             <ion-accordion *ngFor="let item of closedrec; let i = index" [value]="i">
-              <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion == i ? 'none' : ''">
-                <ion-row>
+              <div slot="header" color="light" class="accordionheader">
+                <ion-row class="ion-align-items-center" *ngIf="activeAccordion != i">
                   <ion-col size="2">
-                    <img src="../../../assets/Images/mic.png" />
+                    <img src="../../../assets/Images/mic.png" class="imgg" />
                   </ion-col>
-                  <ion-col size="4">
-                    <p>{{ item.Contact_name }}</p>
+                  <ion-col size="5" class="namee" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+                    <span class="namee" style="margin:0;">{{ item.Contact_name }}</span>
                   </ion-col>
-                  <ion-col size="4" class="ion-text-end">
-                    <p>Mode: {{ item.Mode }}</p>
-                  </ion-col>
-                  <ion-col size="2" class="ion-text-end">
-                    <ion-icon [name]="activeAccordion == i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-                    </ion-icon>
+                  <ion-col size="5" class="namee">
+                    <span class="namee">Mode: {{ item.Mode }}</span> <br />                   
                   </ion-col>
                 </ion-row>
               </div>
 
-              <div slot="content" class="content" style="margin-left:5px">
-                <ion-row>
-                  <ion-col size="12">
-                    <ion-row class="ion-align-items-center">
-                      <ion-col size="2">
-                        <img src="../../../assets/Images/openmic2.png" />
-                      </ion-col>
+              <div slot="content" class="content-wrapper" *ngIf="activeAccordion == i">
+                <div class="card-details">
+                  <div class="detail-section">
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+                    <div class="detail-row"><strong>Name:</strong> <span>{{ item.Addedby }}</span></div>
+                    <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
+                    <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
+                    <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
+                    <div class="detail-row"><strong>Date:</strong> <span>{{ item.RequestDate | date: 'dd/MM/yyyy HH:mm' }}</span></div>
+                    <div class="detail-row"><strong>Contact Person:</strong> <span>{{ item.Contact_name }}</span></div>
+                    <div class="detail-row"><strong>Contact Number:</strong> <span>{{ item.Contact_number }}</span></div>
+                    <div class="detail-row"><strong>Message:</strong> <span>{{ item.Message }}</span></div>
+                    <div class="detail-row">
+                      <strong>Address:</strong> <span>
+                        {{ item.Address }}, {{ item.StateName }}, {{item.Pincode}}                       
+                      </span>
+                    </div>
+                  </div>
 
-                      <ion-col size="3">Venue</ion-col>
-                      <ion-col size="7"><strong>{{item.Venue_name}} </strong></ion-col>
-                    </ion-row>
-                  </ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Name</ion-col>
-                  <ion-col size="7"><strong>{{item.Addedby}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Mode</ion-col>
-                  <ion-col size="7"><strong>{{item.Mode}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Audiance</ion-col>
-                  <ion-col size="7"><strong>{{item.Audiance}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Venue Type</ion-col>
-                  <ion-col size="7"><strong>{{item.Venue}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Date</ion-col>
-                  <ion-col size="7"><strong>{{ item.RequestDate | date: 'dd/MM/yyyy HH:mm' }}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Address</ion-col>
-                  <ion-col size="7"><strong>{{item.Address}}, {{item.StateName}}, {{item.Pincode}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Contact name</ion-col>
-                  <ion-col size="7"><strong>{{item.Contact_name}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Contact number</ion-col>
-                  <ion-col size="7"><strong>{{item.Contact_number}}</strong></ion-col>
-                  <ion-col size="2"> </ion-col>
-                  <ion-col size="3">Message</ion-col>
-                 <ion-col size="7"><strong>{{item.Message}}</strong></ion-col> 
-                 <!--<ion-col size="9" class="ion-padding-top"></ion-col>
-                 <ion-col size="3" class="ion-text-end ion-padding-top">
-                   <button class="accept" *ngIf="item.RequestAcceptStatus == 2">Closed</button>
-                 </ion-col>-->
-               </ion-row>
-               <ion-row>
-                 <ion-col size="12" class="ion-text-end ion-padding-top" style="justify-content: flex-end !important;
-    display: flex;" (click)="closeAccordion()">                  
-                   <div class="triangle-up f-end"></div>
-                 </ion-col>
-               </ion-row>
+                  <!-- Action Footer -->
+                  <div class="footer-actions">
+                    <div class="expand-toggle" (click)="closeAccordion()">
+                      <div class="triangle-up"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ion-accordion>
           </ion-accordion-group>
         </ion-col>
       </ion-row>
-    </ion-col>
+    </div>
 
   </div>
 </ion-content>

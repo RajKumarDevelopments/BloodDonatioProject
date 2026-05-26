@@ -17,7 +17,20 @@
 
 
 <ion-content>
-  <ion-accordion-group [multiple]="false" #notificationAccordionGroup [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)">
+  <!-- No Records Found -->
+  <div *ngIf="!notification || notification.length === 0">
+    <ion-row>
+      <ion-col size="12">
+        <div class="center">
+          <div class="card">
+            <h4>No Records Found</h4>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <ion-accordion-group *ngIf="notification && notification.length > 0" [multiple]="false" #notificationAccordionGroup [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)">
     <!-- Loop through each notification in the list -->
     <ion-accordion *ngFor="let item of notification; let i = index" [value]="i.toString()" [ngClass]="{'ion-accordion-active': activeAccordion === i}">
       <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">

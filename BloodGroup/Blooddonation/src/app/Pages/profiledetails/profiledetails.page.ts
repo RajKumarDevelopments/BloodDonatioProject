@@ -133,7 +133,6 @@ export class ProfiledetailsPage implements OnInit {
     UploadFile.append("Flag", "4");
     const url = "api/BG/BloodGroupMaster_CRUD";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      console.log("BloodGroups Data:", data);
       if (Array.isArray(data)) {
         this.BloodGroups = data;
       } else if (data && typeof data === 'object' && Array.isArray(data.data)) {

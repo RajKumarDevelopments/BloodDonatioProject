@@ -463,8 +463,9 @@ label {
 
 
 .tab-wrap {
-  width: 50%;
-  margin-left: 25%;
+  width: 90%;
+  max-width: 400px;
+  margin: 25px auto 15px;
   display: flex;
   background-color: #f1f2f6;
   border-radius: 100px;
@@ -510,9 +511,8 @@ input[type=radio][name=tabs] {
 @media screen and (max-width: 800px) {
 
   .tab-wrap {
-    width: 100%;
-    margin-left: 2%;
-    /*top: -106px;*/
+    width: 92%;
+    margin: 25px auto 15px;
   }
 }
 
@@ -540,9 +540,8 @@ input {
   }
 
   .tab-wrap {
-    width: 100%;
-    margin-left: 0%;
-    /*top: -106px;*/
+    width: 92%;
+    margin: 25px auto 15px;
   }
 }
 

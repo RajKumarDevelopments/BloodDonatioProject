@@ -22,6 +22,9 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.getdashboard();
   }
   getdashboard() {
@@ -30,8 +33,11 @@ export class DashboardPage implements OnInit {
     UploadFile.append("Param2", this.UserDetails[0].Reffercode);
     var url = 'api/BG/MobileDashboardcount';
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      this.mydashboard = data
-      //.donorcount = this.mydashboard.filter((rol:any)=>rol)
+      if (data) {
+        this.mydashboard = Array.isArray(data) ? data : [data];
+      } else {
+        this.mydashboard = [];
+      }
     });
   }
 
