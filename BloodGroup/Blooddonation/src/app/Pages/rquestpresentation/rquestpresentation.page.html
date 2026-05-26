@@ -154,27 +154,22 @@
             (ionChange)="onOpenAccordionChange($event)" mode="md">
 
             <ion-accordion *ngFor="let item of Myrequsest; let i = index; trackBy: trackByRPId" [value]="i.toString()">
-              <div slot="header" color="light" class="accordionheader">
-                <ion-row class="ion-align-items-center" *ngIf="activeAccordionOpen !== i">
-                  <ion-col size="2">
-                    <img src="../../../assets/Images/mic.png" class="imgg" />
-                  </ion-col>
-                  <ion-col size="5" class="namee" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
-                    <span class="namee" style="margin:0;">{{ item.Contact_name }}</span>
-                    <span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 2px; position: relative; top: -4px;">L</span>
-                  </ion-col>
-                  <ion-col size="5" class="namee">                
-                    <span class="namee">Mode: {{ item.Mode }}</span>
-                  </ion-col>
-                </ion-row>
+              <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordionOpen === i}">
+                <div class="guided-title">
+                  {{ item.Venue_name }}
+                  <span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>
+                </div>
+                <div class="guided-icon">
+                  <span *ngIf="activeAccordionOpen !== i">▼</span>
+                  <span *ngIf="activeAccordionOpen === i">▲</span>
+                </div>
               </div>
 
               <div slot="content" class="content-wrapper" *ngIf="activeAccordionOpen === i">
                 <div class="card-details">
                   <!-- Details Section (Two Column Layout) -->
                   <div class="detail-section">
-                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
-                    <div class="detail-row"><strong>Address:</strong> <span>{{ item.Address }}, {{ item.StateName }}, {{ item.Pincode }}</span></div>
+                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
                     <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
@@ -182,22 +177,20 @@
                     <div class="detail-row"><strong>Presentation Date:</strong> <span>{{ item.RequestDate | date: 'dd-MM-yyyy hh:mm a' }}</span></div>
                     <div class="detail-row"><strong>Contact Person:</strong> <span>{{ item.Contact_name }}</span></div>
                     <div class="detail-row"><strong>Contact Number:</strong> <span>{{ item.Contact_number }}</span></div>
+                    <div class="detail-row"><strong>Address:</strong> <span>{{ item.Address }}, {{ item.StateName }}, {{ item.Pincode }}</span></div>
                     <div class="detail-row"><strong>Message:</strong> <span>{{ item.Message }}</span></div>
                     <div class="detail-row" *ngIf="item.AcceptedCount > 0">
                       <strong>Accepted count:</strong>
                       <span style="color: #0e51c9; text-decoration: underline; cursor: pointer; font-weight: bold;"
-                        (click)="goToDetails(item)">
+                            (click)="goToDetails(item)">
                         {{ item.AcceptedCount }}
                       </span>
                     </div>
                   </div>
 
                   <!-- Action Footer -->
-                  <div class="footer-actions">
-                    <div class="close-text" (click)="closereqst(item)">Close</div>
-                    <div class="expand-toggle" (click)="closeAccordion('open')">
-                      <div class="triangle-up"></div>
-                    </div>
+                  <div class="footer-actions" style="margin-top: 10px; padding-left: 4%;">
+                    <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer;" (click)="closereqst(item)">Close</div>
                   </div>
                 </div>
               </div>
@@ -229,26 +222,22 @@
 
             <ion-accordion *ngFor="let item of MyClosedrequsest; let i = index; trackBy: trackByRPId"
               [value]="i.toString()">
-              <div slot="header" color="light" class="accordionheader">
-                <ion-row class="ion-align-items-center" *ngIf="activeAccordionClosed !== i">
-                  <ion-col size="2">
-                    <img src="../../../assets/Images/mic.png" class="imgg" />
-                  </ion-col>
-                  <ion-col size="5" class="namee" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
-                    <span class="namee" style="margin:0;">{{ item.Contact_name }}</span>
-                    <span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 2px; position: relative; top: -4px;">L</span>
-                  </ion-col>
-                  <ion-col size="5" class="namee">
-                    <span class="namee">Mode: {{ item.Mode }}</span> <br />                   
-                  </ion-col>
-                </ion-row>
+              <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordionClosed === i}">
+                <div class="guided-title">
+                  {{ item.Venue_name }}
+                  <span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>
+                </div>
+                <div class="guided-icon">
+                  <span *ngIf="activeAccordionClosed !== i">▼</span>
+                  <span *ngIf="activeAccordionClosed === i">▲</span>
+                </div>
               </div>
 
               <div slot="content" class="content-wrapper" *ngIf="activeAccordionClosed === i">
                 <div class="card-details">
                   <!-- Details Section (Two Column Layout) -->
                   <div class="detail-section">
-                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
 
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
@@ -272,12 +261,6 @@
                     </div>
                   </div>
 
-                  <!-- Action Footer -->
-                  <div class="footer-actions">
-                    <div class="expand-toggle" (click)="closeAccordion('closed')">
-                      <div class="triangle-up"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </ion-accordion>

@@ -869,16 +869,16 @@ textarea {
 .content-wrapper {
   background: white;
   padding: 12px;
-  border-bottom: 2px solid #ffffff;
+  border-top: 1px solid #ec1c2c;
 }
 
 .card-details {
   background: white;
-  border-radius: 4px;
-  padding: 20px 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 96%;
-  margin: 0 auto;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  width: 100%;
+  margin: 0;
 }
 
 .detail-section {
@@ -1029,4 +1029,45 @@ textarea {
       --min-height: 50px;
     }
   }
+}
+
+.guided-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75em 1.5em;
+  padding-left: 1rem;
+  background: #f1f2f6;
+  width: 100%;
+  cursor: pointer;
+  min-height: 48px;
+
+  &.open {
+    background-color: white;
+  }
+}
+
+.guided-title {
+  font-size: 14px;
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.guided-icon {
+  font-size: 0.7rem;
+  color: #ec1c2c;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ion-accordion {
+  margin-bottom: 8px;
+  background-color: white;
+}
+
+ion-accordion-group {
+  margin: 0 16px;
+  display: block;
 }
