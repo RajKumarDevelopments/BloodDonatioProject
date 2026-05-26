@@ -59,24 +59,21 @@
     <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">-->
           <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
             <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">
-              <div slot="header" color="light" class="accordionheader">
-                <ion-row class="ion-align-items-center" *ngIf="activeAccordion != i">
-                  <ion-col size="2">
-                    <img src="../../../assets/Images/mic.png" class="imgg" />
-                  </ion-col>
-                  <ion-col size="5" class="namee" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
-                    <span class="namee" style="margin:0;">{{ item.Contact_name }}</span>
-                  </ion-col>
-                  <ion-col size="5" class="namee">
-                    <span class="namee">Mode: {{ item.Mode }}</span> <br />                   
-                  </ion-col>
-                </ion-row>
+              <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+                <div class="guided-title">
+                  {{ item.Venue_name }}
+                  <!--<span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>-->
+                </div>
+                <div class="guided-icon">
+                  <span *ngIf="activeAccordion !== i">▼</span>
+                  <span *ngIf="activeAccordion === i">▲</span>
+                </div>
               </div>
 
               <div slot="content" class="content-wrapper" *ngIf="activeAccordion == i">
                 <div class="card-details">
                   <div class="detail-section">
-                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
                     <div class="detail-row"><strong>Name:</strong> <span>{{ item.Addedby }}</span></div>
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
@@ -110,9 +107,6 @@
                       <button class="acceptt">Rejected</button>
                     </div>
 
-                    <div class="expand-toggle" (click)="closeAccordion()">
-                      <div class="triangle-up"></div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -141,24 +135,21 @@
         <ion-col size="12">
           <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
             <ion-accordion *ngFor="let item of closedrec; let i = index" [value]="i">
-              <div slot="header" color="light" class="accordionheader">
-                <ion-row class="ion-align-items-center" *ngIf="activeAccordion != i">
-                  <ion-col size="2">
-                    <img src="../../../assets/Images/mic.png" class="imgg" />
-                  </ion-col>
-                  <ion-col size="5" class="namee" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
-                    <span class="namee" style="margin:0;">{{ item.Contact_name }}</span>
-                  </ion-col>
-                  <ion-col size="5" class="namee">
-                    <span class="namee">Mode: {{ item.Mode }}</span> <br />                   
-                  </ion-col>
-                </ion-row>
+              <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+                <div class="guided-title">
+                  {{ item.Venue_name }}
+                  <!--<span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>-->
+                </div>
+                <div class="guided-icon">
+                  <span *ngIf="activeAccordion !== i">▼</span>
+                  <span *ngIf="activeAccordion === i">▲</span>
+                </div>
               </div>
 
               <div slot="content" class="content-wrapper" *ngIf="activeAccordion == i">
                 <div class="card-details">
                   <div class="detail-section">
-                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
+                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
                     <div class="detail-row"><strong>Name:</strong> <span>{{ item.Addedby }}</span></div>
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
@@ -173,13 +164,6 @@
                       </span>
                     </div>
                   </div>
-
-                  <!-- Action Footer -->
-                  <div class="footer-actions">
-                    <div class="expand-toggle" (click)="closeAccordion()">
-                      <div class="triangle-up"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </ion-accordion>
@@ -190,24 +174,3 @@
 
   </div>
 </ion-content>
-
-<!--<div class="footer_content" style="background-color: #ffffff;" >
-
-
-  <ion-row>
-    <ion-col size="1"> </ion-col>
-    <ion-col size="10">
-      <div class="footer_card1" (click)="Requestdetails(RequestForm.value)">
-        <ion-row>
-          <ion-col size="2" class="icon_img">
-            <img src="../../../assets/client images/All Icons/Post a Blood request.png" />
-          </ion-col>
-          <ion-col size="10" class="footer_label_col">
-            <ion-label class="footer_label">Submit</ion-label>
-          </ion-col>
-        </ion-row>
-      </div>
-    </ion-col>
-    <ion-col size="1"> </ion-col>
-  </ion-row>
-</div>-->
