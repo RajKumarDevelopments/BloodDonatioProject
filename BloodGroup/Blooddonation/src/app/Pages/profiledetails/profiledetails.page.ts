@@ -364,6 +364,7 @@ export class ProfiledetailsPage implements OnInit {
         Pincode: this.Pincode || "",
         UserAddress: this.UserAddress,
         Rolestatus: this.Rolestatus,
+        RoleId: this.Rolestatus ? 4 : 2,
         Availablestatus: this.Availablestatus,
         Status: this.Activestatus,
         Lastdonatedate: this.LastDonationValue,

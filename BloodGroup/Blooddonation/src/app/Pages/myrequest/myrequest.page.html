@@ -51,94 +51,42 @@
     <div *ngIf="selectedTab === 'open' && closed">
       <div class="drawer-container">
         <!-- Card Headers -->
-        <div *ngFor="let obj of opendata; let i = index" class="drawer-item">
-          <div class="drawer-header" *ngIf="!isDrawerOpenForItem(obj.UdId)" (click)="toggleDrawer(obj.UdId)">
-            <ion-row class="ion-align-items-center">
-              <ion-col size="2">
-                <img src="../../../assets/Images/mic.png" />
-              </ion-col>
-              <ion-col size="5">{{ obj.CityName }} ({{ obj.BLGName }})</ion-col>
-              <ion-col size="4" class="textend">
-                <p>{{ obj.BloodRequestDate | date:'dd/MM/yyyy'}}</p>
-              </ion-col>
-              <ion-col size="1">
-                <ion-icon [name]="isDrawerOpenForItem(obj.UdId) ? 'chevron-up-outline' : 'chevron-down-outline'"
-                          class="drawer-toggle-icon">
-                </ion-icon>
-              </ion-col>
-            </ion-row>
+        <div *ngFor="let obj of opendata; let i = index" class="drawer-item" style="margin-bottom: 8px;">
+          <div class="guided-header" [ngClass]="{'open': isDrawerOpenForItem(obj.UdId)}" (click)="toggleDrawer(obj.UdId)">
+            <div class="guided-title">
+              <span *ngIf="obj.CityName">{{ obj.CityName }}</span><span *ngIf="obj.BLGName">&nbsp;{{ obj.BLGName }},&nbsp;{{obj.FullName}}</span>
+            </div>
+            <div class="guided-icon">
+              <span *ngIf="!isDrawerOpenForItem(obj.UdId)">▼</span>
+              <span *ngIf="isDrawerOpenForItem(obj.UdId)">▲</span>
+            </div>
           </div>
 
           <!-- Drawer Content -->
-          <div class="drawer-content" [ngClass]="{'drawer-open': isDrawerOpenForItem(obj.UdId)}">
-            <div class="drawer-inner-content" *ngIf="isDrawerOpenForItem(obj.UdId)">
-              <ion-row class="ion-align-items-center" *ngFor="let obj of BloodRequestDetalis">
-                <!-- Patient Details -->
-                <ion-col size="5"><div>Patient Name</div></ion-col>
-                <ion-col size="7"><strong>{{obj.FullName}}</strong></ion-col>
+          <div class="content-wrapper" *ngIf="isDrawerOpenForItem(obj.UdId)">
+            <div class="card-details">
+              <div class="detail-section" *ngFor="let detail of BloodRequestDetalis">
+                <div class="detail-row"><strong>Patient Name:</strong> <span>{{detail.FullName}}</span></div>
+                <div class="detail-row" *ngIf="detail.Age != ''"><strong>Age:</strong> <span>{{detail.Age}} yrs</span></div>
+                <div class="detail-row"><strong>Gender:</strong> <span>{{detail.Gender}}</span></div>
+                <div class="detail-row"><strong>Blood Group:</strong> <span>{{detail.BLGName}}</span></div>
+                <div class="detail-row"><strong>Blood Type:</strong> <span>{{detail.Typesofblood}}</span></div>
+                <div class="detail-row"><strong>Number of Units:</strong> <span>{{ detail.UnitsofBlood }}</span></div>
+                <div class="detail-row"><strong>Required Date:</strong> <span>{{ detail.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (detail.BloodRequestDate + 'T' + detail.RequestTime) | date: 'hh:mm a' }}</span></div>
+                <div class="detail-row"><strong>Reason:</strong> <span>{{detail.Purpose}}</span></div>
+                <div class="detail-row"><strong>Contact Name:</strong> <span>{{detail.ContactPerson}}</span></div>
+                <div class="detail-row"><strong>Contact Number:</strong> <span>{{detail.ContactMobile}}</span></div>
+                <div class="detail-row" *ngIf="detail.HospitalName != ''"><strong>Hospital Name:</strong> <span>{{detail.HospitalName}}</span></div>
+                <div class="detail-row"><strong>Address:</strong> <span>{{detail.HospitalAddress}}</span></div>
+              </div>
 
-                <ion-col size="5" *ngIf="obj.Age != '' "><div>Age</div></ion-col>
-                <ion-col size="7" *ngIf="obj.Age != '' "><strong>{{obj.Age}} yrs</strong></ion-col>
-
-                <ion-col size="5"><div>Gender</div></ion-col>
-                <ion-col size="7"><strong>{{obj.Gender}}</strong></ion-col>
-
-                <ion-col size="5"><div>Blood Group</div></ion-col>
-                <ion-col size="7"><strong>{{obj.BLGName}}</strong></ion-col>
-
-                <ion-col size="5"><div>Blood Type</div></ion-col>
-                <ion-col size="7"><strong>{{obj.Typesofblood}}</strong></ion-col>
-
-                <ion-col size="5"><div>Number of Units</div></ion-col>
-                <ion-col size="7"><strong> {{ obj.UnitsofBlood }}</strong></ion-col>
-
-                <!--<ion-col size="5"><div>Required Date</div></ion-col>
-                <ion-col size="7"><strong>{{ obj.BloodRequestDate | date:'dd/MM/yyyy'}} {{ obj.RequestTime }}</strong></ion-col>-->
-                <ion-col size="5"><div>Required Date</div></ion-col>
-                <ion-col size="7">
-                  <strong>
-                    {{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }}
-                    {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}
-                  </strong>
-                </ion-col>
-
-
-                <ion-col size="5"><div>Reason</div></ion-col>
-                <ion-col size="7"><strong>{{obj.Purpose}}</strong></ion-col>
-
-                <ion-col size="5"><div>Contact Name</div></ion-col>
-                <ion-col size="7"><strong>{{obj.ContactPerson}}</strong></ion-col>
-
-                <ion-col size="5"><div>Contact Number</div></ion-col>
-                <ion-col size="7"><strong>{{obj.ContactMobile}}</strong></ion-col>
-
-                <ion-col size="5" *ngIf="obj.HospitalName != '' "><div>Hospital Name</div></ion-col>
-                <!--<ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName.split("|")[0].trim()}}</strong></ion-col>-->
-                <ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName}}</strong></ion-col>
-
-                <ion-col size="5"><div>Address</div></ion-col>
-                <!--<ion-col size="7"><strong>{{obj.HospitalName.split("|")[1].trim()}}</strong></ion-col>-->
-                <ion-col size="7"><strong>{{obj.HospitalAddress}}</strong></ion-col>
-              </ion-row>
-
-              <ion-row style="margin-top:20px" class="ion-align-items-center">
-                <ion-col size="4" style="color:red;" (click)="closereq(this.BloodRequestDetalis[0].BloodRequestID)">
-                  <span class="indicate">Close</span>
-                </ion-col>
-                <!--<ion-col size="3" id="open-modal" class="flexend" (click)="openModal(obj)">
-                  <ion-icon name="create-outline" class="colorback" style="color:red; font-size: 14px"></ion-icon>
-                </ion-col>-->
-                <!--<ion-col size="3" class="flexend">
-                  <ion-icon name="share-outline" class="colorback" style="color: red; font-size: 14px"></ion-icon>
-                </ion-col>-->
-                <ion-col size="4" class="flexend" (click)="shareRequest(obj)">
-                  <ion-icon name="share-outline" class="colorback" style="color: red; font-size: 14px"></ion-icon>
-                </ion-col>
-
-                <ion-col size="4" (click)="closeDrawer()">
-                  <div class="title"></div>
-                </ion-col>
-              </ion-row>
+              <!-- Footer Actions -->
+              <div class="footer-actions" style="margin-top: 10px; padding-left: 4%;">
+                <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase;" (click)="closereq(BloodRequestDetalis[0].BloodRequestID)">Close</div>
+                <div class="expand-toggle" style="margin-left: auto; cursor: pointer; display: flex;" (click)="shareRequest(obj)">
+                  <ion-icon name="share-outline" style="color: red; font-size: 18px;"></ion-icon>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -186,166 +134,47 @@
   </div>
 
   <!-- Closed Requests with Drawer -->
-  <!--<div *ngIf="ClosedFlag == 1">
-    <div *ngIf="selectedTab === 'closed'">
-      <div class="drawer-container" *ngIf="closed">-->
-  <!-- Card Headers -->
-  <!--<div *ngFor="let obj of ClosedData; let i = index" class="drawer-item">
-    <div class="drawer-header" *ngIf="!isDrawerOpenForItem(obj.UdId)" (click)="toggleDrawer(obj.UdId)">
-      <ion-row  class="ion-align-items-center">
-        <ion-col size="2">
-          <img src="../../../assets/Images/mic.png" />
-        </ion-col>
-        <ion-col size="5">{{ obj.CityName }} ({{ obj.BLGName }})</ion-col>
-        <ion-col size="4" class="textend">
-          <p>{{ obj.BloodRequestDate | date:'dd/MM/yyyy' }}</p>
-        </ion-col>
-        <ion-col size="1">
-          <ion-icon [name]="isDrawerOpenForItem(obj.UdId) ? 'chevron-up-outline' : 'chevron-down-outline'"
-                    class="drawer-toggle-icon">
-          </ion-icon>
-        </ion-col>
-      </ion-row>
-    </div>-->
-  <!-- Drawer Content -->
-  <!--<div class="drawer-content" [ngClass]="{'drawer-open': isDrawerOpenForItem(obj.UdId)}">
-    <div class="drawer-inner-content" *ngIf="isDrawerOpenForItem(obj.UdId)">
-      <ion-row class="suraj ion-align-items-center">
-        <ion-col size="5"><div>Patient Name</div></ion-col>
-        <ion-col size="7"><strong>{{obj.patientname}}</strong></ion-col>
-
-        <ion-col size="5" *ngIf="obj.Age != '' "><div>Age</div></ion-col>
-        <ion-col size="7" *ngIf="obj.Age != '' "><strong>{{obj.Age}} yrs</strong></ion-col>
-
-        <ion-col size="5"><div>Gender</div></ion-col>
-        <ion-col size="7"><strong>{{obj.Gender}}</strong></ion-col>
-
-        <ion-col size="5"><div>Blood Group</div></ion-col>
-        <ion-col size="7"><strong>{{obj.BLGName}} </strong></ion-col>
-
-        <ion-col size="5"><div>Blood Type</div></ion-col>
-        <ion-col size="7"><strong>{{obj.Typesofblood}}</strong></ion-col>
-
-        <ion-col size="5"><div>Number of Units</div></ion-col>
-        <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
-          <strong>{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</strong>
-        </ion-col>
-        <ion-col size="7" *ngIf="!BloodRequestDetalis || BloodRequestDetalis.length === 0">
-          <strong>Not Available</strong>
-        </ion-col>
-
-        <ion-col size="5"><div>Required Date</div></ion-col>
-        <ion-col size="7"><strong>{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</strong></ion-col>
-
-        <ion-col size="5"><div>Reason</div></ion-col>
-        <ion-col size="7"><strong>{{obj.Purpose}}</strong></ion-col>
-
-        <ion-col size="5"><div>Contact Person</div></ion-col>
-        <ion-col size="7"><strong>{{obj.ContactPerson}}</strong></ion-col>
-
-        <ion-col size="5"><div>Contact Number</div></ion-col>
-        <ion-col size="7"><strong>{{obj.ContactMobile}}</strong></ion-col>
-
-        <ion-col size="5" *ngIf="obj.HospitalName != '' "><div>Hospital Name</div></ion-col>-->
-  <!--<ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName.split("|")[0].trim()}}</strong></ion-col>-->
-  <!--<ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName}}</strong></ion-col>
-
-  <ion-col size="5"><div>Address</div></ion-col>-->
-  <!--<ion-col size="7"><strong>{{obj.HospitalName.split("|")[1].trim()}}</strong></ion-col>-->
-  <!--<ion-col size="7"><strong>{{obj.HospitalAddress}}</strong></ion-col>
-                <ion-col size="5"></ion-col>
-              </ion-row>
-
-              <ion-row>
-                <ion-col size="6" class="flexcenter" style="color:red;" (click)="repostdata()">
-                  <span class="indicate">Repost</span>
-                </ion-col>
-                <ion-col size="3"></ion-col>
-                <ion-col size="3" (click)="closeDrawer()">
-                  <div class="title"></div>
-                </ion-col>
-              </ion-row>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>-->
-  <!-- Closed Requests with Drawer -->
   <div *ngIf="ClosedFlag == 1">
     <div *ngIf="selectedTab === 'closed'">
       <div class="drawer-container" *ngIf="closed">
         <!-- Card Headers -->
-        <div *ngFor="let obj of ClosedData; let i = index" class="drawer-item">
-          <div class="drawer-header" *ngIf="!isDrawerOpenForItem(obj.UdId)" (click)="toggleDrawer(obj.UdId)">
-            <ion-row class="ion-align-items-center">
-              <ion-col size="2">
-                <img src="../../../assets/Images/mic.png" />
-              </ion-col>
-              <ion-col size="5">{{ obj.CityName }} ({{ obj.BLGName }})</ion-col>
-              <ion-col size="4" class="textend">
-                <p>{{ obj.BloodRequestDate | date:'dd/MM/yyyy' }}</p>
-              </ion-col>
-              <ion-col size="1">
-                <ion-icon [name]="isDrawerOpenForItem(obj.UdId) ? 'chevron-up-outline' : 'chevron-down-outline'"
-                          class="drawer-toggle-icon">
-                </ion-icon>
-              </ion-col>
-            </ion-row>
+        <div *ngFor="let obj of ClosedData; let i = index" class="drawer-item" style="margin-bottom: 8px;">
+          <div class="guided-header" [ngClass]="{'open': isDrawerOpenForItem(obj.UdId)}" (click)="toggleDrawer(obj.UdId)">
+            <div class="guided-title">
+              <span *ngIf="obj.CityName">{{ obj.CityName }}</span><span *ngIf="obj.BLGName">&nbsp;{{ obj.BLGName }},&nbsp;{{obj.FullName}}</span>
+            </div>
+            <div class="guided-icon">
+              <span *ngIf="!isDrawerOpenForItem(obj.UdId)">▼</span>
+              <span *ngIf="isDrawerOpenForItem(obj.UdId)">▲</span>
+            </div>
           </div>
 
           <!-- Drawer Content -->
-          <div class="drawer-content" [ngClass]="{'drawer-open': isDrawerOpenForItem(obj.UdId)}">
-            <div class="drawer-inner-content" *ngIf="isDrawerOpenForItem(obj.UdId)">
-              <ion-row class="suraj ion-align-items-center">
-                <ion-col size="5"><div>Patient Name</div></ion-col>
-                <ion-col size="7"><strong>{{obj.patientname}}</strong></ion-col>
-
-                <ion-col size="5" *ngIf="obj.Age != '' "><div>Age</div></ion-col>
-                <ion-col size="7" *ngIf="obj.Age != '' "><strong>{{obj.Age}} yrs</strong></ion-col>
-
-                <ion-col size="5"><div>Gender</div></ion-col>
-                <ion-col size="7"><strong>{{obj.Gender}}</strong></ion-col>
-
-                <ion-col size="5"><div>Blood Group</div></ion-col>
-                <ion-col size="7"><strong>{{obj.BLGName}} </strong></ion-col>
-
-                <ion-col size="5"><div>Blood Type</div></ion-col>
-                <ion-col size="7"><strong>{{obj.Typesofblood}}</strong></ion-col>
-
-                <ion-col size="5"><div>Number of Units</div></ion-col>
-                <ion-col size="7" *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">
-                  <strong>{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</strong>
-                </ion-col>
-                <ion-col size="7" *ngIf="!BloodRequestDetalis || BloodRequestDetalis.length === 0">
-                  <strong>Not Available</strong>
-                </ion-col>
-
-                <ion-col size="5"><div>Required Date</div></ion-col>
-                <ion-col size="7"><strong>{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</strong></ion-col>
-
-                <ion-col size="5"><div>Reason</div></ion-col>
-                <ion-col size="7"><strong>{{obj.Purpose}}</strong></ion-col>
-
-                <ion-col size="5"><div>Contact Person</div></ion-col>
-                <ion-col size="7"><strong>{{obj.ContactPerson}}</strong></ion-col>
-
-                <ion-col size="5"><div>Contact Number</div></ion-col>
-                <ion-col size="7"><strong>{{obj.ContactMobile}}</strong></ion-col>
-
-                <ion-col size="5" *ngIf="obj.HospitalName != '' "><div>Hospital Name</div></ion-col>
-                <ion-col size="7" *ngIf="obj.HospitalName != '' "><strong>{{obj.HospitalName}}</strong></ion-col>
-
-                <ion-col size="5"><div>Address</div></ion-col>
-                <ion-col size="7"><strong>{{obj.HospitalAddress}}</strong></ion-col>
-                <ion-col size="5"></ion-col>
-              </ion-row>
+          <div class="content-wrapper" *ngIf="isDrawerOpenForItem(obj.UdId)">
+            <div class="card-details">
+              <div class="detail-section">
+                <div class="detail-row"><strong>Patient Name:</strong> <span>{{obj.patientname}}</span></div>
+                <div class="detail-row" *ngIf="obj.Age != ''"><strong>Age:</strong> <span>{{obj.Age}} yrs</span></div>
+                <div class="detail-row"><strong>Gender:</strong> <span>{{obj.Gender}}</span></div>
+                <div class="detail-row"><strong>Blood Group:</strong> <span>{{obj.BLGName}}</span></div>
+                <div class="detail-row"><strong>Blood Type:</strong> <span>{{obj.Typesofblood}}</span></div>
+                <div class="detail-row"><strong>Number of Units:</strong> 
+                  <span *ngIf="BloodRequestDetalis && BloodRequestDetalis.length > 0">{{ BloodRequestDetalis[0].UnitsofBlood || 'Not Available' }}</span>
+                  <span *ngIf="!BloodRequestDetalis || BloodRequestDetalis.length === 0">Not Available</span>
+                </div>
+                <div class="detail-row"><strong>Required Date:</strong> <span>{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</span></div>
+                <div class="detail-row"><strong>Reason:</strong> <span>{{obj.Purpose}}</span></div>
+                <div class="detail-row"><strong>Contact Person:</strong> <span>{{obj.ContactPerson}}</span></div>
+                <div class="detail-row"><strong>Contact Number:</strong> <span>{{obj.ContactMobile}}</span></div>
+                <div class="detail-row" *ngIf="obj.HospitalName != ''"><strong>Hospital Name:</strong> <span>{{obj.HospitalName}}</span></div>
+                <div class="detail-row"><strong>Address:</strong> <span>{{obj.HospitalAddress}}</span></div>
+              </div>
 
               <!-- Repost Calendar Section - Inside Drawer -->
-              <div *ngIf="rpd && openDrawerId === obj.UdId">
+              <div *ngIf="rpd && openDrawerId === obj.UdId" style="padding-left: 4%; padding-right: 4%; margin-top: 10px;">
                 <ion-row>
                   <ion-col size="12">
-                    <ion-item>
+                    <ion-item style="--padding-start: 0; --inner-padding-end: 0;">
                       <ion-label position="floating">Repost Date and Time</ion-label>
                       <br />
                       <ion-datetime [min]="today"
@@ -365,8 +194,7 @@
                             style="width:100%; margin-top: 10px;"
                             class="red-button"
                             *ngFor="let detail of BloodRequestDetalis"
-                            (click)="Repost(detail)"
-                            ripple>
+                            (click)="Repost(detail)">
                       Submit
                     </button>
                   </ion-col>
@@ -374,15 +202,9 @@
               </div>
 
               <!-- Action Buttons -->
-              <ion-row *ngIf="!rpd || openDrawerId !== obj.UdId">
-                <ion-col size="6" class="flexcenter" style="color:red;" (click)="repostdata()">
-                  <span class="indicate">Repost</span>
-                </ion-col>
-                <ion-col size="3"></ion-col>
-                <ion-col size="3" (click)="closeDrawer()">
-                  <div class="title"></div>
-                </ion-col>
-              </ion-row>
+              <div class="footer-actions" style="margin-top: 10px; padding-left: 4%;" *ngIf="!rpd || openDrawerId !== obj.UdId">
+                <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase;" (click)="repostdata()">REPOST</div>
+              </div>
             </div>
           </div>
         </div>

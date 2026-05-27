@@ -522,3 +522,105 @@ input {
 .footer_card1{
   padding: 5px 0!important;
 }
+
+/* Standardized Premium UI Classes */
+.guided-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75em 1.5em;
+  padding-left: 1rem;
+  background: #f1f2f6;
+  width: 100%;
+  cursor: pointer;
+  min-height: 48px;
+
+  &.open {
+    background-color: white;
+  }
+}
+
+.guided-title {
+  font-size: 14px;
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.guided-icon {
+  font-size: 0.7rem;
+  color: #ec1c2c;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper {
+  background: white;
+  padding: 12px;
+  border-top: 1px solid #ec1c2c;
+}
+
+.card-details {
+  background: white;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  width: 100%;
+  margin: 0;
+}
+
+.detail-section {
+  padding-left: 4%;
+  margin-top: 12px;
+
+  .detail-row {
+    margin-bottom: 8px;
+    font-size: 12.5px;
+    color: #444;
+    display: flex;
+    align-items: flex-start;
+
+    strong {
+      color: #000;
+      font-weight: 700;
+      flex: 0 0 125px;
+      margin-right: 10px;
+    }
+
+    span {
+      flex: 1;
+      line-height: 1.4;
+    }
+  }
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  padding: 10px 4% 15px;
+  gap: 20px;
+
+  .close-text {
+    color: #ec1c2c;
+    font-weight: 600;
+    font-size: 14px;
+    flex: 1;
+    text-align: left;
+  }
+
+  .count-link {
+    color: #ec1c2c;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 15px;
+    margin-right: 10px;
+  }
+
+  .expand-toggle {
+    margin-left: auto;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+}
