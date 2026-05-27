@@ -47,9 +47,7 @@ export class NotificationsPage implements OnInit {
     });
   }
 
-  getnotification() {
-    console.log("Fetching notifications for RegId:", this.UserDetails[0].RegId);
-    
+  getnotification() {  
     var uploadfile = new FormData();
     uploadfile.append("Param", this.UserDetails[0].RegId);
     var url = "api/BG/Get_Notification_basedon_UserId";
@@ -61,7 +59,6 @@ export class NotificationsPage implements OnInit {
         this.activeAccordion = null;
         
         if (!this.notification || this.notification.length === 0) {
-          console.log("No notifications found");
         } else {
           // Log each notification
           this.notification.forEach((notif: any, index: number) => {

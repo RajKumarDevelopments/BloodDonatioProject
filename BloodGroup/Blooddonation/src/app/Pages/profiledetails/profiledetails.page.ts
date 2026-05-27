@@ -137,9 +137,7 @@ export class ProfiledetailsPage implements OnInit {
         this.BloodGroups = data;
       } else if (data && typeof data === 'object' && Array.isArray(data.data)) {
         this.BloodGroups = data.data;
-      } else {
-        console.warn("Unexpected blood groups data format", data);
-        // Fallback if API fails to provide data
+      } else {       
         this.BloodGroups = [
           { BLGId: 1, BLGName: 'A+' }, { BLGId: 2, BLGName: 'A-' },
           { BLGId: 3, BLGName: 'B+' }, { BLGId: 4, BLGName: 'B-' },
@@ -235,12 +233,6 @@ export class ProfiledetailsPage implements OnInit {
           }
           if (!this.Pincode) this.Pincode = this.getAddressComponent(components, 'postal_code');
         }
-        
-        console.log('Location updated:', {
-          state: this.selectedState,
-          district: this.selectedDistrict,
-          city: this.selectedCity
-        });
       }
     });
   }
