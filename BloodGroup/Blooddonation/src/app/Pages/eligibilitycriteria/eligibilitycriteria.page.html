@@ -61,19 +61,17 @@
             <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">
               <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
                 <div class="guided-title">
-                  {{ item.Venue_name }}
-                  <!--<span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>-->
+                  <span *ngIf="activeAccordion !== i">{{ item.Venue_name }}</span>
                 </div>
                 <div class="guided-icon">
                   <span *ngIf="activeAccordion !== i">▼</span>
-                  <span *ngIf="activeAccordion === i">▲</span>
                 </div>
               </div>
 
               <div slot="content" class="content-wrapper" *ngIf="activeAccordion == i">
                 <div class="card-details">
                   <div class="detail-section">
-                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
                     <div class="detail-row"><strong>Name:</strong> <span>{{ item.Addedby }}</span></div>
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
@@ -90,23 +88,25 @@
                   </div>
 
                   <!-- Action Footer -->
-                  <div class="footer-actions">
-                    <div class="close-text" (click)="openmap(item.Latitude, item.Longitude, item.Address,item.StateName, item.Pincode)" style="color: red; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-                      <ion-icon name="location-outline"></ion-icon> Location
-                    </div>
-                    
-                    <div *ngIf="!item.RequestAcceptStatus" style="display: flex; gap: 10px;">
-                      <button class="accept" (click)="Accept(item, 1)">Accept</button>
-                      <button class="accept" (click)="Accept(item, 2)">Reject</button>
-                    </div>
+                  <div class="footer-actions" style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display:flex; gap: 10px;">
+                      <div class="close-text" (click)="openmap(item.Latitude, item.Longitude, item.Address,item.StateName, item.Pincode)" style="color: red; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <ion-icon name="location-outline"></ion-icon> Location
+                      </div>
+                      
+                      <div *ngIf="!item.RequestAcceptStatus" style="display: flex; gap: 10px;">
+                        <button class="accept" (click)="Accept(item, 1)">Accept</button>
+                        <button class="accept" (click)="Accept(item, 2)">Reject</button>
+                      </div>
 
-                    <div *ngIf="item.RequestAcceptStatus == 1">
-                      <button class="acceptt">Accepted</button>
+                      <div *ngIf="item.RequestAcceptStatus == 1">
+                        <button class="acceptt">Accepted</button>
+                      </div>
+                      <div *ngIf="item.RequestAcceptStatus == 2">
+                        <button class="acceptt">Rejected</button>
+                      </div>
                     </div>
-                    <div *ngIf="item.RequestAcceptStatus == 2">
-                      <button class="acceptt">Rejected</button>
-                    </div>
-
+                    <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion($event)">▲</div>
                   </div>
                 </div>
               </div>
@@ -137,19 +137,17 @@
             <ion-accordion *ngFor="let item of closedrec; let i = index" [value]="i">
               <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
                 <div class="guided-title">
-                  {{ item.Venue_name }}
-                  <!--<span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>-->
+                  <span *ngIf="activeAccordion !== i">{{ item.Venue_name }}</span>
                 </div>
                 <div class="guided-icon">
                   <span *ngIf="activeAccordion !== i">▼</span>
-                  <span *ngIf="activeAccordion === i">▲</span>
                 </div>
               </div>
 
               <div slot="content" class="content-wrapper" *ngIf="activeAccordion == i">
                 <div class="card-details">
                   <div class="detail-section">
-                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
                     <div class="detail-row"><strong>Name:</strong> <span>{{ item.Addedby }}</span></div>
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
@@ -163,6 +161,11 @@
                         {{ item.Address }}, {{ item.StateName }}, {{item.Pincode}}                       
                       </span>
                     </div>
+                  </div>
+
+                  <!-- Action Footer -->
+                  <div class="footer-actions" style="margin-top: 10px; display: flex; justify-content: flex-end; align-items: center;">
+                    <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion($event)">▲</div>
                   </div>
                 </div>
               </div>

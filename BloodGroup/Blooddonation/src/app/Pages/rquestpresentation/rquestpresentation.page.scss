@@ -868,12 +868,12 @@ textarea {
 
 .content-wrapper {
   background: white;
-  padding: 12px;
-  border-top: 1px solid #ec1c2c;
+  padding: 4px 12px 12px 12px;
+  border-top: none;
 }
 
 .card-details {
-  background: white;
+  background: transparent;
   border-radius: 0;
   padding: 0;
   box-shadow: none;
@@ -883,7 +883,7 @@ textarea {
 
 .detail-section {
   padding-left: 4%;
-  margin-top: 12px;
+  margin-top: 0;
 
   .detail-row {
     margin-bottom: 8px;
@@ -1063,7 +1063,7 @@ textarea {
 }
 
 ion-accordion {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   background-color: white;
 }
 

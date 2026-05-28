@@ -884,7 +884,10 @@ export class EligibilitycriteriaPage implements OnInit {
     this.activeAccordion = this.activeAccordion === index ? null : index;
   }
 
-  closeAccordion() {
+  closeAccordion(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
     this.activeAccordion = null;
   }
 
@@ -1224,6 +1227,7 @@ export class EligibilitycriteriaPage implements OnInit {
   trackByRPId(index: number, item: any): any {
     return item?.RPId || index;
   }
+
   onAccordionChange(event: any): void {
     const val = event?.detail?.value;
     this.activeAccordion = val === null || val === undefined ? null : Number(val);

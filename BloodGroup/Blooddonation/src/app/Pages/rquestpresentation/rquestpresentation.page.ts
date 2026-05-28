@@ -323,6 +323,20 @@ export class RquestpresentationPage implements OnInit {
     }
   }
 
+  closeActiveAccordion() {
+    this.activeAccordionOpen = null;
+    if (this.openAccordionGroup) {
+      this.openAccordionGroup.value = null;
+    }
+  }
+
+  closeClosedAccordion() {
+    this.activeAccordionClosed = null;
+    if (this.closedAccordionGroup) {
+      this.closedAccordionGroup.value = null;
+    }
+  }
+
   closeAccordion(tab: 'open' | 'closed') {
     if (tab === 'open') {
       this.activeAccordionOpen = null;

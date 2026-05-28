@@ -156,12 +156,11 @@
             <ion-accordion *ngFor="let item of Myrequsest; let i = index; trackBy: trackByRPId" [value]="i.toString()">
               <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordionOpen === i}">
                 <div class="guided-title">
-                  {{ item.Venue_name }}
+                  <span *ngIf="activeAccordionOpen !== i">{{ item.Venue_name }}</span>
                   <span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>
                 </div>
                 <div class="guided-icon">
                   <span *ngIf="activeAccordionOpen !== i">▼</span>
-                  <span *ngIf="activeAccordionOpen === i">▲</span>
                 </div>
               </div>
 
@@ -169,7 +168,7 @@
                 <div class="card-details">
                   <!-- Details Section (Two Column Layout) -->
                   <div class="detail-section">
-                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
                     <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
@@ -189,8 +188,9 @@
                   </div>
 
                   <!-- Action Footer -->
-                  <div class="footer-actions" style="margin-top: 10px; padding-left: 4%;">
+                  <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: space-between; align-items: center;">
                     <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer;" (click)="closereqst(item)">Close</div>
+                    <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion('open')">▲</div>
                   </div>
                 </div>
               </div>
@@ -224,12 +224,11 @@
               [value]="i.toString()">
               <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordionClosed === i}">
                 <div class="guided-title">
-                  {{ item.Venue_name }}
+                  <span *ngIf="activeAccordionClosed !== i">{{ item.Venue_name }}</span>
                   <span *ngIf="item.OrgPresentation == 1 || item.OrgPresentation == true || item.OrgPresentation == 'true'" style="background-color: #ec1c2c; color: white; font-size: 8px; width: 14px; height: 14px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; margin-left: 4px;">L</span>
                 </div>
                 <div class="guided-icon">
                   <span *ngIf="activeAccordionClosed !== i">▼</span>
-                  <span *ngIf="activeAccordionClosed === i">▲</span>
                 </div>
               </div>
 
@@ -237,8 +236,7 @@
                 <div class="card-details">
                   <!-- Details Section (Two Column Layout) -->
                   <div class="detail-section">
-                    <!--<div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>-->
-
+                    <div class="detail-row"><strong>Venue:</strong> <span>{{ item.Venue_name }}</span></div>
                     <div class="detail-row"><strong>Venue Type:</strong> <span>{{ item.Venue }}</span></div>
                     <div class="detail-row"><strong>Audience:</strong> <span>{{ item.Audiance }}</span></div>
                     <div class="detail-row"><strong>Mode:</strong> <span>{{ item.Mode }}</span></div>
@@ -259,6 +257,11 @@
                         {{ item.AcceptedCount }}
                       </span>
                     </div>
+                  </div>
+
+                  <!-- Action Footer -->
+                  <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+                    <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion('closed')">▲</div>
                   </div>
 
                 </div>
