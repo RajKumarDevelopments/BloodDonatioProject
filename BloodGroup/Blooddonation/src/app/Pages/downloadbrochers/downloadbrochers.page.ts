@@ -911,8 +911,9 @@ export class DownloadbrochersPage implements OnInit {
   }
 
   Brocherinsert(val: any) {
-    if (!this.selectedPlace || !val.Location || !val.Pincode || !val.Place_name || !val.cityid) {
-      this.general.presentToast("Please select Venu type, state, district, and city."); return;
+    if (!this.selectedPlace || !val.stateid || !val.districtid || !val.cityid || !val.Pincode || !val.Place_name) {
+      this.general.presentToast("Please select Venue type, state, district, city, pincode, and venue name."); 
+      return;
     }
     var obj = [{
       Place: this.selectedPlace,
@@ -920,7 +921,7 @@ export class DownloadbrochersPage implements OnInit {
       districtid: this.DistrictID,
       cityid: this.CityID,
       newStatename: this.state,
-      newDistrictname: this.District,
+      newDistrictname: this.district,
       newCityname: this.city,
       Pincode: this.pincode,
       Location: this.area,
@@ -1132,11 +1133,12 @@ export class DownloadbrochersPage implements OnInit {
         // Optionally, you can call a method to fetch nearby places
         this.fetchNearbyPlaces(place.geometry.location);
 
-        // Bind address components to form fields or handle them as needed
-
-
-        // You can now pass the latitude and longitude to any other method if needed
-        this.getCityAndArea(latitude, longitude); // For example, passing it to your custom method
+        // Use the already fetched place details to bind data directly (avoiding redundant and potentially failing HTTP geocoding calls)
+        this.bindLocationDetails(place);
+        
+        // Also save coordinates
+        this.latitude = latitude;
+        this.longitude = longitude;
       } else {
         console.error('Error fetching place details:', status);
       }
@@ -1216,27 +1218,59 @@ export class DownloadbrochersPage implements OnInit {
   bindLocationDetails(place: any) {
     const addressComponents = place.address_components;
 
-    // Extract location details using helper function
-    this.city = this.getAddressComponent(addressComponents, 'locality') ||
-      this.getAddressComponent(addressComponents, 'administrative_area_level_2') || '';
+    this.ngZone.run(() => {
+      // Extract location details using helper function
+      this.city = this.getAddressComponent(addressComponents, 'locality') ||
+        this.getAddressComponent(addressComponents, 'administrative_area_level_2') || '';
 
-    this.area = this.getAddressComponent(addressComponents, 'sublocality') ||
-      this.getAddressComponent(addressComponents, 'sublocality_level_1') ||
-      this.getAddressComponent(addressComponents, 'neighborhood') || '';
+      this.area = this.getAddressComponent(addressComponents, 'sublocality') ||
+        this.getAddressComponent(addressComponents, 'sublocality_level_1') ||
+        this.getAddressComponent(addressComponents, 'neighborhood') || 
+        this.getAddressComponent(addressComponents, 'locality') || 
+        this.getAddressComponent(addressComponents, 'administrative_area_level_2') || '';
 
-    this.pincode = this.getAddressComponent(addressComponents, 'postal_code') || '';
+      this.pincode = this.getAddressComponent(addressComponents, 'postal_code') || '';
 
-    this.state = this.getAddressComponent(addressComponents, 'administrative_area_level_1') || '';
+      this.state = this.getAddressComponent(addressComponents, 'administrative_area_level_1') || '';
 
-    this.country = this.getAddressComponent(addressComponents, 'country') || '';
-    this.District = this.getAddressComponent(addressComponents, 'administrative_area_level_3') || '';
+      this.country = this.getAddressComponent(addressComponents, 'country') || '';
+      this.district = this.getAddressComponent(addressComponents, 'administrative_area_level_3') || '';
 
-    // Update the form fields with the extracted details
-    this.BrocherForm.controls['stateid'].setValue(this.area);
-    this.BrocherForm.controls['Pincode'].setValue(this.pincode);
-    this.BrocherForm.controls['districtid'].setValue(this.District);
-    this.BrocherForm.controls['cityid'].setValue(this.city);
-    this.BrocherForm.controls['Location'].setValue(this.area);
+      // Update the form fields with the extracted details
+      this.BrocherForm.controls['stateid'].setValue(this.state);
+      this.BrocherForm.controls['Pincode'].setValue(this.pincode);
+      this.BrocherForm.controls['districtid'].setValue(this.district);
+      this.BrocherForm.controls['cityid'].setValue(this.city);
+      this.BrocherForm.controls['Location'].setValue(this.area);
+
+      // Prevent overwriting Place_name with full formatted address
+      const currentVenue = this.BrocherForm.controls['Place_name'].value;
+      this.BrocherForm.controls['Place_name'].setValue(currentVenue);
+
+      // Map IDs for internal submission logic
+      this.selectedState = this.state;
+      this.selectedDistrict = this.district;
+      this.selectedCity = this.city;
+
+      this.StateID1 = this.States1 ? this.States1.filter((id: any) => id.StateName == this.selectedState) : [];
+      if (this.StateID1.length > 0) this.StateID = this.StateID1[0].StateId;
+      
+      this.districtids1 = this.Districts1 ? this.Districts1.filter((id: any) => id.DistrictName == this.selectedDistrict) : [];
+      if (this.districtids1.length > 0) {
+        this.districtids = this.districtids1[0].DistrictId;
+        this.DistrictID = this.districtids;
+      }
+      
+      this.CityIDs1 = this.Cities1 ? this.Cities1.filter((id: any) => id.CityName == this.selectedCity) : [];
+      if (this.CityIDs1.length > 0) {
+        this.CityID1 = this.CityIDs1[0].CityId;
+        this.CityID = this.CityID1;
+      }
+
+      localStorage.setItem("District", this.district);
+      localStorage.setItem("City", this.city);
+      localStorage.setItem("State", this.state);
+    });
 
     console.log('Details:', {
       city: this.city,
@@ -1249,54 +1283,54 @@ export class DownloadbrochersPage implements OnInit {
   getCityAndArea(lat: number, lng: number) {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBPFXmwHMaoN_CVZ2K1w2kMLm5qpSXD_s8`; // Replace with your API key
     this.http.get(url).subscribe((response: any) => {
-      if (response && response.results && response.results.length > 0) {
-        const result = response.results[0];
-        this.latitude = lat;
-        this.longitude = lng;
-        this.city = this.getAddressComponent(result.address_components, 'locality');
-        this.selectedCity = this.city
-        this.area = this.getAddressComponent(result.address_components, 'sublocality') ||
-          this.getAddressComponent(result.address_components, 'sublocality_level_1');
-        this.selectedarea = this.area
-        this.pincode = this.getAddressComponent(result.address_components, 'postal_code');
-        this.selectedpincode = this.pincode
-        //this.HsptalForm.controls['Pincode'].setValue(this.pincode);
+      this.ngZone.run(() => {
+        if (response && response.results && response.results.length > 0) {
+          const result = response.results[0];
+          this.latitude = lat;
+          this.longitude = lng;
+          this.city = this.getAddressComponent(result.address_components, 'locality');
+          this.selectedCity = this.city
+          this.area = this.getAddressComponent(result.address_components, 'sublocality') ||
+            this.getAddressComponent(result.address_components, 'sublocality_level_1');
+          this.selectedarea = this.area
+          this.pincode = this.getAddressComponent(result.address_components, 'postal_code');
+          this.selectedpincode = this.pincode
 
-        this.state = this.getAddressComponent(result.address_components, 'administrative_area_level_1');
-        this.selectedState = this.state
-        this.country = this.getAddressComponent(result.address_components, 'country');
-        //this.District = this.getAddressComponent(result.address_components, 'administrative_area_level_2');
-        this.District = this.getAddressComponent(result.address_components, 'administrative_area_level_3');
-        this.selectedDistrict = this.District
+          this.state = this.getAddressComponent(result.address_components, 'administrative_area_level_1');
+          this.selectedState = this.state
+          this.country = this.getAddressComponent(result.address_components, 'country');
+          this.district = this.getAddressComponent(result.address_components, 'administrative_area_level_3');
+          this.selectedDistrict = this.district
 
-        this.BrocherForm.controls['stateid'].setValue(this.area);
-        this.BrocherForm.controls['Pincode'].setValue(this.pincode);
-        this.BrocherForm.controls['districtid'].setValue(this.District);
-        this.BrocherForm.controls['cityid'].setValue(this.city);
-        this.BrocherForm.controls['Location'].setValue(this.area);
+          this.BrocherForm.controls['stateid'].setValue(this.state);
+          this.BrocherForm.controls['Pincode'].setValue(this.pincode);
+          this.BrocherForm.controls['districtid'].setValue(this.district);
+          this.BrocherForm.controls['cityid'].setValue(this.city);
+          this.BrocherForm.controls['Location'].setValue(this.area);
 
-        // ✅ Prevent overwriting Place_name with full formatted address
-        const currentVenue = this.BrocherForm.controls['Place_name'].value;
-        this.BrocherForm.controls['Place_name'].setValue(currentVenue);
-
-
-        this.StateID1 = this.States1.filter((id: any) => id.StateName == this.selectedState)
-        this.StateID = this.StateID1[0].StateId
-        this.districtids1 = this.Districts1.filter((id: any) => id.DistrictName == this.selectedDistrict)
-        this.districtids = this.districtids1[0].DistrictId
-        this.CityIDs1 = this.Cities1.filter((id: any) => id.CityName == this.selectedCity)
-        this.CityID1 = this.CityIDs1[0].CityId
+          // ✅ Prevent overwriting Place_name with full formatted address
+          const currentVenue = this.BrocherForm.controls['Place_name'].value;
+          this.BrocherForm.controls['Place_name'].setValue(currentVenue);
 
 
-        localStorage.setItem("District", this.District);
-        localStorage.setItem("City", this.city);
-        localStorage.setItem("State", this.state);
+          this.StateID1 = this.States1 ? this.States1.filter((id: any) => id.StateName == this.selectedState) : [];
+          if (this.StateID1.length > 0) this.StateID = this.StateID1[0].StateId;
+          this.districtids1 = this.Districts1 ? this.Districts1.filter((id: any) => id.DistrictName == this.selectedDistrict) : [];
+          if (this.districtids1.length > 0) this.districtids = this.districtids1[0].DistrictId;
+          this.CityIDs1 = this.Cities1 ? this.Cities1.filter((id: any) => id.CityName == this.selectedCity) : [];
+          if (this.CityIDs1.length > 0) this.CityID1 = this.CityIDs1[0].CityId;
 
 
-        console.log('District:', this.District, 'City:', this.city, 'Area:', this.area, 'Pincode:', this.pincode, 'State:', this.state, 'Country:', this.country);
-      } else {
-        console.log('No results found');
-      }
+          localStorage.setItem("District", this.district);
+          localStorage.setItem("City", this.city);
+          localStorage.setItem("State", this.state);
+
+
+          console.log('District:', this.district, 'City:', this.city, 'Area:', this.area, 'Pincode:', this.pincode, 'State:', this.state, 'Country:', this.country);
+        } else {
+          console.log('No results found');
+        }
+      });
     }, (error: any) => {
       console.error('Error getting geocode', error);
     });

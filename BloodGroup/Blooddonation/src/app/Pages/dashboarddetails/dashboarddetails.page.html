@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar style="background-color: #f1f2f6;">
     <ion-row>
       <ion-col size="2" routerLink="/dashboard"><ion-icon name="chevron-back-outline"></ion-icon></ion-col>
@@ -6,16 +6,12 @@
         <ion-title> {{name}}</ion-title>
       </ion-col>
       <ion-col size="2">
-        <!--<ion-buttons>
-          <ion-menu-button></ion-menu-button>
-        </ion-buttons>-->
       </ion-col>
     </ion-row>
   </ion-toolbar>
 </ion-header>
 
-
-<ion-content>
+<ion-content class="ion-padding-top">
   <!-- No Records Found for values == 1 -->
   <div *ngIf="values == 1 && (!mydonors || mydonors.length === 0)">
     <ion-row>
@@ -29,62 +25,43 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values ==1 && mydonors && mydonors.length > 0" #accordionGroup1 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style=" padding: 13px;
-    margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 1 && mydonors && mydonors.length > 0" #accordionGroup1 [multiple]="false"
+    [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)"
+    mode="md">
     <ion-accordion *ngFor="let obj of mydonors; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="4">
-            <ion-label>{{obj.FullName}}</ion-label>
-          </ion-col>
-          <ion-col size="3">
-          </ion-col>
-          <ion-col size="4">
-            <ion-label>{{obj.CreatedDate | date:'dd-MM-yyyy'}}</ion-label>
-          </ion-col>
-          <ion-col size="1" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-      <div slot="content" class="content">
-        <ion-row>
-          <ion-col size="1"></ion-col>
-          <ion-col siz="11">
-            <ion-row>
-              <ion-col size="6">Email</ion-col>
-              <ion-col size="6">{{obj.Email}}</ion-col>
-              <ion-col size="6">Age</ion-col>
-              <ion-col size="6">{{obj.Age}}</ion-col>
-              <ion-col size="6">Gender</ion-col>
-              <ion-col size="6">{{obj.Gender}}</ion-col>
-              <ion-col size="6">Phone</ion-col>
-              <ion-col size="6">{{obj.Phonenumber}}</ion-col>
-              <ion-col size="6">Area</ion-col>
-              <ion-col size="6">{{obj.Area}}</ion-col>
-              <ion-col size="6" *ngIf="obj.newStatename">State</ion-col>
-              <ion-col size="6" *ngIf="obj.newStatename">{{obj.newStatename}}</ion-col>
-              <ion-col size="6" *ngIf="obj.newDistrictname">District</ion-col>
-              <ion-col size="6" *ngIf="obj.newDistrictname">{{obj.newDistrictname}}</ion-col>
-              <ion-col size="6" *ngIf="obj.newCityname">City</ion-col>
-              <ion-col size="6" *ngIf="obj.newCityname">{{obj.newCityname}}</ion-col>
-              <ion-col size="6" *ngIf="obj.Pincode">Pincode</ion-col>
-              <ion-col size="6" *ngIf="obj.Pincode">{{obj.Pincode}}</ion-col>
-              <ion-col size="6" *ngIf="obj.HospitalAddress">Address</ion-col>
-              <ion-col size="6" *ngIf="obj.HospitalAddress">{{obj.HospitalAddress}}</ion-col>
-              <ion-col size="6" *ngIf="obj.UserAddress">Address</ion-col>
-              <ion-col size="6" *ngIf="obj.UserAddress">{{obj.UserAddress}}</ion-col>
-
-            </ion-row>
-
-          </ion-col>
-
-          <!-- Close button to hide content and show the header again -->
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Email:</strong> <span>{{obj.Email}}</span></div>
+            <div class="detail-row"><strong>Age:</strong> <span>{{obj.Age}}</span></div>
+            <div class="detail-row"><strong>Gender:</strong> <span>{{obj.Gender}}</span></div>
+            <div class="detail-row"><strong>Phone:</strong> <span>{{obj.Phonenumber}}</span></div>
+            <div class="detail-row"><strong>Area:</strong> <span>{{obj.Area}}</span></div>
+            <div class="detail-row" *ngIf="obj.newStatename"><strong>State:</strong> <span>{{obj.newStatename}}</span>
+            </div>
+            <div class="detail-row" *ngIf="obj.newDistrictname"><strong>District:</strong>
+              <span>{{obj.newDistrictname}}</span></div>
+            <div class="detail-row" *ngIf="obj.newCityname"><strong>City:</strong> <span>{{obj.newCityname}}</span>
+            </div>
+            <div class="detail-row" *ngIf="obj.Pincode"><strong>Pincode:</strong> <span>{{obj.Pincode}}</span></div>
+            <div class="detail-row" *ngIf="obj.HospitalAddress"><strong>Hospital Address:</strong>
+              <span>{{obj.HospitalAddress}}</span></div>
+            <div class="detail-row" *ngIf="obj.UserAddress"><strong>User Address:</strong>
+              <span>{{obj.UserAddress}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -102,66 +79,45 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values == 2 && donorslist && donorslist.length > 0" #accordionGroup2 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style=" padding: 13px;
-    margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 2 && donorslist && donorslist.length > 0" #accordionGroup2 [multiple]="false"
+    [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)"
+    mode="md">
     <ion-accordion *ngFor="let obj of donorslist; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="4">
-            <ion-label>{{obj.FullName}}</ion-label>
-          </ion-col>
-          <ion-col size="3">
-          </ion-col>
-          <ion-col size="4">
-            <ion-label>{{obj.CreatedDate | date:'dd-MM-yyyy'}}</ion-label>
-          </ion-col>
-          <ion-col size="1" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-      <div slot="content" class="content">
-        <ion-row>
-
-          <ion-col size="1"></ion-col>
-          <ion-col siz="11">
-            <ion-row>
-              <!--<ion-col size="6">Email</ion-col>
-              <ion-col size="6">{{obj.Email}}</ion-col>-->
-              <ion-col size="6">Age</ion-col>
-              <ion-col size="6">{{obj.Age}}</ion-col>
-              <ion-col size="6">Gender</ion-col>
-              <ion-col size="6">{{obj.Gender}}</ion-col>
-              <ion-col size="6">Phone</ion-col>
-              <ion-col size="6">{{obj.Phonenumber}}</ion-col>
-              <ion-col size="6">Typesofblood</ion-col>
-              <ion-col size="6">{{obj.Typesofblood}}</ion-col>
-              <ion-col size="6">Purpose</ion-col>
-              <ion-col size="6">{{obj.Purpose}}</ion-col>
-              <ion-col size="6" *ngIf="obj.HospitalName">Hospital Name</ion-col>
-              <ion-col size="6" *ngIf="obj.HospitalName">{{obj.HospitalName}}</ion-col>
-              <ion-col size="6" *ngIf="obj.newStatename">State</ion-col>
-              <ion-col size="6" *ngIf="obj.newStatename">{{obj.newStatename}}</ion-col>
-              <ion-col size="6" *ngIf="obj.newDistrictname">District</ion-col>
-              <ion-col size="6" *ngIf="obj.newDistrictname">{{obj.newDistrictname}}</ion-col>
-              <ion-col size="6" *ngIf="obj.newCityname">City</ion-col>
-              <ion-col size="6" *ngIf="obj.newCityname">{{obj.newCityname}}</ion-col>
-              <ion-col size="6" *ngIf="obj.Pincode">Pincode</ion-col>
-              <ion-col size="6" *ngIf="obj.Pincode">{{obj.Pincode}}</ion-col>
-              <ion-col size="6" *ngIf="obj.HospitalAddress">Address</ion-col>
-              <ion-col size="6" *ngIf="obj.HospitalAddress">{{obj.HospitalAddress}}</ion-col>
-              <ion-col size="6" *ngIf="obj.UserAddress">Address</ion-col>
-              <ion-col size="6" *ngIf="obj.UserAddress">{{obj.UserAddress}}</ion-col>
-            </ion-row>
-          </ion-col>
-
-
-          <!-- Close button to hide content and show the header again -->
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Age:</strong> <span>{{obj.Age}}</span></div>
+            <div class="detail-row"><strong>Gender:</strong> <span>{{obj.Gender}}</span></div>
+            <div class="detail-row"><strong>Phone:</strong> <span>{{obj.Phonenumber}}</span></div>
+            <div class="detail-row"><strong>Types of Blood:</strong> <span>{{obj.Typesofblood}}</span></div>
+            <div class="detail-row"><strong>Purpose:</strong> <span>{{obj.Purpose}}</span></div>
+            <div class="detail-row" *ngIf="obj.HospitalName"><strong>Hospital Name:</strong>
+              <span>{{obj.HospitalName}}</span></div>
+            <div class="detail-row" *ngIf="obj.newStatename"><strong>State:</strong> <span>{{obj.newStatename}}</span>
+            </div>
+            <div class="detail-row" *ngIf="obj.newDistrictname"><strong>District:</strong>
+              <span>{{obj.newDistrictname}}</span></div>
+            <div class="detail-row" *ngIf="obj.newCityname"><strong>City:</strong> <span>{{obj.newCityname}}</span>
+            </div>
+            <div class="detail-row" *ngIf="obj.Pincode"><strong>Pincode:</strong> <span>{{obj.Pincode}}</span></div>
+            <div class="detail-row" *ngIf="obj.HospitalAddress"><strong>Hospital Address:</strong>
+              <span>{{obj.HospitalAddress}}</span></div>
+            <div class="detail-row" *ngIf="obj.UserAddress"><strong>User Address:</strong>
+              <span>{{obj.UserAddress}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -179,55 +135,39 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values==3 && presntationlist2 && presntationlist2.length > 0" #accordionGroup3 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style="padding: 13px; margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 3 && presntationlist2 && presntationlist2.length > 0" #accordionGroup3
+    [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null"
+    (ionChange)="onAccordionChange($event)" mode="md">
     <ion-accordion *ngFor="let obj of presntationlist2; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="5">
-            <p>{{obj.Contact_name}}</p>
-          </ion-col>
-          <ion-col size="4">
-            <p>Mode: {{obj.Mode}}</p>
-          </ion-col>
-          <ion-col size="3" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.Venue_name }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-      <div slot="content" class="content">
-        <ion-row>
-          <ion-col size="1"></ion-col>
-
-          <ion-col size="11">
-            <ion-row>
-              <ion-col size="6">Venue</ion-col>
-              <ion-col size="6">{{obj.Venue_name}}</ion-col>
-              <ion-col size="6">Address</ion-col>
-              <ion-col size="6">{{obj.Address}} </ion-col>
-              <ion-col size="6">Venue</ion-col>
-              <ion-col size="6">{{obj.Venue}}</ion-col>
-              <ion-col size="6">Audiance</ion-col>
-              <ion-col size="6">{{obj.Audiance}}</ion-col>
-              <ion-col size="6">Mode</ion-col>
-              <ion-col size="6">{{obj.Mode}}</ion-col>
-              <ion-col size="6">Created Date</ion-col>
-              <ion-col size="6">{{obj.CreatedDate | date:'dd-MM-yyyy hh:mm a'}}</ion-col>
-              <ion-col size="6">Presentation Date</ion-col>
-              <ion-col size="6">{{obj.RequestDate | date:'dd-MM-yyyy hh:mm a'}}</ion-col>
-              <ion-col size="6">Contact person</ion-col>
-              <ion-col size="6">{{obj.Contact_name}}</ion-col>
-              <ion-col size="6">Contact number</ion-col>
-              <ion-col size="6">{{obj.Contact_number}}</ion-col>
-              <ion-col size="6">Message</ion-col>
-              <ion-col size="6">{{obj.Message}}</ion-col>
-            </ion-row>
-          </ion-col>
-
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Venue:</strong> <span>{{obj.Venue_name}}</span></div>
+            <div class="detail-row"><strong>Address:</strong> <span>{{obj.Address}}</span></div>
+            <div class="detail-row"><strong>Venue Type:</strong> <span>{{obj.Venue}}</span></div>
+            <div class="detail-row"><strong>Audience:</strong> <span>{{obj.Audiance}}</span></div>
+            <div class="detail-row"><strong>Mode:</strong> <span>{{obj.Mode}}</span></div>
+            <div class="detail-row"><strong>Created Date:</strong> <span>{{obj.CreatedDate | date:'dd-MM-yyyy hh:mm
+                a'}}</span></div>
+            <div class="detail-row"><strong>Presentation Date:</strong> <span>{{obj.RequestDate | date:'dd-MM-yyyy hh:mm
+                a'}}</span></div>
+            <div class="detail-row"><strong>Contact Person:</strong> <span>{{obj.Contact_name}}</span></div>
+            <div class="detail-row"><strong>Contact Number:</strong> <span>{{obj.Contact_number}}</span></div>
+            <div class="detail-row"><strong>Message:</strong> <span>{{obj.Message}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -245,64 +185,38 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values == 6 && acceptlist && acceptlist.length > 0" #accordionGroup6 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style="padding: 13px; margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 6 && acceptlist && acceptlist.length > 0" #accordionGroup6 [multiple]="false"
+    [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)"
+    mode="md">
     <ion-accordion *ngFor="let obj of acceptlist; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="5">
-            <p>{{ obj.BloodRequestDate  | date:'dd-MM-yyyy'}}</p>
-          </ion-col>
-          <ion-col size="5">
-            <p>{{ obj.FullName }}</p>
-          </ion-col>
-          <ion-col size="2" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-
-      <div slot="content" class="content">
-        <ion-row>
-          <ion-col size="1"></ion-col>
-          <ion-col size="11">
-            <ion-row>
-
-              <ion-col size="6">Full Name</ion-col>
-              <ion-col size="6">{{ obj.FullName }}</ion-col>
-
-              <ion-col size="6">Purpose</ion-col>
-              <ion-col size="6">{{ obj.Purpose }}</ion-col>
-
-              <ion-col size="6">Request Date</ion-col>
-              <ion-col size="6">{{obj.BloodRequestDate | date:'dd-MM-yyyy'}} {{ obj.RequestTime }}</ion-col>
-
-              <ion-col size="6">Contact Person</ion-col>
-              <ion-col size="6">{{ obj.ContactPerson }}</ion-col>
-
-              <ion-col size="6">Contact Mobile</ion-col>
-              <ion-col size="6">{{ obj.ContactMobile }}</ion-col>
-
-              <ion-col size="6">Types of Blood</ion-col>
-              <ion-col size="6">{{ obj.Typesofblood }}</ion-col>
-
-              <ion-col size="6">BLGName</ion-col>
-              <ion-col size="6">{{ obj.BLGName }}</ion-col>
-
-              <ion-col size="6">UnitsofBlood</ion-col>
-              <ion-col size="6">{{ obj.UnitsofBlood }}</ion-col>
-              <ion-col size="6">Hospital Name</ion-col>
-              <ion-col size="6">{{ obj.HospitalName }}</ion-col>
-              <ion-col size="6">Hospital Address</ion-col>
-              <ion-col size="6">{{ obj.HospitalAddress }}</ion-col>
-            </ion-row>
-          </ion-col>
-
-          <!-- Close button area -->
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Full Name:</strong> <span>{{obj.FullName}}</span></div>
+            <div class="detail-row"><strong>Purpose:</strong> <span>{{obj.Purpose}}</span></div>
+            <div class="detail-row"><strong>Request Date:</strong> <span>{{obj.BloodRequestDate | date:'dd-MM-yyyy'}} {{
+                obj.RequestTime}}</span></div>
+            <div class="detail-row"><strong>Contact Person:</strong> <span>{{obj.ContactPerson}}</span></div>
+            <div class="detail-row"><strong>Contact Mobile:</strong> <span>{{obj.ContactMobile}}</span></div>
+            <div class="detail-row"><strong>Types of Blood:</strong> <span>{{obj.Typesofblood}}</span></div>
+            <div class="detail-row"><strong>BLG Name:</strong> <span>{{obj.BLGName}}</span></div>
+            <div class="detail-row"><strong>Units of Blood:</strong> <span>{{obj.UnitsofBlood}}</span></div>
+            <div class="detail-row"><strong>Hospital Name:</strong> <span>{{obj.HospitalName}}</span></div>
+            <div class="detail-row"><strong>Hospital Address:</strong> <span>{{obj.HospitalAddress}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -320,54 +234,34 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values == 7 && leadrefslist && leadrefslist.length > 0" #accordionGroup7 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style="padding: 13px; margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 7 && leadrefslist && leadrefslist.length > 0" #accordionGroup7
+    [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null"
+    (ionChange)="onAccordionChange($event)" mode="md">
     <ion-accordion *ngFor="let obj of leadrefslist; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="5">
-            <p>{{ obj.CreatedDate | date:'dd-MM-yyyy' }}</p>
-          </ion-col>
-          <ion-col size="5">
-            <p>{{ obj.FullName }}</p>
-          </ion-col>
-          <ion-col size="2" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-
-      <div slot="content" class="content">
-        <ion-row>
-          <ion-col size="1"></ion-col>
-          <ion-col size="11">
-            <ion-row>
-              <ion-col size="6">Name</ion-col>
-              <ion-col size="6">{{ obj.FullName }}</ion-col>
-
-              <ion-col size="6">Phonenumber</ion-col>
-              <ion-col size="6">{{ obj.Phonenumber }}</ion-col>
-
-              <ion-col size="6">Email</ion-col>
-              <ion-col size="6">{{ obj.Email }}</ion-col>
-
-              <ion-col size="6">Age</ion-col>
-              <ion-col size="6">{{ obj.Age }} Years</ion-col>
-
-              <ion-col size="6">Created Date</ion-col>
-              <ion-col size="6">{{ obj.CreatedDate | date:'dd-MM-yyyy hh:mm a'}}</ion-col>
-
-              <ion-col size="6">Gender</ion-col>
-              <ion-col size="6">{{ obj.Gender }}</ion-col>
-
-            </ion-row>
-          </ion-col>
-
-          <!-- Close button area -->
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Name:</strong> <span>{{obj.FullName}}</span></div>
+            <div class="detail-row"><strong>Phone Number:</strong> <span>{{obj.Phonenumber}}</span></div>
+            <div class="detail-row"><strong>Email:</strong> <span>{{obj.Email}}</span></div>
+            <div class="detail-row"><strong>Age:</strong> <span>{{obj.Age}} Years</span></div>
+            <div class="detail-row"><strong>Created Date:</strong> <span>{{obj.CreatedDate | date:'dd-MM-yyyy hh:mm
+                a'}}</span></div>
+            <div class="detail-row"><strong>Gender:</strong> <span>{{obj.Gender}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -385,54 +279,34 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values == 4 && donorreflist && donorreflist.length > 0" #accordionGroup4 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style="padding: 13px; margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 4 && donorreflist && donorreflist.length > 0" #accordionGroup4
+    [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null"
+    (ionChange)="onAccordionChange($event)" mode="md">
     <ion-accordion *ngFor="let obj of donorreflist; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="5">
-            <p>{{ obj.CreatedDate | date:'dd-MM-yyyy' }}</p>
-          </ion-col>
-          <ion-col size="5">
-            <p>{{ obj.FullName }}</p>
-          </ion-col>
-          <ion-col size="2" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-
-      <div slot="content" class="content">
-        <ion-row>
-          <ion-col size="1"></ion-col>
-          <ion-col size="11">
-            <ion-row>
-              <ion-col size="6">Name</ion-col>
-              <ion-col size="6">{{ obj.FullName }}</ion-col>
-
-              <ion-col size="6">Phonenumber</ion-col>
-              <ion-col size="6">{{ obj.Phonenumber }}</ion-col>
-
-              <ion-col size="6">Email</ion-col>
-              <ion-col size="6">{{ obj.Email }}</ion-col>
-
-              <ion-col size="6">Age</ion-col>
-              <ion-col size="6">{{ obj.Age }} Years</ion-col>
-
-              <ion-col size="6">Created Date</ion-col>
-              <ion-col size="6">{{ obj.CreatedDate | date:'dd-MM-yyyy hh:mm a' }}</ion-col>
-
-              <ion-col size="6">Gender</ion-col>
-              <ion-col size="6">{{ obj.Gender }}</ion-col>
-
-            </ion-row>
-          </ion-col>
-
-          <!-- Close button area -->
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Name:</strong> <span>{{obj.FullName}}</span></div>
+            <div class="detail-row"><strong>Phone Number:</strong> <span>{{obj.Phonenumber}}</span></div>
+            <div class="detail-row"><strong>Email:</strong> <span>{{obj.Email}}</span></div>
+            <div class="detail-row"><strong>Age:</strong> <span>{{obj.Age}} Years</span></div>
+            <div class="detail-row"><strong>Created Date:</strong> <span>{{obj.CreatedDate | date:'dd-MM-yyyy hh:mm
+                a'}}</span></div>
+            <div class="detail-row"><strong>Gender:</strong> <span>{{obj.Gender}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -450,52 +324,33 @@
     </ion-row>
   </div>
 
-  <ion-accordion-group *ngIf="values == 5 && boucherlist && boucherlist.length > 0" #accordionGroup5 [multiple]="false" [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)" style="padding: 13px; margin-top: 17px;">
+  <ion-accordion-group *ngIf="values == 5 && boucherlist && boucherlist.length > 0" #accordionGroup5 [multiple]="false"
+    [value]="activeAccordion !== null ? activeAccordion.toString() : null" (ionChange)="onAccordionChange($event)"
+    mode="md">
     <ion-accordion *ngFor="let obj of boucherlist; let i = index" [value]="i.toString()">
-      <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
-        <ion-row>
-          <ion-col size="5">
-            <p>{{ obj.FullName }}</p>
-          </ion-col>
-          <ion-col size="5">
-            <p>{{ obj.Location }}</p>
-          </ion-col>
-          <ion-col size="2" class="ion-text-end">
-            <ion-icon [name]="activeAccordion === i ? 'chevron-up-outline' : 'chevron-down-outline'" class="accordion-toggle-icon">
-            </ion-icon>
-          </ion-col>
-        </ion-row>
+      <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
+        <div class="guided-title">
+          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+        </div>
+        <div class="guided-icon">
+          <span *ngIf="activeAccordion !== i">▼</span>
+        </div>
       </div>
-
-      <div slot="content" class="content">
-        <ion-row>
-          <ion-col size="1"></ion-col>
-          <ion-col size="11">
-            <ion-row>
-              <ion-col size="6">FullName</ion-col>
-              <ion-col size="6">{{ obj.FullName }}</ion-col>
-
-              <ion-col size="6">Location</ion-col>
-              <ion-col size="6">{{ obj.Location }}</ion-col>
-
-              <ion-col size="6">Place</ion-col>
-              <ion-col size="6">{{ obj.Place }}</ion-col>
-
-              <ion-col size="6">Pincode</ion-col>
-              <ion-col size="6">{{ obj.Pincode }}</ion-col>
-           
-            </ion-row>
-          </ion-col>
-
-          <!-- Close button area -->
-          <ion-col size="12" (click)="closeAccordion()">
-            <div class="triangle-up f-end"></div>
-          </ion-col>
-        </ion-row>
+      <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
+        <div class="card-details">
+          <div class="detail-section">
+            <div class="detail-row"><strong>Full Name:</strong> <span>{{obj.FullName}}</span></div>
+            <div class="detail-row"><strong>Location:</strong> <span>{{obj.Location}}</span></div>
+            <div class="detail-row"><strong>Place:</strong> <span>{{obj.Place}}</span></div>
+            <div class="detail-row"><strong>Pincode:</strong> <span>{{obj.Pincode}}</span></div>
+          </div>
+          <div class="footer-actions"
+            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+          </div>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
 
 </ion-content>
-
-
