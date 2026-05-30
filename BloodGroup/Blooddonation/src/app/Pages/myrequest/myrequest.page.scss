@@ -235,8 +235,12 @@ input[type=radio][name=tabs] {
   z-index: -1;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content label {
+input[type=radio][name=tabs]:checked + .tab-label-content label,
+label.active {
+  background-color: #ec1c2c;
   color: white;
+  border-radius: 100px;
+  box-shadow: 0 3px 10px rgba(17, 17, 17, .2);
 }
 
 input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {

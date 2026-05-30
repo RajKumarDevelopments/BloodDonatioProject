@@ -515,7 +515,8 @@ ion-segment-button:hover {
   transition: 0.2s ease;
 }
 
-input[type=radio][name=tabs]:checked+label {
+input[type=radio][name=tabs]:checked + label,
+.tab-label-content label.active {
   background-color: #ec1c2c;
   color: white;
   box-shadow: 0 3px 10px rgba(17, 17, 17, .2);
@@ -544,7 +545,8 @@ input {
 }
 
 @media only screen and (max-width:600px) {
-  input[type=radio][name=tabs]:checked + .tab-label-content label {
+  input[type=radio][name=tabs]:checked + label,
+  .tab-label-content label.active {
     font-size: 13px;
   }
 
