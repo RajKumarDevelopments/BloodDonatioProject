@@ -94,11 +94,19 @@ export class MyrequestPage implements OnInit {
     this.selectedItem = null;
   }
 
-  // New drawer controller methods
+  // New drawer/accordion controller methods
+  onAccordionChange(event: any) {
+    const value = event.detail.value;
+    this.openDrawerId = value;
+    if (value) {
+      this.GetBloodRequestDetails(value);
+    }
+  }
+
   toggleDrawer(itemId: string) {
     this.rpd = null;
     this.flags = null;
-    if (this.openDrawerId === itemId && this.isDrawerOpen) {
+    if (this.openDrawerId === itemId) {
       this.closeDrawer();
     } else {
       this.openDrawer(itemId);

@@ -49,21 +49,20 @@
   <!-- Open Requests with Drawer -->
   <div *ngIf="OpenFlag == 1">
     <div *ngIf="selectedTab === 'open' && closed">
-      <div class="drawer-container">
+      <ion-accordion-group mode="md" [value]="openDrawerId" (ionChange)="onAccordionChange($event)">
         <!-- Card Headers -->
-        <div *ngFor="let obj of opendata; let i = index" class="drawer-item" style="margin-bottom: 8px;">
-          <div class="guided-header" [ngClass]="{'open': isDrawerOpenForItem(obj.UdId)}" (click)="toggleDrawer(obj.UdId)">
-            <div class="guided-title">
-              <span *ngIf="obj.CityName">{{ obj.CityName }}</span><span *ngIf="obj.BLGName">&nbsp;{{ obj.BLGName }},&nbsp;{{obj.FullName}}</span>
+        <ion-accordion *ngFor="let obj of opendata; let i = index" [value]="obj.UdId ? obj.UdId.toString() : ''">
+          <div slot="header" class="guided-header" [ngClass]="{'open': openDrawerId == obj.UdId}">
+            <div class="guided-title" *ngIf="openDrawerId != obj.UdId">
+              <span *ngIf="obj.CityName">{{ obj.CityName }}</span><span *ngIf="obj.BLGName">&nbsp;{{ obj.BLGName }},&nbsp;{{obj.patientname}}</span>
             </div>
             <div class="guided-icon">
-              <span *ngIf="!isDrawerOpenForItem(obj.UdId)">▼</span>
-              <span *ngIf="isDrawerOpenForItem(obj.UdId)">▲</span>
+              <span *ngIf="openDrawerId != obj.UdId">▼</span>
             </div>
           </div>
 
           <!-- Drawer Content -->
-          <div class="content-wrapper" *ngIf="isDrawerOpenForItem(obj.UdId)">
+          <div slot="content" class="content-wrapper" *ngIf="openDrawerId == obj.UdId">
             <div class="card-details">
               <div class="detail-section" *ngFor="let detail of BloodRequestDetalis">
                 <div class="detail-row"><strong>Patient Name:</strong> <span>{{detail.FullName}}</span></div>
@@ -81,16 +80,17 @@
               </div>
 
               <!-- Footer Actions -->
-              <div class="footer-actions" style="margin-top: 10px; padding-left: 4%;">
+              <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: space-between; align-items: center;">
                 <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase;" (click)="closereq(BloodRequestDetalis[0].BloodRequestID)">Close</div>
-                <div class="expand-toggle" style="margin-left: auto; cursor: pointer; display: flex;" (click)="shareRequest(obj)">
-                  <ion-icon name="share-outline" style="color: red; font-size: 18px;"></ion-icon>
+                <div class="expand-toggle" style="margin-left: auto; cursor: pointer; display: flex; gap: 15px; align-items: center;">
+                  <ion-icon name="share-outline" style="color: red; font-size: 18px;" (click)="shareRequest(obj)"></ion-icon>
+                  <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="openDrawerId = null">▲</div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </ion-accordion>
+      </ion-accordion-group>
 
       <!-- Modal remains the same -->
       <ion-modal [isOpen]="isModalOpen" [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
@@ -136,21 +136,20 @@
   <!-- Closed Requests with Drawer -->
   <div *ngIf="ClosedFlag == 1">
     <div *ngIf="selectedTab === 'closed'">
-      <div class="drawer-container" *ngIf="closed">
+      <ion-accordion-group mode="md" [value]="openDrawerId" (ionChange)="onAccordionChange($event)">
         <!-- Card Headers -->
-        <div *ngFor="let obj of ClosedData; let i = index" class="drawer-item" style="margin-bottom: 8px;">
-          <div class="guided-header" [ngClass]="{'open': isDrawerOpenForItem(obj.UdId)}" (click)="toggleDrawer(obj.UdId)">
-            <div class="guided-title">
-              <span *ngIf="obj.CityName">{{ obj.CityName }}</span><span *ngIf="obj.BLGName">&nbsp;{{ obj.BLGName }},&nbsp;{{obj.FullName}}</span>
+        <ion-accordion *ngFor="let obj of ClosedData; let i = index" [value]="obj.UdId ? obj.UdId.toString() : ''">
+          <div slot="header" class="guided-header" [ngClass]="{'open': openDrawerId == obj.UdId}">
+            <div class="guided-title" *ngIf="openDrawerId != obj.UdId">
+              <span *ngIf="obj.CityName">{{ obj.CityName }}</span><span *ngIf="obj.BLGName">&nbsp;{{ obj.BLGName }},&nbsp;{{obj.patientname}}</span>
             </div>
             <div class="guided-icon">
-              <span *ngIf="!isDrawerOpenForItem(obj.UdId)">▼</span>
-              <span *ngIf="isDrawerOpenForItem(obj.UdId)">▲</span>
+              <span *ngIf="openDrawerId != obj.UdId">▼</span>
             </div>
           </div>
 
           <!-- Drawer Content -->
-          <div class="content-wrapper" *ngIf="isDrawerOpenForItem(obj.UdId)">
+          <div slot="content" class="content-wrapper" *ngIf="openDrawerId == obj.UdId">
             <div class="card-details">
               <div class="detail-section">
                 <div class="detail-row"><strong>Patient Name:</strong> <span>{{obj.patientname}}</span></div>
@@ -171,7 +170,7 @@
               </div>
 
               <!-- Repost Calendar Section - Inside Drawer -->
-              <div *ngIf="rpd && openDrawerId === obj.UdId" style="padding-left: 4%; padding-right: 4%; margin-top: 10px;">
+              <div *ngIf="rpd && openDrawerId == obj.UdId" style="padding-left: 4%; padding-right: 4%; margin-top: 10px;">
                 <ion-row>
                   <ion-col size="12">
                     <ion-item style="--padding-start: 0; --inner-padding-end: 0;">
@@ -202,13 +201,14 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="footer-actions" style="margin-top: 10px; padding-left: 4%;" *ngIf="!rpd || openDrawerId !== obj.UdId">
+              <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: space-between; align-items: center;" *ngIf="!rpd || openDrawerId != obj.UdId">
                 <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase;" (click)="repostdata()">REPOST</div>
+                <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="openDrawerId = null">▲</div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </ion-accordion>
+      </ion-accordion-group>
     </div>
   </div>
 
