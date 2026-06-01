@@ -1585,10 +1585,9 @@ export class RquestpresentationPage implements OnInit {
   }
 
   GetCounts(item: any) {
-    debugger
     var UploadFile = new FormData();
     UploadFile.append("Param1", item.PresentationID);
-    //UploadFile.append("Param1", "18");
+    UploadFile.append("Param2", "1");
     var url = "api/BG/Get_PresentationAcceptedCount";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       if (data && data.length > 0) {
@@ -1601,7 +1600,6 @@ export class RquestpresentationPage implements OnInit {
   }
 
   GetPresentationDetails(item: any) {
-    debugger
     var UploadFile = new FormData();
     UploadFile.append("Param1", item.PresentationID);
     var url = "api/BG/Get_PresentationAccetedDetails";

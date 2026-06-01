@@ -737,6 +737,10 @@ export class EligibilitycriteriaPage implements OnInit {
         return reqDate >= today && req.createdBy != currentUserRegid;
       });
 
+      this.requests.forEach((req: any) => {
+        this.GetCounts(req);
+      });
+
       this.closedrec = [...closed, ...expired].filter(
         (req: any) => req.createdBy != currentUserRegid
       );
@@ -768,7 +772,7 @@ export class EligibilitycriteriaPage implements OnInit {
   
 
   Accept(values: any, status: number) {
-
+    this.general.present();
     this.custmer = this.Alldet.filter(
       (cust: any) => cust.RegId == values.CreatedBy
     );
@@ -792,14 +796,15 @@ export class EligibilitycriteriaPage implements OnInit {
 
         if (status === 1) {
           this.Acceptsendnotification(values.Pincode);
-          this.presentToast('Request Accepted successfully', 'success');
+          this.presentToast('You have successfully accepted this presentation.', 'success');
         } else if (status === 2) {
           this.Rejectsendnotification(values.Pincode);
-          this.presentToast('Request Rejected successfully', 'danger');
+          this.presentToast('You have successfully rejected this presentation.', 'danger');
         }
 
       },
       () => {
+        this.general.dismiss();
         this.presentToast('Something went wrong. Try again.', 'danger');
       }
     );
@@ -1039,10 +1044,14 @@ export class EligibilitycriteriaPage implements OnInit {
   }
 
   Acceptsendnotification(Pincode: any) {
+    if (!this.custmer || this.custmer.length === 0) {
+      this.GetRequestpresantaions();
+      return;
+    }
+
     let targetPincode = Pincode; // Use the function parameter
 
     var path = "rquestpresentation";
-    //const message =  `Dear ${this.custmer[0].FullName }, Your request has been Accepted by ${this.UserDetails[0].FullName}, to a special blood donation presentation happening at ${this.selectedPlace}. We would be thrilled to have you join us and learn more about how you can contribute to this noble cause.`;
     const message = `Dear ${this.custmer[0].FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, ${this.UserDetails[0].Phonenumber} for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
 
     // Fetch user data based on the correct Pincode
@@ -1074,14 +1083,21 @@ export class EligibilitycriteriaPage implements OnInit {
         });
       });
       this.GetRequestpresantaions();
+    }, (error) => {
+      this.general.dismiss();
+      this.presentToast('Failed to fetch user data for notification.', 'danger');
     });
   }
 
   Rejectsendnotification(Pincode: any) {
+    if (!this.custmer || this.custmer.length === 0) {
+      this.GetRequestpresantaions();
+      return;
+    }
+
     let targetPincode = Pincode; // Use the function parameter
 
     var path = "rquestpresentation";
-    //const message =  `Dear ${this.custmer[0].FullName }, Your request has been Accepted by ${this.UserDetails[0].FullName}, to a special blood donation presentation happening at ${this.selectedPlace}. We would be thrilled to have you join us and learn more about how you can contribute to this noble cause.`;
     const message = `Dear ${this.custmer[0].FullName}, we regret to inform you that your request has been declined by our leader, ${this.UserDetails[0].FullName}. We appreciate your interest and encourage you to stay connected for future opportunities to contribute to this noble cause.`;
     // Fetch user data based on the correct Pincode
     this.user.getusersData(targetPincode).subscribe((data: any) => {
@@ -1111,6 +1127,9 @@ export class EligibilitycriteriaPage implements OnInit {
         });
       });
       this.GetRequestpresantaions();
+    }, (error) => {
+      this.general.dismiss();
+      this.presentToast('Failed to fetch user data for notification.', 'danger');
     });
   }
 
@@ -1231,5 +1250,20 @@ export class EligibilitycriteriaPage implements OnInit {
   onAccordionChange(event: any): void {
     const val = event?.detail?.value;
     this.activeAccordion = val === null || val === undefined ? null : Number(val);
+  }
+
+  GetCounts(item: any) {
+    var UploadFile = new FormData();
+    UploadFile.append("Param1", item.PresentationID);
+    UploadFile.append("Param2", "2");
+    var url = "api/BG/Get_PresentationAcceptedCount";
+    this.general.PostData(url, UploadFile).subscribe((data: any) => {
+      if (data && data.length > 0) {
+        item.AcceptedCount = data[0].Accepted;
+      } else {
+        item.AcceptedCount = 0;
+      }
+    });
+
   }
 }
