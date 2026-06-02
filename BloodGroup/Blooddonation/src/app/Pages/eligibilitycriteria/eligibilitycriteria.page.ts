@@ -809,7 +809,7 @@ export class EligibilitycriteriaPage implements OnInit {
       }
     );
   }
-  async presentToast(message: string, color: 'success' | 'danger') {
+  async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
@@ -819,6 +819,9 @@ export class EligibilitycriteriaPage implements OnInit {
     await toast.present();
   }
 
+  showDisabledMessage(action: string) {
+    this.presentToast(`A leader has already accepted this request. You do not have a chance to ${action.toLowerCase()} it.`, 'warning');
+  }
 
   //Format date to YYYY-MM-DD (ensuring uniform comparison)
   formatDate(date: any): string {

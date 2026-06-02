@@ -87,7 +87,7 @@ private geolocationService: GeolocationserviceService,private permissionService:
   Logout() {  
     localStorage.removeItem("UserDetails");
     localStorage.removeItem("City");
-    localStorage.removeItem("Distict");
+    localStorage.removeItem("District"); 
     localStorage.removeItem("State");
     localStorage.removeItem("URL");
     localStorage.removeItem("selectedTab");

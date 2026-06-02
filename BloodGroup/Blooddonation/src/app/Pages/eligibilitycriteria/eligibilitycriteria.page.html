@@ -98,11 +98,15 @@
                         <button class="accept" (click)="Accept(item, 1)">Accept</button>
                         <button class="accept" (click)="Accept(item, 2)">Reject</button>
                       </div>
+                      <div *ngIf="!item.RequestAcceptStatus && item.AcceptedCount == 10" style="display:flex; gap: 10px;">
+                        <button class="acceptt" (click)="showDisabledMessage('Accept')">Accept</button>
+                        <button class="acceptt" (click)="showDisabledMessage('Reject')">Reject</button>
+                      </div>
                     </div>
 
                     <div style="display: flex; align-items: center; gap: 10px;">
                       <div *ngIf="item.RequestAcceptStatus == 1">
-                        <button class="acceptt">Accepted</button>
+                        <button class="acceptt" style="background-color: #2dd36f; color: white;">Accepted</button>
                       </div>
                       <div *ngIf="item.RequestAcceptStatus == 2">
                         <button class="acceptt">Rejected</button>
