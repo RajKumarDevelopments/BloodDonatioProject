@@ -64,6 +64,44 @@ export class ProfiledetailsPage implements OnInit {
   TodayDate: any;
   maxDate: string = new Date().toISOString();
 
+  restrictedNameValidator(control: any) {
+    if (!control.value) return null;
+    const lowerName = control.value.toLowerCase().trim();
+    const restricted = ['kamma', 'kapu', 'reddy', 'mala', 'yadav'];
+    if (restricted.includes(lowerName)) {
+      return { restrictedName: true };
+    }
+    return null;
+  }
+
+  preventInvalidChars(event: KeyboardEvent) {
+    if (event.key.length === 1 && !/^[a-zA-Z]$/.test(event.key)) {
+      event.preventDefault();
+      this.ProfileForm.get('firstName')?.setErrors({ pattern: true });
+      this.ProfileForm.get('firstName')?.markAsTouched();
+    }
+  }
+
+  onPasteSanitize(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData || (window as any).clipboardData;
+    const pastedText = clipboardData?.getData('text') || '';
+    if (/[^a-zA-Z]/.test(pastedText)) {
+      event.preventDefault();
+      this.ProfileForm.get('firstName')?.setErrors({ pattern: true });
+      this.ProfileForm.get('firstName')?.markAsTouched();
+    }
+  }
+
+  onFirstNameInput(event: any) {
+    let value = event.target.value;
+    if (/[^a-zA-Z]/.test(value)) {
+      const sanitized = value.replace(/[^a-zA-Z]/g, '');
+      this.ProfileForm.get('firstName')?.setValue(sanitized, { emitEvent: false });
+      event.target.value = sanitized;
+      this.ProfileForm.get('firstName')?.setErrors({ pattern: true });
+    }
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     public general: GeneralService,
@@ -86,8 +124,10 @@ export class ProfiledetailsPage implements OnInit {
 
     // Initialize Form
     this.ProfileForm = this.formBuilder.group({
-      firstName: [this.UserName || '', [Validators.required]],
-      weight: [this.UserDetails[0]?.Weight || '', [Validators.required]]
+      firstName: [this.UserDetails?.[0]?.FirstName || this.UserName || '', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/), this.restrictedNameValidator]],
+      middleName: [this.UserDetails?.[0]?.MiddleName || ''],
+      surName: [this.UserDetails?.[0]?.SurName || ''],
+      weight: [this.UserDetails?.[0]?.Weight || '', [Validators.required]]
     });
 
     // Initialize Other Fields
@@ -345,10 +385,14 @@ export class ProfiledetailsPage implements OnInit {
   }
 
   UserRegistration(val: any) {
+    debugger
     if (this.ProfileForm.valid) {
       const obj = [{
         RegId: this.UserID,
-        FullName: val.firstName,
+        FullName: val.firstName + (val.surname ? ' ' + val.surname : ''),
+        FirstName: val.firstName,
+        MiddleName: val.middleName,
+        SurName: val.surName,
         Email: this.Email,
         Weight: val.weight ?? this.Weight,
         Gender: this.Gender,

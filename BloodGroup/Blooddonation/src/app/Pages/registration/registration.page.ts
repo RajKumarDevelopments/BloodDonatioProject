@@ -61,7 +61,7 @@ export class RegistrationPage {
   date: any;
   patientname: any;
   BloodGroups: any; States: any; Districts: any; Cities: any;
-  FirstName: any; LastName: any;
+  FirstName: any; MiddleName: any; SurName: any; LastName: any;
   Age: any; TodayDate: any; Weight: any; WeightKgs: any;
   BloodType: any;
   selectedBloodType: any; BloodGroupID: any;
@@ -87,6 +87,45 @@ export class RegistrationPage {
     { value: 'Others', label: 'Others' }
   ];
 
+  restrictedNameValidator(control: any) {
+    if (!control.value) return null;
+    const lowerName = control.value.toLowerCase().trim();
+    const restricted = ['kamma', 'kapu', 'reddy', 'mala', 'yadav'];
+    if (restricted.includes(lowerName)) {
+      return { restrictedName: true };
+    }
+    return null;
+  }
+
+  preventInvalidChars(event: KeyboardEvent) {
+    if (event.key.length === 1 && !/^[a-zA-Z]$/.test(event.key)) {
+      event.preventDefault();
+      this.registrationForm.get('firstName')?.setErrors({ pattern: true });
+      this.registrationForm.get('firstName')?.markAsTouched();
+    }
+  }
+
+  onPasteSanitize(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData || (window as any).clipboardData;
+    const pastedText = clipboardData?.getData('text') || '';
+    if (/[^a-zA-Z]/.test(pastedText)) {
+      event.preventDefault();
+      this.registrationForm.get('firstName')?.setErrors({ pattern: true });
+      this.registrationForm.get('firstName')?.markAsTouched();
+    }
+  }
+
+  onFirstNameInput(event: any) {
+    let value = event.target.value;
+    if (/[^a-zA-Z]/.test(value)) {
+      const sanitized = value.replace(/[^a-zA-Z]/g, '');
+      this.registrationForm.get('firstName')?.setValue(sanitized, { emitEvent: false });
+      event.target.value = sanitized;
+      this.registrationForm.get('firstName')?.setErrors({ pattern: true });
+    }
+    this.reg();
+  }
+
   constructor(
     private alertController: AlertController,
     private geolocationService: GeolocationserviceService,
@@ -99,7 +138,9 @@ export class RegistrationPage {
     public http: HttpClient
   ) {
     this.registrationForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.maxLength(50), Validators.minLength(3), Validators.required])],
+      firstName: ['', [Validators.maxLength(50), Validators.minLength(3), Validators.required, Validators.pattern(/^[a-zA-Z]+$/), this.restrictedNameValidator]],
+      middleName: [''],
+      surName: [''],
       Weight: ['', Validators.compose([Validators.maxLength(3), Validators.minLength(2), Validators.required])],
       address: [''],
       area: [''],
@@ -113,16 +154,30 @@ export class RegistrationPage {
     this.UserDetails1 = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.UserDetails1);
     this.UserName = this.activeRoute.snapshot.paramMap.get("UserName");
+    const passedFirstName = this.activeRoute.snapshot.paramMap.get("FirstName");
+    const passedMiddleName = this.activeRoute.snapshot.paramMap.get("MiddleName");
+    const passedSurName = this.activeRoute.snapshot.paramMap.get("SurName");
     this.Mobile = this.activeRoute.snapshot.paramMap.get("Mobile");
     this.InviteCode = this.activeRoute.snapshot.paramMap.get("InviteCode");
-    this.FirstName = this.registrationForm.controls['firstName'].setValue(this.UserName);
+    
+    this.FirstName = passedFirstName || this.UserName;
+    this.MiddleName = passedMiddleName;
+    this.SurName = passedSurName;
+    
+    this.registrationForm.controls['firstName'].setValue(this.FirstName);
+    this.registrationForm.controls['middleName'].setValue(this.MiddleName);
+    this.registrationForm.controls['surName'].setValue(this.SurName);
     this.DonorFlag = this.activeRoute.snapshot.paramMap.get("DonorFlag");
     this.RegFlag = this.activeRoute.snapshot.paramMap.get("RegFlag");
 
     if (this.RegFlag == 1) {
-      this.FirstName = this.UserDetails[0].FullName;
+      this.FirstName = this.UserDetails[0].FirstName || this.UserDetails[0].FullName;
+      this.MiddleName = this.UserDetails[0].MiddleName;
+      this.SurName = this.UserDetails[0].SurName;
       this.Mobile = this.UserDetails[0].Phonenumber;
       this.registrationForm.controls['firstName'].setValue(this.FirstName);
+      this.registrationForm.controls['middleName'].setValue(this.MiddleName);
+      this.registrationForm.controls['surName'].setValue(this.SurName);
     }
 
     var date = new Date();
@@ -510,6 +565,8 @@ export class RegistrationPage {
 
   reg() {
     this.FirstName = this.registrationForm.get('firstName')?.value;
+    this.MiddleName = this.registrationForm.get('middleName')?.value;
+    this.SurName = this.registrationForm.get('surName')?.value;
     this.Weight = this.registrationForm.get('Weight')?.value;
     if (this.Weight != "") {
       this.WeightKgs = this.Weight + " " + "kgs";
@@ -664,8 +721,10 @@ export class RegistrationPage {
         var obj = [{
           RegId: this.UserDetails[0].RegId,
           Email: this.UserDetails[0].Email,
-          Password: this.UserDetails[0].Password,
+          Password: this.UserDetails[0].Password,         
           FullName: this.FirstName,
+          MiddleName: this.MiddleName,
+          SurName: this.SurName,
           Phonenumber: this.Mobile,
           Age: this.Age,
           DOB: this.DOB,

@@ -41,7 +41,18 @@
       <div *ngIf="OTPVerified == 1">
         <div class="items_center">
           <ion-icon name="person-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter First and Last Name" [(ngModel)]="UserName" [minlength]="3" class="input_field" />
+          <input type="text" placeholder="Enter First Name" [(ngModel)]="FirstName" (ngModelChange)="onFirstNameChange($event)" (keypress)="preventInvalidChars($event)" (paste)="onPasteSanitize($event)" [minlength]="3" class="input_field" />
+        </div>
+        <div *ngIf="firstNameError" style="color: red; font-size: 12px; padding-left: 45px; margin-top: 5px; margin-bottom: 5px;">
+          {{ firstNameError }}
+        </div>
+        <div class="items_center">
+          <ion-icon name="person-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Middle Name" [(ngModel)]="MiddleName" class="input_field" />
+        </div>
+        <div class="items_center">
+          <ion-icon name="person-outline" class="input_icon"></ion-icon>
+          <input type="text" placeholder="Enter Surname" [(ngModel)]="SurName" class="input_field" />
         </div>
         <div class="items_center">
           <ion-icon name="pencil-outline" class="input_icon"></ion-icon>

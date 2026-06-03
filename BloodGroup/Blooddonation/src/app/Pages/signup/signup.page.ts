@@ -15,7 +15,8 @@ export class SignupPage implements OnInit {
   passwordType: string = 'password';
   passwordIcon: string = 'eye-off-outline';
   Mobile: any; MobileOTP: any; OTP: any;
-  UserName: any; InviteCode: any;
+  FirstName: any; MiddleName: any; SurName: any; UserName: any; InviteCode: any;
+  firstNameError: string | null = null;
   OTPFlag: any; SignFlag: any;
   OTPVerified: any;
   //TandC: any; Policy: any;
@@ -108,7 +109,9 @@ export class SignupPage implements OnInit {
       this.TandC = true;
       this.OTPVerified = 1
       const data = this.mydata[0];
-      this.UserName = data.UserName,
+      this.FirstName = data.FirstName || data.UserName,
+      this.MiddleName = data.MiddleName,
+      this.SurName = data.SurName,
         this.Email = data.Email,
         this.Password = data.Password,
         this.ConformPassword = data.Password,
@@ -121,7 +124,9 @@ export class SignupPage implements OnInit {
       this.Policy = true;
       this.OTPVerified = 1
       const data = this.mydata[0];
-      this.UserName = data.UserName,
+      this.FirstName = data.FirstName || data.UserName,
+      this.MiddleName = data.MiddleName,
+      this.SurName = data.SurName,
         this.Email = data.Email,
         this.Mobile = data.Mobile,
 
@@ -142,7 +147,9 @@ export class SignupPage implements OnInit {
     this.Policy = true;
     this.OTPVerified = 1
     const data = this.mydata[0];
-    this.UserName = data.UserName,
+    this.FirstName = data.FirstName || data.UserName,
+    this.MiddleName = data.MiddleName,
+    this.SurName = data.SurName,
       this.Email = data.Email,
       this.Mobile = data.Mobile,
 
@@ -183,6 +190,8 @@ export class SignupPage implements OnInit {
     //this.OTPFlag = 1;
     this.OTP = Math.floor(1000 + Math.random() * 9000);
     var UploadFile = new FormData();
+    console.log('OTP :', this.Mobile);
+    console.log('OTP :', this.OTP);
     UploadFile.append("MobileNo", this.Mobile);
     UploadFile.append("OTP", this.OTP);
     var url = "api/BG/SendOtpToMobile";
@@ -208,14 +217,64 @@ export class SignupPage implements OnInit {
     }
   }
 
+  validateFirstName(name: string): string | null {
+    if (!name) return 'First Name is required.';
+    if (!/^[a-zA-Z]+$/.test(name)) return 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+    const lowerName = name.toLowerCase().trim();
+    const restricted = ['kamma', 'kapu', 'reddy', 'mala', 'yadav'];
+    if (restricted.includes(lowerName)) return `The name '${name}' is not allowed as a First Name.`;
+    return null;
+  }
+
+  onFirstNameChange(value: string) {
+    if (!value) {
+      this.FirstName = value;
+      this.firstNameError = this.validateFirstName(value);
+      return;
+    }
+    if (/[^a-zA-Z]/.test(value)) {
+       this.firstNameError = 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+       setTimeout(() => {
+         this.FirstName = value.replace(/[^a-zA-Z]/g, '');
+       });
+    } else {
+       this.FirstName = value;
+       this.firstNameError = this.validateFirstName(value);
+    }
+  }
+
+  preventInvalidChars(event: KeyboardEvent) {
+    if (event.key.length === 1 && !/^[a-zA-Z]$/.test(event.key)) {
+      event.preventDefault();
+      this.firstNameError = 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+    }
+  }
+
+  onPasteSanitize(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData || (window as any).clipboardData;
+    const pastedText = clipboardData?.getData('text') || '';
+    if (/[^a-zA-Z]/.test(pastedText)) {
+      event.preventDefault();
+      this.firstNameError = 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+    }
+  }
+
   NextDetails() {
     
     if (this.Password == this.ConformPassword) {
-     if (this.UserName != undefined) {
-        if (this.UserName != "" && this.Email != "" && this.Password != "") {
+     if (this.FirstName != undefined) {
+        if (this.FirstName != "" && this.Email != "" && this.Password != "") {
+          this.firstNameError = this.validateFirstName(this.FirstName);
+          if (this.firstNameError !== null) {
+            this.generalservice.presentToast(this.firstNameError);
+            return;
+          }
           if (this.TandC == true || this.Policy == true) {
             var obj = [{
-              FullName: this.UserName,
+              FullName: this.FirstName,
+              FirstName: this.FirstName,
+              MiddleName: this.MiddleName,
+              SurName: this.SurName,
               Phonenumber: this.Mobile,
               Email: this.Email,
               Reffercode: this.InviteCode,
@@ -296,7 +355,7 @@ export class SignupPage implements OnInit {
   SendNote(ReceiverID: any, UserID: any, data: any) {
     
     var path = "requsetform";
-    const massege = "Excited to inform you that " + this.UserName + " .has registered using your referral code. Thank you for sharing our service and helping us grow!";
+    const massege = "Excited to inform you that " + this.FirstName + " .has registered using your referral code. Thank you for sharing our service and helping us grow!";
     var UploadFile = new FormData();
     UploadFile.append("deviceToken", data[0].Devicetoken);
     UploadFile.append("message", massege);
@@ -331,10 +390,10 @@ export class SignupPage implements OnInit {
     this.generalservice.PostData(url, uploadfile).subscribe((data: any) => {
       if (data == "SUCCESS") {
         this.generalservice.presentAlert("SUCCESS", 'Confirmation mail to Register Details');
-        this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, UserName: this.UserName, InviteCode: this.InviteCode }]);
+        this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, FirstName: this.FirstName, MiddleName: this.MiddleName, SurName: this.SurName, InviteCode: this.InviteCode }]);
       }
       else {
-        this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, UserName: this.UserName, InviteCode: this.InviteCode }]);
+        this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, FirstName: this.FirstName, MiddleName: this.MiddleName, SurName: this.SurName, InviteCode: this.InviteCode }]);
       }
     });
   }
@@ -386,7 +445,9 @@ export class SignupPage implements OnInit {
 
 
     var obj = [{
-      UserName: this.UserName,
+      FirstName: this.FirstName,
+      MiddleName: this.MiddleName,
+      SurName: this.SurName,
       Mobile: this.Mobile,
       Email: this.Email,
       Password: this.Password,
@@ -404,7 +465,9 @@ export class SignupPage implements OnInit {
   policy() {
 
     var obj = [{
-      UserName: this.UserName,
+      FirstName: this.FirstName,
+      MiddleName: this.MiddleName,
+      SurName: this.SurName,
       Mobile: this.Mobile,
       Email: this.Email,
       Password: this.Password,

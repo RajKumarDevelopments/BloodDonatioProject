@@ -16,8 +16,25 @@
     <ion-list lines="none" class="ion-no-padding">
       <!-- Full Name -->
       <ion-item>
-        <ion-label>Full Name</ion-label>
-        <ion-input formControlName="firstName" placeholder="Enter Name"></ion-input>
+        <ion-label>First Name</ion-label>
+        <ion-input formControlName="firstName" placeholder="Enter First Name" (keypress)="preventInvalidChars($event)" (paste)="onPasteSanitize($event)" (ionInput)="onFirstNameInput($event)"></ion-input>
+      </ion-item>
+      <div class="formvalidators" *ngIf="ProfileForm.get('firstName')?.invalid && (ProfileForm.get('firstName')?.dirty || ProfileForm.get('firstName')?.touched)">
+        <div *ngIf="ProfileForm.get('firstName')?.errors?.['required']">First Name is required.</div>
+        <div *ngIf="ProfileForm.get('firstName')?.errors?.['pattern']">First Name must contain only alphabets (no spaces, numbers, or special characters).</div>
+        <div *ngIf="ProfileForm.get('firstName')?.errors?.['restrictedName']">This name is restricted.</div>
+      </div>
+
+      <!-- Middle Name -->
+      <ion-item>
+        <ion-label>Middle Name</ion-label>
+        <ion-input formControlName="middleName" placeholder="Enter Middle Name"></ion-input>
+      </ion-item>
+
+      <!-- Surname -->
+      <ion-item>
+        <ion-label>Surname</ion-label>
+        <ion-input formControlName="surName" placeholder="Enter Surname"></ion-input>
       </ion-item>
 
 

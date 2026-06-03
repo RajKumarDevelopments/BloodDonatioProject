@@ -16,13 +16,28 @@
       <!-- First Name -->
       <ion-item>
         <ion-label>First Name</ion-label>
-        <ion-input formControlName="firstName" placeholder="Enter Name" (ionInput)="reg()"></ion-input>
+        <ion-input formControlName="firstName" placeholder="Enter Name" (keypress)="preventInvalidChars($event)" (paste)="onPasteSanitize($event)" (ionInput)="onFirstNameInput($event)"></ion-input>
       </ion-item>
       <div class="formvalidators" *ngIf="registrationForm.get('firstName')?.invalid && (registrationForm.get('firstName')?.dirty || registrationForm.get('firstName')?.touched)">
         <div *ngIf="registrationForm.get('firstName')?.errors?.['required']">First Name is required.</div>
         <div *ngIf="registrationForm.get('firstName')?.errors?.['minlength']">First Name should be at least 3 characters.</div>
         <div *ngIf="registrationForm.get('firstName')?.errors?.['maxlength']">First Name should not exceed 50 characters.</div>
+        <div *ngIf="registrationForm.get('firstName')?.errors?.['pattern']">First Name must contain only alphabets (no spaces, numbers, or special characters).</div>
+        <div *ngIf="registrationForm.get('firstName')?.errors?.['restrictedName']">This name is restricted.</div>
       </div>
+
+      <!-- Middle Name -->
+      <ion-item>
+        <ion-label>Middle Name</ion-label>
+        <ion-input formControlName="middleName" placeholder="Enter Middle Name" (ionInput)="reg()"></ion-input>
+      </ion-item>
+
+      <!-- Surname -->
+      <ion-item>
+        <ion-label>Surname</ion-label>
+        <ion-input formControlName="surName" placeholder="Enter Surname" (ionInput)="reg()"></ion-input>
+      </ion-item>
+
 
       <!-- Date of Birth -->
       <ion-item (click)="openPicker('dob')" button detail="false">
