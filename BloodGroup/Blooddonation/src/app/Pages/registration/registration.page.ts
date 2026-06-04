@@ -87,10 +87,10 @@ export class RegistrationPage {
     { value: 'Others', label: 'Others' }
   ];
 
-  restrictedNameValidator(control: any) {
+  restrictedNameValidator = (control: any) => {
     if (!control.value) return null;
     const lowerName = control.value.toLowerCase().trim();
-    const restricted = ['kamma', 'kapu', 'reddy', 'mala', 'yadav'];
+    const restricted = this.general.restrictedCasts || [];
     if (restricted.includes(lowerName)) {
       return { restrictedName: true };
     }
@@ -769,7 +769,11 @@ export class RegistrationPage {
         this.general.presentToast("You are below 18 yrs. So you are not eligible to register.");
       }
     } else {
-      this.general.presentToast('Please enter all fields.');
+      if (this.registrationForm.get('firstName')?.invalid) {
+        this.general.presentToast('First Name cannot contain caste names, spaces, special characters, or numbers.');
+      } else {
+        this.general.presentToast('Please enter all fields.');
+      }
     }
   }
 

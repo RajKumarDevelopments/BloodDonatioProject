@@ -219,10 +219,10 @@ export class SignupPage implements OnInit {
 
   validateFirstName(name: string): string | null {
     if (!name) return 'First Name is required.';
-    if (!/^[a-zA-Z]+$/.test(name)) return 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+    if (!/^[a-zA-Z]+$/.test(name)) return 'First Name cannot contain caste names, spaces, special characters, or numbers.';
     const lowerName = name.toLowerCase().trim();
-    const restricted = ['kamma', 'kapu', 'reddy', 'mala', 'yadav'];
-    if (restricted.includes(lowerName)) return `The name '${name}' is not allowed as a First Name.`;
+    const restricted = this.generalservice.restrictedCasts || [];
+    if (restricted.includes(lowerName)) return 'First Name cannot contain caste names, spaces, special characters, or numbers.';
     return null;
   }
 
@@ -233,7 +233,7 @@ export class SignupPage implements OnInit {
       return;
     }
     if (/[^a-zA-Z]/.test(value)) {
-       this.firstNameError = 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+       this.firstNameError = 'First Name cannot contain caste names, spaces, special characters, or numbers.';
        setTimeout(() => {
          this.FirstName = value.replace(/[^a-zA-Z]/g, '');
        });
@@ -246,7 +246,7 @@ export class SignupPage implements OnInit {
   preventInvalidChars(event: KeyboardEvent) {
     if (event.key.length === 1 && !/^[a-zA-Z]$/.test(event.key)) {
       event.preventDefault();
-      this.firstNameError = 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+      this.firstNameError = 'First Name cannot contain caste names, spaces, special characters, or numbers.';
     }
   }
 
@@ -255,7 +255,7 @@ export class SignupPage implements OnInit {
     const pastedText = clipboardData?.getData('text') || '';
     if (/[^a-zA-Z]/.test(pastedText)) {
       event.preventDefault();
-      this.firstNameError = 'First Name must contain only alphabets (no spaces, numbers, or special characters).';
+      this.firstNameError = 'First Name cannot contain caste names, spaces, special characters, or numbers.';
     }
   }
 

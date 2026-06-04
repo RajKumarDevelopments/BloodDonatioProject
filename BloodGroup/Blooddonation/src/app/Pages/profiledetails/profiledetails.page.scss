@@ -47,6 +47,13 @@ ion-content {
   }
 }
 
+// Validation Messages
+.formvalidators {
+  color: var(--primary-red);
+  font-size: 12px;
+  padding: 4px 16px;
+}
+
 // Standard List Style
 ion-item {
   --padding-start: 16px;

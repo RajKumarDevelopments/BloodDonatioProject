@@ -64,10 +64,10 @@ export class ProfiledetailsPage implements OnInit {
   TodayDate: any;
   maxDate: string = new Date().toISOString();
 
-  restrictedNameValidator(control: any) {
+  restrictedNameValidator = (control: any) => {
     if (!control.value) return null;
     const lowerName = control.value.toLowerCase().trim();
-    const restricted = ['kamma', 'kapu', 'reddy', 'mala', 'yadav'];
+    const restricted = this.general.restrictedCasts || [];
     if (restricted.includes(lowerName)) {
       return { restrictedName: true };
     }
@@ -385,12 +385,10 @@ export class ProfiledetailsPage implements OnInit {
   }
 
   UserRegistration(val: any) {
-    debugger
     if (this.ProfileForm.valid) {
       const obj = [{
         RegId: this.UserID,
-        FullName: val.firstName + (val.surname ? ' ' + val.surname : ''),
-        FirstName: val.firstName,
+        FullName: val.firstName,
         MiddleName: val.middleName,
         SurName: val.surName,
         Email: this.Email,
@@ -435,7 +433,11 @@ export class ProfiledetailsPage implements OnInit {
         this.general.presentToast("Connection error. Please check your network.");
       });
     } else {
-      this.general.presentToast("Please fill all required fields.");
+      if (this.ProfileForm.get('firstName')?.invalid) {
+        this.general.presentToast('First Name cannot contain caste names, spaces, special characters, or numbers.');
+      } else {
+        this.general.presentToast("Please fill all required fields.");
+      }
     }
   }
 

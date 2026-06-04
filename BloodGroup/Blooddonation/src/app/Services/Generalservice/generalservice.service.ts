@@ -15,6 +15,8 @@ export class GeneralService {
   token: any;
   private GlobalData = new Subject<any>();
 
+  restrictedCasts: string[] = [];
+
   publishSomeData(data: any) {
     this.GlobalData.next(data);
   }
@@ -40,7 +42,7 @@ export class GeneralService {
 
 
     localStorage.setItem('URL', this.HomeUrl);
-
+    this.GetCasts();
   }
   getBaseUrl(): string {
     return this.HomeUrl;
@@ -181,5 +183,33 @@ export class GeneralService {
     var m = date.getMonth() + 1;
     var y = date.getFullYear();
     return y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+  }
+
+  GetCasts() {
+    var obj = [{}]
+    var UploadFile = new FormData();
+    UploadFile.append("Param", JSON.stringify(obj));
+    UploadFile.append("Flag", "4");
+    var url = "api/BG/CastMaster_crud";
+    this.PostData(url, UploadFile).subscribe((data: any) => {
+      let dataArray = [];
+      if (Array.isArray(data)) {
+        dataArray = data;
+      } else if (data && typeof data === 'object' && Array.isArray(data.data)) {
+        dataArray = data.data;
+      }
+      
+      if (dataArray.length > 0) {
+        const casts = dataArray
+          .filter((item: any) => item.Status === true && item.CastName)
+          .map((item: any) => item.CastName.toLowerCase().trim());
+        
+        if (casts.length > 0) {
+          this.restrictedCasts = casts;
+        }
+      }
+    }, err => {
+      console.log("Error fetching casts", err);
+    });
   }
 }
