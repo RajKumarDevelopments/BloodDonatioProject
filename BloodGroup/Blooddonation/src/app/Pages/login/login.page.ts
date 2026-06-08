@@ -11,6 +11,7 @@ import { GeneralService } from '../../Services/Generalservice/generalservice.ser
 export class LoginPage implements OnInit {
   LoginForm!: FormGroup;
   submitAttempt: boolean = false;
+  isSubmitting: boolean = false;
   passwordType: string = 'password';
   passwordIcon: string = 'eye-off-outline';
   Mobile: any; MobileOTP: any; OTP: any;
@@ -105,10 +106,14 @@ export class LoginPage implements OnInit {
 
   MobileLogin1() {
     if (this.MobileOTP == this.OTP) {
+      this.isSubmitting = true;
+      this.generalservice.present('Logging in, please wait...');
       let uploadFile = new FormData();
       uploadFile.append("Mobile", this.Mobile);
       var url = 'api/BG/checking_Mobile';
       this.generalservice.PostData(url, uploadFile).subscribe((result: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
         if (result != "NOTEXIST") {
           localStorage.setItem("UserDetails", JSON.stringify(result));
           this.loadingController.dismiss();
@@ -118,6 +123,10 @@ export class LoginPage implements OnInit {
           this.navCtrl.navigateForward(['/signup']);
           this.generalservice.presentToast('Invalid email or mobile. Please register.');
         }
+      }, (err: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
+        this.generalservice.presentToast('Something went wrong. Please try again later.');
       });
     } else {
       this.generalservice.presentToast('Please enter correct otp...!');
@@ -129,10 +138,14 @@ export class LoginPage implements OnInit {
     this.Devicetoken = JSON.parse(this.Devicetoken1);
 
     if (this.MobileOTP == this.OTP) {
+      this.isSubmitting = true;
+      this.generalservice.present('Logging in, please wait...');
       let uploadFile = new FormData();
       uploadFile.append("Mobile", this.Mobile);
       var url = 'api/BG/checking_Mobile';
       this.generalservice.PostData(url, uploadFile).subscribe((result: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
         if (result != "NOTEXIST") {
           localStorage.setItem("UserDetails", JSON.stringify(result));
           this.loadingController.dismiss();
@@ -151,6 +164,10 @@ export class LoginPage implements OnInit {
           this.navCtrl.navigateForward(['/signup']);
           this.generalservice.presentToast('Invalid email or mobile. Please register.');
         }
+      }, (err: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
+        this.generalservice.presentToast('Something went wrong. Please try again later.');
       });
     } else {
       this.generalservice.presentToast('Please enter correct otp...!');
@@ -164,11 +181,15 @@ export class LoginPage implements OnInit {
   login() {
     debugger
     this.submitAttempt = true;
+    this.isSubmitting = true;
+    this.generalservice.present('Logging in, please wait...');
     let uploadFile = new FormData();
     uploadFile.append("Param1", this.Mobile);
     uploadFile.append("Param2", this.MobileOTP);
     const url = 'api/BG/BG_Admin_Login';
     this.generalservice.PostData(url, uploadFile).subscribe((response: any) => {
+      this.isSubmitting = false;
+      this.generalservice.dismiss();
       if (response != "Invalid User") {
         localStorage.setItem("UserDetails", JSON.stringify(response));
         this.navCtrl.navigateForward(['/home']);
@@ -178,6 +199,8 @@ export class LoginPage implements OnInit {
         this.generalservice.presentToast('Invalid email or password. Please register.');
       }
     }, (err: any) => {
+      this.isSubmitting = false;
+      this.generalservice.dismiss();
       this.loadingController.dismiss();
       this.generalservice.presentToast('Something went wrong. Please try again later.');
     });

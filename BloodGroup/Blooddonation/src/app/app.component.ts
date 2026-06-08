@@ -84,16 +84,31 @@ private geolocationService: GeolocationserviceService,private permissionService:
     this.activeMenu = this.activeMenu === menu ? '' : menu;
   }
 
-  Logout() {  
-    localStorage.removeItem("UserDetails");
-    localStorage.removeItem("City");
-    localStorage.removeItem("District"); 
-    localStorage.removeItem("State");
-    localStorage.removeItem("URL");
-    localStorage.removeItem("selectedTab");
-    localStorage.removeItem("URL");
-    this.navCtrl.navigateForward('/login');
-    window.location.reload();
+  async Logout() {
+    const alert = await this.alertController.create({
+      header: 'Confirm Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            localStorage.removeItem("UserDetails");
+            localStorage.removeItem("City");
+            localStorage.removeItem("District"); 
+            localStorage.removeItem("State");
+            localStorage.removeItem("URL");
+            localStorage.removeItem("selectedTab");
+            this.navCtrl.navigateForward('/login');
+            window.location.reload();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   navigateTo(path: string) {

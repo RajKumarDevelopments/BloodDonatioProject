@@ -15,6 +15,7 @@ declare var google: any;
 })
 export class ProfiledetailsPage implements OnInit {
   activePicker: 'dob' | 'gender' | 'blood' | 'lastDonation' | null = null;
+  isSubmitting: boolean = false;
 
   ProfileForm: FormGroup;
   UserDetails: any;
@@ -419,8 +420,10 @@ export class ProfiledetailsPage implements OnInit {
       UploadFile.append("Flag", "3");
       const url = "api/BG/Insert_Update_DonersForm";
 
-      this.general.present();
+      this.isSubmitting = true;
+      this.general.present('Saving your details, please wait...');
       this.general.PostData(url, UploadFile).subscribe((res: any) => {
+        this.isSubmitting = false;
         this.general.dismiss();
         if (res === "SUCCESS") {
           this.refreshUserData();
@@ -430,6 +433,7 @@ export class ProfiledetailsPage implements OnInit {
           this.general.presentToast("Update failed. Please try again.");
         }
       }, error => {
+        this.isSubmitting = false;
         this.general.dismiss();
         this.general.presentToast("Connection error. Please check your network.");
       });

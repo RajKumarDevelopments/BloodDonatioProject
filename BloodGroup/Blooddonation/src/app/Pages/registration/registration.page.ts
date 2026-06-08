@@ -54,6 +54,7 @@ export class RegistrationPage {
   Email: any; Password: any;
   registrationForm: FormGroup; searchValue: any;
   selectedDonation: string = ''; // Added for donation selection
+  isSubmitting: boolean = false;
 
   showGenderOptions: boolean = false;
   dateList: any;
@@ -749,22 +750,36 @@ export class RegistrationPage {
         UploadFile.append("Param", JSON.stringify(obj));
         UploadFile.append("Flag", "2");
         var url = "api/BG/Insert_Update_DonersForm";
+        this.isSubmitting = true;
+        this.general.present('Registering your account, please wait...');
         this.general.PostData(url, UploadFile).subscribe((data: any) => {
           if (data == "SUCCESS") {
             let uploadFile = new FormData();
             uploadFile.append("Mobile", this.Mobile);
-            var url = 'api/BG/checking_Mobile';
-            this.general.PostData(url, uploadFile).subscribe((result: any) => {
+            var url2 = 'api/BG/checking_Mobile';
+            this.general.PostData(url2, uploadFile).subscribe((result: any) => {
+              this.isSubmitting = false;
+              this.general.dismiss();
               if (result != "NOTEXIST") {
                 localStorage.setItem("UserDetails", JSON.stringify(result));
                 this.general.presentAlert("SUCCESS", "Your registration has been completed successfully.");
                 this.navCtrl.navigateForward(['/home']);
               }
-            })
+            }, (err: any) => {
+              this.isSubmitting = false;
+              this.general.dismiss();
+              this.general.presentToast('Something went wrong. Please try again later.');
+            });
           } else {
+            this.isSubmitting = false;
+            this.general.dismiss();
             this.general.presentToast('Something went wrong. Please try again later.');
           }
-        })
+        }, (err: any) => {
+          this.isSubmitting = false;
+          this.general.dismiss();
+          this.general.presentToast('Something went wrong. Please try again later.');
+        });
       } else {
         this.general.presentToast("You are below 18 yrs. So you are not eligible to register.");
       }

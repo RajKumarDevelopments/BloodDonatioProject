@@ -17,6 +17,8 @@ export class SignupPage implements OnInit {
   Mobile: any; MobileOTP: any; OTP: any;
   FirstName: any; MiddleName: any; SurName: any; UserName: any; InviteCode: any;
   firstNameError: string | null = null;
+  emailError: string | null = null;
+  isSubmitting: boolean = false;
   OTPFlag: any; SignFlag: any;
   OTPVerified: any;
   //TandC: any; Policy: any;
@@ -217,6 +219,20 @@ export class SignupPage implements OnInit {
     }
   }
 
+  validateEmail(email: string): string | null {
+    if (!email) return 'Email is required.';
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+      return 'Please enter a valid email address (e.g., user@example.com).';
+    }
+    return null;
+  }
+
+  onEmailChange(value: string) {
+    this.Email = value;
+    this.emailError = this.validateEmail(value);
+  }
+
   validateFirstName(name: string): string | null {
     if (!name) return 'First Name is required.';
     if (!/^[a-zA-Z]+$/.test(name)) return 'First Name cannot contain caste names, spaces, special characters, or numbers.';
@@ -269,7 +285,14 @@ export class SignupPage implements OnInit {
             this.generalservice.presentToast(this.firstNameError);
             return;
           }
+          this.emailError = this.validateEmail(this.Email);
+          if (this.emailError !== null) {
+            this.generalservice.presentToast(this.emailError);
+            return;
+          }
           if (this.TandC == true || this.Policy == true) {
+            this.isSubmitting = true;
+            this.generalservice.present('Registering your account, please wait...');
             var obj = [{
               FullName: this.FirstName,
               FirstName: this.FirstName,
@@ -287,7 +310,8 @@ export class SignupPage implements OnInit {
             UploadFile.append("Flag", "1");
             var url = "api/BG/Insert_Update_DonersForm";
             this.generalservice.PostData(url, UploadFile).subscribe((data: any) => {
-              
+              this.isSubmitting = false;
+              this.generalservice.dismiss();
               if (data == "SUCCESS") {
                 this.GetUserdata();
                 //this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, UserName: this.UserName, InviteCode: this.InviteCode }]);
@@ -297,6 +321,10 @@ export class SignupPage implements OnInit {
               } else {
                 this.generalservice.presentToast('Something went wrong. Please try again later.');
               }
+            }, (err: any) => {
+              this.isSubmitting = false;
+              this.generalservice.dismiss();
+              this.generalservice.presentToast('Something went wrong. Please try again later.');
             })
 
 

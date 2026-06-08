@@ -46,6 +46,7 @@ export class DonorRegistrationPage implements OnInit {
   searchValue: any;
   email: any;
   selectedDonation: string = '';
+  isSubmitting: boolean = false;
 
   showGenderOptions: boolean = false;
   dateList: any;
@@ -132,7 +133,7 @@ export class DonorRegistrationPage implements OnInit {
       firstName: ['', [Validators.maxLength(50), Validators.minLength(3), Validators.required, Validators.pattern(/^[a-zA-Z]+$/), this.restrictedNameValidator]],
       middleName: [''],
       surName: [''],
-      Email: ['', Validators.required],
+      Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       Weight: ['', Validators.compose([Validators.maxLength(3), Validators.minLength(2), Validators.required])],
       address: [''],
       area: [''],
@@ -628,14 +629,22 @@ export class DonorRegistrationPage implements OnInit {
         UploadFile.append("Param", JSON.stringify(obj));
         UploadFile.append("Flag", "1");
         var url = "api/BG/Insert_Update_DonersForm";
+        this.isSubmitting = true;
+        this.general.present('Registering your account, please wait...');
         this.general.PostData(url, UploadFile).subscribe((data: any) => {
+          this.isSubmitting = false;
+          this.general.dismiss();
           if (data == "SUCCESS") {
             this.general.presentAlert("SUCCESS", "You added a donor successfully.");
             this.navCtrl.navigateForward(['/home']);
           } else {
             this.general.presentToast('Something went wrong. Please try again later.');
           }
-        })
+        }, (err: any) => {
+          this.isSubmitting = false;
+          this.general.dismiss();
+          this.general.presentToast('Something went wrong. Please try again later.');
+        });
       } else {
         this.general.presentToast("Donor is below 18 yrs. So not eligible to register.");
       }

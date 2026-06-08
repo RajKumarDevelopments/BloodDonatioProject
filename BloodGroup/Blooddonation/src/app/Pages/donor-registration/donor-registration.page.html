@@ -44,7 +44,8 @@
         <ion-input formControlName="Email" placeholder="Enter Email" (ionInput)="reg()"></ion-input>
       </ion-item>
       <div class="formvalidators" *ngIf="registrationForm.get('Email')?.invalid && (registrationForm.get('Email')?.dirty || registrationForm.get('Email')?.touched)">
-        <div *ngIf="registrationForm.get('Email')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="registrationForm.get('Email')?.errors?.['required']" style="color: red;">Email is required.</div>
+        <div *ngIf="registrationForm.get('Email')?.errors?.['pattern']" style="color: red;">Please enter a valid email address (e.g., user&#64;example.com).</div>
       </div>
 
       <!-- Date of Birth -->
@@ -136,7 +137,7 @@
 
     <!-- Save Button inside ion-content to fix overlay layering -->
     <div class="items_button" *ngIf="DonorFlag == 1">
-      <button type="button" (click)="AddDonorbyLeader(registrationForm.value)">Submit</button>
+      <button type="button" [disabled]="isSubmitting" (click)="AddDonorbyLeader(registrationForm.value)">Submit</button>
     </div>
 
     <div style="height: 30px;"></div>

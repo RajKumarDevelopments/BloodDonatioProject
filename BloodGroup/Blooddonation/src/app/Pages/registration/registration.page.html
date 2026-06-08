@@ -128,7 +128,7 @@
 
     <!-- Save Button inside ion-content to fix overlay layering -->
     <div class="items_button" *ngIf="DonorFlag != 1">
-      <button type="button" (click)="UserRegistration()">Register</button>
+      <button type="button" [disabled]="isSubmitting" (click)="UserRegistration()">Register</button>
     </div>
 
     <div style="height: 30px;"></div>

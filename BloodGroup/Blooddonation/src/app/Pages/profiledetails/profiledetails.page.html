@@ -134,7 +134,7 @@
 
     <!-- Save Button -->
     <div class="items_button">
-      <button type="button" (click)="UserRegistration(ProfileForm.value)">Save Changes</button>
+      <button type="button" [disabled]="isSubmitting" (click)="UserRegistration(ProfileForm.value)">Save Changes</button>
     </div>
 
     <div style="height: 30px;"></div>

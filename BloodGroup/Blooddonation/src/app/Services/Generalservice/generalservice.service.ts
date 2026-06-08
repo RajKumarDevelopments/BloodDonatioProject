@@ -56,10 +56,10 @@ export class GeneralService {
     toast.present();
   }
 
-  async present() {
+  async present(message: string = 'Loading....') {
     this.isLoading = true;
     return await this.loadingController.create({
-      message: 'Loading....',
+      message: message,
       //  duration: 5000
       spinner: 'bubbles',
       translucent: true,

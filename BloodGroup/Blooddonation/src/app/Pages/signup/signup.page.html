@@ -60,11 +60,10 @@
         </div>
         <div class="items_center">
           <ion-icon name="mail-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Email Id" [(ngModel)]="Email" class="input_field" />
-          <!--<div *ngIf="Email.invalid && (Email.dirty || Email.touched)" class="error-message">
-            <div *ngIf="Email.errors?.required">Email is required.</div>
-            <div *ngIf="Email.errors?.email">Invalid email address.</div>
-          </div>-->
+          <input type="text" placeholder="Enter Email Id" [(ngModel)]="Email" (ngModelChange)="onEmailChange($event)" class="input_field" />
+        </div>
+        <div *ngIf="emailError" style="color: red; font-size: 12px; padding-left: 45px; margin-top: 5px; margin-bottom: 5px;">
+          {{ emailError }}
         </div>
         <div class="items_center1" >
           <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="Password" placeholder="Enter Password" class="input_field passwordd" />
@@ -141,8 +140,8 @@
     <!--</ion-col>-->
   </ion-row>
 </ion-content>
-<ion-footer (click)="NextDetails()" *ngIf="OTPVerified == 1">
-  <button type="submit">Next</button>
+<ion-footer *ngIf="OTPVerified == 1">
+  <button type="submit" [disabled]="isSubmitting" (click)="NextDetails()">Next</button>
 </ion-footer>
 <ion-footer (click)="CheckOTP()" *ngIf="OTPFlag == 1 && OTPVerified != 1">
   <button type="submit">Verify OTP</button>
