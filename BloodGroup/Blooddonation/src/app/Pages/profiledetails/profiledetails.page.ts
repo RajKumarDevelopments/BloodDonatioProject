@@ -385,6 +385,7 @@ export class ProfiledetailsPage implements OnInit {
   }
 
   UserRegistration(val: any) {
+    debugger
     if (this.ProfileForm.valid) {
       const obj = [{
         RegId: this.UserID,
