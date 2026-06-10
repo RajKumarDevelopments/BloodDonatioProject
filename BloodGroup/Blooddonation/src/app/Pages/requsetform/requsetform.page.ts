@@ -102,6 +102,7 @@ export class RequsetformPage implements OnInit {
     distictids1: any;
     CityIDs1: any;
   opend: any;
+  Bloodreasondata: any;
   
   constructor(private photoViewer: PhotoViewer,public general: GeneralService, private modal: ModalController, private fb: FormBuilder,
   private nav: NavController, private loadingController: LoadingController, public actionSheetController: ActionSheetController, private alert: AlertController,
@@ -168,6 +169,7 @@ export class RequsetformPage implements OnInit {
     this.GetStates();
     this.GetBloodGroups();
     this.GetBloodUnits();
+    this.bloodReason();
     this.loadMap();
 
   }
@@ -549,6 +551,21 @@ export class RequsetformPage implements OnInit {
       this.general.presentToast("something went wrong");
     })
   }
+
+  bloodReason() {
+    var obj = [{}]
+    var UploadFile = new FormData();
+    UploadFile.append("Param", JSON.stringify(obj));
+    UploadFile.append("Flag", "4");
+    var url = "api/BG/ReasonMaster_crud";
+    this.general.PostData(url, UploadFile).subscribe((data: any) => {
+
+      this.Bloodreasondata = data;
+    }, err => {
+      this.general.presentToast("something went wrong");
+    })
+  }
+
   reg() {
     this.modal.dismiss();
   }
