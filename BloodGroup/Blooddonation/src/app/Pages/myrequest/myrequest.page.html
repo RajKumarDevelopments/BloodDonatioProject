@@ -72,7 +72,7 @@
                 <div class="detail-row"><strong>Blood Type:</strong> <span>{{detail.Typesofblood}}</span></div>
                 <div class="detail-row"><strong>Number of Units:</strong> <span>{{ detail.UnitsofBlood }}</span></div>
                 <div class="detail-row"><strong>Required Date:</strong> <span>{{ detail.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (detail.BloodRequestDate + 'T' + detail.RequestTime) | date: 'hh:mm a' }}</span></div>
-                <div class="detail-row"><strong>Reason:</strong> <span>{{detail.Purpose}}</span></div>
+                <div class="detail-row"><strong>Reason:</strong> <span>{{detail.Reason}}</span></div>
                 <div class="detail-row"><strong>Contact Name:</strong> <span>{{detail.ContactPerson}}</span></div>
                 <div class="detail-row"><strong>Contact Number:</strong> <span>{{detail.ContactMobile}}</span></div>
                 <div class="detail-row" *ngIf="detail.HospitalName != ''"><strong>Hospital Name:</strong> <span>{{detail.HospitalName}}</span></div>
@@ -162,7 +162,7 @@
                   <span *ngIf="!BloodRequestDetalis || BloodRequestDetalis.length === 0">Not Available</span>
                 </div>
                 <div class="detail-row"><strong>Required Date:</strong> <span>{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</span></div>
-                <div class="detail-row"><strong>Reason:</strong> <span>{{obj.Purpose}}</span></div>
+                <div class="detail-row"><strong>Reason:</strong> <span>{{obj.Reason}}</span></div>
                 <div class="detail-row"><strong>Contact Person:</strong> <span>{{obj.ContactPerson}}</span></div>
                 <div class="detail-row"><strong>Contact Number:</strong> <span>{{obj.ContactMobile}}</span></div>
                 <div class="detail-row" *ngIf="obj.HospitalName != ''"><strong>Hospital Name:</strong> <span>{{obj.HospitalName}}</span></div>

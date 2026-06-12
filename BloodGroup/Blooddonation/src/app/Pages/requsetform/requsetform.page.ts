@@ -103,6 +103,8 @@ export class RequsetformPage implements OnInit {
     CityIDs1: any;
   opend: any;
   Bloodreasondata: any;
+  selectedReason: any;
+  activePicker: string | null = null;
   
   constructor(private photoViewer: PhotoViewer,public general: GeneralService, private modal: ModalController, private fb: FormBuilder,
   private nav: NavController, private loadingController: LoadingController, public actionSheetController: ActionSheetController, private alert: AlertController,
@@ -174,9 +176,6 @@ export class RequsetformPage implements OnInit {
 
   }
  
- 
-  
-
 
   loadMap1() {
     if (typeof google === 'undefined' || !google.maps) {
@@ -481,7 +480,8 @@ export class RequsetformPage implements OnInit {
     this.selectedBloodUnit = data.selectedBloodUnit,
     this.selectedBloodType = data.selectedBloodType,
       this.selectedtype = data.Typesofblood,
-      this.selectedImage = data.Receiptimage
+      this.selectedImage = data.Receiptimage,
+      this.selectedReason = data.selectedReason
     //this.BloodRequestForm.controls['Email'].setValue(data.Email);
     //this.selectState(data.StateId);
     //this.selectDistrict(data.DistrictId);
@@ -512,7 +512,8 @@ export class RequsetformPage implements OnInit {
     this.selectedBloodUnit = data.selectedBloodUnit,
     this.selectedBloodType = data.selectedBloodType,
       this.selectedtype = data.Typesofblood,
-      this.selectedImage = data.Receiptimage
+      this.selectedImage = data.Receiptimage,
+      this.selectedReason = data.selectedReason
 
     //this.BloodRequestForm.controls['Email'].setValue(data.Email);
     //this.selectState(data.StateId);
@@ -567,32 +568,43 @@ export class RequsetformPage implements OnInit {
   }
 
   reg() {
-    this.modal.dismiss();
+    // legacy method, kept for reference if needed
+  }
+  openPicker(pickerType: string) {
+    this.activePicker = pickerType;
+  }
+  closePicker() {
+    this.activePicker = null;
   }
   selectGender(val: any) {
 
     this.selectedGender = val;
     this.BloodRequestForm.controls['Gender'].setValue(this.selectedGender);
-    this.reg();
+    this.closePicker();
   } selectblood(val: any) {
     
     this.selectedtype = val;
     this.BloodRequestForm.controls['Gender'].setValue(this.selectedGender);
-    this.reg();
+    this.closePicker();
   }
   selectBloodGroup(val: any) {
     
     this.BloodGroupID = val.BLGId;
     this.selectedBloodType = val.BLGName;
     this.BloodRequestForm.controls['BloodGroup'].setValue(this.BloodGroupID);
-    this.reg();
+    this.closePicker();
   }
   selectBloodUnit(val: any) {
    
     this.BloodUnitID = val.UnitsofBloodId;
     this.selectedBloodUnit = val.UnitsofBlood;
     this.BloodRequestForm.controls['BloodUnit'].setValue(this.BloodUnitID);
-    this.reg();
+    this.closePicker();
+  }
+  selectReason(val: any) {
+    this.selectedReason = val.Reason;
+    this.BloodRequestForm.controls['Reason'].setValue(val.RID);
+    this.closePicker();
   }
 
   AddRequestForm() {
@@ -699,7 +711,8 @@ export class RequsetformPage implements OnInit {
         BloodGroupId: data.BloodGroup,
 
         Typesofblood: data.selectedtype,
-        Receiptimage: data.selectedImage
+        Receiptimage: data.selectedImage,
+        selectedReason: data.selectedReason
 
 
       }]
@@ -732,7 +745,8 @@ export class RequsetformPage implements OnInit {
         BloodGroupId: this.BloodRequestForm.value.BloodGroup,
 
         Typesofblood: this.selectedtype,
-        Receiptimage: this.selectedImage
+        Receiptimage: this.selectedImage,
+        selectedReason: this.selectedReason
 
 
       }]
@@ -773,7 +787,8 @@ export class RequsetformPage implements OnInit {
         BloodGroupId: data.BloodGroup,
 
         Typesofblood: data.selectedtype,
-        Receiptimage: data.selectedImage
+        Receiptimage: data.selectedImage,
+        selectedReason: data.selectedReason
       }]
       this.nav.navigateForward(['/privacypolicy', { data: JSON.stringify(obj) }])
     } else {
@@ -804,7 +819,8 @@ export class RequsetformPage implements OnInit {
         BloodGroupId: this.BloodRequestForm.value.BloodGroup,
 
         Typesofblood: this.selectedtype,
-        Receiptimage: this.selectedImage
+        Receiptimage: this.selectedImage,
+        selectedReason: this.selectedReason
 
 
       }]
@@ -1196,18 +1212,15 @@ export class RequsetformPage implements OnInit {
     this.photoViewer.show(url, 'Image Zoom', { share: true });
 
     const options = {
-      share: true, // default is false
-      closeButton: true, // default is true
-      copyToReference: true, // default is false
-      headers: "",  // If it is not provided, it will trigger an exception
-      piccasoOptions: {} // If it is not provided, it will trigger an exception
+      share: true,
+      closeButton: true,
+      copyToReference: true,
+      headers: "",
+      piccasoOptions: {}
     };
     //var url = this.HomeUrl;
     this.photoViewer.show(url, "", options);
   }
-
-
-  ///location////
 
   getnavigation() {
     this.nav.navigateForward('/searchlocation')
