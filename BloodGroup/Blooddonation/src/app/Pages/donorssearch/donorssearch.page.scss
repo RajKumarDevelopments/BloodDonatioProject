@@ -41,15 +41,6 @@
   color: #6c757d; /* Gray color (adjust as needed) */
 }
 
-/*.card {*/
-/*box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;*/
-/*border-radius: 150px;
-  width: 315px;
-  height: 315px;
-  background-color: #f1f2f7;
-  margin-top: 3rem;
-  background-color: white;
-}*/
 
 .center {
   align-items: center;
@@ -67,7 +58,6 @@
 .tabs_title {
   font-size: 10px;
   text-align: center;
-  /*margin-left: -15%;*/
   display: flex;
   align-content: center;
   justify-content: center
@@ -97,17 +87,12 @@
   margin-bottom: 5%;
 }
 
-//RambabuP
 .highlight {
   color: rgb(65 67 88);
   font-size: 14px;
   font-weight: 600;
 }
 //============
-/*ion-content {
-  --background: transparent;
-  background: url('https://png.pngtree.com/background/20220731/original/pngtree-simple-red-curve-background-picture-image_1912762.jpg') no-repeat center center / cover;
-}*/
 details summary::-webkit-details-marker {
   display: none;
 }
@@ -140,7 +125,6 @@ summary {
   display: block;
   background: #4e4e4e21;
   color: black;
-  /*padding-left: 2.2rem;*/
   position: relative;
   cursor: pointer;
   height: 60px;
@@ -149,8 +133,6 @@ summary {
 .content {
   background: white;
   margin: 2%;
-  /*padding: 50px;*/
-  /*border: 2px solid #888;*/
   border-top: none;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -160,7 +142,6 @@ summary {
 }
 
 .round {
-  /*box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;*/
   border-radius: 50px;
   height: 40px;
   width: 40px
@@ -174,7 +155,6 @@ summary {
 .textend, p {
   text-align: end;
   font-size: 13px !important;
-  //color: #b7b9c8;
 }
 
 .textend p {
@@ -183,22 +163,16 @@ summary {
 
 ion-card {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  //border-top: 2px solid red;
-  //border-left: 2px solid red;
   border-radius: 3px;
-  //background: lightgray;
   color: black;
   background: white;
 }
 
 .cards1 {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  //border-top: 2px solid red;
-  //border-left: 2px solid red;
   border-radius: 0px;
   background: lightgray;
   color: black;
-  // background: white;
 }
 
 .card {
@@ -224,7 +198,6 @@ ion-card {
   background-color: #ec1c2c;
   color: white;
   border-radius: 50px;
-  /* margin: 5% 0% -3% 5%;*/
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   width: 100%;
 }
@@ -352,7 +325,6 @@ label {
   align-items: center;
   justify-content: center;
   text-align: center;
-  /* height: 56px;*/
   transition: color 0.2s ease;
   width: 100%;
   padding: 11px;
@@ -418,7 +390,6 @@ input[type=radio][name=tabs] {
   .tab-wrap {
     width: 100%;
     margin-left: 2%;
-    /*top: -106px;*/
   }
 }
 
@@ -450,7 +421,6 @@ input {
   .tab-wrap {
     width: 100%;
     margin-left: 0%;
-    /*top: -106px;*/
   }
 }
 
@@ -535,8 +505,6 @@ input {
 }
 
 .hosp {
-  /*margin-left: 48px;
-  margin-top: -10px;*/
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -549,9 +517,7 @@ input {
 }
 
 .cti {
-  /*margin-top: -10px;*/
   float: right;
-  /*margin-right: 16px*/
 }
 
 .accordionheaders {
@@ -644,7 +610,6 @@ ion-item.accordion-content {
 }
 
 .floatt {
-  /*float: inline-end;*/
   width: 25px;
   margin: auto;
 }
@@ -662,10 +627,6 @@ ion-item.accordion-content {
 }
 
 .filter {
-  /*float: inline-end;
-  margin-right: 19px;
-  font-size: 10px;
-  margin-top: -51px;*/
   position: relative;
 }
 

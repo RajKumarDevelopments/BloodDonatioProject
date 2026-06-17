@@ -1,16 +1,16 @@
-<!--<ion-header [translucent]="true">
+<ion-header [translucent]="true">
   <ion-row>
-    <ion-col size="2" routerLink="/home">-->
+    <ion-col size="2" routerLink="/home">
       <!--<ion-icon name="chevron-back-outline"></ion-icon>-->
-    <!--</ion-col>
+    </ion-col>
     <ion-col size="8">
       <ion-title>DONATE NOW</ion-title>
     </ion-col>
-    <ion-col size="2">-->
+    <ion-col size="2">
       <!--<ion-buttons>
         <ion-menu-button></ion-menu-button>
       </ion-buttons>-->
-    <!--</ion-col>
+    </ion-col>
   </ion-row>
 </ion-header>
 
@@ -42,10 +42,10 @@
         </div>
       </ion-col>
     </ion-row>
-  </div>-->
+  </div>
 
   <!-- In Your Location Tab -->
-  <!--<div *ngIf="selectedTab === 'open' && curnt">
+  <div *ngIf="selectedTab === 'open' && curnt">
     <ion-accordion-group [multiple]="false" #openAccordionGroup
       [value]="activeAccordionOpen !== null ? activeAccordionOpen.toString() : null"
       (ionChange)="onOpenAccordionChange($event)">
@@ -149,9 +149,9 @@
               <strong>{{ BloodRequestDetalis[0].BloodRequestDate | date:'dd/MM/yyyy' }} {{
                 (BloodRequestDetalis[0].BloodRequestDate + 'T' + BloodRequestDetalis[0].RequestTime) | date: 'hh:mm a'
                 }}</strong>
-            </ion-col>-->
+            </ion-col>
             <!--{{ obj.BloodRequestDate | date: 'dd/MM/yyyy' }} {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}-->
-            <!--<ion-col size="5">
+            <ion-col size="5">
               <div>Purpose</div>
             </ion-col>
             <ion-col size="7"><strong>{{ obj.Purpose }}</strong></ion-col>
@@ -208,13 +208,9 @@
                   <div class="round">
                     <ion-icon color="danger" name="share-social-outline"></ion-icon>
                   </div>
-                </ion-col>-->
-                <!--<ion-col size="2.4">
-                  <div class="round" (click)="closeAccordion('open')">
-                    <ion-icon name="close-outline" style="color:gray"></ion-icon>
-                  </div>
-                </ion-col>-->
-              <!--</ion-row>
+                </ion-col>
+                
+              </ion-row>
             </ion-col>
             <ion-col size="2"></ion-col>
           </ion-row>
@@ -222,18 +218,16 @@
             <ion-col size="9"></ion-col>
             <ion-col size="3"></ion-col>
             <ion-col size="3" *ngIf="obj.ApprovalStatus !== 5 && status">
-              <div class="accordionhead" (click)="acceptCheck(obj.CreatedByEmail)">Accept</div>-->
-              <!--<ion-icon name="triangle-outline" color="danger"></ion-icon>-->
-            <!--</ion-col>
+              <div class="accordionhead" (click)="acceptCheck(obj.CreatedByEmail)">Accept</div>
+            </ion-col>
             <ion-col size="6">
               <div class="accordionhead floatt" (click)="openModal()">
                 <img class="reportimg" src="../../../assets/Images/danger.png" />
               </div>
             </ion-col>
             <ion-col size="3" (click)="closeAccordion('open')">
-              <div class="triangle-up f-end"></div>-->
-              <!--<ion-icon name="triangle-outline" color="danger"></ion-icon>-->
-            <!--</ion-col>
+              <div class="triangle-up f-end"></div>
+            </ion-col>
           </ion-row>
         </div>
       </ion-accordion>
@@ -253,10 +247,10 @@
         <textarea [(ngModel)]="myrepots" placeholder="Write a message..."></textarea>
       </ng-template>
     </ion-modal>
-  </div>-->
+  </div>
 
   <!-- Other Location Tab -->
-  <!--<div *ngIf="selectedTab === 'closed' && curnt">
+  <div *ngIf="selectedTab === 'closed' && curnt">
     <div class="filter">
       <ion-icon name="filter-outline" (click)="toggleFilter()" class="filter-icon"></ion-icon>
       <div *ngIf="showDropdown" class="dropdown-container">
@@ -453,9 +447,8 @@
               </div>
             </ion-col>
             <ion-col size="3" (click)="closeAccordion('closed')">
-              <div class="triangle-up f-end"></div>-->
-              <!--<ion-icon name="triangle-outline" color="danger"></ion-icon>-->
-            <!--</ion-col>
+              <div class="triangle-up f-end"></div>
+            </ion-col>
           </ion-row>
         </div>
       </ion-accordion>
@@ -499,9 +492,8 @@
       </div>
     </ion-col>
     <ion-col size="2.4" routerLink="/donatenow">
-      <div class="border" style="background-color:#a9b5cb;border:none">-->
-        <!--<ion-icon name="egg-outline" class="tabs_icon" style="color:white;font-size:25px"></ion-icon>-->
-        <!--<img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/donatenow.png" />
+      <div class="border" style="background-color:#a9b5cb;border:none">
+        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/donatenow.png" />
         <div class="tabs_title"></div>
       </div>
     </ion-col>
@@ -512,4 +504,4 @@
       </div>
     </ion-col>
   </ion-row>
-</div>-->
+</div>
