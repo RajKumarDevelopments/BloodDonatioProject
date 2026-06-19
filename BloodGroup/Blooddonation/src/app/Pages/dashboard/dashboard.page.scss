@@ -1,12 +1,15 @@
 ion-card {
   --ion-margin: 10px;
   text-align: center;
-  background-color: #ff0000c7;
+  background-color: lightgray;
   margin-bottom: 16px
 }
 
 h2 {
-  margin-left: 11px;
+  text-align: center;
+  margin: 30px 6px 0px 0px;
+  width: 100%;
+  font-size: 14px;
 }
 
 .image {
@@ -37,7 +40,7 @@ ion-card-header {
  // background-color: orange;
 }
 ion-card:hover{
-  background-color:red;
+  background-color: lightcoral;
 }
 ion-card-title :hover {
   color: white;
@@ -45,14 +48,14 @@ ion-card-title :hover {
 
 ion-card-title {
   font-size: 14px;
-  color: #fff;
+  color: #333;
 }
 
 .count {
   font-size: 1.5em;
   font-weight: bold;
   margin-top: 10px;
-  color: white;
+  color: #333;
 }
 
 .edit {

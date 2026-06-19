@@ -623,7 +623,8 @@ export class DonorRegistrationPage implements OnInit {
           Status: true,
           Statusphn: true,
           Rolestatus: false,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          DonorAddByLeader: this.UserDetails[0].Reffercode
         }]
         var UploadFile = new FormData();
         UploadFile.append("Param", JSON.stringify(obj));

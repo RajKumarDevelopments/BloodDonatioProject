@@ -745,6 +745,7 @@ export class RegistrationPage {
           Pincode: this.Pincode,
           Status: true,
           Statusphn: true,
+
         }]
         var UploadFile = new FormData();
         UploadFile.append("Param", JSON.stringify(obj));

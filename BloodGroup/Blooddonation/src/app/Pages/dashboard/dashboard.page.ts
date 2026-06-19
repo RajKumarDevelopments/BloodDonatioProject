@@ -19,6 +19,21 @@ export class DashboardPage implements OnInit {
         this.Rolestatus = true;
       }
     }   
+    
+    // Optimization: Initialize mydashboard instantly to prevent UI rendering delay
+    const cachedData = localStorage.getItem('dashboard_counts');
+    if (cachedData) {
+      this.mydashboard = JSON.parse(cachedData);
+    } else {
+      this.mydashboard = [{
+        Presentationcount: 0,
+        Bannercount: 0,
+        Referalcount: 0,
+        Dotationcount: 0,
+        Adddonorscount: 0,
+        LeadPresentationcount: 0
+      }];
+    }
   }
 
   ngOnInit() {
@@ -35,6 +50,7 @@ export class DashboardPage implements OnInit {
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       if (data) {
         this.mydashboard = Array.isArray(data) ? data : [data];
+        localStorage.setItem('dashboard_counts', JSON.stringify(this.mydashboard));
       } else {
         this.mydashboard = [];
       }
