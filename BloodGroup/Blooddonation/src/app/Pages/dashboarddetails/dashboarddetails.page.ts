@@ -121,6 +121,23 @@ export class DashboarddetailsPage implements OnInit {
     })
   }
 
+  // myLeadRef() {
+  //   var UploadFile = new FormData();
+  //   UploadFile.append("Param1", this.UserDetails[0].RegId);
+  //   UploadFile.append("Param2", "3");
+  //   UploadFile.append("Param3", this.UserDetails[0].RegId);
+  //   var url = "api/BG/Get_RequestPresentation";
+  //   this.general.PostData(url, UploadFile).subscribe((data: any) => {
+  //     this.presntationlist = data;
+  //     this.presntationlist1 = this.presntationlist.filter((flt: any) => flt.CreatedBy == this.UserDetails[0].RegId)
+  //     this.presntationlist2 = this.presntationlist1
+  //     this.accordionState = Array(this.presntationlist1.length).fill(false);
+  //     this.activeAccordion = null;
+  //   }, err => {
+  //     this.general.presentToast("something went wrong");
+  //   })
+  // }
+
   
 
   onAccordionChange(event: any) {
@@ -163,8 +180,9 @@ export class DashboarddetailsPage implements OnInit {
   myLeadRef() {
     var UploadFile = new FormData();
     UploadFile.append("Param1", this.UserDetails[0].RegId);
-    UploadFile.append("Param2", '7');
-    var url = "api/BG/DashBoardDetails";
+    UploadFile.append("Param2", "3");
+    UploadFile.append("Param3", this.UserDetails[0].RegId);
+    var url = "api/BG/Get_RequestPresentation";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.leadrefslist = data;
       this.accordionState = Array(this.donorslist.length).fill(false);

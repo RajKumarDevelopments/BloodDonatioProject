@@ -240,28 +240,33 @@
     <ion-accordion *ngFor="let obj of leadrefslist; let i = index" [value]="i.toString()">
       <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
         <div class="guided-title">
-          <span *ngIf="activeAccordion !== i">{{ obj.FullName }}</span>
+          <span *ngIf="activeAccordion !== i">{{ obj.Venue_name }}</span>
         </div>
         <div class="guided-icon">
           <span *ngIf="activeAccordion !== i">▼</span>
         </div>
       </div>
       <div slot="content" class="content-wrapper" *ngIf="activeAccordion === i">
-        <div class="card-details">
-          <div class="detail-section">
-            <div class="detail-row"><strong>Name:</strong> <span>{{obj.FullName}}</span></div>
-            <div class="detail-row"><strong>Phone Number:</strong> <span>{{obj.Phonenumber}}</span></div>
-            <div class="detail-row"><strong>Email:</strong> <span>{{obj.Email}}</span></div>
-            <div class="detail-row"><strong>Age:</strong> <span>{{obj.Age}} Years</span></div>
-            <div class="detail-row"><strong>Created Date:</strong> <span>{{obj.CreatedDate | date:'dd-MM-yyyy hh:mm
-                a'}}</span></div>
-            <div class="detail-row"><strong>Gender:</strong> <span>{{obj.Gender}}</span></div>
-          </div>
-          <div class="footer-actions"
-            style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
-            <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
-          </div>
+         <div class="card-details">
+        <div class="detail-section">
+          <div class="detail-row"><strong>Venue:</strong> <span>{{obj.Venue_name}}</span></div>
+          <div class="detail-row"><strong>Address:</strong> <span>{{obj.Address}}</span></div>
+          <div class="detail-row"><strong>Venue Type:</strong> <span>{{obj.Venue}}</span></div>
+          <div class="detail-row"><strong>Audience:</strong> <span>{{obj.Audiance}}</span></div>
+          <div class="detail-row"><strong>Mode:</strong> <span>{{obj.Mode}}</span></div>
+          <div class="detail-row"><strong>Created Date:</strong> <span>{{obj.CreatedDate | date:'dd-MM-yyyy hh:mm
+              a'}}</span></div>
+          <div class="detail-row"><strong>Presentation Date:</strong> <span>{{obj.RequestDate | date:'dd-MM-yyyy hh:mm
+              a'}}</span></div>
+          <div class="detail-row"><strong>Contact Person:</strong> <span>{{obj.Contact_name}}</span></div>
+          <div class="detail-row"><strong>Contact Number:</strong> <span>{{obj.Contact_number}}</span></div>
+          <div class="detail-row"><strong>Message:</strong> <span>{{obj.Message}}</span></div>
         </div>
+        <div class="footer-actions"
+          style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: flex-end; align-items: center;">
+          <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion()">▲</div>
+        </div>
+      </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
