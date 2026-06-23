@@ -608,9 +608,7 @@ export class RequsetformPage implements OnInit {
   }
 
   AddRequestForm() {
-    debugger
     const contactNumber = this.BloodRequestForm.value.ContactNumber;
-
     // Check if contact number is exactly 10 digits
     if (!/^\d{10}$/.test(contactNumber)) {
       this.general.presentToastt("Please enter exactly 10 digits for Contact Number.", "warning");
@@ -830,7 +828,6 @@ export class RequsetformPage implements OnInit {
   }
   
   Sendmailfromadmin() {
-   debugger
     var selectedDateTime = this.BloodRequestForm.value.RequiredDate;
     var selectedDate = selectedDateTime.split('T')[0];
     var selectedTime = selectedDateTime.split('T')[1];
@@ -874,7 +871,6 @@ export class RequsetformPage implements OnInit {
 
 
   sendnotification(Pincode: any) {
-    
     var path = "requsetform";
     const massege = "The request " + this.selectedBloodType + ".comes from " + this.BloodRequestForm.value.HospitalName + ", located at " + this.BloodRequestForm.value.area + " .They are looking for donors who can come in at " + this.selectedtime + ", For more information, you can contact " + this.BloodRequestForm.value.ContactName + ".at " + this.BloodRequestForm.value.ContactNumber + " ";
     this.user.getAdmin().subscribe((data: any) => {

@@ -690,14 +690,10 @@ export class RegistrationPage {
   }
 
   UserRegistration() {
-    // ── Mandatory: Last Donation ──────────────────────────────────────────────
     if (!this.LastDonationDate || this.LastDonationDate === '') {
       this.general.presentToast('Please select Last Donation Date.');
       return;
     }
-    // ─────────────────────────────────────────────────────────────────────────
-
-    // Recalculate/Ensure Age is set before submission
     if (this.DOB) {
       try {
         const parts = this.DOB.split('-');

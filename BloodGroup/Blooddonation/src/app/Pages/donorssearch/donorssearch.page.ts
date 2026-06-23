@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { HttpClient } from '@angular/common/http';
-import { IonModal, NavController, Platform, AlertController, IonAccordionGroup } from '@ionic/angular';
+import { IonModal, NavController, Platform, AlertController, IonAccordionGroup, LoadingController, ToastController } from '@ionic/angular';
 import { UserService } from '../../Services/user/user.service';
 declare var google: any;
 import { Share } from '@capacitor/share';
@@ -52,6 +52,7 @@ export class DonorssearchPage implements OnInit {
   myrepots: any;
   value: any;
   acceptcomment: any;
+  isAccepting: boolean = false;
   isModalOpen: boolean = false;
   open: boolean = true;
   crntlatitude: any;
@@ -90,7 +91,8 @@ export class DonorssearchPage implements OnInit {
   expiryWhatsappstatus: boolean[] = [];
   expirydates: string[] = [];
   NewBloodDonateDate: any;
-  CreatedByEmail: any;
+  Email: any;
+  UnitsofBlood: any;
   LastDonationValue: any = null;
     Role: any;
     status: any;
@@ -102,7 +104,9 @@ export class DonorssearchPage implements OnInit {
     private http: HttpClient,
     private nav: NavController,
     private launchNavigator: LaunchNavigator,
-    private platform: Platform
+    private platform: Platform,
+    private loadingController: LoadingController,
+    private toastController: ToastController
   ) {
     this.userdetail = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.userdetail);
@@ -279,16 +283,18 @@ export class DonorssearchPage implements OnInit {
       message: 'Are you sure you want to accept this blood request?',
       buttons: [
         { text: 'No', role: 'cancel' },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.checkAlreadyAccepted(); // final step
-          }
-        }
+        { text: 'Yes', role: 'yes' }
       ]
     });
 
     await alert.present();
+    const { role } = await alert.onDidDismiss();
+    
+    if (role === 'yes') {
+      this.acceptrqst(); // Direct call to new API
+    } else {
+      this.isAccepting = false;
+    }
   }
 
 
@@ -301,6 +307,8 @@ export class DonorssearchPage implements OnInit {
     });
 
     await alert.present();
+    await alert.onDidDismiss();
+    this.isAccepting = false;
   }
 
 
@@ -522,53 +530,58 @@ export class DonorssearchPage implements OnInit {
     });
   }
 
-  acceptrqst() {
+  async acceptrqst() {
+    const loading = await this.loadingController.create({
+      message: 'Accepting request, please wait...',
+      spinner: 'crescent'
+    });
+    await loading.present();
+
     var UploadFile = new FormData();
     UploadFile.append("Param1", this.MyBloodRequestID);
     UploadFile.append("Param2", this.UserDetails[0].RegId);
+    UploadFile.append("Param3", this.UnitsofBlood);
     var url = "api/BG/Update_request_donors";
-    this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      if (data == 'SUCCESS') {
+
+    this.general.PostData(url, UploadFile).subscribe(async (data: any) => {
+      await loading.dismiss();
+      this.isAccepting = false;
+      
+      const status = Array.isArray(data) ? data[0]?.Status : data;
+
+      if (status === 'USEREXIST' || data === 'USEREXIST') {
+        this.showToast('You have already accepted this blood request.', 'light');
+      } else if (status === 'EXIST' || data === 'EXIST') {
+        this.showToast('This blood request has already received the required number of donor acceptances.', 'light');
+      } else if (status === 'SUCCESS' || data === 'SUCCESS') {
+        this.showToast('Thank you for stepping forward to donate blood. Your response has been recorded.', 'success');
         this.accept();
+      } else {
+        this.showToast('Unexpected response. Please try again.', 'danger');
       }
+    }, async (error: any) => {
+      await loading.dismiss();
+      this.isAccepting = false;
+      this.showToast('Failed to accept blood request. Please try again later.', 'danger');
     });
   }
 
-  async acceptCheck(value: any) {
-    this.CreatedByEmail = value;
+  async acceptCheck(value:any) {
+    if (this.isAccepting) return;
+    this.isAccepting = true;
+    this.Email = value[0].Email;
+    this.UnitsofBlood = value[0].UnitsofBlood;
     this.getLastDonateDate(); // first check eligibility
   }
 
-
-
-
-  checkAlreadyAccepted() {
-    const uploadFile = new FormData();
-    uploadFile.append('Param1', this.MyBloodRequestID);
-
-    const url = 'api/BG/CheckAnydonorisaccepted';
-
-    this.general.PostData(url, uploadFile).subscribe((data: any) => {
-
-      const status = Array.isArray(data) ? data[0]?.Status : data;
-
-      if (status === 'NotExist') {
-        this.acceptrqst();
-      } else {
-        this.showAlreadyAcceptedAlert();
-      }
-
+  async showToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      color: color,
+      position: 'top'
     });
-  }
-
-  async showAlreadyAcceptedAlert() {
-    const alert = await this.alertController.create({
-      header: 'Information',
-      message: 'This blood request has already been accepted by another donor. Thank you for your willingness to help.',
-      buttons: ['OK']
-    });
-
-    await alert.present();
+    toast.present();
   }
 
 
@@ -605,7 +618,7 @@ export class DonorssearchPage implements OnInit {
       Email: this.UserDetails[0].Email,
       FullName: this.UserDetails[0].FullName,
       Phonenumber: this.UserDetails[0].Phonenumber,
-      CreatedByEmail: this.CreatedByEmail
+      CreatedByEmail: this.Email
     }];
     const uploadfile = new FormData();
     uploadfile.append("Email", JSON.stringify(obj));
@@ -686,8 +699,8 @@ export class DonorssearchPage implements OnInit {
       Pincode: ${obj.Pincode}
 
       For more details, visit the link below:
-      const shareUrl = "https://letshelp.breakingindiaapp.com";
-      const image = "https://letshelp.breakingindiaapp.com/webservices/Image/logo.png";
+      const shareUrl = "https://letshelp.in.com";
+      const image = "https://letshelp.in/webservices/Image/logo.png";
     `;
     const encodedText = encodeURIComponent(text);
     try {
