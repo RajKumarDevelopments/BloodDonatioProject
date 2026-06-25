@@ -425,6 +425,12 @@ export class DonorssearchPage implements OnInit {
     }
   }
 
+  clearSearch() {
+    this.searchQuery = '';
+    this.selectedPincode = [...this.otherloc1];
+    this.otherloc = [...this.otherloc1];
+  }
+
   loadMap() {
     if (typeof google === 'undefined' || !google.maps) {
       console.error('Google Maps JavaScript API is not loaded.');

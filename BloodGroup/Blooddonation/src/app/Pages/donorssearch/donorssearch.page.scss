@@ -686,3 +686,95 @@ ion-item.accordion-content {
   color: #666;
   font-size: 18px;
 }
+
+/* Standardized List-View UI */
+.guided-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75em 1.5em;
+  padding-left: 1rem;
+  background: #f1f2f6;
+  width: 100%;
+  cursor: pointer;
+  min-height: 48px;
+
+  &.open {
+    background-color: white;
+  }
+}
+
+.guided-icon {
+  font-size: 0.7rem;
+  color: #ec1c2c;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper {
+  background: white;
+  padding: 4px 12px 12px 12px;
+  border-top: none;
+}
+
+.detail-section {
+  padding-left: 4%;
+  margin-top: 0;
+
+  .detail-row {
+    margin-bottom: 8px;
+    font-size: 12.5px;
+    color: #444;
+    display: flex;
+    align-items: flex-start;
+
+    strong {
+      color: #000;
+      font-weight: 700;
+      flex: 0 0 125px;
+      margin-right: 10px;
+    }
+
+    span {
+      flex: 1;
+      line-height: 1.4;
+    }
+  }
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+ion-accordion-group {
+  margin: 0 16px !important;
+  display: block !important;
+}
+
+ion-accordion {
+  margin-bottom: 4px !important;
+  background-color: white !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  border: none !important;
+
+  &::part(header) {
+    border-radius: 0px !important;
+  }
+}
+
+ion-accordion.accordion-expanding,
+ion-accordion.accordion-expanded {
+  margin-top: 0px !important;
+  margin-bottom: 4px !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+
+.card-details {
+  width: 100%;
+}
