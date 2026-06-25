@@ -217,7 +217,7 @@
 <div class="footer_content" style="background-color: #ffffff;" *ngIf="status">
   <ion-row>
     <ion-col size="12">
-      <div class="footer_card1" routerLink="/searchlocation">
+      <div class="footer_card1" (click)="goToSearchLocation()" style="cursor: pointer;">
         <ion-row>
           <ion-col size="2" class="icon_img">
             <img src="../../../assets/client images/All Icons/Post a Blood request.png" />

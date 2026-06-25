@@ -435,7 +435,9 @@ export class MyrequestPage implements OnInit {
         window.open(url, '_blank');
       }
 
-
+  goToSearchLocation() {
+    this.nav.navigateForward('/searchlocation');
+  }
 
   getAvailablestatus() {
     var uploadfile = new FormData();
