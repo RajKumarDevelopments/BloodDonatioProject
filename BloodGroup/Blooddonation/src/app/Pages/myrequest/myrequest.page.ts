@@ -4,8 +4,6 @@ declare var google: any;
 import { Geolocation } from '@capacitor/geolocation';
 import { GeolocationserviceService } from '../../Services/locationservice/geolocationservice.service'
 import { ModalController, NavController, Platform, ActionSheetController, LoadingController, MenuController, AlertController } from '@ionic/angular';
-
-
 @Component({
   selector: 'app-myrequest',
   templateUrl: './myrequest.page.html',
@@ -15,7 +13,6 @@ export class MyrequestPage implements OnInit {
   // Replace accordion variables with drawer variables
   openDrawerId: string | null = null;
   isDrawerOpen: boolean = false;
-
   OpenBloodRequests: any;
   BloodRequestDetalis: any;
   OpenFlag: any = 1; ClosedFlag: any;
@@ -64,36 +61,31 @@ export class MyrequestPage implements OnInit {
   selectedObj: any = null; // Add this at the top
   Role: any;
   status: any;
-
-  constructor(public general: GeneralService, private loadingController: LoadingController,private nav: NavController,) {
+  Count: any;
+  BloodAcceptedDetalis: any;
+  constructor(public general: GeneralService, private loadingController: LoadingController, private nav: NavController,) {
     this.userdetail = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.userdetail);
-
     if (this.UserDetails[0].Status == false) {
       //this.general.presentAlert("Alert", "Please activate the mail and proceed with the other operations in the application...");
     }
     else {
-
     }
     const todayDate = new Date();
     this.today = todayDate.toISOString(); // Includes date and time
     this.RepostDate = this.today; // Set the default date and time to now
     this.flags = 0; // or set it to your required value
   }
-
   ngOnInit() {
     this.requestdata();
     this.getAvailablestatus();
   }
-
   openDetails(index: number) {
     this.selectedItem = index;
   }
-
   closeDetails(item: any) {
     this.selectedItem = null;
   }
-
   // New drawer/accordion controller methods
   onAccordionChange(event: any) {
     const value = event.detail.value;
@@ -102,7 +94,6 @@ export class MyrequestPage implements OnInit {
       this.GetBloodRequestDetails(value);
     }
   }
-
   toggleDrawer(itemId: string) {
     this.rpd = null;
     this.flags = null;
@@ -112,51 +103,41 @@ export class MyrequestPage implements OnInit {
       this.openDrawer(itemId);
     }
   }
-
   openDrawer(itemId: string) {
     this.openDrawerId = itemId;
     this.isDrawerOpen = true;
     this.GetBloodRequestDetails(itemId);
   }
-
   closeDrawer() {
     this.openDrawerId = null;
     this.isDrawerOpen = false;
   }
-
   isDrawerOpenForItem(itemId: string): boolean {
     return this.openDrawerId === itemId && this.isDrawerOpen;
   }
-
   open1(state: number) {
     // Close drawer when needed
     this.closeDrawer();
   }
-
   openModal(val: any) {
     this.selectedObj = val; //Save selected object
     this.Name = val.ContactPerson;
     this.Number = val.ContactMobile;
     this.isModalOpen = true;
   }
-
   filterDigitsOnly(event: any) {
     const input = event.target;
     input.value = input.value.replace(/[^0-9]/g, ''); // removes all non-digit characters
     this.Number = input.value; // update the bound variable
   }
-
-
   upd() {
     const vals = this.selectedObj; //use saved object
-   // console.log('md:', vals)
+    // console.log('md:', vals)
     this.name = this.Name;
     this.number = this.Number;
     this.isModalOpen = false;
     this.AddRequestForm(vals);
   }
-
-
   AddRequestForm(value: any) {
     if (this.Name || this.Number) {
       var obj = [{
@@ -178,23 +159,19 @@ export class MyrequestPage implements OnInit {
       this.general.presentToast("Please enter all fields to raise a blood request..!");
     }
   }
-
   repostdata() {
     this.rpd = 1
     this.flags = 3
   }
-
   onDateChange(event: any) {
     this.RepostDate = event.detail.value
     console.log('Selected date:', event.detail.value);
   }
-
   Date(item: any) {
     this.time = item.detail.value
   }
-
   Repost(detail: any) {
-   
+
     var selectedDateTime = this.RepostDate;
     var selectedDate = selectedDateTime.split('T')[0];
     var selectedTime = selectedDateTime.split('T')[1];
@@ -237,11 +214,10 @@ export class MyrequestPage implements OnInit {
       if (data == 'SUCCESS') {
         this.nav.navigateForward(['/home'])
         this.general.presentAlert('SUCCESS', 'You have successfully reposted...')
-       // window.location.reload();
+        // window.location.reload();
       }
     });
   }
-
   closereq(BloodRequestID: any) {
     debugger
     var uploadfile = new FormData();
@@ -252,42 +228,35 @@ export class MyrequestPage implements OnInit {
       this.requestdata();
     })
   }
-
   openrequestfilt() {
     this.opendata = [];
     this.openreqdata = this.opendata.filter((t: any) => t.ApprovalStatus == 4)
   }
-
   updateMapLocation(lat: number, lng: number) {
     const location = new google.maps.LatLng(lat, lng);
     this.map.setCenter(location);
     this.map.setZoom(15);
   }
 
- 
   setTab(tab: string) {
     if (this.selectedTab !== tab) {
       this.selectedTab = tab;
       this.closeDrawer(); // Close any open drawer when switching tabs
-
       // Reset repost calendar visibility when switching tabs
       this.rpd = null;
       this.flags = null;
     }
-
     if (tab === 'open') {
       this.loaders(tab);
     } else if (tab === 'closed') {
       this.loaders(tab);
     }
   }
-
   async loaders(tabs: any) {
     const loading = await this.loadingController.create({
       translucent: true,
       duration: 1000
     });
-
     try {
       if (tabs == 'open') {
         this.requestdata();
@@ -301,13 +270,11 @@ export class MyrequestPage implements OnInit {
       await loading.dismiss();
     }
   }
-
   async loaders1(tabs: any) {
     const loading = await this.loadingController.create({
       translucent: true,
       duration: 1000
     });
-
     try {
       if (tabs == 'open') {
         this.requestdata();
@@ -321,7 +288,6 @@ export class MyrequestPage implements OnInit {
       await loading.dismiss();
     }
   }
-
   requestdata() {
     var uploadfile = new FormData();
     uploadfile.append("Param1", '1');
@@ -331,7 +297,6 @@ export class MyrequestPage implements OnInit {
       this.OpenFlag = 1;
       this.ClosedFlag = 0;
       this.opendata = data;
-
       if (this.opendata != "") {
         this.opendata.forEach((item: any, index: any) => {
           item.subIndexName = this.getIndexName(index);
@@ -344,7 +309,6 @@ export class MyrequestPage implements OnInit {
       }
     })
   }
-
   closedata() {
     var uploadfile = new FormData();
     uploadfile.append("Param1", '2');
@@ -353,7 +317,7 @@ export class MyrequestPage implements OnInit {
     this.general.PostData(url, uploadfile).subscribe((data: any) => {
       this.OpenFlag = 0;
       this.ClosedFlag = 1;
-      this.ClosedData = data;     
+      this.ClosedData = data;
       if (data == "") {
         this.closed = false;
         this.msg = "You don't have any closed requests"
@@ -370,7 +334,6 @@ export class MyrequestPage implements OnInit {
       }
     })
   }
-
   GetBloodRequestDetails(Val: any) {
     this.opend = 1
     this.selecd = Val
@@ -379,18 +342,18 @@ export class MyrequestPage implements OnInit {
     var url = "api/BG/Get_Requestbasedon_presonID";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.BloodRequestDetalis = data;
+      if (this.BloodRequestDetalis && this.BloodRequestDetalis.length > 0) {
+        this.GetAcceptedCount(this.BloodRequestDetalis[0].BloodRequestID || this.BloodRequestDetalis[0].UdId || Val);
+      }
     })
   }
-
   getIndexName(index: number): string {
     const indexNames = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
-
     if (index >= 0 && index < 10) {
       return indexNames[index];
     } else {
       const lastDigit = index % 10;
       const secondLastDigit = Math.floor(index / 10) % 10;
-
       if (secondLastDigit === 1) {
         return `${index + 1}th`;
       } else {
@@ -407,10 +370,8 @@ export class MyrequestPage implements OnInit {
       }
     }
   }
-
   shareRequest(obj: any) {
     const detail = this.BloodRequestDetalis.find((x: any) => x.RegId === obj.RegId || x.UdId === obj.UdId);
-
     if (!detail) {
       console.warn('Matching detail not found');
       return;
@@ -430,15 +391,12 @@ export class MyrequestPage implements OnInit {
     Contact: ${detail.ContactPerson} (${detail.ContactMobile})
     Hospital: ${detail.HospitalName || 'N/A'}
     Address: ${detail.HospitalAddress || 'N/A'}`;
-
-        const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
-      }
-
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
   goToSearchLocation() {
     this.nav.navigateForward('/searchlocation');
   }
-
   getAvailablestatus() {
     var uploadfile = new FormData();
     uploadfile.append("Param1", this.UserDetails[0].RegId)
@@ -449,6 +407,41 @@ export class MyrequestPage implements OnInit {
       this.status = this.Role[0].Availablestatus;
     }, (error) => {
       console.error('Error fetching role:', error);
+    });
+  }
+  GetAcceptedCount(Val: any) {
+    var UploadFile = new FormData();
+    UploadFile.append("Param1", Val);
+    UploadFile.append("Param2", '2');
+    var url = "api/BG/BloodAcceptedUser";
+    this.general.PostData(url, UploadFile).subscribe((data: any) => {
+      this.Count = data;
+    })
+  }
+  GetAcceptedUsers(Val: any) {
+    var UploadFile = new FormData();
+    UploadFile.append("Param1", Val);
+    UploadFile.append("Param2", '1');
+    var url = "api/BG/BloodAcceptedUser";
+    this.general.PostData(url, UploadFile).subscribe((data: any) => {
+      this.BloodAcceptedDetalis = data;
+    })
+  }
+  getValidCount() {
+    if (this.Count === null || this.Count === undefined || this.Count === '') return 0;
+    if (Array.isArray(this.Count)) {
+      if (this.Count.length > 0) {
+        return this.Count[0].AcceptedCount || this.Count[0].Accepted || this.Count[0].Count || 0;
+      }
+      return 0;
+    }
+    return this.Count;
+  }
+  goToDetails(item: any) {
+    this.nav.navigateForward('/requestaccepteddetails', {
+      queryParams: {
+        BloodRequestedId: item.BloodRequestID || item.UdId || this.selecd
+      }
     });
   }
 }

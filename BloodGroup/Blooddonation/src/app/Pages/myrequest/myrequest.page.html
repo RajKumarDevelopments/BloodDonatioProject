@@ -77,6 +77,15 @@
                 <div class="detail-row"><strong>Contact Number:</strong> <span>{{detail.ContactMobile}}</span></div>
                 <div class="detail-row" *ngIf="detail.HospitalName != ''"><strong>Hospital Name:</strong> <span>{{detail.HospitalName}}</span></div>
                 <div class="detail-row"><strong>Address:</strong> <span>{{detail.HospitalAddress}}</span></div>
+                <div class="detail-row">
+                  <strong>Accepted Count:</strong> 
+                  <span *ngIf="getValidCount() > 0" style="color: #0e51c9; text-decoration: underline; cursor: pointer; font-weight: bold;" (click)="goToDetails(detail)">
+                    {{ getValidCount() }}
+                  </span>
+                  <span *ngIf="getValidCount() == 0">
+                    0
+                  </span>
+                </div>
               </div>
 
               <!-- Footer Actions -->
@@ -167,6 +176,15 @@
                 <div class="detail-row"><strong>Contact Number:</strong> <span>{{obj.ContactMobile}}</span></div>
                 <div class="detail-row" *ngIf="obj.HospitalName != ''"><strong>Hospital Name:</strong> <span>{{obj.HospitalName}}</span></div>
                 <div class="detail-row"><strong>Address:</strong> <span>{{obj.HospitalAddress}}</span></div>
+                <div class="detail-row">
+                  <strong>Accepted Count:</strong> 
+                  <span *ngIf="getValidCount() > 0" style="color: #0e51c9; text-decoration: underline; cursor: pointer; font-weight: bold;" (click)="goToDetails(obj)">
+                    {{ getValidCount() }}
+                  </span>
+                  <span *ngIf="getValidCount() == 0">
+                    0
+                  </span>
+                </div>
               </div>
 
               <!-- Repost Calendar Section - Inside Drawer -->

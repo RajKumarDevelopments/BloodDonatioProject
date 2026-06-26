@@ -242,7 +242,11 @@ const routes: Routes = [
   {
     path: 'presentationaccepteddetails',
     loadChildren: () => import('./Pages/presentationaccepteddetails/presentationaccepteddetails.module').then( m => m.PresentationaccepteddetailsPageModule)
+  },  {
+    path: 'requestaccepteddetails',
+    loadChildren: () => import('./Pages/requestaccepteddetails/requestaccepteddetails.module').then( m => m.RequestaccepteddetailsPageModule)
   },
+
 
 ];
 

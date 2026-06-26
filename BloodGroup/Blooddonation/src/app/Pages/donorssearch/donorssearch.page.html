@@ -55,7 +55,7 @@
           <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
             <div style="display: flex; align-items: center;">
               <img src="../../../assets/Images/mic.png" style="width: 24px; height: 24px; object-fit: contain; margin-right: 12px;" />
-              <span style="font-size: 13px; font-weight: 600; color: #333;">Blood Group: {{obj.BLGName}}</span>
+              <span style="font-size: 13px; font-weight: 600; color: #333;">{{obj.BLGName}}</span>
             </div>
             <div style="display: flex; align-items: center;">
               <span style="font-size: 11px; color: #888; margin-right: 10px;">{{obj.BloodRequestDate | date:'dd/MM/yyyy'}}<span *ngIf="obj.RequestTime">, {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</span></span>
@@ -160,7 +160,7 @@
           <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
             <div style="display: flex; align-items: center;">
               <img src="../../../assets/Images/mic.png" style="width: 24px; height: 24px; object-fit: contain; margin-right: 12px;" />
-              <span style="font-size: 13px; font-weight: 600; color: #333;">Blood Group: {{obj.BLGName}}</span>
+              <span style="font-size: 13px; font-weight: 600; color: #333;">{{obj.BLGName}}</span>
             </div>
             <div style="display: flex; align-items: center;">
               <span style="font-size: 11px; color: #888; margin-right: 10px;">{{obj.BloodRequestDate | date:'dd/MM/yyyy'}}<span *ngIf="obj.RequestTime">, {{ (obj.BloodRequestDate + 'T' + obj.RequestTime) | date: 'hh:mm a' }}</span></span>
