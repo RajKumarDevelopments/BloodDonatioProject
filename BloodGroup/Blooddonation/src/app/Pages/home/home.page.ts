@@ -91,7 +91,7 @@ export class HomePage implements OnInit, AfterViewInit {
     }
 
     const RefferCode = this.UserDetails[0].Reffercode;
-    const baseUrl = "https://letshelp.breakingindiaapp.com";  
+    const baseUrl = "https://play.google.com/store/apps/details?id=com.gg.Bloodgroup";  
     const text = `Blood donation is the real act of humanity. It costs nothing but saves a life.Donating blood is not just giving blood, it’s giving life.Every drop of blood is like a breath for someone out there. Donate and let them breathe.
  Use my referral code: ${RefferCode}
  Join now: ${baseUrl}`;

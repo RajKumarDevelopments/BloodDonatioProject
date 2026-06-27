@@ -28,8 +28,8 @@ export class JoincampaignPage implements OnInit {
   }
     async InviteFrinds() {
       const text = "Blood donation is the real act of humanity. It costs nothing but saves a life. Donating blood is not just giving blood, it’s giving life. Every drop of blood is like a breath for someone out there. Donate and let them breathe.";
-      const image = "https://letshelp.breakingindiaapp.com/webservices/Image/logo.png";
-      const shareUrl = "https://letshelp.breakingindiaapp.com";
+      const image = "https://letshelp.in/webservices/Image/logo.png";
+      const shareUrl = "https://play.google.com/store/apps/details?id=com.gg.Bloodgroup";
 
       try {
         await Share.share({
