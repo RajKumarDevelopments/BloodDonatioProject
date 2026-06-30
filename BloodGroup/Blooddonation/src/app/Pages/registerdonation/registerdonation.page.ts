@@ -248,11 +248,12 @@ export class RegisterdonationPage implements OnInit {
   }
 
   GetBloodRequestdropdown() {
+    debugger
+    var UploadFile = new FormData();
+    UploadFile.append("Param1", this.UserDetails[0].RegId);
     const url = 'api/BG/Get_BloodRequestsIDMobiles';
-
-    this.general.GetData(url).subscribe((data: any) => {
+    this.general.PostData(url, UploadFile).subscribe(async (data: any) => {  
       this.dropBloodRequestIDs1 = data;
-
     this.dropBloodRequestIDs = this.dropBloodRequestIDs1.filter((s: any) =>
       s.AcceptedBy == this.UserDetails[0].RegId &&
       (s.SYSSubmitted == 0 || s.SYSSubmitted == null)
