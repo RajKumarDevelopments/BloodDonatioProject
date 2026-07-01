@@ -252,14 +252,19 @@ export class RegisterdonationPage implements OnInit {
     var UploadFile = new FormData();
     UploadFile.append("Param1", this.UserDetails[0].RegId);
     const url = 'api/BG/Get_BloodRequestsIDMobiles';
-    this.general.PostData(url, UploadFile).subscribe(async (data: any) => {  
-      this.dropBloodRequestIDs1 = data;
-    this.dropBloodRequestIDs = this.dropBloodRequestIDs1.filter((s: any) =>
-      s.AcceptedBy == this.UserDetails[0].RegId &&
-      (s.SYSSubmitted == 0 || s.SYSSubmitted == null)
-    );
+    this.general.PostData(url, UploadFile).subscribe(async (data: any) => {
+      // The API returns an array, so dropBloodRequestIDs1 should be data, NOT data[0]
+      this.dropBloodRequestIDs1 = data || [];
+      
+      this.dropBloodRequestIDs = this.dropBloodRequestIDs1.filter((s: any) =>
+        (s.AcceptedBy == this.UserDetails[0].RegId || s.AcceptedBy == null) &&
+        (s.SYSSubmitted == 0 || s.SYSSubmitted == null)
+      );
 
-      if (this.dropBloodRequestIDs.length === 0) {
+      // IMPORTANT: We must clear messg if we have matching requests, otherwise it stays hidden!
+      if (this.dropBloodRequestIDs && this.dropBloodRequestIDs.length > 0) {
+        this.messg = null;
+      } else {
         this.messg = 'No request found';
       }
     });

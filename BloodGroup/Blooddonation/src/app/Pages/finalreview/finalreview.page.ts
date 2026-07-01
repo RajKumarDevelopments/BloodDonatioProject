@@ -173,7 +173,7 @@ export class FinalreviewPage implements OnInit {
         var UploadFile = new FormData();
         UploadFile.append("BloodDonationImage", this.MySelectedImage);
         UploadFile.append("BloodRequestID", this.SelectedBloodRequestID);
-        UploadFile.append("RoleId", this.Rolid);
+        UploadFile.append("RoleId", this.UserDetails[0].RegId);
         var url = "api/BG/UploadBloodDonationImagebyDonorwitroleid";
 
         this.general.PostData(url, UploadFile).subscribe((data: any) => {
