@@ -39,7 +39,8 @@ export class RegisterdonationPage implements OnInit {
   userdetail: any;
   UserDetails: any; TodayDate: any; DOB: any;
   HospitalAddress: any
-  DonationDate: any
+  DonationDate: any;
+  donatedate: any;
   Address: any; CurrentAddress: any;
   placeService: any; autocomplete: any; searchQuery: any;
   selectedLocation: string = 'address'; // Default location
@@ -77,7 +78,7 @@ export class RegisterdonationPage implements OnInit {
   myids: boolean = false; dropBloodRequestIDs: any;
   reqstid: any; selectedBloodRequestID: any;
   dropfiltes: any; my: any; Myhospital: any; Donate: any;
-  donatedate: any;
+  BloodRequestDate: any;
   donatetime: any; maxDate: any; Today: any;
   mydateofservice: any; NewBloodDonateDate: any;
   dropBloodRequestIDs1: any;
@@ -320,8 +321,46 @@ export class RegisterdonationPage implements OnInit {
           this.HospitalAddress = data.HospitalAddress;
 
           if (data.BloodRequestDate) {
-            const parts = data.BloodRequestDate.split('/');
-            this.donatedate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            if (data.BloodRequestDate.includes('/')) {
+              const datetimeParts = data.BloodRequestDate.split(' ');
+              const datePart = datetimeParts[0];
+              const parts = datePart.split('/');
+              let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+              
+              if (datetimeParts.length > 1) {
+                let timeStr = datetimeParts[1];
+                if (datetimeParts.length > 2) {
+                   const ampm = datetimeParts[2].toUpperCase();
+                   let [hh, mm, ss] = timeStr.split(':');
+                   let hours = parseInt(hh, 10);
+                   if (ampm === 'PM' && hours < 12) hours += 12;
+                   if (ampm === 'AM' && hours === 12) hours = 0;
+                   hh = hours.toString().padStart(2, '0');
+                   timeStr = `${hh}:${mm}${ss ? ':' + ss : ':00'}`;
+                } else if (timeStr.split(':').length === 2) {
+                   timeStr += ':00';
+                }
+                formattedDate += `T${timeStr}`;
+              } else {
+                formattedDate += `T00:00:00`;
+              }
+              this.BloodRequestDate = formattedDate;
+            } else {
+              this.BloodRequestDate = data.BloodRequestDate;
+            }
+            
+            const dateObj = new Date(this.BloodRequestDate);
+            if (!isNaN(dateObj.getTime())) {
+              const year = dateObj.getFullYear();
+              const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+              const day = dateObj.getDate().toString().padStart(2, '0');
+              this.donatedate = `${year}-${month}-${day}`;
+
+              const hours = dateObj.getHours().toString().padStart(2, '0');
+              const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+              const seconds = dateObj.getSeconds().toString().padStart(2, '0');
+              this.donatetime = `${hours}:${minutes}:${seconds}`;
+            }
           }
 
           this.searchQuery = this.HospitalAddress;
@@ -402,20 +441,29 @@ export class RegisterdonationPage implements OnInit {
   }
 
   take1(val: any) {
-      var obj = [{
-        hospitaladdress: this.searchQuery,
-
-        hospitalname: this.Myhospital,
-        date: this.donatedate,
-        time: this.donatetime,
-        state: this.selectedState,
-        District: this.District,
-        city: this.city,
-        BloodrequestID: this.SelectedBloodRequestID
-
-      }]
-    this.navCtrl.navigateForward(['/imagetemplates', { ids: 1, image: this.selectedImage, totaldata: JSON.stringify(obj), donatedate: this.donatedate }]);
+    if (this.BloodRequestDate) {
+      const selectedDate = new Date(this.BloodRequestDate);
+      const currentDate = new Date();
+      if (selectedDate > currentDate) {
+        this.showAlert('Alert', 'The donation date does not allow future dates.');
+        return;
+      }
     }
+
+    var obj = [{
+      hospitaladdress: this.searchQuery,
+
+      hospitalname: this.Myhospital,
+      date: this.donatedate,
+      time: this.donatetime,
+      state: this.selectedState,
+      District: this.District,
+      city: this.city,
+      BloodrequestID: this.SelectedBloodRequestID
+
+    }]
+    this.navCtrl.navigateForward(['/imagetemplates', { ids: 1, image: this.selectedImage, totaldata: JSON.stringify(obj), donatedate: this.donatedate }]);
+  }
 
 
   // Function to show alert

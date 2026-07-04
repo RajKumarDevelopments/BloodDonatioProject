@@ -1,6 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="headerhight">
+      <ion-row class="headerw-100">
+        <ion-col size="1">
+          <ion-icon name="chevron-back-outline" routerLink="/registerdonation"></ion-icon>
+        </ion-col>
+        <ion-col size="11">
+          <ion-title>IMAGE TEMPLATES</ion-title>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true" *ngIf="selectedImage">
   <ion-row>
-    <ion-col style="margin-left:15px">
+    <ion-col size="12" style="margin-left:15px; margin-top: 10px;">
       <h2>Donation and validation</h2>
       You will receive an certificate of appreciation once your Donation is validated
     </ion-col>

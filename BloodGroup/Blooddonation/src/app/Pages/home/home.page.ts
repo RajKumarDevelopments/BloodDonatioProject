@@ -129,12 +129,10 @@ export class HomePage implements OnInit, AfterViewInit {
     });
   }
   getNotificationCount() {
-    debugger
     var uploadfile = new FormData();
     uploadfile.append("Param1", this.UserDetails[0].RegId);
     uploadfile.append("Param2", '2');
     var url = "api/BG/UpdateNotificationstatus";
-    debugger
     this.general.PostData(url, uploadfile).subscribe((data: any) => {
       this.Counts = data;
       if (this.Counts && this.Counts.length > 0) {

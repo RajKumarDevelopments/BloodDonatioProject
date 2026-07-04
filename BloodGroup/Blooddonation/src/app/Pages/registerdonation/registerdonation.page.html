@@ -52,7 +52,7 @@
                          (ionCancel)="clearBloodRequest()"> <!-- 🔴 CHANGED -->>
               <ion-select-option *ngFor="let item of dropBloodRequestIDs"
                                  [value]="item.BloodRequestID">
-                {{ item.BloodRequestID }} ({{ item.FullName }})
+                {{ item.BloodRequestID }} ({{ item.ContactPerson }})
               </ion-select-option>
             </ion-select>
           </div>
@@ -63,11 +63,11 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearchBar">
-      <ion-searchbar [(ngModel)]="searchQuery"
+      <!--<ion-searchbar [(ngModel)]="searchQuery"
                      (ionInput)="onSearchInput()"
                      debounce="500"
                      placeholder="Search for a location">
-      </ion-searchbar>
+      </ion-searchbar>-->
 
       <ion-list *ngIf="predictions?.length">
         <ion-item *ngFor="let prediction of predictions"
@@ -115,7 +115,7 @@
                   </ion-icon>
 
                   <div class="regright" *ngIf="Donate">
-                    {{ donatedate | date: 'dd-MM-yyyy' }}
+                    {{ BloodRequestDate | date:'dd-MM-yyyy hh:mm a' }}
                   </div>
 
                 </ion-item>
@@ -142,7 +142,7 @@
                       <ion-datetime presentation="date"
                                     [max]="maxDate"
                                     [preferWheel]="true"
-                                    [(ngModel)]="donatedate"
+                                    [(ngModel)]="BloodRequestDate"
                                     (ionChange)="Donatedate($event.detail.value)">
                       </ion-datetime>
                     </ion-item>
