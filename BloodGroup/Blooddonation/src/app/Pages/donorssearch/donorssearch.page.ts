@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { HttpClient } from '@angular/common/http';
@@ -25,6 +25,7 @@ export class DonorssearchPage implements OnInit {
   @ViewChild('closedAccordionGroup', { static: false }) closedAccordionGroup!: IonAccordionGroup;
   OpenBloodRequests: any;
   BloodRequestDetalis: any;
+  BloodAcceptedDetalis: any;
   OpenFlag: any = 1;
   ClosedFlag: any;
   CloseBloodRequests: any;
@@ -95,7 +96,8 @@ export class DonorssearchPage implements OnInit {
   UnitsofBlood: any;
   LastDonationValue: any = null;
     Role: any;
-    status: any;
+  status: any;
+  isLoadingAcceptStatus: boolean = false;
 
   constructor(
     private alertController: AlertController,
@@ -106,7 +108,8 @@ export class DonorssearchPage implements OnInit {
     private launchNavigator: LaunchNavigator,
     private platform: Platform,
     private loadingController: LoadingController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private cdr: ChangeDetectorRef
   ) {
     this.userdetail = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.userdetail);
@@ -525,6 +528,8 @@ export class DonorssearchPage implements OnInit {
     this.selecd = Val;
     this.opend = 1;
     this.closse = 0;
+    this.BloodAcceptedDetalis = null;
+    this.isLoadingAcceptStatus = true;
     var UploadFile = new FormData();
     UploadFile.append("Param", Val);
     var url = "api/BG/Get_Requestbasedon_presonID_mobile";
@@ -533,6 +538,51 @@ export class DonorssearchPage implements OnInit {
       this.MyBloodRequestID = this.BloodRequestDetalis[0].BloodRequestID;
       this.crntlatitude = this.BloodRequestDetalis[0].Latitude;
       this.crntlongitude = this.BloodRequestDetalis[0].Longitude;
+      this.GetAcceptStatus(this.MyBloodRequestID);
+    });
+  }
+
+  GetAcceptStatus(Val: any) {
+    var UploadFile = new FormData();
+    UploadFile.append("Param1", Val);
+    UploadFile.append("Param2", '3');
+    UploadFile.append("Param3", this.UserDetails[0].RegId);
+    var url = "api/BG/BloodAcceptedUser";
+    this.general.PostData(url, UploadFile).subscribe((data: any) => {
+      let parsedData = data;
+      if (typeof data === 'string') {
+        try {
+          parsedData = JSON.parse(data);
+        } catch (e) {
+          console.error("Error parsing BloodAcceptedDetalis:", e);
+        }
+      }
+      this.BloodAcceptedDetalis = parsedData;
+      
+      let isAccepted = false;
+      if (Array.isArray(this.BloodAcceptedDetalis) && this.BloodAcceptedDetalis.length > 0) {
+        const record = this.BloodAcceptedDetalis[0];
+        if (record.Accepted == 1 || record.Accepted == '1' || record.AcceptBy == 1 || record.AcceptBy == '1') {
+          isAccepted = true;
+        }
+      } else if (this.BloodAcceptedDetalis && typeof this.BloodAcceptedDetalis === 'object') {
+        if (this.BloodAcceptedDetalis.Accepted == 1 || this.BloodAcceptedDetalis.Accepted == '1' || this.BloodAcceptedDetalis.AcceptBy == 1 || this.BloodAcceptedDetalis.AcceptBy == '1') {
+          isAccepted = true;
+        }
+      }
+      
+      if (this.selectedTab === 'open' && this.activeAccordionOpen !== null) {
+        if (this.currentloc && this.currentloc[this.activeAccordionOpen]) {
+           this.currentloc[this.activeAccordionOpen].AcceptBy = isAccepted ? 1 : 0;
+        }
+      } else if (this.selectedTab === 'closed' && this.activeAccordionClosed !== null) {
+        if (this.otherloc && this.otherloc[this.activeAccordionClosed]) {
+           this.otherloc[this.activeAccordionClosed].AcceptBy = isAccepted ? 1 : 0;
+        }
+      }
+      
+      this.isLoadingAcceptStatus = false;
+      this.cdr.detectChanges(); // Force Angular to update the UI instantly
     });
   }
 
@@ -751,4 +801,6 @@ export class DonorssearchPage implements OnInit {
       console.error('Error fetching role:', error);
     });
   }
+
+
 }

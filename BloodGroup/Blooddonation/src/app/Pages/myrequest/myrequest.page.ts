@@ -413,6 +413,7 @@ export class MyrequestPage implements OnInit {
     var UploadFile = new FormData();
     UploadFile.append("Param1", Val);
     UploadFile.append("Param2", '2');
+    UploadFile.append("Param3", this.UserDetails[0].RegId);
     var url = "api/BG/BloodAcceptedUser";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.Count = data;
@@ -422,6 +423,7 @@ export class MyrequestPage implements OnInit {
     var UploadFile = new FormData();
     UploadFile.append("Param1", Val);
     UploadFile.append("Param2", '1');
+    UploadFile.append("Param3", this.UserDetails[0].RegId);
     var url = "api/BG/BloodAcceptedUser";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.BloodAcceptedDetalis = data;
@@ -444,4 +446,6 @@ export class MyrequestPage implements OnInit {
       }
     });
   }
+
+ 
 }

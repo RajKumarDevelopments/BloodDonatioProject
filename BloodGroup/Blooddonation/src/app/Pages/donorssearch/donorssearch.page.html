@@ -103,12 +103,12 @@
           </div>
 
           <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: space-between; align-items: center;">
-            <div *ngIf="obj.ApprovalStatus !== 5 && status">
+            <div *ngIf="obj.ApprovalStatus !== 5 && status && !isLoadingAcceptStatus && obj.AcceptBy != 1">
               <div class="accordionhead" style="cursor: pointer; background: #ec1c2c; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px;" [class.disabled]="isAccepting" [style.opacity]="isAccepting ? 0.5 : 1" [style.pointer-events]="isAccepting ? 'none' : 'auto'" (click)="acceptCheck(BloodRequestDetalis)">
                 {{ isAccepting ? 'Accepting...' : 'Accept' }}
               </div>
             </div>
-            <div *ngIf="!(obj.ApprovalStatus !== 5 && status)"></div>
+            <div *ngIf="!(obj.ApprovalStatus !== 5 && status && !isLoadingAcceptStatus && obj.AcceptBy != 1)"></div>
             <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion('open')">▲</div>
           </div>
         </div>
@@ -208,12 +208,12 @@
           </div>
 
           <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: space-between; align-items: center;">
-            <div *ngIf="obj.ApprovalStatus !== 5 && status">
+            <div *ngIf="obj.ApprovalStatus !== 5 && status && !isLoadingAcceptStatus && obj.AcceptBy != 1">
               <div class="accordionhead" style="cursor: pointer; background: #ec1c2c; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px;" [class.disabled]="isAccepting" [style.opacity]="isAccepting ? 0.5 : 1" [style.pointer-events]="isAccepting ? 'none' : 'auto'" (click)="acceptCheck(BloodRequestDetalis)">
                 {{ isAccepting ? 'Accepting...' : 'Accept' }}
               </div>
             </div>
-            <div *ngIf="!(obj.ApprovalStatus !== 5 && status)"></div>
+            <div *ngIf="!(obj.ApprovalStatus !== 5 && status && !isLoadingAcceptStatus && obj.AcceptBy != 1)"></div>
             <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="closeAccordion('closed')">▲</div>
           </div>
         </div>
