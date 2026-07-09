@@ -22,6 +22,19 @@ export class RegistrationPage {
 
   openPicker(pickerType: any) {
     this.activePicker = pickerType;
+    if (pickerType === 'lastDonation') {
+      if (this.LastDonationDate && this.LastDonationDate !== 'I Never Donate' && this.LastDonationDate !== 'I Dont Remember' && this.LastDonationDate !== 'I Don’t Remember') {
+        this.date = this.LastDonationDate;
+      } else {
+        this.date = undefined;
+      }
+    } else if (pickerType === 'dob') {
+      if (this.DOB) {
+        this.date = this.DOB;
+      } else {
+        this.date = undefined;
+      }
+    }
   }
 
   closePicker() {
@@ -194,17 +207,17 @@ export class RegistrationPage {
   }
 
   async GetCurrentLocation(forceOverwrite: boolean = false) {
-    if (forceOverwrite) {
-      this.general.present();
-    }
     try {
       const permission = await Geolocation.checkPermissions();
       if (permission.location !== 'granted') {
         const request = await Geolocation.requestPermissions();
         if (request.location !== 'granted') {
-          if (forceOverwrite) this.general.dismiss();
           return;
         }
+      }
+
+      if (forceOverwrite) {
+        this.general.present();
       }
 
       const position = await Geolocation.getCurrentPosition({
@@ -283,6 +296,17 @@ export class RegistrationPage {
   async tryGetLocation() {
     try {
       this.isLoadingLocation = true;
+
+      const permission = await Geolocation.checkPermissions();
+      if (permission.location !== 'granted') {
+        const request = await Geolocation.requestPermissions();
+        if (request.location !== 'granted') {
+          this.isLoadingLocation = false;
+          this.general.presentToast('Location permission denied. Please enter details manually.');
+          return;
+        }
+      }
+
       const position = await Geolocation.getCurrentPosition({
         enableHighAccuracy: true
       });
@@ -433,12 +457,35 @@ export class RegistrationPage {
         this.loadAndMatchLocation();
 
       } else {
-        this.isLoadingLocation = false;
-        console.log('No results found');
+        this.fallbackGeocode(lat, lng);
       }
     }, error => {
-      this.isLoadingLocation = false;
+      this.fallbackGeocode(lat, lng);
       console.error('Error getting geocode', error);
+    });
+  }
+
+  fallbackGeocode(lat: number, lng: number) {
+    const fallbackUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
+    this.http.get(fallbackUrl).subscribe((response: any) => {
+      if (response && response.principalSubdivision) {
+        this.selectedState = response.principalSubdivision;
+        this.selectedDistrict = response.city || response.locality;
+        this.selectedCity = response.locality || response.city;
+        this.Area = response.locality || '';
+        this.Pincode = response.postcode || '';
+
+        this.registrationForm.controls['area'].setValue(this.Area);
+        this.registrationForm.controls['pincode'].setValue(this.Pincode);
+
+        this.loadAndMatchLocation();
+      } else {
+        this.isLoadingLocation = false;
+        console.log('No results found in fallback');
+      }
+    }, err => {
+      this.isLoadingLocation = false;
+      console.error('Error getting fallback geocode', err);
     });
   }
 

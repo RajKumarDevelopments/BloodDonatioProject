@@ -38,6 +38,42 @@ export class SignupPage implements OnInit {
   reshowPassword: boolean = false; Devicetoken: any;
   Devicetoken1: any;
   Email: string = '';
+
+  resendTimer: number = 60;
+  timerInterval: any;
+  canResend: boolean = false;
+
+  startResendTimer() {
+    this.resendTimer = 60;
+    this.canResend = false;
+    clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      this.resendTimer--;
+      if (this.resendTimer <= 0) {
+        this.canResend = true;
+        clearInterval(this.timerInterval);
+      }
+    }, 1000);
+  }
+
+  async listenForOTP() {
+    if ('OTPCredential' in window) {
+      const ac = new AbortController();
+      setTimeout(() => { ac.abort(); }, 60 * 1000);
+      try {
+        const otp: any = await navigator.credentials.get({
+          otp: { transport: ['sms'] },
+          signal: ac.signal
+        } as any);
+        if (otp && otp.code) {
+          this.MobileOTP = otp.code;
+        }
+      } catch (err) {
+        console.log('WebOTP Error:', err);
+      }
+    }
+  }
+
   constructor(private generalservice: GeneralService, public navCtrl: NavController,
     private formBuilder: FormBuilder, public activeRoute: ActivatedRoute, public user: UserService) {
     
@@ -201,6 +237,8 @@ export class SignupPage implements OnInit {
       
       if (data == "SUCCESS") {
         this.OTPFlag = 1;
+        this.startResendTimer();
+        this.listenForOTP();
       }
     })
   }

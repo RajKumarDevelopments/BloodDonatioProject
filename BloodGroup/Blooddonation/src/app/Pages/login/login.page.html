@@ -30,10 +30,16 @@
           </div>
 
           <!-- OTP Input (Mobile = 10 digits) -->
-          <div class="items_center" *ngIf="Mobile?.length === 10">
-            <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-            <input type="tel" autocomplete="one-time-code" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
-          </div>
+          <form (submit)="$event.preventDefault()" *ngIf="Mobile?.length === 10">
+            <div class="items_center">
+              <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
+              <input type="text" inputmode="numeric" autocomplete="one-time-code" name="otp" id="otp" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+            </div>
+            <div class="items_center" *ngIf="OTPFlag === 1" style="margin-top: 5px;">
+              <span *ngIf="!canResend" style="color: gray; font-size: 14px;">Resend OTP in {{ resendTimer }}s</span>
+              <span *ngIf="canResend" class="resend-link" style="color: red; cursor: pointer; text-decoration: underline; font-size: 14px;" (click)="SendOTPToMobile()">Resend OTP</span>
+            </div>
+          </form>
 
           <!-- Password Input (Email login: length > 12) -->
           <div class="items_center" *ngIf="Mobile?.length > 12">
@@ -106,8 +112,10 @@
 
           <div class="items_center">
             <ion-icon name="keypad-outline" class="input_icon"></ion-icon>
-            <input type="tel"
+            <input type="text" inputmode="numeric"
                    autocomplete="one-time-code"
+                   name="forgot-otp"
+                   id="forgot-otp"
                    placeholder="Enter 4-digit OTP"
                    [(ngModel)]="forgotOTP"
                    maxlength="4"
@@ -115,7 +123,8 @@
           </div>
 
           <div class="items_center" style="margin-top: -4%;">
-            <span class="resend-link" (click)="sendForgotPasswordOTP()">Resend OTP</span>
+            <span *ngIf="!forgotCanResend" style="color: gray; font-size: 14px;">Resend OTP in {{ forgotResendTimer }}s</span>
+            <span *ngIf="forgotCanResend" class="resend-link" (click)="sendForgotPasswordOTP()">Resend OTP</span>
           </div>
         </ng-container>
 

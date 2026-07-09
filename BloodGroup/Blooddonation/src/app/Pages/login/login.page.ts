@@ -35,6 +35,58 @@ export class LoginPage implements OnInit {
   showNewPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
+  resendTimer: number = 60;
+  timerInterval: any;
+  canResend: boolean = false;
+
+  forgotResendTimer: number = 60;
+  forgotTimerInterval: any;
+  forgotCanResend: boolean = false;
+
+  startResendTimer() {
+    this.resendTimer = 60;
+    this.canResend = false;
+    clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      this.resendTimer--;
+      if (this.resendTimer <= 0) {
+        this.canResend = true;
+        clearInterval(this.timerInterval);
+      }
+    }, 1000);
+  }
+
+  async listenForOTP() {
+    if ('OTPCredential' in window) {
+      const ac = new AbortController();
+      setTimeout(() => { ac.abort(); }, 60 * 1000);
+      try {
+        const otp: any = await navigator.credentials.get({
+          otp: { transport: ['sms'] },
+          signal: ac.signal
+        } as any);
+        if (otp && otp.code) {
+          this.MobileOTP = otp.code;
+        }
+      } catch (err) {
+        console.log('WebOTP Error:', err);
+      }
+    }
+  }
+
+  startForgotResendTimer() {
+    this.forgotResendTimer = 60;
+    this.forgotCanResend = false;
+    clearInterval(this.forgotTimerInterval);
+    this.forgotTimerInterval = setInterval(() => {
+      this.forgotResendTimer--;
+      if (this.forgotResendTimer <= 0) {
+        this.forgotCanResend = true;
+        clearInterval(this.forgotTimerInterval);
+      }
+    }, 1000);
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private loadingController: LoadingController,
@@ -100,6 +152,8 @@ export class LoginPage implements OnInit {
     this.generalservice.PostData(url, UploadFile).subscribe((data: any) => {
       if (data == "SUCCESS") {
         this.OTPFlag = 1;
+        this.startResendTimer();
+        this.listenForOTP();
       }
     });
   }
@@ -335,6 +389,7 @@ export class LoginPage implements OnInit {
       this.generalservice.PostData(url, uploadFile).subscribe((res: any) => {
         this.forgotOTPFlag = true;
         this.generalservice.presentToast('OTP sent to your email successfully!');
+        this.startForgotResendTimer();
       });
 
 

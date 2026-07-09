@@ -343,6 +343,19 @@ export class ProfiledetailsPage implements OnInit {
 
   openPicker(pickerType: any) {
     this.activePicker = pickerType;
+    if (pickerType === 'lastDonation') {
+      if (this.LastDonationValue && this.LastDonationValue !== 'I Never Donate' && this.LastDonationValue !== 'I Dont Remember' && this.LastDonationValue !== 'I Don’t Remember') {
+        this.date = this.LastDonationValue;
+      } else {
+        this.date = '';
+      }
+    } else if (pickerType === 'dob') {
+      if (this.DOB) {
+        this.date = this.DOB;
+      } else {
+        this.date = '';
+      }
+    }
   }
 
   closePicker() {

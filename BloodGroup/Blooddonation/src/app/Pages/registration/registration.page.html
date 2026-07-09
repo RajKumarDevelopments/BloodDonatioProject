@@ -167,8 +167,8 @@
       <!-- Last Donation Date Picker -->
       <div *ngIf="activePicker === 'lastDonation'">
         <div class="option-buttons ion-padding-horizontal">
-          <ion-button expand="block" fill="outline" (click)="donation('I Never Donate')" color="dark">I Never Donate</ion-button>
-          <ion-button expand="block" fill="outline" (click)="donation('I Dont Remember')" color="dark">I Don’t Remember</ion-button>
+          <ion-button expand="block" [fill]="LastDonationDate === 'I Never Donate' ? 'solid' : 'outline'" [color]="LastDonationDate === 'I Never Donate' ? 'danger' : 'dark'" (click)="donation('I Never Donate')">I Never Donate</ion-button>
+          <ion-button expand="block" [fill]="LastDonationDate === 'I Dont Remember' || LastDonationDate === 'I Don’t Remember' ? 'solid' : 'outline'" [color]="LastDonationDate === 'I Dont Remember' || LastDonationDate === 'I Don’t Remember' ? 'danger' : 'dark'" (click)="donation('I Dont Remember')">I Don’t Remember</ion-button>
         </div>
         
         <div class="divider-text">OR SELECT DATE</div>
