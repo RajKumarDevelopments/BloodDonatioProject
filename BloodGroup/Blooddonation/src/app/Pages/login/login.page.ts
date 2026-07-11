@@ -35,16 +35,16 @@ export class LoginPage implements OnInit {
   showNewPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-  resendTimer: number = 60;
+  resendTimer: number = 30;
   timerInterval: any;
   canResend: boolean = false;
 
-  forgotResendTimer: number = 60;
+  forgotResendTimer: number = 30;
   forgotTimerInterval: any;
   forgotCanResend: boolean = false;
 
   startResendTimer() {
-    this.resendTimer = 60;
+    this.resendTimer = 30;
     this.canResend = false;
     clearInterval(this.timerInterval);
     this.timerInterval = setInterval(() => {
@@ -59,7 +59,7 @@ export class LoginPage implements OnInit {
   async listenForOTP() {
     if ('OTPCredential' in window) {
       const ac = new AbortController();
-      setTimeout(() => { ac.abort(); }, 60 * 1000);
+      setTimeout(() => { ac.abort(); }, 30 * 1000);
       try {
         const otp: any = await navigator.credentials.get({
           otp: { transport: ['sms'] },
@@ -75,7 +75,7 @@ export class LoginPage implements OnInit {
   }
 
   startForgotResendTimer() {
-    this.forgotResendTimer = 60;
+    this.forgotResendTimer = 30;
     this.forgotCanResend = false;
     clearInterval(this.forgotTimerInterval);
     this.forgotTimerInterval = setInterval(() => {
@@ -142,7 +142,6 @@ export class LoginPage implements OnInit {
   }
 
   SendOTPToMobile() {
-    debugger
     this.OTP = Math.floor(1000 + Math.random() * 9000);
     console.log(this.OTP);
     var UploadFile = new FormData();
@@ -233,7 +232,6 @@ export class LoginPage implements OnInit {
   }
 
   login() {
-    debugger
     this.submitAttempt = true;
     this.isSubmitting = true;
     this.generalservice.present('Logging in, please wait...');
@@ -267,7 +265,6 @@ export class LoginPage implements OnInit {
   // ─── Forgot Password Flow ───────────────────────────────────────────────────
 
   openForgotPassword() {
-    debugger
     let checkData = new FormData();
     checkData.append("Mobile", this.Mobile);   // SP both mobile/email check chesthundi
 
@@ -302,7 +299,6 @@ export class LoginPage implements OnInit {
 
 
   sendForgotPasswordOTP1() {
-    debugger;
 
     if (!this.forgotEmail || !this.forgotEmail.includes('@')) {
       this.generalservice.presentToast('Please enter a valid email address.');
@@ -328,7 +324,6 @@ export class LoginPage implements OnInit {
     });
   }
   sendForgotPasswordOTP2() {
-    debugger;
 
     if (!this.forgotEmail || !this.forgotEmail.includes('@')) {
       this.generalservice.presentToast('Please enter a valid email address.');
@@ -355,7 +350,6 @@ export class LoginPage implements OnInit {
     });
   }
   sendForgotPasswordOTP() {
-    debugger;
 
     if (!this.forgotEmail || !this.forgotEmail.includes('@')) {
       this.generalservice.presentToast('Please enter a valid email address.');
@@ -401,7 +395,6 @@ export class LoginPage implements OnInit {
 
 
   verifyForgotOTP() {
-    debugger
     if (!this.forgotOTP) {
       this.generalservice.presentToast('Please enter the OTP.');
       return;
@@ -427,7 +420,6 @@ export class LoginPage implements OnInit {
    * Resets the password by calling the API with the verified email and new password.
    */
   resetPassword() {
-    debugger
     if (!this.newPassword || this.newPassword.length < 6) {
       this.generalservice.presentToast('Password must be at least 6 characters.');
       return;

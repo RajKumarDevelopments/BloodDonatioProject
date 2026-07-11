@@ -54,62 +54,7 @@ export class SearchdonorsPage implements OnInit {
       this.general.presentToast("something went wrong");
     })
   }
-  //GetStates() {
-    
-  //  var obj = [{
-  //    RegId: 1,
-  //    TokenId: "4A9493F9-8CD2-42F8-90ED-49C6B28DC544"
-  //  }]
-  //  var UploadFile = new FormData();
-  //  UploadFile.append("Param", JSON.stringify(obj));
-  //  UploadFile.append("Flag", "4");
-  //  var url = "api/BG/StatesMaster_crud";
-  //  this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      
-  //    this.States = data;
-  //    this.States1 = data;
-  //  }, err => {
-  //    this.general.presentToast("something went wrong");
-  //  })
-  //}
-  //GetDistricts() {
-    
-  //  var obj = [{
-  //    RegId: 1,
-  //    TokenId: "4A9493F9-8CD2-42F8-90ED-49C6B28DC544",
-  //    StateId: this.StateID
-  //  }]
-  //  var UploadFile = new FormData();
-  //  UploadFile.append("Param", JSON.stringify(obj));
-  //  UploadFile.append("Flag", "5");
-  //  var url = "api/BG/DistrictMaster_crud";
-  //  this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      
-  //    this.Districts = data;
-  //    this.Districts1 = data;
-  //  }, err => {
-  //    this.general.presentToast("something went wrong");
-  //  })
-  //}
-  //GetCities() {
-    
-  //  var obj = [{
-  //    RegId: 1,
-  //    TokenId: "4A9493F9-8CD2-42F8-90ED-49C6B28DC544",
-  //    DistrictId: this.DistrictID
-  //  }]
-  //  var UploadFile = new FormData();
-  //  UploadFile.append("Param", JSON.stringify(obj));
-  //  UploadFile.append("Flag", "5");
-  //  var url = "api/BG/CitiesMaster_Crud";
-  //  this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      
-  //    this.Cities = data;
-  //    this.Cities1 = data;
-  //  }, err => {
-  //    this.general.presentToast("something went wrong");
-  //  })
-  //}
+  
   GetPincodes() {
         
     var url = "api/BG/Get_PincodeDropdown";
@@ -122,45 +67,6 @@ export class SearchdonorsPage implements OnInit {
     })
   }
 
-  //SearchStates() {
-    
-  //  const searchQuery = this.searchState.trim().toLowerCase();
-  //  if (searchQuery === '') {
-  //    this.States = this.States1;
-  //  } else {
-  //    this.States = this.States1.filter((BG: any) => {
-  //      return (
-  //        BG.StateName.toLowerCase().includes(searchQuery)
-  //      );
-  //    });
-  //  }
-  //}
-  //SearchDistricts() {
-    
-  //  const searchQuery = this.searchDistrict.trim().toLowerCase();
-  //  if (searchQuery === '') {
-  //    this.Districts = this.Districts1;
-  //  } else {
-  //    this.Districts = this.Districts1.filter((BG: any) => {
-  //      return (
-  //        BG.DistrictName.toLowerCase().includes(searchQuery)
-  //      );
-  //    });
-  //  }
-  //}
-  //SearchCities() {
-    
-  //  const searchQuery = this.searchCity.trim().toLowerCase();
-  //  if (searchQuery === '') {
-  //    this.Cities = this.Cities1;
-  //  } else {
-  //    this.Cities = this.Cities1.filter((BG: any) => {
-  //      return (
-  //        BG.CityName.toLowerCase().includes(searchQuery)
-  //      );
-  //    });
-  //  }
-  //}
   SearchPincodes() {
     
     const searchQuery = this.searchPincode.trim().toLowerCase();

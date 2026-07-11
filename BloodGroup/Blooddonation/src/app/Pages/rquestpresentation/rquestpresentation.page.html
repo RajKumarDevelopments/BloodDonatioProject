@@ -296,36 +296,6 @@
     </ion-modal>
   </div>
 
-  <!-- Custom Bottom Drawer / Picker System -->
-  <div class="drawer-overlay" [class.active]="activePicker !== null" (click)="closePicker()"></div>
-  
-  <div class="bottom-drawer" [class.active]="activePicker !== null">
-    <div class="drawer-header">
-      <div class="drawer-title">
-        Select Venue Type
-      </div>
-      <button class="drawer-close" (click)="closePicker()">Close</button>
-    </div>
-    
-    <div class="drawer-content">
-      <div *ngIf="activePicker === 'venueType'">
-        <div style="max-height: 400px; overflow-y: auto;">
-          <ion-list lines="full">
-            <ng-container *ngFor="let obj of venueslist">
-              <ion-item *ngIf="obj.Status == 1" (click)="selectPlace(obj)" detail="false" class="drawer-item" button>
-                <ion-label>{{obj.WorkPlace}}</ion-label>
-                <ion-icon name="checkmark-circle" slot="end" *ngIf="WorkID === obj.WorkID" style="color: red;"></ion-icon>
-              </ion-item>
-            </ng-container>
-            <ion-item *ngIf="!venueslist || venueslist.length === 0" class="ion-text-center">
-              <ion-label color="medium">No venue types found</ion-label>
-            </ion-item>
-          </ion-list>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </ion-content>
 
 <!-- Footer for Form Mode -->
@@ -344,4 +314,34 @@
       </div>
     </ion-col>
   </ion-row>
+</div>
+
+<!-- Custom Bottom Drawer / Picker System -->
+<div class="drawer-overlay" [class.active]="activePicker !== null" (click)="closePicker()"></div>
+
+<div class="bottom-drawer" [class.active]="activePicker !== null">
+  <div class="drawer-header">
+    <div class="drawer-title">
+      Select Venue Type
+    </div>
+    <button class="drawer-close" (click)="closePicker()">Close</button>
+  </div>
+  
+  <div class="drawer-content">
+    <div *ngIf="activePicker === 'venueType'">
+      <div style="max-height: 400px; overflow-y: auto;">
+        <ion-list lines="full">
+          <ng-container *ngFor="let obj of venueslist">
+            <ion-item *ngIf="obj.Status == 1" (click)="selectPlace(obj)" detail="false" class="drawer-item" button>
+              <ion-label>{{obj.WorkPlace}}</ion-label>
+              <ion-icon name="checkmark-circle" slot="end" *ngIf="WorkID === obj.WorkID" style="color: red;"></ion-icon>
+            </ion-item>
+          </ng-container>
+          <ion-item *ngIf="!venueslist || venueslist.length === 0" class="ion-text-center">
+            <ion-label color="medium">No venue types found</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </div>
 </div>

@@ -39,12 +39,12 @@ export class SignupPage implements OnInit {
   Devicetoken1: any;
   Email: string = '';
 
-  resendTimer: number = 60;
+  resendTimer: number = 30;
   timerInterval: any;
   canResend: boolean = false;
 
   startResendTimer() {
-    this.resendTimer = 60;
+    this.resendTimer = 30;
     this.canResend = false;
     clearInterval(this.timerInterval);
     this.timerInterval = setInterval(() => {
@@ -59,7 +59,7 @@ export class SignupPage implements OnInit {
   async listenForOTP() {
     if ('OTPCredential' in window) {
       const ac = new AbortController();
-      setTimeout(() => { ac.abort(); }, 60 * 1000);
+      setTimeout(() => { ac.abort(); }, 30 * 1000);
       try {
         const otp: any = await navigator.credentials.get({
           otp: { transport: ['sms'] },
