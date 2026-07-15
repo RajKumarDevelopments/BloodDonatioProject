@@ -9,7 +9,11 @@ import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { PermissionService } from '../../Services/permission/permission.service';
 import { GeolocationserviceService } from '../../Services/locationservice/geolocationservice.service'
 import { Platform, AlertController } from '@ionic/angular';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Capacitor } from '@capacitor/core';
+import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
 
+declare var google: any;
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.page.html',
@@ -149,7 +153,8 @@ export class RegistrationPage {
     public general: GeneralService,
     public navCtrl: NavController,
     public activeRoute: ActivatedRoute,
-    public http: HttpClient
+    public http: HttpClient,
+    private locationAccuracy: LocationAccuracy
   ) {
     this.registrationForm = this.formBuilder.group({
       firstName: ['', [Validators.maxLength(50), Validators.minLength(3), Validators.required, Validators.pattern(/^[a-zA-Z]+$/), this.restrictedNameValidator]],
@@ -201,126 +206,77 @@ export class RegistrationPage {
   }
 
   ngOnInit() {
-    this.checkAndGetLocation();
+    // Only fetch location if not already fetched
+    if (!this.Pincode) {
+      this.GetCurrentLocation(false);
+    }
     this.GetBloodGroups();
     this.GetStates();
   }
 
   async GetCurrentLocation(forceOverwrite: boolean = false) {
+    if (!forceOverwrite && this.Pincode) return;
     try {
-      const permission = await Geolocation.checkPermissions();
-      if (permission.location !== 'granted') {
-        const request = await Geolocation.requestPermissions();
-        if (request.location !== 'granted') {
-          return;
-        }
-      }
-
+      this.isLoadingLocation = true;
       if (forceOverwrite) {
         this.general.present();
       }
-
+      
       const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true
+        timeout: 10000,
+        enableHighAccuracy: true,
+        maximumAge: 0
       });
-
+      
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;
       
       if (forceOverwrite) {
         this.general.dismiss();
       }
-      this.getCityAndArea(this.latitude, this.longitude);
+      this.getGeoLocation(this.latitude, this.longitude, forceOverwrite);
       
       if (forceOverwrite) {
-        this.general.presentToast("Location fetched from GPS!");
+        this.general.presentToast("Location fetched successfully!");
       }
-    } catch (error) {
-      if (forceOverwrite) {
-        this.general.dismiss();
-        this.general.presentToast("Error getting location. Please check GPS settings.");
-      }
-      console.error('Location error', error);
-    }
-  }
-
-  async checkAndGetLocation() {
-    try {
-      this.isLoadingLocation = true;
-      // Silently try to get current position (like Google Maps does)
-      const position = await Geolocation.getCurrentPosition({
-        timeout: 3000,
-        enableHighAccuracy: false
-      });
-
-      // Success! Location is ON - use it automatically
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
-      console.log('Location detected:', position);
-      this.getCityAndArea(this.latitude, this.longitude);
-
     } catch (error: any) {
       this.isLoadingLocation = false;
-      console.log('Location not available, asking user...', error);
-
-      // Location is OFF or denied - ask user like Google does
+      if (forceOverwrite) {
+        this.general.dismiss();
+      }
+      console.log('Location not available, showing custom prompt...', error);
       this.showLocationPermissionAlert();
     }
   }
 
   async showLocationPermissionAlert() {
     const alert = await this.alertController.create({
-      header: 'Use your location',
-      message: 'This app wants to use your location to auto-fill address details.',
+      header: 'Location Access Needed',
+      message: 'We need your location to automatically fill in your address details. Please enable Location Services in your device settings. You can also skip this and enter your address manually.',
       buttons: [
         {
-          text: 'No, thanks',
+          text: 'Skip',
           role: 'cancel',
           handler: () => {
-            console.log('User declined location - will enter manually');
-            // Simply skip - user will fill form manually
+            // User skipped, allow manual entry without blocking
           }
         },
         {
-          text: 'OK',
-          handler: async () => {
-            await this.tryGetLocation();
+          text: 'Go to Settings',
+          handler: () => {
+            this.openLocationSettings();
           }
         }
       ]
     });
-
     await alert.present();
   }
 
-  async tryGetLocation() {
-    try {
-      this.isLoadingLocation = true;
-
-      const permission = await Geolocation.checkPermissions();
-      if (permission.location !== 'granted') {
-        const request = await Geolocation.requestPermissions();
-        if (request.location !== 'granted') {
-          this.isLoadingLocation = false;
-          this.general.presentToast('Location permission denied. Please enter details manually.');
-          return;
-        }
-      }
-
-      const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true
-      });
-
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
-      console.log('Location obtained:', position);
-      this.getCityAndArea(this.latitude, this.longitude);
-
-    } catch (error) {
-      this.isLoadingLocation = false;
-      console.error('Could not get location:', error);
-      this.general.presentToast('Could not get location. Please enter details manually.');
-    }
+  openLocationSettings() {
+    NativeSettings.open({ 
+      optionAndroid: AndroidSettings.Location,
+      optionIOS: IOSSettings.LocationServices 
+    });
   }
 
   selectGender(value: string) {
@@ -431,37 +387,71 @@ export class RegistrationPage {
     this.Pincode = val;
     this.registrationForm.controls['pincode'].setValue(val);
   }
+  
+  getGeoLocation(lat: any, lng: any, forceOverwrite: boolean = false) {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
-  getCityAndArea(lat: number, lng: number) {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBPFXmwHMaoN_CVZ2K1w2kMLm5qpSXD_s8`;
+    geocoder.geocode({ 'location': latlng }, (results: any, status: any) => {
+      if (forceOverwrite) {
+        this.general.dismiss();
+      }
+      
+      if (status === 'OK' && results[0]) {
+        const result = results[0];
+        const components = result.address_components;
 
-    this.http.get(url).subscribe((response: any) => {
-      if (response && response.results && response.results.length > 0) {
-        const result = response.results[0];
+        // Reset IDs if manually refreshing
+        if (forceOverwrite) {
+          this.StateID = 0;
+          this.DistrictID = 0;
+          this.CityID = 0;
+          
+          this.selectedState = this.getAddressComponent(components, 'administrative_area_level_1');
+          this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') || 
+                                   this.getAddressComponent(components, 'administrative_area_level_2');
+          this.selectedCity = this.getAddressComponent(components, 'locality') || 
+                               this.getAddressComponent(components, 'sublocality_level_1');
+          this.Area = this.getAddressComponent(components, 'sublocality') || 
+                      this.getAddressComponent(components, 'sublocality_level_1');
+          this.Pincode = this.getAddressComponent(components, 'postal_code');
+          
+          // Update form immediately
+          this.registrationForm.controls['area'].setValue(this.Area);
+          this.registrationForm.controls['pincode'].setValue(this.Pincode);
+          
+          this.general.presentToast("Location fetched from GPS!");
+        } else {
+          // Automatic fetch - only set if empty
+          if (!this.selectedState) this.selectedState = this.getAddressComponent(components, 'administrative_area_level_1');
+          if (!this.selectedDistrict) {
+            this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') || 
+                                   this.getAddressComponent(components, 'administrative_area_level_2');
+          }
+          if (!this.selectedCity) {
+            this.selectedCity = this.getAddressComponent(components, 'locality') || 
+                                 this.getAddressComponent(components, 'sublocality_level_1');
+          }
+          if (!this.Area) {
+            this.Area = this.getAddressComponent(components, 'sublocality') || 
+                        this.getAddressComponent(components, 'sublocality_level_1');
+            this.registrationForm.controls['area'].setValue(this.Area);
+          }
+          if (!this.Pincode) {
+            this.Pincode = this.getAddressComponent(components, 'postal_code');
+            this.registrationForm.controls['pincode'].setValue(this.Pincode);
+          }
+        }
 
-        // Extract location data with fallbacks
-        this.selectedState = this.getAddressComponent(result.address_components, 'administrative_area_level_1');
-        this.selectedDistrict = this.getAddressComponent(result.address_components, 'administrative_area_level_3') ||
-          this.getAddressComponent(result.address_components, 'administrative_area_level_2');
-        this.selectedCity = this.getAddressComponent(result.address_components, 'locality') ||
-          this.getAddressComponent(result.address_components, 'sublocality_level_1');
-        this.Area = this.getAddressComponent(result.address_components, 'sublocality') ||
-          this.getAddressComponent(result.address_components, 'sublocality_level_1');
-        this.Pincode = this.getAddressComponent(result.address_components, 'postal_code');
-
-        // Update form immediately
-        this.registrationForm.controls['area'].setValue(this.Area);
-        this.registrationForm.controls['pincode'].setValue(this.Pincode);
-
-        // Load and match states
+        // Now that fields are populated, trigger matching
         this.loadAndMatchLocation();
 
       } else {
-        this.fallbackGeocode(lat, lng);
+        if (forceOverwrite) {
+          this.general.presentToast("Could not determine address from location.");
+        }
+        console.error('Geocoder failed due to: ' + status);
       }
-    }, error => {
-      this.fallbackGeocode(lat, lng);
-      console.error('Error getting geocode', error);
     });
   }
 

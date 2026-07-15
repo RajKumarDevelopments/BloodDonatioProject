@@ -262,7 +262,7 @@ span {
 }
 
 .body_content {
-  height: 65vh;
+  height: auto;
 }
 
 .top_header {
@@ -270,7 +270,8 @@ span {
   border-bottom: none;
   background-color: #ffffff;
   position: relative;
-  height: 25vh;
+  height: auto;
+  padding-bottom: 15px;
   border-radius: 0px 0px 25px 25px;
   /*padding: 10px;*/
 }
@@ -331,7 +332,7 @@ hr {
 .swiper-container {
   width: 100%;
   height: 100%;
-  margin: 10% 0%;
+  margin: 2% 0%;
 }
 
 .swiper-slide {
@@ -358,10 +359,10 @@ hr {
 swiper-container {
   width: 96%;
   height: 200px;
-  padding: 15px 0;
-  border-radius: 25px;
+  padding: 5px 0;
+  border-radius: 15px;
   overflow: hidden;
-  margin-top: 10%;
+  margin-top: 2%;
 }
 
 .swiper-slide {
@@ -387,7 +388,7 @@ swiper-container {
   display: flex;
   align-items: center;
   justify-content: center;*/
-  border-radius: 10px;
+  border-radius: 15px;
   height: 100%;
   overflow: hidden;
 }
@@ -395,9 +396,8 @@ swiper-container {
 .image-container img {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
-  margin-top: 1rem;
 }
 
 .parent_not {

@@ -174,7 +174,7 @@ export class LoginPage implements OnInit {
           window.location.reload();
         } else {
           this.navCtrl.navigateForward(['/signup']);
-          this.generalservice.presentToast('Invalid email or mobile. Please register.');
+          this.generalservice.presentToast('Invalid Mobile number or User Ddoesnt not exit. Click back to rety or Click Signup if you are a new user');
         }
       }, (err: any) => {
         this.isSubmitting = false;
@@ -215,7 +215,7 @@ export class LoginPage implements OnInit {
           });
         } else {
           this.navCtrl.navigateForward(['/signup']);
-          this.generalservice.presentToast('Invalid email or mobile. Please register.');
+          this.generalservice.presentToast('Invalid Mobile number or User Ddoesnt not exit. Click back to rety or Click Signup if you are a new user');
         }
       }, (err: any) => {
         this.isSubmitting = false;
@@ -248,7 +248,7 @@ export class LoginPage implements OnInit {
         window.location.reload();
       } else {
         this.navCtrl.navigateForward(['/signup']);
-        this.generalservice.presentToast('Invalid email or password. Please register.');
+        this.generalservice.presentToast('Invalid Mobile number or User Ddoesnt not exit. Click back to rety or Click Signup if you are a new user');
       }
     }, (err: any) => {
       this.isSubmitting = false;

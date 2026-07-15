@@ -150,12 +150,8 @@ export class DonordetailsPage implements OnInit {
 
   ApplyFilter() {
     var UploadFile = new FormData()
-    UploadFile.append("Param1", this.State);
-    UploadFile.append("Param2", this.District);
-    UploadFile.append("Param3", this.City);
-    UploadFile.append("Param4", this.Pincode);
-    UploadFile.append("Param5", this.BloodGroup);
-    UploadFile.append("Param6", "");
+    UploadFile.append("Param1", this.Pincode);
+    UploadFile.append("Param2", this.BloodGroup);
     var url = "api/BG/Get_Searchdetails";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.FilterData1 = Array.isArray(data) ? data : [];

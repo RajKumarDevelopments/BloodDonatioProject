@@ -6,7 +6,9 @@ import { GeneralService } from '../../Services/Generalservice/generalservice.ser
 import { ActivatedRoute } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
-
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Capacitor } from '@capacitor/core';
+import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
 @Component({
   selector: 'app-donor-registration',
   templateUrl: './donor-registration.page.html',
@@ -127,7 +129,8 @@ export class DonorRegistrationPage implements OnInit {
     public general: GeneralService,
     public navCtrl: NavController,
     public activeRoute: ActivatedRoute,
-    public http: HttpClient
+    public http: HttpClient,
+    private locationAccuracy: LocationAccuracy
   ) {
     this.registrationForm = this.formBuilder.group({
       firstName: ['', [Validators.maxLength(50), Validators.minLength(3), Validators.required, Validators.pattern(/^[a-zA-Z]+$/), this.restrictedNameValidator]],
@@ -169,80 +172,64 @@ export class DonorRegistrationPage implements OnInit {
   }
 
   ngOnInit() {
-    this.checkAndGetLocation();
+    if (!this.Pincode) {
+      this.GetCurrentLocation(false);
+    }
     this.GetBloodGroups();
     this.GetStates();
   }
 
   async GetCurrentLocation(forceOverwrite: boolean = false) {
-    if (forceOverwrite) {
-      this.general.present();
-    }
-    try {
-      const permission = await Geolocation.checkPermissions();
-      if (permission.location !== 'granted') {
-        const request = await Geolocation.requestPermissions();
-        if (request.location !== 'granted') {
-          if (forceOverwrite) this.general.dismiss();
-          return;
-        }
-      }
-
-      const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true
-      });
-
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
-      
-      if (forceOverwrite) {
-        this.general.dismiss();
-      }
-      this.getCityAndArea(this.latitude, this.longitude);
-      
-      if (forceOverwrite) {
-        this.general.presentToast("Location fetched from GPS!");
-      }
-    } catch (error) {
-      if (forceOverwrite) {
-        this.general.dismiss();
-        this.general.presentToast("Error getting location. Please check GPS settings.");
-      }
-      console.error('Location error', error);
-    }
-  }
-
-  async checkAndGetLocation() {
+    if (!forceOverwrite && this.Pincode) return;
     try {
       this.isLoadingLocation = true;
+      if (forceOverwrite) {
+        this.general.present();
+      }
+      
       const position = await Geolocation.getCurrentPosition({
-        timeout: 3000,
-        enableHighAccuracy: false
+        timeout: 10000,
+        enableHighAccuracy: true,
+        maximumAge: 0
       });
-
+      
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;
+      
+      if (forceOverwrite) {
+        this.general.dismiss();
+      }
       this.getCityAndArea(this.latitude, this.longitude);
-
+      
+      if (forceOverwrite) {
+        this.general.presentToast("Location fetched successfully!");
+      }
     } catch (error: any) {
       this.isLoadingLocation = false;
+      if (forceOverwrite) {
+        this.general.dismiss();
+      }
+      console.log('Location not available, showing custom prompt...', error);
       this.showLocationPermissionAlert();
     }
   }
 
   async showLocationPermissionAlert() {
     const alert = await this.alertController.create({
-      header: 'Use your location',
-      message: 'This app wants to use your location to auto-fill address details.',
+      header: 'Location Access Needed',
+      message: 'We need your location to automatically fill in your address details. Please enable Location Services in your device settings. You can also skip this and enter your address manually.',
       buttons: [
         {
-          text: 'No, thanks',
-          role: 'cancel'
+          text: 'Skip',
+          role: 'cancel',
+          handler: () => {
+            // User skipped, allow manual entry without blocking
+          }
         },
         {
-          text: 'OK',
-          handler: async () => {
-            await this.tryGetLocation();
+          text: 'Go to Settings',
+          handler: () => {
+            this.openLocationSettings();
           }
         }
       ]
@@ -250,21 +237,11 @@ export class DonorRegistrationPage implements OnInit {
     await alert.present();
   }
 
-  async tryGetLocation() {
-    try {
-      this.isLoadingLocation = true;
-      const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true
-      });
-
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
-      this.getCityAndArea(this.latitude, this.longitude);
-
-    } catch (error) {
-      this.isLoadingLocation = false;
-      this.general.presentToast('Could not get location. Please enter details manually.');
-    }
+  openLocationSettings() {
+    NativeSettings.open({ 
+      optionAndroid: AndroidSettings.Location,
+      optionIOS: IOSSettings.LocationServices 
+    });
   }
 
   selectGender(value: string) {

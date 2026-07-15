@@ -332,7 +332,7 @@
       <div style="max-height: 400px; overflow-y: auto;">
         <ion-list lines="full">
           <ng-container *ngFor="let obj of venueslist">
-            <ion-item *ngIf="obj.Status == 1" (click)="selectPlace(obj)" detail="false" class="drawer-item" button>
+            <ion-item (click)="selectPlace(obj)" detail="false" class="drawer-item" button>
               <ion-label>{{obj.WorkPlace}}</ion-label>
               <ion-icon name="checkmark-circle" slot="end" *ngIf="WorkID === obj.WorkID" style="color: red;"></ion-icon>
             </ion-item>

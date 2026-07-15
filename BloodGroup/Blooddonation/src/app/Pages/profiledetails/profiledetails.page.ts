@@ -1,10 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController, LoadingController, AlertController, IonModal } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, IonModal, Platform } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
 import { HttpClient } from '@angular/common/http';
 import { Geolocation } from '@capacitor/geolocation';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Capacitor } from '@capacitor/core';
+import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
 
 declare var google: any;
 
@@ -16,6 +19,8 @@ declare var google: any;
 export class ProfiledetailsPage implements OnInit {
   activePicker: 'dob' | 'gender' | 'blood' | 'lastDonation' | null = null;
   isSubmitting: boolean = false;
+  initialStateStr: string = '';
+  backButtonSubscription: any;
 
   ProfileForm: FormGroup;
   UserDetails: any;
@@ -23,7 +28,7 @@ export class ProfiledetailsPage implements OnInit {
   UserName: any;
   Email: any;
   Mobile: any;
-  
+
   // Profile Variables
   Gender: any;
   selectedGender: any;
@@ -34,7 +39,7 @@ export class ProfiledetailsPage implements OnInit {
   Age: any;
   Weight: any;
   LastDonationValue: any;
-  
+
   // Location Variables
   selectedState: any;
   selectedDistrict: any;
@@ -109,10 +114,12 @@ export class ProfiledetailsPage implements OnInit {
     public navCtrl: NavController,
     private alertController: AlertController,
     public datePipe: DatePipe,
-    private http: HttpClient
+    private http: HttpClient,
+    private locationAccuracy: LocationAccuracy,
+    private platform: Platform
   ) {
     this.TodayDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    
+
     // Load User Data
     const data = localStorage.getItem("UserDetails");
     if (data) {
@@ -142,7 +149,7 @@ export class ProfiledetailsPage implements OnInit {
       this.DOB = u.DOB;
       this.Weight = u.Weight;
       this.LastDonationValue = u.Lastdonatedate;
-      
+
       this.selectedState = u.StateName || u.newStatename;
       this.selectedDistrict = u.DistrictName || u.newDistrictname;
       this.selectedCity = u.CityName || u.newCityname;
@@ -152,11 +159,13 @@ export class ProfiledetailsPage implements OnInit {
       this.Area = u.Area;
       this.Pincode = u.Pincode;
       this.UserAddress = u.UserAddress;
-      
+
       this.Rolestatus = u.Rolestatus;
       this.Availablestatus = u.Availablestatus;
       this.Activestatus = u.Status;
     }
+
+    this.captureInitialState();
   }
 
   ngOnInit() {
@@ -164,6 +173,82 @@ export class ProfiledetailsPage implements OnInit {
     // Only fetch current location if it's a new profile or location is missing
     if (!this.selectedState || !this.selectedDistrict || !this.selectedCity) {
       this.GetCurrentLocation();
+    }
+  }
+
+  ionViewDidEnter() {
+    this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10, (processNextHandler) => {
+      this.checkUnsavedChangesAndGoBack(processNextHandler);
+    });
+  }
+
+  ionViewWillLeave() {
+    if (this.backButtonSubscription) {
+      this.backButtonSubscription.unsubscribe();
+    }
+  }
+
+  captureInitialState() {
+    this.initialStateStr = this.getCurrentState();
+  }
+
+  getCurrentState() {
+    return JSON.stringify({
+      form: this.ProfileForm.value,
+      gender: this.Gender || '',
+      bloodType: this.BloodType || '',
+      dob: this.DOB || '',
+      lastDonation: this.LastDonationValue || '',
+      state: this.selectedState || '',
+      district: this.selectedDistrict || '',
+      city: this.selectedCity || '',
+      area: this.Area || '',
+      pincode: this.Pincode || '',
+      role: !!this.Rolestatus,
+      available: !!this.Availablestatus
+    });
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.initialStateStr !== this.getCurrentState();
+  }
+
+  goBack() {
+    this.checkUnsavedChangesAndGoBack();
+  }
+
+  async checkUnsavedChangesAndGoBack(processNextHandler?: any) {
+    if (this.hasUnsavedChanges()) {
+      const alert = await this.alertController.create({
+        header: 'Unsaved Changes',
+        message: 'You have unsaved changes. Do you want to save them before leaving this page?',
+        buttons: [
+          {
+            text: 'Discard',
+            role: 'cancel',
+            handler: () => {
+              if (processNextHandler) {
+                processNextHandler();
+              } else {
+                this.navCtrl.navigateBack('/home');
+              }
+            }
+          },
+          {
+            text: 'Save',
+            handler: () => {
+              this.UserRegistration(this.ProfileForm.value);
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      if (processNextHandler) {
+        processNextHandler();
+      } else {
+        this.navCtrl.navigateBack('/home');
+      }
     }
   }
 
@@ -178,7 +263,7 @@ export class ProfiledetailsPage implements OnInit {
         this.BloodGroups = data;
       } else if (data && typeof data === 'object' && Array.isArray(data.data)) {
         this.BloodGroups = data.data;
-      } else {       
+      } else {
         this.BloodGroups = [
           { BLGId: 1, BLGName: 'A+' }, { BLGId: 2, BLGName: 'A-' },
           { BLGId: 3, BLGName: 'B+' }, { BLGId: 4, BLGName: 'B-' },
@@ -199,33 +284,59 @@ export class ProfiledetailsPage implements OnInit {
   }
 
   async GetCurrentLocation(forceOverwrite: boolean = false) {
-    if (forceOverwrite) {
-      this.general.present();
-    }
+    if (!forceOverwrite && this.Pincode) return;
     try {
-      const permission = await Geolocation.checkPermissions();
-      if (permission.location !== 'granted') {
-        const request = await Geolocation.requestPermissions();
-        if (request.location !== 'granted') {
-          if (forceOverwrite) this.general.dismiss();
-          return;
-        }
+      if (forceOverwrite) {
+        this.general.present();
       }
 
       const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true
+        timeout: 10000,
+        enableHighAccuracy: true,
+        maximumAge: 0
       });
 
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;
+
       this.getGeoLocation(this.latitude, this.longitude, forceOverwrite);
-    } catch (error) {
+    } catch (error: any) {
       if (forceOverwrite) {
         this.general.dismiss();
-        this.general.presentToast("Error getting location. Please check GPS settings.");
       }
-      console.error('Location error', error);
+      console.log('Location not available, showing custom prompt...', error);
+      this.showLocationPermissionAlert();
     }
+  }
+
+  async showLocationPermissionAlert() {
+    const alert = await this.alertController.create({
+      header: 'Location Access Needed',
+      message: 'We need your location to automatically fill in your address details. Please enable Location Services in your device settings. You can also skip this and enter your address manually.',
+      buttons: [
+        {
+          text: 'Skip',
+          role: 'cancel',
+          handler: () => {
+            // User skipped, allow manual entry without blocking
+          }
+        },
+        {
+          text: 'Go to Settings',
+          handler: () => {
+            this.openLocationSettings();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  openLocationSettings() {
+    NativeSettings.open({
+      optionAndroid: AndroidSettings.Location,
+      optionIOS: IOSSettings.LocationServices
+    });
   }
 
   getGeoLocation(lat: any, lng: any, forceOverwrite: boolean = false) {
@@ -236,7 +347,7 @@ export class ProfiledetailsPage implements OnInit {
       if (forceOverwrite) {
         this.general.dismiss();
       }
-      
+
       if (status === 'OK' && results[0]) {
         const result = results[0];
         const components = result.address_components;
@@ -246,31 +357,31 @@ export class ProfiledetailsPage implements OnInit {
           this.StateID = 0;
           this.DistrictID = 0;
           this.CityID = 0;
-          
+
           this.selectedState = this.getAddressComponent(components, 'administrative_area_level_1');
-          this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') || 
-                                   this.getAddressComponent(components, 'administrative_area_level_2');
-          this.selectedCity = this.getAddressComponent(components, 'locality') || 
-                               this.getAddressComponent(components, 'sublocality_level_1');
-          this.Area = this.getAddressComponent(components, 'sublocality') || 
-                      this.getAddressComponent(components, 'sublocality_level_1');
+          this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') ||
+            this.getAddressComponent(components, 'administrative_area_level_2');
+          this.selectedCity = this.getAddressComponent(components, 'locality') ||
+            this.getAddressComponent(components, 'sublocality_level_1');
+          this.Area = this.getAddressComponent(components, 'sublocality') ||
+            this.getAddressComponent(components, 'sublocality_level_1');
           this.Pincode = this.getAddressComponent(components, 'postal_code');
-          
+
           this.general.presentToast("Location fetched from GPS!");
         } else {
           // Automatic fetch - only set if empty
           if (!this.selectedState) this.selectedState = this.getAddressComponent(components, 'administrative_area_level_1');
           if (!this.selectedDistrict) {
-            this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') || 
-                                   this.getAddressComponent(components, 'administrative_area_level_2');
+            this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') ||
+              this.getAddressComponent(components, 'administrative_area_level_2');
           }
           if (!this.selectedCity) {
-            this.selectedCity = this.getAddressComponent(components, 'locality') || 
-                                 this.getAddressComponent(components, 'sublocality_level_1');
+            this.selectedCity = this.getAddressComponent(components, 'locality') ||
+              this.getAddressComponent(components, 'sublocality_level_1');
           }
           if (!this.Area) {
-            this.Area = this.getAddressComponent(components, 'sublocality') || 
-                      this.getAddressComponent(components, 'sublocality_level_1');
+            this.Area = this.getAddressComponent(components, 'sublocality') ||
+              this.getAddressComponent(components, 'sublocality_level_1');
           }
           if (!this.Pincode) this.Pincode = this.getAddressComponent(components, 'postal_code');
         }
