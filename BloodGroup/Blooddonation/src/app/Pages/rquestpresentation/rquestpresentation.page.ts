@@ -1431,15 +1431,12 @@ export class RquestpresentationPage implements OnInit {
     });
   }
 
-
-
-
   sendnotification(Pincode: any) {
-
     const targetPincode = Pincode;
     const path = "eligibilitycriteria";
-
-    const message = `We are excited to invite ${this.UserDetails[0].FullName} to a blood donation presentation at ${this.selectedPlace}. Your presence can help save lives.`;
+    const message = `New presentation request in your area.
+    Someone nearby is looking to organise a Let's Help session.
+    Check the Leaders page → Organise a Presentation → Presentations Near You to view details and accept.`;
 
     // Filter leaders by PINCODE
     const matchedLeaders = this.leadersonly.filter(

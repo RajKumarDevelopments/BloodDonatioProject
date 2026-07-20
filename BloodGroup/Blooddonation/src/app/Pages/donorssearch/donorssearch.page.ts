@@ -98,6 +98,7 @@ export class DonorssearchPage implements OnInit {
     Role: any;
   status: any;
   isLoadingAcceptStatus: boolean = false;
+    FullName: any;
 
   constructor(
     private alertController: AlertController,
@@ -536,6 +537,7 @@ export class DonorssearchPage implements OnInit {
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.BloodRequestDetalis = data;
       this.MyBloodRequestID = this.BloodRequestDetalis[0].BloodRequestID;
+      this.FullName = this.BloodRequestDetalis[0].FullName;
       this.crntlatitude = this.BloodRequestDetalis[0].Latitude;
       this.crntlongitude = this.BloodRequestDetalis[0].Longitude;
       this.GetAcceptStatus(this.MyBloodRequestID);
@@ -644,7 +646,9 @@ export class DonorssearchPage implements OnInit {
 
   accept() {
     this.acpt = true;
-    this.acceptcomment = 'Your blood request is Accepted by ' + this.UserDetails[0].FullName + ' Contact no:' + this.UserDetails[0].Phonenumber;
+    this.acceptcomment = `Hi ${this.FullName}, your blood request has been accepted by ${this.UserDetails[0].FullName}.
+      Contact: ${this.UserDetails[0].Phonenumber}
+      Please reach out immediately and coordinate the donation.`;
     this.comment = this.acceptcomment;
     this.sendMail();
     this.sendnotoifications();

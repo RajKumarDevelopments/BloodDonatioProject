@@ -546,13 +546,25 @@ export class ProfiledetailsPage implements OnInit {
       this.isSubmitting = true;
       this.general.present('Saving your details, please wait...');
       this.general.PostData(url, UploadFile).subscribe((res: any) => {
-        this.isSubmitting = false;
-        this.general.dismiss();
         if (res === "SUCCESS") {
-          this.refreshUserData();
-          this.general.presentToast("Profile updated successfully!");
-          this.navCtrl.navigateRoot('/home');
+          this.refreshUserData().subscribe((result: any) => {
+            this.isSubmitting = false;
+            this.general.dismiss();
+            if (result && result !== "NOTEXIST") {
+              localStorage.setItem("UserDetails", JSON.stringify(result));
+            }
+            this.general.presentToast("Profile updated successfully!");
+            this.navCtrl.navigateRoot('/home');
+          }, () => {
+            // Fallback in case of error fetching refreshed data
+            this.isSubmitting = false;
+            this.general.dismiss();
+            this.general.presentToast("Profile updated successfully!");
+            this.navCtrl.navigateRoot('/home');
+          });
         } else {
+          this.isSubmitting = false;
+          this.general.dismiss();
           this.general.presentToast("Update failed. Please try again.");
         }
       }, error => {
@@ -572,10 +584,6 @@ export class ProfiledetailsPage implements OnInit {
   refreshUserData() {
     const uploadFile = new FormData();
     uploadFile.append("Mobile", this.Mobile);
-    this.general.PostData('api/BG/checking_Mobile', uploadFile).subscribe((result: any) => {
-      if (result && result !== "NOTEXIST") {
-        localStorage.setItem("UserDetails", JSON.stringify(result));
-      }
-    });
+    return this.general.PostData('api/BG/checking_Mobile', uploadFile);
   }
 }

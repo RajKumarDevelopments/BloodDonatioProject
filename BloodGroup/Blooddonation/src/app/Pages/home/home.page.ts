@@ -38,6 +38,10 @@ export class HomePage implements OnInit, AfterViewInit {
   
   }
   ionViewWillEnter() {  
+    this.UserDetails1 = localStorage.getItem("UserDetails");
+    if (this.UserDetails1) {
+      this.UserDetails = JSON.parse(this.UserDetails1);
+    }
     this.getNotificationCount();
     this.getdonatelast();
     this.GetBanners();

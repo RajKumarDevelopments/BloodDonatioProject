@@ -1014,8 +1014,11 @@ export class EligibilitycriteriaPage implements OnInit {
     for (let i = 0; i < expired.length; i++) {
       let currentCustomer = expired[i]; // Access each customer correctly
 
-      const message = `Dear ${currentCustomer.FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
-
+    //  const message = `Dear ${currentCustomer.FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
+      const message = `Good news! Your presentation request has been accepted.
+      Leader Name: ${this.UserDetails[0].FullName}
+      Contact: ${this.UserDetails[0].MobileNumber}
+      Reach out to ${this.selectedPlace} and organise the session.`;
       // Fetch user data based on the correct Pincode
       this.user.getusersData(currentCustomer.Pincode).subscribe((data: any) => {
         let uploadFile = new FormData();
