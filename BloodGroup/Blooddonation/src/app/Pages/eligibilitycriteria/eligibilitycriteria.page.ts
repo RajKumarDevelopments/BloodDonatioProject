@@ -1054,22 +1054,17 @@ export class EligibilitycriteriaPage implements OnInit {
       this.GetRequestpresantaions();
       return;
     }
-
-    let targetPincode = Pincode; // Use the function parameter
-
+    let targetPincode = Pincode;
     var path = "rquestpresentation";
     const message = `Dear ${this.custmer[0].FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, ${this.UserDetails[0].Phonenumber} for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
-
     // Fetch user data based on the correct Pincode
     this.user.getusersData(targetPincode).subscribe((data: any) => {
-
-
       var UploadFile = new FormData();
       UploadFile.append("deviceId", this.custmer[0].Devicetoken);
       UploadFile.append("message", message);
       UploadFile.append("senderName", "BloodGroup");
-      UploadFile.append("Path", path);
-
+      UploadFile.append("path", path);
+      UploadFile.append("Img", "");
       var notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
 
@@ -1100,9 +1095,7 @@ export class EligibilitycriteriaPage implements OnInit {
       this.GetRequestpresantaions();
       return;
     }
-
-    let targetPincode = Pincode; // Use the function parameter
-
+    let targetPincode = Pincode;
     var path = "rquestpresentation";
     const message = `Dear ${this.custmer[0].FullName}, we regret to inform you that your request has been declined by our leader, ${this.UserDetails[0].FullName}. We appreciate your interest and encourage you to stay connected for future opportunities to contribute to this noble cause.`;
     // Fetch user data based on the correct Pincode
@@ -1111,8 +1104,8 @@ export class EligibilitycriteriaPage implements OnInit {
       UploadFile.append("deviceId", this.custmer[0].Devicetoken);
       UploadFile.append("message", message);
       UploadFile.append("senderName", "BloodGroup");
-      UploadFile.append("Path", path);
-
+      UploadFile.append("path", path);
+      UploadFile.append("Img", "");
       var notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
          
@@ -1140,11 +1133,8 @@ export class EligibilitycriteriaPage implements OnInit {
   }
 
   sendnotification(Pincode: any) {
-
-    let targetPincode = Pincode; // Use the function parameter
-
+    let targetPincode = Pincode;
     if (this.UserDetails[0].RoleId != 4) {
-      // Check if any leader's pincode matches the given Pincode
       this.ourleaderspincode = this.Alldet.filter((item: any) => item.Pincode == targetPincode);
       this.AdminPincode = this.Alldet.filter((item: any) => item.RoleId == 1);
       this.Admindevicetoken = this.Alldet.filter((item: any) => item.RoleId == 1);
@@ -1168,13 +1158,12 @@ export class EligibilitycriteriaPage implements OnInit {
       }
 
       for (let i = 0; i < this.leaderdevicetoken.length; i++) {
-        
-
         var UploadFile = new FormData();
         UploadFile.append("deviceId", this.leaderdevicetoken[i].Devicetoken);
         UploadFile.append("message", message);
         UploadFile.append("senderName", "BloodGroup");
-        UploadFile.append("Path", path);
+        UploadFile.append("path", path);
+        UploadFile.append("Img", "");
         var notificationUrl = "api/BG/sendNotification";
         this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
           
@@ -1223,14 +1212,14 @@ export class EligibilitycriteriaPage implements OnInit {
       UploadFile.append("deviceId", this.AdminDeviceid);
       UploadFile.append("message", message);
       UploadFile.append("senderName", "BloodGroup");
-      UploadFile.append("Path", path);
-
+      UploadFile.append("path", path);
+      UploadFile.append("Img", "");
       var notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
       
 
         this.test.push({
-          RegID: this.UserDetails[0].RegId, // Fixed incorrect index
+          RegID: this.UserDetails[0].RegId,
           NotificationsDesc: message,
           CreatedBy: this.UserDetails[0].RegId
         });

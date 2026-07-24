@@ -695,7 +695,8 @@ export class DonorssearchPage implements OnInit {
     UploadFile.append("deviceId", this.BloodRequestDetalis[0].Devicetoken);
     UploadFile.append("message", this.acceptcomment);
     UploadFile.append("senderName", "Let's Help");
-    UploadFile.append("Path", '/tabs/tab1');
+    UploadFile.append("path", 'myrequest');
+    UploadFile.append("Img", "");
     var notificationUrl = "api/BG/sendNotification";
     this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
       if (notificationData) {

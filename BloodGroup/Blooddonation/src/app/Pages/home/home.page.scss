@@ -174,7 +174,7 @@ ion-header ion-toolbar:first-of-type {
 .headder {
   font-size: 10px;
   /*margin-top: -3.5rem;*/
-  margin: 0% -12% 45% 7%;
+  margin: 0% -12% 0% 7%;
 }
 
 .text_center {
@@ -235,8 +235,8 @@ span {
 
 
 .circular-card {
-  width: 110px;
-  height: 110px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -247,14 +247,14 @@ span {
   padding: 5px;
   position: relative;
   background-color: #d3d3d373;
-  margin-top: 1.5rem;
+  margin-top: 1px;
 }
 
 .username {
   color: #242424;
   font-weight: bold;
   /*margin: -3% 0% 2% 0%;*/
-  margin: 2% 1% -4% 0%;
+  margin: 2% 1% 0% 0%;
 }
 
 .footer_content {
@@ -263,6 +263,12 @@ span {
 
 .body_content {
   height: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5px;
+  padding-bottom: 5%;
 }
 
 .top_header {
@@ -271,7 +277,7 @@ span {
   background-color: #ffffff;
   position: relative;
   height: auto;
-  padding-bottom: 15px;
+  padding-bottom: 5px;
   border-radius: 0px 0px 25px 25px;
   /*padding: 10px;*/
 }
@@ -310,8 +316,8 @@ hr {
 }
 
 .row-spacing {
-  margin-top: 2%;
-  margin-bottom: 2%;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .icon_imgs {
@@ -358,19 +364,17 @@ hr {
 
 swiper-container {
   width: 96%;
-  height: 200px;
-  padding: 5px 0;
+  height: auto;
+  margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
-  margin-top: 2%;
 }
 
 .swiper-slide {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
-  /* Ensure slides are the same height */
+  height: auto;
 }
 
 
@@ -382,22 +386,19 @@ swiper-container {
 }
 
 .image-container {
-  /*width: 100%;  
-  height: 200px;  
-  overflow: hidden;  
-  display: flex;
-  align-items: center;
-  justify-content: center;*/
+  width: 100%;
   border-radius: 15px;
-  height: 100%;
   overflow: hidden;
+  display: block;
 }
 
 .image-container img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
   border-radius: 15px;
-  overflow: hidden;
+  display: block;
 }
 
 .parent_not {
@@ -429,6 +430,9 @@ swiper-container {
   max-width: 100%;
   margin: 0 auto;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .footer-btn {

@@ -423,10 +423,11 @@ export class SignupPage implements OnInit {
     var path = "requsetform";
     const massege = "Excited to inform you that " + this.FirstName + " .has registered using your referral code. Thank you for sharing our service and helping us grow!";
     var UploadFile = new FormData();
-    UploadFile.append("deviceToken", data[0].Devicetoken);
+    UploadFile.append("deviceId", data[0].Devicetoken);
     UploadFile.append("message", massege);
     UploadFile.append("senderName", "BloodGroup");
-    UploadFile.append("Path", path);
+    UploadFile.append("path", path);
+    UploadFile.append("Img", "");
     var notificationUrl = "api/BG/sendNotification";
     this.generalservice.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
       ;

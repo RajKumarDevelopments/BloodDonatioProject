@@ -878,10 +878,11 @@ export class RequsetformPage implements OnInit {
       for (var i = 0; i < data.length; i++) {
       
         var UploadFile = new FormData();
-        UploadFile.append("deviceToken", data[i].Devicetoken);
+        UploadFile.append("deviceId", data[i].Devicetoken);
         UploadFile.append("message", massege);
         UploadFile.append("senderName", "BloodGroup");
-        UploadFile.append("Path", path);
+        UploadFile.append("path", path);
+        UploadFile.append("Img", "");
         var notificationUrl = "api/BG/sendNotification";
         this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
        

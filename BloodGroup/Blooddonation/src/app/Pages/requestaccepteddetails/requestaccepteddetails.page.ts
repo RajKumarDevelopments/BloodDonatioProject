@@ -34,10 +34,10 @@ export class RequestaccepteddetailsPage implements OnInit {
   GetAcceptedUsers(Val: any) {
     this.isLoading = true;
     this.general.present();
-
     var UploadFile = new FormData();
     UploadFile.append("Param1", Val);
     UploadFile.append("Param2", '1');
+    UploadFile.append("Param3", '1');
     var url = "api/BG/BloodAcceptedUser";
     this.general.PostData(url, UploadFile).subscribe(
       (data: any) => {

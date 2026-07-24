@@ -1372,7 +1372,8 @@ export class RquestpresentationPage implements OnInit {
       uploadFile.append("deviceId", this.custmer[0].Devicetoken);
       uploadFile.append("message", message);
       uploadFile.append("senderName", "BloodGroup");
-      uploadFile.append("Path", path);
+      uploadFile.append("path", path);
+      uploadFile.append("Img", "");
 
       let notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, uploadFile).subscribe((notificationData: any) => {
@@ -1409,7 +1410,8 @@ export class RquestpresentationPage implements OnInit {
       UploadFile.append("deviceId", this.custmer[0].Devicetoken);
       UploadFile.append("message", message);
       UploadFile.append("senderName", "BloodGroup");
-      UploadFile.append("Path", path);
+      UploadFile.append("path", path);
+      UploadFile.append("Img", "");
 
       var notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
@@ -1432,12 +1434,10 @@ export class RquestpresentationPage implements OnInit {
   }
 
   sendnotification(Pincode: any) {
+    debugger
     const targetPincode = Pincode;
     const path = "eligibilitycriteria";
-    const message = `New presentation request in your area.
-    Someone nearby is looking to organise a Let's Help session.
-    Check the Leaders page → Organise a Presentation → Presentations Near You to view details and accept.`;
-
+    const message = `New presentation request in your area.Someone nearby is looking to organise a Let's Help session.Check the Leaders page → Organise a Presentation → Presentations Near You to view details and accept.`;
     // Filter leaders by PINCODE
     const matchedLeaders = this.leadersonly.filter(
       (l: any) => l.RoleId === 4 && l.Pincode === this.CurrentPincode
@@ -1447,28 +1447,24 @@ export class RquestpresentationPage implements OnInit {
       console.log("No leaders found for this pincode");
       return;
     }
-
+    debugger
     matchedLeaders.forEach((leader: any) => {
-
       const uploadFile = new FormData();
       uploadFile.append("deviceId", leader.Devicetoken);
       uploadFile.append("message", message);
       uploadFile.append("senderName", "BloodGroup");
-      uploadFile.append("Path", path);
-
+      uploadFile.append("path", path);
+      uploadFile.append("Img", "");
       this.general.PostData("api/BG/sendNotification", uploadFile).subscribe(() => {
-
         const notificationObj = [{
           RegID: leader.RegId,
           NotiRecevieID: leader.RegId,
           NotificationsDesc: message,
           CreatedBy: this.UserDetails[0].RegId
         }];
-
         const dbUpload = new FormData();
         dbUpload.append("Param", JSON.stringify(notificationObj));
         dbUpload.append("Flag", "1");
-
         this.general.PostData("api/BG/Crud_Notifications", dbUpload).subscribe();
       });
     });
@@ -1499,8 +1495,8 @@ export class RquestpresentationPage implements OnInit {
       uploadFile.append("deviceId", leader.Devicetoken);
       uploadFile.append("message", message);
       uploadFile.append("senderName", "BloodGroup");
-      uploadFile.append("Path", path);
-
+      uploadFile.append("path", path);
+      uploadFile.append("Img", "");
       this.general.PostData("api/BG/sendNotification", uploadFile).subscribe(() => {
 
         const notificationObj = [{
@@ -1523,12 +1519,9 @@ export class RquestpresentationPage implements OnInit {
   }
 
   Adminsendnotification(Pincode: any) {
-
     const targetPincode = Pincode;
     const path = "eligibilitycriteria";
-
     const message = `Dear Admin, I am ${this.UserDetails[0].FullName}. I would like to conduct a blood donation presentation at ${this.selectedPlace}. Kindly review and approve.`;
-
     // Filter Admin by PINCODE
     const matchedAdmins = this.Alldet.filter(
       (a: any) => a.RoleId === 1 && a.Pincode == this.CurrentPincode
@@ -1545,10 +1538,9 @@ export class RquestpresentationPage implements OnInit {
       uploadFile.append("deviceId", admin.Devicetoken);
       uploadFile.append("message", message);
       uploadFile.append("senderName", "BloodGroup");
-      uploadFile.append("Path", path);
-
+      uploadFile.append("path", path);
+      uploadFile.append("Img", "");
       this.general.PostData("api/BG/sendNotification", uploadFile).subscribe(() => {
-
         const notificationObj = [{
           RegID: admin.RegId,
           NotiRecevieID: admin.RegId,
