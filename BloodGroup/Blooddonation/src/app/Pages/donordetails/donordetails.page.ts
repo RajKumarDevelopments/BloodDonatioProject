@@ -458,7 +458,7 @@ closeModal() {
       UploadFile.append("deviceId", obj.Devicetoken);
       UploadFile.append("message", `Dear ${obj.FullName}, ${this.UserDetails[0].FullName} urgently needs ${obj.BLGName} blood at ${this.UserDetails[0].CityName}. Your help can save a life. Please call: ${this.UserDetails[0].Phonenumber}`);
       UploadFile.append("senderName", "BloodGroup");
-      UploadFile.append("path", '/donordetails');
+      UploadFile.append("path", 'searchdonors');
       UploadFile.append("Img", "");
 
       var notificationUrl = "api/BG/sendNotification";

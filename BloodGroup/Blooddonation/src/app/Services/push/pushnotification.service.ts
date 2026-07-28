@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { PushNotificationSchema, PushNotifications, Token, ActionPerformed } from '@capacitor/push-notifications';
 import { NotificationcountService } from '../notificationcount/notificationcount.service';
 import { NavController, AlertController } from '@ionic/angular';
@@ -14,11 +14,11 @@ import { Browser } from '@capacitor/browser';
 export class PushnotificationService {
   private notificationEnabled: boolean = true;
 
-  constructor(private NavCtrl: NavController, public notificationService: NotificationcountService, private alertCtrl: AlertController) { }
+  constructor(private NavCtrl: NavController, public notificationService: NotificationcountService, private alertCtrl: AlertController, private zone: NgZone) { }
 
 
 
-async scheduleNotification(interval: 'oneday' | 'oneweek' | 'daily' | 'monthly') {
+  async scheduleNotification(interval: 'oneday' | 'oneweek' | 'daily' | 'monthly') {
     console.log(`Turning off notifications for ${interval}`);
 
     this.notificationEnabled = false;
@@ -27,7 +27,7 @@ async scheduleNotification(interval: 'oneday' | 'oneweek' | 'daily' | 'monthly')
     // Save the disabled state and timestamp
     await Preferences.set({ key: 'notificationDisabled', value: 'true' });
     await Preferences.set({ key: 'disableTimestamp', value: Date.now().toString() });
-  await this.openNotificationSettings();
+    await this.openNotificationSettings();
 
     let timeDelay = this.getInterval(interval);
 
@@ -78,7 +78,7 @@ async scheduleNotification(interval: 'oneday' | 'oneweek' | 'daily' | 'monthly')
 
 
   async addListeners() {
-    
+
     PushNotifications.createChannel({
       description: 'General Notifications',
       id: 'PushDefaultForeground',
@@ -90,7 +90,7 @@ async scheduleNotification(interval: 'oneday' | 'oneweek' | 'daily' | 'monthly')
       visibility: 1
     }).then(() => {
       console.log('push channel created: ');
-    }).catch((error:any) => {
+    }).catch((error: any) => {
       console.error('push channel error: ', error);
     });
 
@@ -98,41 +98,53 @@ async scheduleNotification(interval: 'oneday' | 'oneweek' | 'daily' | 'monthly')
       console.log('Registration token: ', token.value);
       localStorage.setItem("Token", JSON.stringify(token.value))
     });
-    await PushNotifications.addListener('registrationError', (err:any) => {
+    await PushNotifications.addListener('registrationError', (err: any) => {
       console.error('Registration error: ', err.error);
     });
     await PushNotifications.addListener('pushNotificationReceived', (notification: any) => {
-      
-      console.log('Push notification received: ', notification);
-      // Increment the notification count when a push notification is received
+      this.zone.run(() => {
+        console.log('Push notification received: ', notification);
+        // Increment the notification count when a push notification is received
 
-      const currentCount = this.notificationService.getnotificationCount();
-      this.notificationService.updateNotificationCount(currentCount + 1);
-      console.log('count', currentCount);
-      // Trigger a change detection cycle to update the UI
-      // this.cdr.detectChanges();
-      //if (notification.data ?.clickAction === 'bookings') {
-      //  // Navigate to the 'bookings' page
-      //  this.NavCtrl.navigateForward('/bookings');
-      //}
-
+        const currentCount = this.notificationService.getnotificationCount();
+        this.notificationService.updateNotificationCount(currentCount + 1);
+        console.log('count', currentCount);
+        // Trigger a change detection cycle to update the UI
+        // this.cdr.detectChanges();
+        //if (notification.data ?.clickAction === 'bookings') {
+        //  // Navigate to the 'bookings' page
+        //  this.NavCtrl.navigateForward('/bookings');
+        //}
+      });
     });
     await PushNotifications.addListener('pushNotificationActionPerformed', (notification: any) => {
-      
-      console.log('Push notification action performed', notification.actionId, notification.inputValue);
-      // Check the actionId to determine the action
-      if (notification.actionId === 'tap') {
-        
-        if (notification.notification.data?.clickAction != "PlayStore") {
-          // Navigate to the 'bookings' page
+      this.zone.run(() => {
+        console.log('Push notification action performed', notification.actionId, notification.inputValue);
+        // Check the actionId to determine the action
+        if (notification.actionId === 'tap') {
 
-
-
-          this.NavCtrl.navigateForward([notification.notification.data.clickAction, { BookingID: JSON.stringify(notification.notification.data.BookingID) }]);
-        } else if (notification.notification.data?.clickAction == "PlayStore") {
-          window.location.href = "https://play.google.com/store/apps/details?id=com.gg.yklabs";
+          if (notification.notification.data?.clickAction != "PlayStore") {
+            let clickAction = notification.notification.data.clickAction;
+            if (clickAction && clickAction.includes(';')) {
+              let parts = clickAction.split(';');
+              let route = parts[0];
+              let params: any = {};
+              for (let i = 1; i < parts.length; i++) {
+                let [key, val] = parts[i].split('=');
+                params[key] = val;
+              }
+              if (notification.notification.data.BookingID) {
+                params['BookingID'] = JSON.stringify(notification.notification.data.BookingID);
+              }
+              this.NavCtrl.navigateForward([route, params]);
+            } else {
+              this.NavCtrl.navigateForward([clickAction, { BookingID: JSON.stringify(notification.notification.data.BookingID) }]);
+            }
+          } else if (notification.notification.data?.clickAction == "PlayStore") {
+            window.location.href = "https://play.google.com/store/apps/details?id=com.gg.Bloodgroup";
+          }
         }
-      }
+      });
     });
   }
 

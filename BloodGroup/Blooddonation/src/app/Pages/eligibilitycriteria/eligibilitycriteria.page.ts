@@ -116,7 +116,7 @@ export class EligibilitycriteriaPage implements OnInit {
     public datePipe: DatePipe,
     public general: GeneralService, private launchNavigator: LaunchNavigator, private toastController: ToastController,
     public navCtrl: NavController, public http: HttpClient, public activeRoute: ActivatedRoute, public user: UserService, private cdr: ChangeDetectorRef) {
-    
+
     this.UserDetails1 = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.UserDetails1);
     if (this.UserDetails[0].Status == false) {
@@ -128,7 +128,7 @@ export class EligibilitycriteriaPage implements OnInit {
       this.Getvenues();
     }
 
-   
+
     this.RequestForm = this.Fb.group({
       Mode: ["",],
       Audiance: ["",],
@@ -414,7 +414,7 @@ export class EligibilitycriteriaPage implements OnInit {
 
         if (this.UserDetails[0].RoleId == 4) {
 
-        }     
+        }
 
       } else {
         console.log('No results found');
@@ -463,7 +463,7 @@ export class EligibilitycriteriaPage implements OnInit {
     UploadFile.append("Flag", "4");
     var url = "api/BG/StatesMaster_crud";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-  
+
       this.States = data;
       this.States1 = data;
       var selectedstateid = this.States1.filter((id: any) => id.StateName == this.selectedState);
@@ -490,7 +490,7 @@ export class EligibilitycriteriaPage implements OnInit {
     UploadFile.append("Flag", "5");
     var url = "api/BG/DistrictMaster_crud";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-    
+
       this.Districts = data;
       this.Districts1 = data;
       var selectdistrictid = this.Districts1.filter((id: any) => id.DistrictName == this.selectedDistrict)
@@ -512,7 +512,7 @@ export class EligibilitycriteriaPage implements OnInit {
     UploadFile.append("Flag", "5");
     var url = "api/BG/CitiesMaster_Crud";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      
+
       this.Cities = data;
       this.Cities1 = data;
       var selectcityid = this.Cities1.filter((id: any) => id.CityName == this.selectedCity)
@@ -620,7 +620,7 @@ export class EligibilitycriteriaPage implements OnInit {
 
     var url = "api/BG/Register_User_Curd";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      
+
       this.Alldet = data
       this.leadersonly = this.Alldet.filter((led: any) => led.RoleId == 4)
       //console.log('det', this.leadersonly)
@@ -708,7 +708,7 @@ export class EligibilitycriteriaPage implements OnInit {
     }
   }
 
-  
+
   GetRequestpresantaions() {
     let UploadFile = new FormData();
     UploadFile.append("Param2", "2");
@@ -768,8 +768,8 @@ export class EligibilitycriteriaPage implements OnInit {
       this.general.presentToast("something went wrong");
     });
   }
- 
-  
+
+
 
   Accept(values: any, status: number) {
     this.general.present();
@@ -839,14 +839,14 @@ export class EligibilitycriteriaPage implements OnInit {
     return `${year}-${month}-${day}`;
   }
   open1(state: number) {
-    
+
 
     if (this.activeAccordion === state) {
       this.activeAccordion = null;
     }
   }
 
-  
+
   openmap(Latitude?: any, Longitude?: any, Address?: string, StateName?: string, Pincode?: string) {
     let options: LaunchNavigatorOptions = {
       app: this.launchNavigator.APP.GOOGLE_MAPS
@@ -908,7 +908,7 @@ export class EligibilitycriteriaPage implements OnInit {
     }
     //  Create the array properly without overriding `this.test`
     this.test = values.map(value => ({
-      CreatedBy: this.UserDetails[0].RegId,     
+      CreatedBy: this.UserDetails[0].RegId,
       TokenId: this.UserDetails[0].TokenId,
       Mode: value.Mode,
       Audiance: value.Audiance,
@@ -928,15 +928,15 @@ export class EligibilitycriteriaPage implements OnInit {
       Latitude: this.latitude,
       Longitude: this.longitude,
 
-      
+
       RPId: value.RPId,
       ModifiedBy: this.UserDetails[0].RegId
     }));
 
- 
+
     const jsonData = JSON.stringify(this.test);
 
-   
+
     let UploadFile = new FormData();
     UploadFile.append("Param", JSON.stringify(this.test));
     UploadFile.append("Flag", "2");
@@ -983,25 +983,25 @@ export class EligibilitycriteriaPage implements OnInit {
     });
   }
 
- 
-    async setTab(tab: string) {
-      this.selectedTab = tab;
-      if (tab === 'open') {
-        this.opening = true;
-        this.closed = false;
-      } else if (tab === 'closed') {
-        this.closed = true;
-        this.opening = false;
-      }
-      this.activeAccordion = null;
-      
-      // Force change detection
-      this.cdr.detectChanges();
-      
-      await this.general.present();
-      this.GetRequestpresantaions();
+
+  async setTab(tab: string) {
+    this.selectedTab = tab;
+    if (tab === 'open') {
+      this.opening = true;
+      this.closed = false;
+    } else if (tab === 'closed') {
+      this.closed = true;
+      this.opening = false;
     }
-  
+    this.activeAccordion = null;
+
+    // Force change detection
+    this.cdr.detectChanges();
+
+    await this.general.present();
+    this.GetRequestpresantaions();
+  }
+
 
   ExpiredAcceptsendnotification(expired: any[]) {
     if (!Array.isArray(expired) || expired.length === 0) {
@@ -1014,7 +1014,7 @@ export class EligibilitycriteriaPage implements OnInit {
     for (let i = 0; i < expired.length; i++) {
       let currentCustomer = expired[i]; // Access each customer correctly
 
-    //  const message = `Dear ${currentCustomer.FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
+      //  const message = `Dear ${currentCustomer.FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
       const message = `Good news! Your presentation request has been accepted.
       Leader Name: ${this.UserDetails[0].FullName}
       Contact: ${this.UserDetails[0].MobileNumber}
@@ -1055,8 +1055,12 @@ export class EligibilitycriteriaPage implements OnInit {
       return;
     }
     let targetPincode = Pincode;
-    var path = "rquestpresentation";
-    const message = `Dear ${this.custmer[0].FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, ${this.UserDetails[0].Phonenumber} for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
+    var path = "rquestpresentation;rk=2";
+    // const message = `Dear ${this.custmer[0].FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, ${this.UserDetails[0].Phonenumber} for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
+    const message =
+      `Good news! Your presentation request has been accepted by Leader ${this.UserDetails[0].FullName}.\n\n` +
+      `Contact: ${this.UserDetails[0].Phonenumber}\n\n` +
+      `Check on Accepted Count for more details in your request.`;
     // Fetch user data based on the correct Pincode
     this.user.getusersData(targetPincode).subscribe((data: any) => {
       var UploadFile = new FormData();
@@ -1108,7 +1112,7 @@ export class EligibilitycriteriaPage implements OnInit {
       UploadFile.append("Img", "");
       var notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
-         
+
 
         this.test.push({
           RegID: this.custmer[0].RegId, // Fixed incorrect index
@@ -1166,7 +1170,7 @@ export class EligibilitycriteriaPage implements OnInit {
         UploadFile.append("Img", "");
         var notificationUrl = "api/BG/sendNotification";
         this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
-          
+
 
           this.test.push({
             RegID: this.leaderdevicetoken[i].RegId, // Fixed incorrect index
@@ -1190,7 +1194,7 @@ export class EligibilitycriteriaPage implements OnInit {
 
 
   Adminsendnotification(Pincode: any) {
-    
+
 
     let targetPincode = Pincode; // Use the function parameter
 
@@ -1207,7 +1211,7 @@ export class EligibilitycriteriaPage implements OnInit {
 
     // Fetch user data based on the correct Pincode
     this.user.getusersData(targetPincode).subscribe((data: any) => {
-    
+
       var UploadFile = new FormData();
       UploadFile.append("deviceId", this.AdminDeviceid);
       UploadFile.append("message", message);
@@ -1216,7 +1220,7 @@ export class EligibilitycriteriaPage implements OnInit {
       UploadFile.append("Img", "");
       var notificationUrl = "api/BG/sendNotification";
       this.general.PostData(notificationUrl, UploadFile).subscribe((notificationData: any) => {
-      
+
 
         this.test.push({
           RegID: this.UserDetails[0].RegId,

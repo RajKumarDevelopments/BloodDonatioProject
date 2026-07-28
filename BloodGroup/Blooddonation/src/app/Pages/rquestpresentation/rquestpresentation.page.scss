@@ -376,7 +376,7 @@ ion-segment-button:hover {
   display: flex;
   background-color: #f1f2f6;
   border-radius: 100px;
-  margin: 15px 0px 5px;
+  margin: 15px 0 0;
 }
 
 input[type=radio][name=tabs] {
@@ -465,7 +465,7 @@ label {
 .tab-wrap {
   width: 90%;
   max-width: 400px;
-  margin: 25px auto 15px;
+  margin: 15px auto 0;
   display: flex;
   background-color: #f1f2f6;
   border-radius: 100px;
@@ -513,7 +513,7 @@ input[type=radio][name=tabs] {
 
   .tab-wrap {
     width: 92%;
-    margin: 25px auto 15px;
+    margin: 15px auto 0;
   }
 }
 
@@ -543,7 +543,7 @@ input {
 
   .tab-wrap {
     width: 92%;
-    margin: 25px auto 15px;
+    margin: 15px auto 0;
   }
 }
 

@@ -896,21 +896,21 @@ export class RquestpresentationPage implements OnInit {
         if (data === "SUCCESS") {
           if (!(this.Rk == 3 && val.OrgPresentation === true)) {
             if (this.leadersonly && this.leadersonly.length > 0) {
-  
+
               if (this.UserDetails[0].RoleId !== 4) {
-  
+
                 this.leadersPincode = [];
-  
+
                 for (let i = 0; i < this.Alldet.length; i++) {
                   this.leadersPincode.push(this.Alldet[i].Pincode);
                 }
-  
+
                 this.sendnotification(this.leadersPincode);
-  
+
               } else {
                 this.sendnotification(val.Pincode);
               }
-  
+
             }
           }
 
@@ -1351,7 +1351,7 @@ export class RquestpresentationPage implements OnInit {
     if (this.closedAccordionGroup) {
       this.closedAccordionGroup.value = null;
     }
-    
+
     await this.general.present();
     this.GetRequestpresantaions();
   }
@@ -1399,11 +1399,11 @@ export class RquestpresentationPage implements OnInit {
 
   Acceptsendnotification(Pincode: any) {
     let targetPincode = Pincode; // Use the function parameter
-
-    var path = "rquestpresentation";
-    //const message =  `Dear ${this.custmer[0].FullName }, Your request has been Accepted by ${this.UserDetails[0].FullName}, to a special blood donation presentation happening at ${this.selectedPlace}. We would be thrilled to have you join us and learn more about how you can contribute to this noble cause.`;
-    const message = `Dear ${this.custmer[0].FullName}, your request has been accepted by our leader, ${this.UserDetails[0].FullName}, for the special blood donation presentation at ${this.selectedPlace}. We would be thrilled to have you join us and contribute to this noble cause.`;
-
+    var path = "rquestpresentation;rk=2";
+    const message =
+      `Good news! Your presentation request has been accepted by Leader ${this.UserDetails[0].FullName}.\n\n` +
+      `Contact: ${this.UserDetails[0].Phonenumber}\n\n` +
+      `Check on Accepted Count for more details in your request.`;
     // Fetch user data based on the correct Pincode
     this.user.getusersData(targetPincode).subscribe((data: any) => {
       var UploadFile = new FormData();
@@ -1437,7 +1437,9 @@ export class RquestpresentationPage implements OnInit {
     debugger
     const targetPincode = Pincode;
     const path = "eligibilitycriteria";
-    const message = `New presentation request in your area.Someone nearby is looking to organise a Let's Help session.Check the Leaders page → Organise a Presentation → Presentations Near You to view details and accept.`;
+    const message =
+      `A new presentation request raised in your area. Someone nearby is looking to organise a Let's Help session.\n\n` +
+      `Click here to view the details and accept.`;
     // Filter leaders by PINCODE
     const matchedLeaders = this.leadersonly.filter(
       (l: any) => l.RoleId === 4 && l.Pincode === this.CurrentPincode

@@ -646,9 +646,12 @@ export class DonorssearchPage implements OnInit {
 
   accept() {
     this.acpt = true;
-    this.acceptcomment = `Hi ${this.FullName}, your blood request has been accepted by ${this.UserDetails[0].FullName}.
-      Contact: ${this.UserDetails[0].Phonenumber}
-      Please reach out immediately and coordinate the donation.`;
+    this.acceptcomment =
+      `Hi ${this.FullName},\n\n` +
+      `Your blood request has been accepted by ${this.UserDetails[0].FullName}.\n` +
+      `Contact: ${this.UserDetails[0].Phonenumber}\n\n` +
+      `Please reach out immediately and coordinate the donation.\n` +
+      `Check on Accepted Count for more details in your request.`;
     this.comment = this.acceptcomment;
     this.sendMail();
     this.sendnotoifications();

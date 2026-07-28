@@ -53,11 +53,7 @@
     </div>
 
     <div *ngIf="opening && requests && requests.length > 0">
-      <ion-row>
-        <ion-col size="12">
-          <!--<ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
-    <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">-->
-          <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
+      <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
             <ion-accordion *ngFor="let item of requests; let i = index" [value]="i">
               <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
                 <div class="guided-title">
@@ -118,8 +114,6 @@
               </div>
             </ion-accordion>
           </ion-accordion-group>
-        </ion-col>
-      </ion-row>
     </div>
 
     <!-- CLOSED TAB -->
@@ -137,9 +131,7 @@
     </div>
 
     <div *ngIf="closed && !opening && closedrec && closedrec.length > 0">
-      <ion-row>
-        <ion-col size="12">
-          <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
+      <ion-accordion-group [value]="activeAccordion" (ionChange)="onAccordionChange($event)">
             <ion-accordion *ngFor="let item of closedrec; let i = index" [value]="i">
               <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordion === i}">
                 <div class="guided-title">
@@ -177,8 +169,6 @@
               </div>
             </ion-accordion>
           </ion-accordion-group>
-        </ion-col>
-      </ion-row>
     </div>
 
   </div>
