@@ -59,8 +59,6 @@ export class LanguagePage implements OnInit {
 
   // Translate text using Google Translate
   gotohome() {
-    debugger;
-
     // Ensure LoginDetails is initialized
     if (!this.UserDetails || this.UserDetails.length === 0 || this.UserDetails[0] === "") {
       this.navCtrl.navigateForward('/login');

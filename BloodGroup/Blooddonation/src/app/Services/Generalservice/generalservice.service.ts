@@ -36,9 +36,9 @@ export class GeneralService {
     public alertController: AlertController,
     public loadingController: LoadingController, public bearer: BearerService) {
 
-    this.HomeUrl = 'https://localhost:44387/';
-    // this.HomeUrl = "https://letshelp.breakingindiaapp.com/webservices/";
-    //this.HomeUrl = "https://letshelp.in/webservices/";
+    //this.HomeUrl = 'https://localhost:44387/';
+    //this.HomeUrl = "https://letshelp.breakingindiaapp.com/webservices/";
+    this.HomeUrl = "https://letshelp.in/webservices/";
 
 
     localStorage.setItem('URL', this.HomeUrl);

@@ -212,7 +212,7 @@ export class FinalreviewPage implements OnInit {
         RegId: this.UserDetails[0].RegId,
         CreatedBy: this.UserDetails[0].RegId,
         ModifiedBy: this.UserDetails[0].RegId,
-        BloodRequestID: this.mycompltedata[0].BloodrequestID,
+        BloodRequestID: this.mycompltedata[0]?.BloodrequestID ?? '',
         AdminApprovedStatus: 1,
         Categoryid: 1,
         SYSSubmitted: 1,

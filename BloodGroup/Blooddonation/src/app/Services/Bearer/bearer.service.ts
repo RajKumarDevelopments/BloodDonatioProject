@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class BearerService {
 
-   private apiUrl = 'https://localhost:44387/api/Token/Gettoken';
+  //private apiUrl = 'https://localhost:44387/api/Token/Gettoken';
   //private apiUrl = 'https://letshelp.breakingindiaapp.com/webservices/api/Token/Gettoken';
-  //private apiUrl = 'https://letshelp.in/webservices/api/Token/Gettoken';
+  private apiUrl = 'https://letshelp.in/webservices/api/Token/Gettoken';
   constructor(private http: HttpClient) { }
 
   getToken(): Observable<any> {

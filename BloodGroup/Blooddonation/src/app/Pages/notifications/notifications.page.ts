@@ -97,8 +97,6 @@ export class NotificationsPage implements OnInit {
     this.showExtraContent = !this.showExtraContent;
   }
   open1(state: number) {
-    debugger
-
     this.accordionState = Array(this.notification.length).fill(state === 0 ? false : true);
     //this.donorslist
 

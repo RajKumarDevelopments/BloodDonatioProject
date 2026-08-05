@@ -63,11 +63,11 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearchBar">
-      <!--<ion-searchbar [(ngModel)]="searchQuery"
+      <ion-searchbar [(ngModel)]="searchQuery"
                      (ionInput)="onSearchInput()"
                      debounce="500"
                      placeholder="Search for a location">
-      </ion-searchbar>-->
+      </ion-searchbar>
 
       <ion-list *ngIf="predictions?.length">
         <ion-item *ngFor="let prediction of predictions"

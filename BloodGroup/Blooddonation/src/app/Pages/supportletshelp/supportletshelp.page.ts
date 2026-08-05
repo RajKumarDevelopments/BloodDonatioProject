@@ -127,7 +127,6 @@ export class SupportletshelpPage implements OnInit {
   }
 
   nxt(val: any) {
-    debugger
     if (this.venues != undefined) {
       this.navCtrl.navigateForward(['/rquestpresentation', { rk: val, venu: this.venues, pincode: this.selectedpincode }])
     } else {

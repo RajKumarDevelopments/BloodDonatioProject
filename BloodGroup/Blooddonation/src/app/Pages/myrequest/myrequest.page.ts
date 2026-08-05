@@ -77,6 +77,10 @@ export class MyrequestPage implements OnInit {
     this.flags = 0; // or set it to your required value
   }
   ngOnInit() {
+    // Initialization logic if any
+  }
+
+  ionViewWillEnter() {
     this.requestdata();
     this.getAvailablestatus();
   }
@@ -219,7 +223,6 @@ export class MyrequestPage implements OnInit {
     });
   }
   closereq(BloodRequestID: any) {
-    debugger
     var uploadfile = new FormData();
     uploadfile.append("Param1", BloodRequestID);
     var url = "api/BG/BloodRequestClosed";

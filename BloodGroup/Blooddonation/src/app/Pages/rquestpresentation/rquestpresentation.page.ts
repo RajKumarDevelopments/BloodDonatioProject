@@ -1434,7 +1434,6 @@ export class RquestpresentationPage implements OnInit {
   }
 
   sendnotification(Pincode: any) {
-    debugger
     const targetPincode = Pincode;
     const path = "eligibilitycriteria";
     const message =
@@ -1449,7 +1448,6 @@ export class RquestpresentationPage implements OnInit {
       console.log("No leaders found for this pincode");
       return;
     }
-    debugger
     matchedLeaders.forEach((leader: any) => {
       const uploadFile = new FormData();
       uploadFile.append("deviceId", leader.Devicetoken);

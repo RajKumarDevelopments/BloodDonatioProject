@@ -589,7 +589,6 @@ export class DonorssearchPage implements OnInit {
   }
 
   async acceptrqst() {
-    debugger
     const loading = await this.loadingController.create({
       message: 'Accepting request, please wait...',
       spinner: 'crescent'

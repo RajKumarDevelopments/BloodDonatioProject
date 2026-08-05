@@ -19,8 +19,6 @@ export class LeaderguidePage implements OnInit {
   }
   Go()
   {
-    debugger
-    
     var obj = [{
       RegId: this.UserDetails[0].RegId,
       FullName: this.UserDetails[0].FullName,

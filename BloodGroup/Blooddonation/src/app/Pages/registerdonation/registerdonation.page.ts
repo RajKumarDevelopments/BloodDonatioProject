@@ -249,7 +249,6 @@ export class RegisterdonationPage implements OnInit {
   }
 
   GetBloodRequestdropdown() {
-    debugger
     var UploadFile = new FormData();
     UploadFile.append("Param1", this.UserDetails[0].RegId);
     const url = 'api/BG/Get_BloodRequestsIDMobiles';

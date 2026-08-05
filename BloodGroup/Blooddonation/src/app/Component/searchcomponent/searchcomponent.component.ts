@@ -35,7 +35,6 @@ export class SearchcomponentComponent  implements OnInit {
     this.Id = navParams.get('Id');
     this.clang = navParams.get('CLANG');
     this.clong = navParams.get('CLONG');
-    debugger
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
