@@ -13,6 +13,7 @@ import { AndroidSettings, IOSSettings, NativeSettings } from 'capacitor-native-s
 import { GeolocationserviceService } from './Services/locationservice/geolocationservice.service'
 //register();
 import { LanguageTranslatorService } from './Services/LanguageServices/language-translator.service'
+import { App } from '@capacitor/app';
 
 //==============
 @Component({
@@ -46,6 +47,10 @@ export class AppComponent {
   Expirys: any;
   Expirydays1: any; Expirydays: any;
     Role: any;
+
+  lastBackTime: number = 0;
+  isExitAlertOpen: boolean = false;
+
   constructor(private alertController: AlertController,private languageService: LanguageTranslatorService,
 private geolocationService: GeolocationserviceService,private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
     private menu: MenuController, private router: Router,
@@ -55,6 +60,7 @@ private geolocationService: GeolocationserviceService,private permissionService:
     //.catch(err => console.log(err));
     this.initializeApp();
     this.Navigation();
+    this.setupBackButtonHandler();
 
     this.push.addListeners();
     this.push.registerNotifications();
@@ -84,6 +90,68 @@ private geolocationService: GeolocationserviceService,private permissionService:
     this.activeMenu = this.activeMenu === menu ? '' : menu;
   }
 
+  setupBackButtonHandler() {
+    this.platform.ready().then(() => {
+      this.platform.backButton.subscribeWithPriority(10, async () => {
+        const currentUrl = (this.router.url || '').split(';')[0].split('?')[0];
+        const isRootPage = currentUrl === '/home' || currentUrl === '/login' || currentUrl === '/language' || currentUrl === '/';
+        const currentTime = new Date().getTime();
+
+        if (this.isExitAlertOpen) {
+          return;
+        }
+
+        if (currentTime - this.lastBackTime < 2000 || (isRootPage && this.lastBackTime > 0 && currentTime - this.lastBackTime < 3000)) {
+          this.showExitConfirmAlert();
+        } else {
+          this.lastBackTime = currentTime;
+
+          if (isRootPage) {
+            this.general.presentToast('Press back again to exit');
+          } else {
+            this.navCtrl.back();
+          }
+        }
+      });
+    });
+  }
+
+  async showExitConfirmAlert() {
+    if (this.isExitAlertOpen) return;
+    this.isExitAlertOpen = true;
+
+    const alert = await this.alertController.create({
+      header: 'Exit App',
+      message: 'Are you sure you want to close the app?',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            this.isExitAlertOpen = false;
+            this.lastBackTime = 0;
+          }
+        },
+        {
+          text: 'Yes / Close',
+          handler: () => {
+            this.isExitAlertOpen = false;
+            try {
+              App.exitApp();
+            } catch (e) {
+              if ((navigator as any)['app']) {
+                (navigator as any)['app'].exitApp();
+              }
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   async Logout() {
     const alert = await this.alertController.create({
       header: 'Confirm Logout',
@@ -96,13 +164,11 @@ private geolocationService: GeolocationserviceService,private permissionService:
         {
           text: 'Yes',
           handler: () => {
-            localStorage.removeItem("UserDetails");
-            localStorage.removeItem("City");
-            localStorage.removeItem("District"); 
-            localStorage.removeItem("State");
-            localStorage.removeItem("URL");
-            localStorage.removeItem("selectedTab");
-            this.navCtrl.navigateForward('/login');
+            const apiUrl = localStorage.getItem('URL') || "https://letshelp.in/webservices/";
+            localStorage.clear();
+            sessionStorage.clear();
+            localStorage.setItem('URL', apiUrl);
+            this.navCtrl.navigateRoot('/login');
             window.location.reload();
           }
         }
@@ -170,19 +236,32 @@ private geolocationService: GeolocationserviceService,private permissionService:
 
   Navigation() {
     this.platform.ready().then(() => {
-      this.UserDetails = localStorage.getItem("UserDetails");
-      this.UserDetails = JSON.parse(this.UserDetails);
-      if (this.UserDetails == null) {
-        this.navCtrl.navigateForward('/language');
-      } else if (this.UserDetails != null) {
-        if (this.UserDetails[0].Status == false) {
-          this.navCtrl.navigateForward(['/registration', { RegFlag: 1 }]);
-          //this.showLocationAlert();
-        } else {
-          this.navCtrl.navigateForward('/home');
-          //this.showLocationAlert();
+      const storedUser = localStorage.getItem("UserDetails");
+      const apiUrl = localStorage.getItem('URL') || "https://letshelp.in/webservices/";
+      if (!storedUser || storedUser === 'undefined' || storedUser === 'null') {
+        localStorage.clear();
+        sessionStorage.clear();
+        localStorage.setItem('URL', apiUrl);
+        this.navCtrl.navigateRoot('/login');
+      } else {
+        try {
+          this.UserDetails = JSON.parse(storedUser);
+          if (!this.UserDetails || !Array.isArray(this.UserDetails) || this.UserDetails.length === 0) {
+            localStorage.clear();
+            sessionStorage.clear();
+            localStorage.setItem('URL', apiUrl);
+            this.navCtrl.navigateRoot('/login');
+          } else if (this.UserDetails[0].Status == false) {
+            this.navCtrl.navigateRoot(['/registration', { RegFlag: 1 }]);
+          } else {
+            this.navCtrl.navigateRoot('/home');
+          }
+        } catch (e) {
+          localStorage.clear();
+          sessionStorage.clear();
+          localStorage.setItem('URL', apiUrl);
+          this.navCtrl.navigateRoot('/login');
         }
-        //this.navCtrl.navigateForward('/home');
       }
     });
   }

@@ -145,13 +145,10 @@ export class GeneralPage implements OnInit {
 
         this.general.presentAlert('SUCCESS', 'Your Account Has Deleted Permanently');
 
-        localStorage.removeItem('UserDetails');
-        localStorage.removeItem("City");
-        localStorage.removeItem("Distict");
-        localStorage.removeItem("District");
-        localStorage.removeItem("State");
-        localStorage.removeItem("URL");
-        localStorage.removeItem("selectedTab");
+        const apiUrl = localStorage.getItem('URL') || "https://letshelp.in/webservices/";
+        localStorage.clear();
+        sessionStorage.clear();
+        localStorage.setItem('URL', apiUrl);
 
         this.NavCtl.navigateRoot('/login');
 
@@ -181,7 +178,10 @@ export class GeneralPage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            localStorage.removeItem('UserDetails');
+            const apiUrl = localStorage.getItem('URL') || "https://letshelp.in/webservices/";
+            localStorage.clear();
+            sessionStorage.clear();
+            localStorage.setItem('URL', apiUrl);
             this.NavCtl.navigateRoot('/login');
           }
         }

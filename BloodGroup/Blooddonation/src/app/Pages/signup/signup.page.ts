@@ -405,15 +405,13 @@ export class SignupPage implements OnInit {
         formData.append('tokenDetails', JSON.stringify(array));
         var url = "api/BG/UpdateDeviceToken";
         this.generalservice.PostData(url, formData).subscribe((data: any) => {
-         // this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, UserName: this.UserName, InviteCode: this.InviteCode }]);
-          //this.navCtrl.navigateForward(['/home']);
         });
         this.user.getreferalcodeusers(result[0].ReffererId).subscribe((data: any) => {
           if (data != null) {
             this.SendNote(result[0].ReffererId, result[0].RegId, data);
           }
         });
-        //this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, UserName: this.UserName, InviteCode: this.InviteCode }]);
+        this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, FirstName: this.FirstName, MiddleName: this.MiddleName, SurName: this.SurName, InviteCode: this.InviteCode }]);
       }
     })
   }
@@ -444,7 +442,7 @@ export class SignupPage implements OnInit {
       notificationsUploadFile.append("Flag", "1");
 
       this.generalservice.PostData(notificationsUrl, notificationsUploadFile).subscribe(() => {
-        this.SendMailtoCustomer();
+       // this.SendMailtoCustomer();
       });
     });
   }

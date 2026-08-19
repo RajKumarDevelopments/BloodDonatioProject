@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, LoadingController, ActionSheetController, ModalController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
@@ -12,6 +12,7 @@ import { Platform, AlertController } from '@ionic/angular';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { Capacitor } from '@capacitor/core';
 import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
+import html2canvas from 'html2canvas';
 
 declare var google: any;
 @Component({
@@ -73,6 +74,10 @@ export class RegistrationPage {
   selectedDonation: string = ''; // Added for donation selection
   isSubmitting: boolean = false;
 
+  memberId: string = '';
+  regDate: string = '';
+  @ViewChild('leaderIdCard') leaderIdCardElement!: ElementRef;
+
   showGenderOptions: boolean = false;
   dateList: any;
   time: any;
@@ -95,6 +100,13 @@ export class RegistrationPage {
   private timeoutId: any = null;
   private debounceTimer: any; // To manage the debounce
   isLoadingLocation: boolean = false;
+
+  isLeader: boolean = false;
+  roleId: number = 2;
+  roleStatus: boolean = false;
+  leaderModalOpen: boolean = false;
+  leaderTermsAccepted: boolean = false;
+  acceptedViaButton: boolean = false;
 
   Gender: string | null = null;
   selectedGender: string | null = null;
@@ -189,7 +201,7 @@ export class RegistrationPage {
     this.DonorFlag = this.activeRoute.snapshot.paramMap.get("DonorFlag");
     this.RegFlag = this.activeRoute.snapshot.paramMap.get("RegFlag");
 
-    if (this.RegFlag == 1) {
+    if (this.RegFlag == 1 && this.UserDetails && this.UserDetails.length > 0) {
       this.FirstName = this.UserDetails[0].FirstName || this.UserDetails[0].FullName;
       this.MiddleName = this.UserDetails[0].MiddleName;
       this.SurName = this.UserDetails[0].SurName;
@@ -279,6 +291,44 @@ export class RegistrationPage {
     });
   }
 
+  onLeaderToggle(event: any) {
+    if (event.detail.checked) {
+      // Only open modal if roleId is not 4 yet (prevents re-opening if already accepted)
+      if (this.roleId !== 4) {
+        this.leaderModalOpen = true;
+        this.leaderTermsAccepted = false;
+        this.acceptedViaButton = false;
+      }
+    } else {
+      this.roleId = 2;
+      this.roleStatus = false;
+      this.leaderTermsAccepted = false;
+    }
+  }
+
+  acceptLeaderTerms() {
+    if (this.leaderTermsAccepted) {
+      this.acceptedViaButton = true;
+      this.roleId = 4;
+      this.roleStatus = true;
+      this.isLeader = true;
+      this.leaderModalOpen = false;
+    } else {
+      this.general.presentToast('Please accept the terms and conditions');
+    }
+  }
+
+  cancelLeaderTerms() {
+    if (!this.acceptedViaButton) {
+      this.roleId = 2;
+      this.roleStatus = false;
+      this.isLeader = false;
+      this.leaderTermsAccepted = false;
+    }
+    this.acceptedViaButton = false;
+    this.leaderModalOpen = false;
+  }
+
   selectGender(value: string) {
     this.selectedGender = value;
     this.confirmGender();
@@ -296,7 +346,6 @@ export class RegistrationPage {
     UploadFile.append("Flag", "4");
     var url = "api/BG/BloodGroupMaster_CRUD";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      console.log("BloodGroups Data in Registration:", data);
       if (Array.isArray(data)) {
         this.BloodGroups = data;
       } else if (data && typeof data === 'object' && Array.isArray(data.data)) {
@@ -772,7 +821,8 @@ export class RegistrationPage {
           newStatename: this.selectedState,
           newDistrictname: this.selectedDistrict,
           newCityname: this.selectedCity,
-          RoleId: 2,
+          RoleId: this.roleId,
+          RoleStatus: this.roleStatus,
           UserAddress: this.UserAddress,
           Area: this.Area,
           Pincode: this.Pincode,
@@ -796,8 +846,42 @@ export class RegistrationPage {
               this.general.dismiss();
               if (result != "NOTEXIST") {
                 localStorage.setItem("UserDetails", JSON.stringify(result));
-                this.general.presentAlert("SUCCESS", "Your registration has been completed successfully.");
-                this.navCtrl.navigateForward(['/home']);
+                console.log('Check', result);
+                
+                const completeRegistration = () => {
+                  this.general.presentAlert("SUCCESS", "Your registration has been completed successfully.");
+                  this.navCtrl.navigateForward(['/home']).then(() => {
+                    window.location.reload();
+                  });
+                };
+
+                const userEmail = (result[0].Email || this.UserDetails?.[0]?.Email || '').trim();
+                const isTargetRole = (Number(this.roleId) === 4 || Number(this.roleId) === 2);
+
+                if (isTargetRole && result && result.length > 0 && userEmail && userEmail !== 'undefined') {
+                  this.FirstName = (result[0].FirstName || result[0].FullName || this.FirstName || '').trim();
+                  this.memberId = result[0].UserProtalID ? result[0].UserProtalID : ('LH' + String(result[0].RegId).padStart(7, '0'));
+                  
+                  var emailForm = new FormData();
+                  emailForm.append('Email', userEmail);
+                  emailForm.append('FirstName', this.FirstName);
+                  emailForm.append('MemberId', this.memberId);
+                  emailForm.append('RegId', result[0].RegId ? result[0].RegId.toString() : '');
+                  emailForm.append('RoleId', (this.roleId || 2).toString());
+                  
+                  this.general.PostData('api/BG/SendLeaderWelcomeEmail', emailForm).subscribe(
+                    () => {
+                      console.log('Welcome email sent successfully');
+                      completeRegistration();
+                    },
+                    (err: any) => {
+                      console.error('Failed to send welcome email', err);
+                      completeRegistration();
+                    }
+                  );
+                } else {
+                  completeRegistration();
+                }
               }
             }, (err: any) => {
               this.isSubmitting = false;

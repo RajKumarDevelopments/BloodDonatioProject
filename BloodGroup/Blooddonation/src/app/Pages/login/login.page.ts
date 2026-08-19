@@ -110,51 +110,77 @@ export class LoginPage implements OnInit {
   }
 
   VerifyMobileEmail() {
-    if (this.Mobile != null) {
-      if (this.Mobile.length == 10) {
-        let uploadFile = new FormData();
-        uploadFile.append("Mobile", this.Mobile);
-        var url = 'api/BG/checking_Mobile';
-        this.generalservice.PostData(url, uploadFile).subscribe((result: any) => {
-          if (this.Mobile.length == 10) {
-            if (result != "NOTEXIST") {
-              this.SendOTPToMobile();
-              this.generalservice.presentToast('OTP sent successfully!');
-            } else {
-              this.generalservice.presentToast('Invalid email or mobile. Please register.');
-              this.navCtrl.navigateForward(['/signup']);
-            }
-          } else {
-            this.OTPFlag = 1;
-            this.login();
-          }
-        });
-      } else {
-        if (this.Mobile) {
-          this.generalservice.presentToast('Please enter valid mobile number...!');
-        } else if (this.Mobile.length > 10) {
-          this.flag1 = 1;
-        }
-      }
-    } else {
-      this.generalservice.presentToast('Please enter mobile number...!');
+    const mobileStr = (this.Mobile || '').toString().trim();
+    if (!mobileStr) {
+      this.generalservice.presentToast('Please enter mobile number.');
+      return;
     }
+
+    if (mobileStr.length !== 10 || !/^\d{10}$/.test(mobileStr)) {
+      this.generalservice.presentToast('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.generalservice.present('Sending OTP...');
+
+    let uploadFile = new FormData();
+    uploadFile.append("Mobile", mobileStr);
+    var url = 'api/BG/checking_Mobile';
+    this.generalservice.PostData(url, uploadFile).subscribe(
+      (result: any) => {
+        if (result != "NOTEXIST") {
+          this.SendOTPToMobile();
+        } else {
+          this.isSubmitting = false;
+          this.generalservice.dismiss();
+          this.generalservice.presentToast('Mobile number not registered. Please register.');
+          this.navCtrl.navigateForward(['/signup']);
+        }
+      },
+      (err: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
+        console.error('Error checking mobile number', err);
+        this.generalservice.presentToast('Failed to verify mobile number. Please try again.');
+      }
+    );
   }
 
   SendOTPToMobile() {
+    const mobileStr = (this.Mobile || '').toString().trim();
     this.OTP = Math.floor(1000 + Math.random() * 9000);
-    console.log(this.OTP);
+    console.log('Generated OTP:', this.OTP);
+
     var UploadFile = new FormData();
-    UploadFile.append("MobileNo", this.Mobile);
-    UploadFile.append("OTP", this.OTP);
+    UploadFile.append("MobileNo", mobileStr);
+    UploadFile.append("OTP", this.OTP.toString());
+
+    if (!this.isSubmitting) {
+      this.generalservice.present('Sending OTP...');
+    }
+
     var url = "api/BG/SendOtpToMobile";
-    this.generalservice.PostData(url, UploadFile).subscribe((data: any) => {
-      if (data == "SUCCESS") {
-        this.OTPFlag = 1;
-        this.startResendTimer();
-        this.listenForOTP();
+    this.generalservice.PostData(url, UploadFile).subscribe(
+      (data: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
+        if (data == "SUCCESS") {
+          this.OTPFlag = 1;
+          this.generalservice.presentToast('OTP sent successfully!');
+          this.startResendTimer();
+          this.listenForOTP();
+        } else {
+          this.generalservice.presentToast('Failed to send OTP. Please try again.');
+        }
+      },
+      (err: any) => {
+        this.isSubmitting = false;
+        this.generalservice.dismiss();
+        console.error('Error sending OTP', err);
+        this.generalservice.presentToast('An error occurred while sending OTP. Please try again.');
       }
-    });
+    );
   }
 
   MobileLogin1() {
@@ -227,8 +253,9 @@ export class LoginPage implements OnInit {
     }
   }
 
-  isNumeric(value: string): boolean {
-    return /^[0-9]+$/.test(value);
+  isNumeric(value: any): boolean {
+    if (!value) return false;
+    return /^[0-9]+$/.test(String(value).trim());
   }
 
   login() {

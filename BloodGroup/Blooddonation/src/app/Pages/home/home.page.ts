@@ -65,6 +65,9 @@ export class HomePage implements OnInit, AfterViewInit {
   nav() {
     this.navCtrl.navigateForward('/home');
   }
+  goToProfile() {
+    this.navCtrl.navigateForward('/profiledetails');
+  }
   goNext() {
     this.swiper?.slideNext();
   }

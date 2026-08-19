@@ -176,7 +176,9 @@ export class FinalreviewPage implements OnInit {
         UploadFile.append("RoleId", this.UserDetails[0].RegId);
         var url = "api/BG/UploadBloodDonationImagebyDonorwitroleid";
 
+        this.general.present('Saving data...');
         this.general.PostData(url, UploadFile).subscribe((data: any) => {
+          this.general.dismiss();
           if (data == "SUCCESS") {
             // Clear localStorage after successful submit
             localStorage.removeItem('framedImage');
@@ -187,6 +189,8 @@ export class FinalreviewPage implements OnInit {
             this.sendmailtoadmin();
             this.downloadImage();
           }
+        }, error => {
+          this.general.dismiss();
         });
       } else {
         this.general.presentToast("Please upload your image..!");
@@ -223,7 +227,9 @@ export class FinalreviewPage implements OnInit {
       UploadFile.append("Flag", '1');
       var url = "api/BG/UploadBloodDonationImagenorqstId";
 
+      this.general.present('Saving data...');
       this.general.PostData(url, UploadFile).subscribe((data: any) => {
+        this.general.dismiss();
         if (data == "SUCCESS") {
           // Clear localStorage after successful submit
           localStorage.removeItem('framedImage');
@@ -234,6 +240,8 @@ export class FinalreviewPage implements OnInit {
           this.sendmailtoadmin();
           this.downloadImage();
         }
+      }, error => {
+        this.general.dismiss();
       });
     }
   }

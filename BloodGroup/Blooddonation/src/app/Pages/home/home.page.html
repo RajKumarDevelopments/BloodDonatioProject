@@ -32,7 +32,7 @@
 
     <ion-row class="name " style="border-top: 1px solid #1e1c1c17;">
       <ion-col size="12" class="text_center">
-        <div *ngIf="UserDetails" style="font-size:19px !important;" class="username Arial font36">
+        <div *ngIf="UserDetails" (click)="goToProfile()" style="font-size:19px !important; cursor: pointer;" class="username Arial font36">
           {{UserDetails[0].FullName}}</div>
       </ion-col>
 
@@ -47,7 +47,7 @@
         <!--<div class="headder Arial font20">You've got <br /><span class="Arial font24" *ngIf="UserDetails">{{UserDetails[0].Refferpoints}} points</span> </div>-->
       </ion-col>
       <ion-col size="4" style="display: flex; justify-content: center; align-items: center;">
-        <div style="position: relative; display: inline-block;">
+        <div (click)="goToProfile()" style="position: relative; display: inline-block; cursor: pointer;">
           <div class="circular-card">
             <svg height="100%" width="100%" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000">
