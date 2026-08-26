@@ -8,10 +8,10 @@ input[type="checkbox"].readonly {
   pointer-events: none; /* Disable pointer events */
 }
 .header_left {
-  padding: 5px;
+  padding: 0% 10%;
   font-size: 15px;
   color: gray;
-
+  cursor: pointer;
 }
 .formvalidators {
   padding-left: 5%;
@@ -19,11 +19,12 @@ input[type="checkbox"].readonly {
   color: red;
 }
 .header_right {
-  padding: 5px;
+  padding: 0% 10%;
   float: right;
   font-size: 15px;
   color: red;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .items_center img {
@@ -38,15 +39,38 @@ input {
   width: 85%;
 }
 
+ion-footer {
+  box-shadow: none;
+  border: none;
+  background: transparent;
+  padding: 12px 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 ion-footer button {
   padding: 15px;
   border-radius: 50px;
   border: none;
   background-color: red;
   color: white;
-  width: 98%;
-  /*  margin: 5%
-*/
+  width: 85%;
+  max-width: 400px;
+  font-size: 15px;
+  font-weight: 600;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: opacity 0.2s ease;
+}
+
+ion-footer button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .passwordd {
   margin: 0% 9% !important;

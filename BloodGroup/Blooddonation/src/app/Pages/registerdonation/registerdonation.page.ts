@@ -85,6 +85,11 @@ export class RegisterdonationPage implements OnInit {
   messg: any;
   hideSearchBar: boolean = false;
   isDateLocked: boolean = false;
+  customAlertOptions: any = {
+    header: 'Accepted Blood Requests',
+    subHeader: 'Select a blood request to proceed',
+    translucent: true
+  };
   constructor(private loadingController: LoadingController, public general: GeneralService, public http: HttpClient, public actionSheetController: ActionSheetController,
     private modal: ModalController, private router: Router, public datePipe: DatePipe, private navCtrl: NavController, public activeRoute: ActivatedRoute,
     public geocodingService: GeolocationserviceService, private toastCtrl: ToastController, private alertController: AlertController, private geolocationService: GeolocationserviceService,private alertCtrl: AlertController
@@ -112,8 +117,11 @@ export class RegisterdonationPage implements OnInit {
 
   ngOnInit() {
     // this.showLocationAlert();
-    const today = new Date();
-    this.maxDate = today.toISOString().split('T')[0];
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    this.maxDate = `${year}-${month}-${day}`;
     this.loadMap();
     this.GetBloodRequestdropdown();
     this.Gethospitaldetails();
@@ -128,21 +136,20 @@ export class RegisterdonationPage implements OnInit {
     // Step 1: Show a custom alert asking for location permission
     const alert = await this.alertController.create({
       header: 'Location Access Required',
-      message: 'This app needs access to your location. Please enable location services to proceed.',
+      message: 'This app needs access to your location to provide personalized services.',
       buttons: [
         {
-          text: 'Deny',
+          text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Location permission denied');
-            this.general.presentToast('You have denied location access. Some features may not work.');
+            console.log('Location permission denied by user');
           }
         },
         {
           text: 'Allow',
-          handler: async () => {
-            console.log('Location permission allowed');
-            await this.checkLocationServices();
+          handler: () => {
+            // Step 2: Request location permission using Capacitor Geolocation
+            this.requestLocationPermission();
           }
         }
       ]
@@ -150,6 +157,32 @@ export class RegisterdonationPage implements OnInit {
 
     await alert.present();
   }
+
+  async requestLocationPermission() {
+    try {
+      const permission = await Geolocation.requestPermissions();
+      if (permission.location === 'granted') {
+        console.log('Location permission granted');
+        // Proceed with getting the current position
+        this.getCurrentPosition();
+      } else {
+        console.log('Location permission denied');
+      }
+    } catch (error) {
+      console.error('Error requesting location permission', error);
+    }
+  }
+
+  async getCurrentPosition() {
+    try {
+      const coordinates = await Geolocation.getCurrentPosition();
+      console.log('Current coordinates:', coordinates);
+      // Use the coordinates as needed
+    } catch (error) {
+      console.error('Error getting current position', error);
+    }
+  }
+
   async checkLocationServices() {
     try {
       const permissionStatus = await this.geolocationService.getCurrentLocation();
@@ -276,15 +309,22 @@ export class RegisterdonationPage implements OnInit {
 
 
   Donatedate(item: any) {
+    if (!item) return;
     this.Donate = item; 
+    this.BloodRequestDate = item;
 
     const dateObj = new Date(this.Donate);
-    const date = dateObj.toISOString().split('T')[0];
-    this.donatedate = date;
+    if (!isNaN(dateObj.getTime())) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      this.donatedate = `${year}-${month}-${day}`;
 
-    const time = dateObj.toTimeString().split(' ')[0];
-    this.donatetime = time;
-
+      const hours = String(dateObj.getHours()).padStart(2, '0');
+      const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+      const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+      this.donatetime = `${hours}:${minutes}:${seconds}`;
+    }
   }
 
 

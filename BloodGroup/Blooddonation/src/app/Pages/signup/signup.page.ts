@@ -87,7 +87,7 @@ export class SignupPage implements OnInit {
 
     this.DonorFlag = this.activeRoute.snapshot.paramMap.get("DonorFlag");
     this.data1 = this.activeRoute.snapshot.paramMap.get("objs");
-    this.mydata = JSON.parse(this.data1);
+    this.mydata = this.data1 ? JSON.parse(this.data1) : null;
     this.TandCValue = this.activeRoute.snapshot.paramMap.get("TandCValue");
     this.PolicyValue = this.activeRoute.snapshot.paramMap.get("PolicyValue");
     if (this.TandCValue == 1) {
@@ -102,9 +102,72 @@ export class SignupPage implements OnInit {
     if (this.PolicyValue == 1 && this.TandCValue == 1) {
       this.getdata1();
     }
+
+    this.populateReferralCode();
   }
 
   ngOnInit() {
+    this.populateReferralCode();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('referralCodeReceived', (e: any) => {
+        if (e?.detail && !this.InviteCode) {
+          this.InviteCode = e.detail;
+        }
+      });
+    }
+  }
+
+  ionViewWillEnter() {
+    this.populateReferralCode();
+  }
+
+  populateReferralCode() {
+    if (this.InviteCode) {
+      return;
+    }
+
+    // 1. Check Route query params
+    const queryParams = this.activeRoute.snapshot.queryParams;
+    let code = queryParams?.['referral_code'] || queryParams?.['ref'] || queryParams?.['referrer'] || queryParams?.['InviteCode'] || queryParams?.['invite_code'] || queryParams?.['code'];
+
+    // 2. Check Route matrix params
+    if (!code) {
+      code = this.activeRoute.snapshot.paramMap.get('InviteCode') ||
+             this.activeRoute.snapshot.paramMap.get('referral_code') ||
+             this.activeRoute.snapshot.paramMap.get('ref');
+    }
+
+    // 3. Check localStorage or sessionStorage
+    if (!code) {
+      code = localStorage.getItem('pendingReferralCode') || sessionStorage.getItem('pendingReferralCode');
+    }
+
+    // 4. Check window.location in browser/web fallback
+    if (!code && typeof window !== 'undefined' && window.location) {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        code = urlParams.get('referral_code') || urlParams.get('ref') || urlParams.get('referrer') || urlParams.get('InviteCode') || urlParams.get('code');
+        if (!code && window.location.hash && window.location.hash.includes('?')) {
+          const hashQuery = window.location.hash.split('?')[1];
+          const hashParams = new URLSearchParams(hashQuery);
+          code = hashParams.get('referral_code') || hashParams.get('ref') || hashParams.get('referrer') || hashParams.get('InviteCode');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Process code if formatted as referrer=referral_code%3DXYZ
+    if (code && typeof code === 'string') {
+      if (code.includes('referral_code=')) {
+        const match = code.match(/referral_code=([^&]+)/i);
+        if (match && match[1]) {
+          code = decodeURIComponent(match[1]);
+        }
+      }
+      this.InviteCode = code.trim();
+      localStorage.setItem('pendingReferralCode', this.InviteCode);
+    }
   }
 
   togglePassword() {
@@ -156,7 +219,7 @@ export class SignupPage implements OnInit {
         this.Mobile = data.Mobile,
         this.RoleId = 2,
         this.Status = data.Status,
-        this.InviteCode = data.Reffercode
+        this.InviteCode = data.Reffercode || this.InviteCode || localStorage.getItem('pendingReferralCode') || ''
     } else {
       this.flags = 3
       this.Policy = true;
@@ -172,7 +235,7 @@ export class SignupPage implements OnInit {
         this.ConformPassword = data.Password,
         this.RoleId = 2,
         this.Status = data.Status,
-        this.InviteCode = data.Reffercode,
+        this.InviteCode = data.Reffercode || this.InviteCode || localStorage.getItem('pendingReferralCode') || '',
 
         this.getdata1();
     }
@@ -195,7 +258,7 @@ export class SignupPage implements OnInit {
       this.ConformPassword = data.Password,
       this.RoleId = 2,
       this.Status = data.Status,
-      this.InviteCode = data.Reffercode
+      this.InviteCode = data.Reffercode || this.InviteCode || localStorage.getItem('pendingReferralCode') || ''
   }
 
   VerifyMobileEmail() {
@@ -351,6 +414,8 @@ export class SignupPage implements OnInit {
               this.isSubmitting = false;
               this.generalservice.dismiss();
               if (data == "SUCCESS") {
+                localStorage.removeItem('pendingReferralCode');
+                sessionStorage.removeItem('pendingReferralCode');
                 this.GetUserdata();
                 //this.navCtrl.navigateForward(['/registration', { Mobile: this.Mobile, UserName: this.UserName, InviteCode: this.InviteCode }]);
               } else if (data == "Mobile Exists") {

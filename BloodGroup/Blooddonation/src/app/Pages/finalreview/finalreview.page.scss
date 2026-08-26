@@ -53,7 +53,33 @@ h4 {
   font-size: 18px;
 }
 .rows {
-  padding: 10%;
+  padding: 5% 10% 10% 10%;
+}
+
+.submit-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+  --color: #fff;
+}
+
+.button-pushable:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .red-button {

@@ -136,36 +136,16 @@
     </ion-col>
   </ion-row>
 
-  <br />
   <ion-row class="row-spacing" *ngIf="DonorFlag != 1">
-    <!--<ion-col size="12">-->
-      <!--<div class="items_center">
-        <div style="  color:gray">Already have an account?</div>
-      </div>-->
-      <!--<div class="items_center" routerLink="/login">
-        <div style="color:red">Login</div>
-      </div>-->
-    <!--</ion-col>-->
   </ion-row>
 </ion-content>
 <ion-footer *ngIf="OTPVerified == 1">
   <button type="submit" [disabled]="isSubmitting" (click)="NextDetails()">Next</button>
 </ion-footer>
-<ion-footer (click)="CheckOTP()" *ngIf="OTPFlag == 1 && OTPVerified != 1">
-  <button type="submit">Verify OTP</button>
+<ion-footer *ngIf="OTPFlag == 1 && OTPVerified != 1">
+  <button type="submit" [disabled]="isSubmitting" (click)="CheckOTP()">Verify OTP</button>
 </ion-footer>
-<ion-footer (click)="VerifyMobileEmail()" *ngIf="OTPFlag != 1 && OTPVerified != 1">
-  <button type="submit">Send OTP</button>
+<ion-footer *ngIf="OTPFlag != 1 && OTPVerified != 1">
+  <button type="submit" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>
 </ion-footer>
-<!--<ion-footer>
-  <div class="items_center">
-    <button type="submit" (click)="NextDetails()" *ngIf="OTPFlag == 1">Next</button>
-    <button type="submit" (click)="SendOTPToMobile()" *ngIf="OTPFlag != 1">Send OTP</button>
-  </div>
-</ion-footer>-->
-<style>
-  .footer-md {
-    -webkit-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-    box-shadow: none;
-  }
-</style>
+

@@ -31,27 +31,18 @@
    
   </ion-row>
   <ion-row class="rows">
-    <ion-col size="4"  > 
-    </ion-col>
-    <ion-col size="4" (click)="submit()">
-      <!--<button expand="full" class="red-button1" ripple>Submit</button>-->
-      <button expand="full" class="button-pushable" role="button">
+    <ion-col size="12" class="submit-col">
+      <button class="button-pushable" role="button" [disabled]="isSubmitting" (click)="submit()">
         <span class="button-shadow"></span>
         <span class="button-edge"></span>
         <span class="button-front text">
-          Submit
+          <span class="btn-content">
+            <ion-spinner *ngIf="isSubmitting" name="crescent" class="btn-spinner"></ion-spinner>
+            <span *ngIf="!isSubmitting">Submit</span>
+            <span *ngIf="isSubmitting">Submitting...</span>
+          </span>
         </span>
       </button>
     </ion-col>
-    <ion-col size="4"  > 
-    </ion-col>
-    <!--<ion-col size="6" (click)="submit()">
-    <button expand="full" class="red-button" ripple >Submit & Download</button>
-  </ion-col>
-  <ion-col size="6">
-    <button expand="full" class="white-button" ripple (click)="shareCardViaWhatsApp()">
-      <img src="../../../assets/Images/share1.png" class="sharee" />
-    </button>
-  </ion-col>-->
   </ion-row>
 </ion-content>

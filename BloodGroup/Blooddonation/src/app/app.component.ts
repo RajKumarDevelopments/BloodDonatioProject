@@ -285,6 +285,32 @@ private geolocationService: GeolocationserviceService,private permissionService:
     }
   }
 
+  extractAndStoreReferralCode(urlString: string) {
+    if (!urlString) return;
+    try {
+      let code = '';
+      const match = urlString.match(/[?&](?:referral_code|ref|invite_code|code)=([^&#]+)/i);
+      if (match && match[1]) {
+        code = decodeURIComponent(match[1]);
+      } else {
+        const referrerMatch = urlString.match(/[?&]referrer=([^&#]+)/i);
+        if (referrerMatch && referrerMatch[1]) {
+          const decoded = decodeURIComponent(referrerMatch[1]);
+          const subMatch = decoded.match(/referral_code=([^&]+)/i);
+          code = subMatch && subMatch[1] ? decodeURIComponent(subMatch[1]) : decoded;
+        }
+      }
+
+      if (code && code.trim()) {
+        localStorage.setItem('pendingReferralCode', code.trim());
+        sessionStorage.setItem('pendingReferralCode', code.trim());
+        console.log('Saved pending referral code from URL:', code.trim());
+      }
+    } catch (e) {
+      console.error('Error extracting referral code:', e);
+    }
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
       // Ensure dark mode is turned off by removing any dark mode classes
@@ -294,6 +320,26 @@ private geolocationService: GeolocationserviceService,private permissionService:
       document.body.style.setProperty('--ion-background-color', '#ffffff');
       document.body.style.setProperty('--ion-text-color', '#000000');
       // Add any other light mode styles you want to enforce
+
+      // Listen for Deep Links / App URL Open (Capacitor)
+      try {
+        App.addListener('appUrlOpen', (event: any) => {
+          if (event?.url) {
+            console.log('App opened with URL:', event.url);
+            this.extractAndStoreReferralCode(event.url);
+          }
+        });
+      } catch (e) {
+        console.error('Error attaching appUrlOpen listener:', e);
+      }
+
+      // Check current window URL / referrer for referral parameters
+      if (typeof window !== 'undefined' && window.location) {
+        this.extractAndStoreReferralCode(window.location.href);
+        if (document.referrer) {
+          this.extractAndStoreReferralCode(document.referrer);
+        }
+      }
     });
   }
 

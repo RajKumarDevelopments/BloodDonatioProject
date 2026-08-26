@@ -69,6 +69,7 @@ export class FinalreviewPage implements OnInit {
   Rolid: any;
   selectedTemplate: any;
   templateNumber: any;
+  isSubmitting: boolean = false;
 
   constructor(
     public general: GeneralService,
@@ -163,6 +164,10 @@ export class FinalreviewPage implements OnInit {
   }
 
   submit() {
+    if (this.isSubmitting) {
+      return;
+    }
+
     if (!this.MySelectedImage) {
       this.general.presentToast("Image not loaded properly. Please go back and try again.");
       return;
@@ -176,9 +181,11 @@ export class FinalreviewPage implements OnInit {
         UploadFile.append("RoleId", this.UserDetails[0].RegId);
         var url = "api/BG/UploadBloodDonationImagebyDonorwitroleid";
 
+        this.isSubmitting = true;
         this.general.present('Saving data...');
         this.general.PostData(url, UploadFile).subscribe((data: any) => {
           this.general.dismiss();
+          this.isSubmitting = false;
           if (data == "SUCCESS") {
             // Clear localStorage after successful submit
             localStorage.removeItem('framedImage');
@@ -188,15 +195,19 @@ export class FinalreviewPage implements OnInit {
             this.navCtrl.navigateForward('/home');
             this.sendmailtoadmin();
             this.downloadImage();
+          } else {
+            this.general.presentToast(data || "Upload failed. Please try again.");
           }
         }, error => {
           this.general.dismiss();
+          this.isSubmitting = false;
+          this.general.presentToast("Something went wrong while submitting. Please try again.");
         });
       } else {
         this.general.presentToast("Please upload your image..!");
       }
     } else {
-      this.noreqqstid()
+      this.noreqqstid();
     }
   }
 
@@ -227,9 +238,11 @@ export class FinalreviewPage implements OnInit {
       UploadFile.append("Flag", '1');
       var url = "api/BG/UploadBloodDonationImagenorqstId";
 
+      this.isSubmitting = true;
       this.general.present('Saving data...');
       this.general.PostData(url, UploadFile).subscribe((data: any) => {
         this.general.dismiss();
+        this.isSubmitting = false;
         if (data == "SUCCESS") {
           // Clear localStorage after successful submit
           localStorage.removeItem('framedImage');
@@ -239,9 +252,13 @@ export class FinalreviewPage implements OnInit {
           this.navCtrl.navigateForward('/home');
           this.sendmailtoadmin();
           this.downloadImage();
+        } else {
+          this.general.presentToast(data || "Upload failed. Please try again.");
         }
       }, error => {
         this.general.dismiss();
+        this.isSubmitting = false;
+        this.general.presentToast("Something went wrong while submitting. Please try again.");
       });
     }
   }

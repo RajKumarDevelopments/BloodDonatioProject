@@ -89,7 +89,27 @@ export class HomePage implements OnInit, AfterViewInit {
     return result;
   }
   async InviteFrinds() {
-    if (this.UserDetails[0].Status == false) {
+    this.UserDetails1 = localStorage.getItem("UserDetails");
+    if (this.UserDetails1) {
+      try {
+        this.UserDetails = JSON.parse(this.UserDetails1);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    if (!this.UserDetails) {
+      this.general.presentToast('Please login to invite friends.');
+      return;
+    }
+
+    const userObj = Array.isArray(this.UserDetails) ? this.UserDetails[0] : this.UserDetails;
+    if (!userObj) {
+      this.general.presentToast('Please login to invite friends.');
+      return;
+    }
+
+    if (userObj.Status === false) {
       this.general.presentAlert(
         "Alert",
         "Please activate the mail and proceed with the other operations in the application..."
@@ -97,20 +117,44 @@ export class HomePage implements OnInit, AfterViewInit {
       return;
     }
 
-    const RefferCode = this.UserDetails[0].Reffercode;
-    const baseUrl = "https://play.google.com/store/apps/details?id=com.gg.Bloodgroup";  
-    const text = `Blood donation is the real act of humanity. It costs nothing but saves a life.Donating blood is not just giving blood, it’s giving life.Every drop of blood is like a breath for someone out there. Donate and let them breathe.
- Use my referral code: ${RefferCode}
- Join now: ${baseUrl}`;
+    const RefferCode = userObj.Reffercode || userObj.RefferCode || userObj.ReferralCode || userObj.Reffer_Code || '';
+    const baseUrl = "https://play.google.com/store/apps/details?id=com.gg.Bloodgroup";
+    const shareUrl = RefferCode
+      ? `${baseUrl}&referrer=${encodeURIComponent('referral_code=' + RefferCode)}`
+      : baseUrl;
+
+    const text = `Blood donation is the real act of humanity. It costs nothing but saves a life. Donating blood is not just giving blood, it’s giving life. Every drop of blood is like a breath for someone out there. Donate and let them breathe.
+
+Use my referral code: ${RefferCode}
+Download App: ${shareUrl}`;
 
     try {
       await Share.share({
-        title: 'Lets Help',
+        title: 'Lets Help - Blood Donation',
         text: text,
-        url: baseUrl,
         dialogTitle: 'Share with your friends'
       });
-    } catch (error) {      
+    } catch (error) {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'Lets Help - Blood Donation',
+            text: text
+          });
+          return;
+        } catch (e) {
+          console.log('Navigator share cancelled/failed:', e);
+        }
+      }
+
+      if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(text);
+          this.general.presentToast('Referral invitation link copied to clipboard!');
+        } catch (e) {
+          console.log('Clipboard error:', e);
+        }
+      }
     }
   }
 

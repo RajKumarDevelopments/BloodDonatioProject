@@ -1,186 +1,147 @@
 
 
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <div class="headerhight">
-      <ion-row class="headerw-100">
-        <ion-col size="1">
-          <ion-icon name="chevron-back-outline" routerLink="/home"></ion-icon>
-        </ion-col>
-        <ion-col size="11">
-          <ion-title>REGISTER DONATION / SHARE YOUR SERVICE</ion-title>
-        </ion-col>
-      </ion-row>
-    </div>
+    <ion-buttons slot="start">
+      <ion-icon name="chevron-back-outline" routerLink="/home" class="header-back-icon"></ion-icon>
+    </ion-buttons>
+    <ion-title class="main-title">REGISTER DONATION / SHARE YOUR SERVICE</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-row>
-    <ion-col size="12" style="margin-left:15px">
-      <h2>Donation and validation</h2>
-      You will recieve an certificate of Appreciation once your Donatin is validated
+  <!-- Top Title & Icon Section -->
+  <ion-row class="top-section">
+    <ion-col size="12" class="top-text-col">
+      <h2 class="section-heading">Donation and validation</h2>
+      <p class="section-subtext">You will receive a certificate of appreciation once your donation is validated.</p>
     </ion-col>
-    <ion-col size="4"></ion-col>
-    <ion-col size="4" style="display:flex; justify-content:center;">
-      <img src="../../../assets/Images/gggg.JPG" />
+    <ion-col size="12" class="medal-col">
+      <img src="../../../assets/Images/gggg.JPG" alt="Medal" class="medal-img" />
     </ion-col>
-    <ion-col size="4"></ion-col>
   </ion-row>
 
-  <ion-grid class="gridd">
+  <div class="content-wrapper">
 
-    <!-- Blood Request Dropdown -->
-    <ion-row>
-      <ion-col size="12">
-        <div class="header-bar">
+    <!-- Accepted Blood Requests Selector -->
+    <div class="blood-req-bar" *ngIf="!messg && dropBloodRequestIDs?.length">
+      <div class="req-title">
+        Accepted blood requests
+      </div>
 
-          <div class="title-text">
-            Accepted blood request Id's
-          </div>
+      <!-- Select Dropdown when requests exist -->
+      <div class="select-box">
+        <ion-icon name="funnel" class="funnel-icon"></ion-icon>
+        <ion-select placeholder="Select Blood Request"
+                    [(ngModel)]="selectedBloodRequestID"
+                    (ionChange)="reqst(selectedBloodRequestID)"
+                    (ionCancel)="clearBloodRequest()"
+                    interface="alert"
+                    [interfaceOptions]="customAlertOptions"
+                    class="blood-select">
+          <ion-select-option *ngFor="let item of dropBloodRequestIDs"
+                             [value]="item.BloodRequestID">
+            {{ item.BloodRequestID }} - {{ item.ContactPerson || item.HospitalName }}
+          </ion-select-option>
+        </ion-select>
+        <ion-icon *ngIf="selectedBloodRequestID" name="close-circle" class="clear-icon" (click)="clearBloodRequest()"></ion-icon>
+      </div>
+    </div>
 
-          <div *ngIf="messg"  (click)="goToDonate()">
-            <p  class="no-req">No Requests</p>
-          </div>
-
-          <div class="select-box" *ngIf="!messg">
-            <ion-icon name="funnel" class="funnel-icon"></ion-icon>
-            <ion-select placeholder="Select Blood Request"
-                        [(ngModel)]="selectedBloodRequestID"
-                        (ionChange)="reqst(selectedBloodRequestID)"
-                         (ionCancel)="clearBloodRequest()"> <!-- 🔴 CHANGED -->>
-              <ion-select-option *ngFor="let item of dropBloodRequestIDs"
-                                 [value]="item.BloodRequestID">
-                {{ item.BloodRequestID }} ({{ item.ContactPerson }})
-              </ion-select-option>
-            </ion-select>
-          </div>
-
-        </div>
-      </ion-col>
-    </ion-row>
-
-    <!-- Search -->
-    <div *ngIf="!hideSearchBar">
+    <!-- Search Bar -->
+    <div class="search-wrap" *ngIf="!hideSearchBar">
       <ion-searchbar [(ngModel)]="searchQuery"
                      (ionInput)="onSearchInput()"
                      debounce="500"
-                     placeholder="Search for a location">
+                     placeholder="Search for a location"
+                     class="custom-searchbar">
       </ion-searchbar>
 
-      <ion-list *ngIf="predictions?.length">
-        <ion-item *ngFor="let prediction of predictions"
-                  (click)="selectPrediction(prediction)">
-          {{ prediction.description }}
+      <ion-list class="predictions-list" *ngIf="predictions?.length">
+        <ion-item button *ngFor="let prediction of predictions"
+                  (click)="selectPrediction(prediction)"
+                  lines="full">
+          <ion-icon name="location-outline" slot="start" color="danger"></ion-icon>
+          <ion-label class="ion-text-wrap">{{ prediction.description }}</ion-label>
         </ion-item>
       </ion-list>
     </div>
 
-    <!-- Map -->
-    <div class="map-wrapper">
+    <!-- Hidden Map (required for Google Places API) -->
+    <div class="hidden-map">
       <div #map id="map"></div>
     </div>
 
-  </ion-grid>
+    <!-- ===== DONATION DETAILS ===== -->
+    <div *ngIf="Myhospital" class="donation-details-wrap">
+      <ion-card class="hospital-card">
+        <ion-card-content>
+          <!-- Donation Center Row -->
+          <div class="card-detail-item">
+            <span class="detail-title">Donation Center:</span>
+            <span class="detail-description">{{ Myhospital }}</span>
+          </div>
 
-  <!-- ===== DONATION DETAILS ===== -->
+          <!-- Donate Date Row -->
+          <div class="card-detail-item date-detail-item" id="open-modal2" [class.locked]="isDateLocked">
+            <span class="detail-title">Donate Date:</span>
+            <div class="date-val-wrap">
+              <span class="date-chosen-text" *ngIf="Donate">{{ BloodRequestDate | date:'dd-MM-yyyy' }}</span>
+              <ion-icon name="calendar-outline" class="cal-icon" *ngIf="!Donate && !isDateLocked"></ion-icon>
+              <ion-icon name="lock-closed-outline" class="cal-icon locked" *ngIf="isDateLocked"></ion-icon>
+            </div>
+          </div>
 
-  <div *ngIf="Myhospital">
-    <ion-row>
-      <ion-col size="12">
-        <ion-card style="background-color:white;">
-          <ion-card-content>
+          <!-- Date Picker Modal -->
+          <ion-modal #modal2
+                     *ngIf="!isDateLocked"
+                     trigger="open-modal2"
+                     [initialBreakpoint]="0.75"
+                     [breakpoints]="[0, 0.75, 1]">
 
-            <ion-row>
-              <ion-col size="6">
-                <h5>Donation Center:</h5>
-              </ion-col>
-              <ion-col size="6">
-                <div>{{ Myhospital }}</div>
-              </ion-col>
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title size="small">Select Donation Date</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button (click)="modal2.dismiss()" color="danger" strong="true">
+                      Done
+                    </ion-button>
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
 
-              <!-- Donate Date (LOCKED when BloodRequest selected) -->
-              <ion-col size="12">
-                <ion-item id="open-modal2"
-                          class="custom_item transparent-item"
-                          [disabled]="isDateLocked">
+              <div class="datetime-wrapper">
+                <ion-datetime presentation="date"
+                              [max]="maxDate"
+                              [(ngModel)]="BloodRequestDate"
+                              (ionChange)="Donatedate($event.detail.value)">
+                </ion-datetime>
+              </div>
+            </ng-template>
+          </ion-modal>
+        </ion-card-content>
+      </ion-card>
 
-                  <ion-label>Donate Date:</ion-label>
+      <!-- Upload Image Card -->
+      <ion-card *ngIf="Donate" class="add-picture-card" (click)="take1('')">
+        <ion-card-content class="picture-card-content">
+          <div class="cardss-text">
+            Add Donor Book Picture
+          </div>
+          <div class="camera-icon-wrap">
+            <ion-icon name="camera" class="retakes"></ion-icon>
+          </div>
+        </ion-card-content>
+      </ion-card>
 
-                  <!-- Calendar icon only when editable -->
-                  <ion-icon name="calendar-outline"
-                            slot="end"
-                            *ngIf="!Donate && !isDateLocked">
-                  </ion-icon>
-
-                  <div class="regright" *ngIf="Donate">
-                    {{ BloodRequestDate | date:'dd-MM-yyyy hh:mm a' }}
-                  </div>
-
-                </ion-item>
-
-                <!-- Date Picker Modal (ONLY when NOT locked) -->
-                <ion-modal #modal2
-                           *ngIf="!isDateLocked"
-                           trigger="open-modal2"
-                           [initialBreakpoint]="0.50"
-                           [breakpoints]="[0,1]">
-
-                  <ng-template>
-                    <ion-header>
-                      <ion-toolbar>
-                        <ion-buttons slot="end">
-                          <ion-button (click)="modal2.dismiss()" style="color:blue">
-                            OK
-                          </ion-button>
-                        </ion-buttons>
-                      </ion-toolbar>
-                    </ion-header>
-
-                    <ion-item>
-                      <ion-datetime presentation="date"
-                                    [max]="maxDate"
-                                    [preferWheel]="true"
-                                    [(ngModel)]="BloodRequestDate"
-                                    (ionChange)="Donatedate($event.detail.value)">
-                      </ion-datetime>
-                    </ion-item>
-
-                  </ng-template>
-                </ion-modal>
-
-                <!-- Optional hint -->
-                <ion-note color="medium" *ngIf="isDateLocked">
-                  <!--Donation date is fixed for this blood request-->
-                </ion-note>
-
-              </ion-col>
-            </ion-row>
-
-          </ion-card-content>
-        </ion-card>
-
-        <!-- Upload Image -->
-        <ion-card *ngIf="Donate" style="background-color:white; margin-top:4px">
-          <ion-grid>
-            <ion-row (click)="take1('')">
-              <ion-col size="8" class="cardss text-center">
-                Add Donor Book Picture
-              </ion-col>
-              <ion-col size="4" class="ion-text-end camm">
-                <ion-icon name="camera" class="retakes"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card>
-
-      </ion-col>
-    </ion-row>
-
-    <div class="donor" *ngIf="selectedImage">
-      <img [src]="HomeUrl + selectedImage" class="imgclass" />
+      <!-- Preview Image -->
+      <div class="donor-preview" *ngIf="selectedImage">
+        <img [src]="HomeUrl + selectedImage" class="imgclass" alt="Donor Preview" />
+      </div>
     </div>
+
   </div>
 
 </ion-content>
