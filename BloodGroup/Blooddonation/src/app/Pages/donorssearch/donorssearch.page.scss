@@ -1,7 +1,6 @@
-
 .header-md {
-  box-shadow: none;
-  border-bottom: 1px solid #d3d3d3a6;
+  box-shadow: none !important;
+  border-bottom: none !important;
 }
 
 .card1 {
@@ -46,40 +45,96 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  height: 50vh;
+}
+
+.empty-state-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 52vh;
+}
+
+.card {
+  border-radius: 50%;
+  width: min(270px, 72vw);
+  height: min(270px, 72vw);
+  background-color: #f1f2f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .card h4 {
-  padding: 15px;
+  padding: 20px;
   text-align: center;
-  margin: 43% 0% 0% 0%;
+  margin: 0;
+  font-size: 17px;
+  color: #555;
+  font-weight: 500;
 }
 
-.tabs_title {
-  font-size: 10px;
-  text-align: center;
+.footer_content {
+  height: 10vh;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
   display: flex;
-  align-content: center;
-  justify-content: center
+  align-items: center;
 }
 
-.tabs_icon {
-  margin-left: 0.9rem;
-  font-size: 20px;
-  padding: 5px;
+.footer_col {
   display: flex;
-  align-content: center;
-  justify-content: center
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 
 .border {
-  border: 1px solid gray;
-  height: 50px;
-  width: 60px;
+  height: 48px;
+  width: 58px;
   border-radius: 10px;
-  background-color: #d8dae396;
+  background-color: rgba(216, 218, 227, 0.5882352941);
   border: none;
-  padding: 5px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.border img.ficons {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  margin: 0 auto !important;
+  display: block;
+}
+
+.border img.ficons_white {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain;
+  margin: 0 auto !important;
+  display: block;
+}
+
+.tabs_icon {
+  font-size: 22px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tabs_title {
+  font-size: 9.5px !important;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 2px;
+  color: #333;
 }
 
 .row-spacing {
@@ -276,105 +331,24 @@ ion-segment-button:hover {
   margin-top: -1rem;
 }
 
+.tabs-header-wrapper {
+  margin-top: 18px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .tab-wrap {
-  width: 50%;
-  margin-left: 25%;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto !important;
   position: relative;
   display: flex;
   background-color: #f1f2f6;
   border-radius: 100px;
-}
-
-input[type=radio][name=tabs] {
-  position: absolute;
-  z-index: -1;
-}
-
-input[type=radio][name=tabs]:checked + .tab-label-content label {
-  color: white;
-}
-
-input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {
-  display: block;
-}
-
-input[type=radio][name=tabs]:nth-of-type(1):checked ~ .slide {
-  left: calc((100% / 4) * 0);
-}
-
-input[type=radio][name=tabs]:nth-of-type(2):checked ~ .slide {
-  left: 63%;
-}
-
-input[type=radio][name=tabs]:nth-of-type(3):checked ~ .slide {
-  left: calc((100% / 4) * 2);
-}
-
-input[type=radio][name=tabs]:nth-of-type(4):checked ~ .slide {
-  left: calc((100% / 4) * 3);
-}
-
-input[type=radio][name=tabs]:first-of-type:checked ~ .slide {
-  left: 27px;
-}
-
-label {
-  cursor: pointer;
+  padding: 3px;
   box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  transition: color 0.2s ease;
-  width: 100%;
-  padding: 11px;
-}
-
-.slide {
-  background: #008cb3;
-  width: calc(100% / 4);
-  height: 4px;
-  position: absolute;
-  left: 0;
-  top: calc(100% - 4px);
-  transition: left 0.3s ease-out;
-}
-
-.tab-label-content {
-  width: 100%;
-}
-
-.tab-label-content .tab-content {
-  position: absolute;
-  top: 100px;
-  left: 16px;
-  line-height: 130%;
-  display: none;
-}
-
-.accordion-content {
-  transition: max-height 0.3s ease-in-out;
-  overflow: hidden;
-  max-height: 0; /* Start with zero height */
-}
-
-.accordion-content[style*="display: block"] {
-  max-height: 500px; /* Set max height when open */
-}
-
-/* CRITICAL FIX: Force active tab styling */
-input[type=radio][name=tabs]:checked + .tab-label-content label,
-.tab-label-content label.active {
-  background-color: #ec1c2c !important;
-  border-radius: 100px !important;
-  box-shadow: 0 3px 10px rgba(17, 17, 17, .2) !important;
-  padding: 11px !important;
-  color: white !important;
-}
-
-input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {
-  display: block;
-  color: black; /* Change text color inside tab-content */
 }
 
 input[type=radio][name=tabs] {
@@ -382,22 +356,51 @@ input[type=radio][name=tabs] {
   opacity: 0;
   width: 0;
   height: 0;
-  display: none
+  display: none;
 }
 
-@media screen and (max-width: 800px) {
-
-  .tab-wrap {
-    width: 100%;
-    margin-left: 2%;
-  }
+.tab-label-content {
+  flex: 1;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-:host .ionicon {
+.tab-label-content label {
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.2s ease;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
 }
 
-.round1 {
-  margin-left: 125%
+input[type=radio][name=tabs]:checked + .tab-label-content label,
+.tab-label-content label.active {
+  background-color: #ec1c2c !important;
+  border-radius: 100px !important;
+  box-shadow: 0 2px 8px rgba(236, 28, 44, 0.35) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.accordion-content {
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
+  max-height: 0;
+}
+
+.accordion-content[style*="display: block"] {
+  max-height: 500px;
 }
 
 input {
@@ -408,19 +411,17 @@ input {
   background: white;
 }
 
+:host .ionicon {
+}
+
+.round1 {
+  margin-left: 125%
+}
+
 @media only screen and (max-width:600px) {
-  input[type=radio][name=tabs]:checked + .tab-label-content label,
-  .tab-label-content label.active {
-    font-size: 13px;
-  }
 
   label {
-    font-size: 13px;
-  }
-
-  .tab-wrap {
-    width: 100%;
-    margin-left: 0%;
+    font-size: 12.5px;
   }
 }
 

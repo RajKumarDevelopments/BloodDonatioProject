@@ -1,47 +1,41 @@
 <ion-header [translucent]="true">
-  <ion-row>
-    <ion-col size="2" routerLink="/home">
-      <!--<ion-icon name="chevron-back-outline"></ion-icon>-->
-    </ion-col>
-    <ion-col size="8">
-      <ion-title>DONATE NOW</ion-title>
-    </ion-col>
-    <ion-col size="2">
-      <!--<ion-buttons>
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>-->
-    </ion-col>
-  </ion-row>
+  <ion-toolbar>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="2" routerLink="/home">
+        <!--<ion-icon name="chevron-back-outline"></ion-icon>-->
+      </ion-col>
+      <ion-col size="8">
+        <ion-title>DONATE NOW</ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <!--<ion-buttons>
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>-->
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-row>
-    <ion-col size="2"></ion-col>
-    <ion-col size="8">
-      <div class="tab-wrap">
-        <input type="radio" name="tabs" id="tab1" [checked]="selectedTab === 'open'" (change)="setTab('open')">
-        <div class="tab-label-content" (click)="setTab('open')">
-          <label for="tab1" [class.active]="selectedTab === 'open'">In your location</label>
-        </div>
-        <input type="radio" name="tabs" id="tab2" [checked]="selectedTab === 'closed'" (change)="setTab('closed')">
-        <div class="tab-label-content" (click)="setTab('closed')">
-          <label for="tab2" [class.active]="selectedTab === 'closed'">Other location</label>
-        </div>
+  <div class="tabs-header-wrapper">
+    <div class="tab-wrap">
+      <input type="radio" name="tabs" id="tab1" [checked]="selectedTab === 'open'" (change)="setTab('open')">
+      <div class="tab-label-content" (click)="setTab('open')">
+        <label for="tab1" [class.active]="selectedTab === 'open'">In your location</label>
       </div>
-    </ion-col>
-    <ion-col size="2"></ion-col>
-  </ion-row>
+      <input type="radio" name="tabs" id="tab2" [checked]="selectedTab === 'closed'" (change)="setTab('closed')">
+      <div class="tab-label-content" (click)="setTab('closed')">
+        <label for="tab2" [class.active]="selectedTab === 'closed'">Other location</label>
+      </div>
+    </div>
+  </div>
 
-  <div *ngIf="!curnt">
-    <ion-row class="ion-margin-top ion-padding-top">
-      <ion-col size="12" class="ion-padding-top">
-        <div class="center">
-          <div class="card" style="display: flex;justify-content: center;align-items: center;">
-            <h4 style="margin:0!important;padding:0!important">{{msg}}</h4>
-          </div>
-        </div>
-      </ion-col>
-    </ion-row>
+  <div *ngIf="!curnt" class="empty-state-wrapper">
+    <div class="center">
+      <div class="card" style="display: flex;justify-content: center;align-items: center;">
+        <h4 style="margin:0!important;padding:20px!important">{{msg}}</h4>
+      </div>
+    </div>
   </div>
 
   <!-- In Your Location Tab -->
@@ -237,37 +231,39 @@
   </div>
 </ion-content>
 
-<div class="footer_content">
-  <ion-row>
-    <ion-col size="2.4">
-      <div class="border" routerLink="/home">
-        <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
-        <div class="tabs_title">Home</div>
-      </div>
-    </ion-col>
-    <ion-col size="2.4">
-      <div class="border" routerLink="/needblood">
-        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donatenowwhite.png" />
-        <div class="tabs_title">Find donor</div>
-      </div>
-    </ion-col>
-    <ion-col size="2.4">
-      <div class="border" routerLink="/joincampaign">
-        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Join Campaign.png" />
-        <div class="tabs_title">Campaign</div>
-      </div>
-    </ion-col>
-    <ion-col size="2.4" routerLink="/donatenow">
-      <div class="border" style="background-color:#a9b5cb;border:none">
-        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/donatenow.png" />
-        <div class="tabs_title"></div>
-      </div>
-    </ion-col>
-    <ion-col size="2.4" routerLink="/letshlpgallerry">
-      <div class="border">
-        <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Gallery.png" />
-        <div class="tabs_title">Gallery</div>
-      </div>
-    </ion-col>
-  </ion-row>
+<div class="footer_content" style="background-color: #f0f1f5">
+  <div class="responsive-container" style="width: 100%;">
+    <ion-row class="ion-nowrap ion-align-items-center" style="margin: 0; width: 100%;">
+      <ion-col size="2.4" class="footer_col">
+        <div class="border footer-btn" routerLink="/home">
+          <ion-icon name="home-outline" class="tabs_icon"></ion-icon>
+          <div class="tabs_title">Home</div>
+        </div>
+      </ion-col>
+      <ion-col size="2.4" class="footer_col">
+        <div class="border footer-btn" routerLink="/needblood">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Donatenowwhite.png" />
+          <div class="tabs_title">Find donor</div>
+        </div>
+      </ion-col>
+      <ion-col size="2.4" class="footer_col">
+        <div class="border footer-btn" routerLink="/joincampaign">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Join Campaign.png" />
+          <div class="tabs_title">Campaign</div>
+        </div>
+      </ion-col>
+      <ion-col size="2.4" class="footer_col">
+        <div class="border footer-btn" style="background-color:#a9b5cb;border:none" routerLink="/donorssearch">
+          <img class="ficons_white" src="../../../assets/client images/All Icons/Home page Icons/donatenow.png" />
+          <div class="tabs_title"></div>
+        </div>
+      </ion-col>
+      <ion-col size="2.4" class="footer_col">
+        <div class="border footer-btn" routerLink="/letshlpgallerry">
+          <img class="ficons" src="../../../assets/client images/All Icons/Home page Icons/Gallery.png" />
+          <div class="tabs_title">Gallery</div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
 </div>

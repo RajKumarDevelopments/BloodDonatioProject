@@ -3,20 +3,43 @@
   background: url('https://png.pngtree.com/background/20220731/original/pngtree-simple-red-curve-background-picture-image_1912762.jpg') no-repeat center center / cover;
 }*/
 
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  min-height: calc(100vh - 56px - 10vh);
+  padding: 10px 0 16px 0;
+}
+
+.center-circle-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px auto 12px auto;
+}
+
+.action-cards-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 ion-card {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   border-top: 2px solid red;
   border-left: 2px solid red;
-  border-radius: 20px
+  border-radius: 20px;
 }
 
 .card {
-  /*box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;*/
-  border-radius: 150px;
-  width: 300px;
-  height: 300px;
+  border-radius: 50%;
+  width: min(260px, 68vw);
+  height: min(260px, 68vw);
   background-color: #f1f2f6;
-  /*margin-top: 1rem*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card h6 {
@@ -29,7 +52,7 @@ ion-card {
 .center {
   align-items: center;
   display: flex;
-  justify-content: center
+  justify-content: center;
 }
 
 .card1 {
@@ -96,32 +119,67 @@ ion-card {
   color: #6c757d; /* Gray color (adjust as needed) */
 }
 
-.tabs_title {
-  font-size: 10px;
-  text-align: center;
-  /*margin-left: -15%;*/
+.footer_content {
+  height: 10vh;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
   display: flex;
-  align-content: center;
-  justify-content: center
+  align-items: center;
 }
 
-.tabs_icon {
-  margin-left: 0.9rem;
-  font-size: 20px;
-  padding: 5px;
+.footer_col {
   display: flex;
-  align-content: center;
-  justify-content: center
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 
 .border {
-  border: 1px solid gray;
-  height: 50px;
-  width: 60px;
+  height: 48px;
+  width: 58px;
   border-radius: 10px;
-  background-color: #d8dae396;
+  background-color: rgba(216, 218, 227, 0.5882352941);
   border: none;
-  padding: 5px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.border img.ficons {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  margin: 0 auto !important;
+  display: block;
+}
+
+.border img.ficons_white {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain;
+  margin: 0 auto !important;
+  display: block;
+}
+
+.tabs_icon {
+  font-size: 22px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tabs_title {
+  font-size: 9.5px !important;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 2px;
+  color: #333;
 }
 
 .card_img {

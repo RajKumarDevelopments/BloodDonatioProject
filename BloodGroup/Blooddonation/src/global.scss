@@ -197,20 +197,29 @@ ion-content {
   box-sizing: border-box;
 }
 
+ion-header {
+  background: white;
+  box-shadow: none !important;
+}
+
 ion-header ion-toolbar:first-of-type {
-  padding-top: var(--ion-safe-area-top, 0);
+  padding-top: max(var(--ion-safe-area-top, 0px), env(safe-area-inset-top, 0px), 16px);
   --background: white;
   --color: black;
-  box-shadow: none;
-  margin-bottom: -5%;
-  border-bottom: 1px solid #1e1c1c17; 
+  --min-height: 56px;
+  --border-width: 0 !important;
+  --border-color: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
 }
 
 ion-title {
   text-align: center;
-  padding: 15px;
-  font-weight: 600;
+  padding: 12px 15px;
+  font-weight: 700;
+  font-size: 16px !important;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 ion-toolbar ion-icon { 

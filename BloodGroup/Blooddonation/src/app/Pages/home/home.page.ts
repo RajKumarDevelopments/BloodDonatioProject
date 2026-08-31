@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { NavController, LoadingController, ActionSheetController, ModalController } from '@ionic/angular';
+import { NavController, LoadingController, ActionSheetController, ModalController, MenuController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
@@ -25,7 +25,7 @@ export class HomePage implements OnInit, AfterViewInit {
     Counts: any;
 
   constructor(private alertController: AlertController, public general: GeneralService, public navCtrl: NavController, public datePipe: DatePipe,
-    private socialSharing: SocialSharing) {
+    private socialSharing: SocialSharing, private menuCtrl: MenuController) {
     this.UserDetails1 = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.UserDetails1);
     this.HomeUrL = localStorage.getItem("URL");
@@ -67,6 +67,13 @@ export class HomePage implements OnInit, AfterViewInit {
   }
   goToProfile() {
     this.navCtrl.navigateForward('/profiledetails');
+  }
+  goToNotifications() {
+    this.navCtrl.navigateForward('/notifications');
+  }
+  openMenu() {
+    this.menuCtrl.enable(true);
+    this.menuCtrl.open('end');
   }
   goNext() {
     this.swiper?.slideNext();

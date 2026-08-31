@@ -267,8 +267,23 @@ span {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 5px;
-  padding-bottom: 5%;
+  gap: 12px;
+  padding-top: 10px;
+  padding-bottom: 12px;
+}
+
+.banner_section {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.action_cards_section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 2px;
+  margin-bottom: 6px;
 }
 
 .top_header {
@@ -277,9 +292,14 @@ span {
   background-color: #ffffff;
   position: relative;
   height: auto;
-  padding-bottom: 5px;
+  padding-top: max(var(--ion-safe-area-top, 0px), env(safe-area-inset-top, 0px), 24px);
+  padding-bottom: 12px;
   border-radius: 0px 0px 25px 25px;
-  /*padding: 10px;*/
+  z-index: 10;
+}
+
+.top-nav-row {
+  min-height: 38px;
 }
 
 .sub_text {
@@ -363,11 +383,12 @@ hr {
 //================
 
 swiper-container {
-  width: 96%;
+  width: 94%;
   height: auto;
   margin: 0 auto;
   border-radius: 15px;
   overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .swiper-slide {
@@ -394,8 +415,8 @@ swiper-container {
 
 .image-container img {
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 7;
+  height: 175px;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: 15px;
   display: block;
@@ -435,6 +456,56 @@ swiper-container {
   height: 100%;
 }
 
+.footer_col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
 .footer-btn {
+  height: 48px;
+  width: 58px;
+  border-radius: 10px;
+  background-color: rgba(216, 218, 227, 0.5882352941);
+  border: none;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
+}
+
+.footer-btn img.ficons {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain;
+  margin: 0 auto !important;
+  display: block;
+}
+
+.footer-btn img.ficons_white {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain;
+  margin: 0 auto !important;
+  display: block;
+}
+
+.tabs_icon {
+  font-size: 22px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tabs_title {
+  font-size: 9.5px !important;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 2px;
+  color: #333;
 }
