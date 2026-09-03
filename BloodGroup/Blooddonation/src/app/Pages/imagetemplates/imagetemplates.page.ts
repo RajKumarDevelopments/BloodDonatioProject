@@ -677,65 +677,54 @@ export class ImagetemplatesPage implements OnInit {
     // Clear canvas
     ctx.clearRect(0, 0, W, H);
 
-    const TEMPLATE_DISPLAY_SIZE = 300; 
-    const DRAW_AREA_SIZE = 300; // Increased to 300 to match full container size
+    // Get actual display size of the template composite in UI
+    const compositeEl = document.getElementById('templateComposite');
+    const displayW = (compositeEl && compositeEl.clientWidth > 0) ? compositeEl.clientWidth : 300;
+    const displayH = (compositeEl && compositeEl.clientHeight > 0) ? compositeEl.clientHeight : 300;
 
-    // Calculate scaling ratio
-    const ratio = W / TEMPLATE_DISPLAY_SIZE;
+    const ratioX = W / displayW;
+    const ratioY = H / displayH;
 
-    // Scale draw area to canvas size
-    const canvasDrawSize = DRAW_AREA_SIZE * ratio;
+    // Base cover scaling (matching object-fit: cover in UI)
+    const baseScale = Math.max(W / cameraImage.naturalWidth, H / cameraImage.naturalHeight);
+    const coverW = cameraImage.naturalWidth * baseScale;
+    const coverH = cameraImage.naturalHeight * baseScale;
 
-    const cx = W / 2;
-    const cy = H / 2;
-
-    // Scale to fit image in template area (same as UI)
-    const baseScale = canvasDrawSize / Math.max(cameraImage.naturalWidth, cameraImage.naturalHeight);
-    const finalScale = baseScale * this.imageTransform.scale;
-
-    const drawW = cameraImage.naturalWidth * finalScale;
-    const drawH = cameraImage.naturalHeight * finalScale;
-
-    // Scale offsets to canvas
-    const offsetX = this.imageTransform.offsetX * ratio;
-    const offsetY = this.imageTransform.offsetY * ratio;
-
-    const dx = cx - (drawW / 2) + offsetX;
-    const dy = cy - (drawH / 2) + offsetY;
-
+    // Calculate center with offsets scaled to canvas resolution
+    const targetCenterX = (W / 2) + (this.imageTransform.offsetX * ratioX);
+    const targetCenterY = (H / 2) + (this.imageTransform.offsetY * ratioY);
 
     // ---- STEP 1: WHITE BACKGROUND ----
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, W, H);
 
-    // ---- STEP 2: DRAW USER IMAGE ----
+    // ---- STEP 2: DRAW USER IMAGE WITH EXACT TRANSFORMS ----
     ctx.save();
 
-    // Apply rotation and translation
+    // Move to target center
+    ctx.translate(targetCenterX, targetCenterY);
+
+    // Apply rotation around center
     if (this.imageTransform.rotation !== 0) {
-      const rotCenterX = cx + offsetX;
-      const rotCenterY = cy + offsetY;
-      ctx.translate(rotCenterX, rotCenterY);
       ctx.rotate((this.imageTransform.rotation * Math.PI) / 180);
-      ctx.translate(-rotCenterX, -rotCenterY);
     }
 
-    // Draw image (no clipping, let the template mask it)
-    ctx.drawImage(cameraImage, dx, dy, drawW, drawH);
+    // Apply scale around center
+    if (this.imageTransform.scale !== 1) {
+      ctx.scale(this.imageTransform.scale, this.imageTransform.scale);
+    }
 
-    ctx.restore(); 
+    // Draw image centered at (0, 0)
+    ctx.drawImage(cameraImage, -coverW / 2, -coverH / 2, coverW, coverH);
 
-
+    ctx.restore();
 
     // ---- STEP 3: DRAW TEMPLATE FRAME ----
     ctx.drawImage(templateImage, 0, 0, W, H);
 
-
-
     // ---- STEP 4: CONVERT TO HIGH QUALITY BASE64 ----
-    // Use quality 1.0 for maximum quality
-    this.framedBase64Image = canvas.toDataURL('image/jpeg', 1.0);
-
+    this.framedBase64Image = canvas.toDataURL('image/jpeg', 0.95);
+    localStorage.setItem('framedImage', this.framedBase64Image);
   }
 
   onImageLoad() {

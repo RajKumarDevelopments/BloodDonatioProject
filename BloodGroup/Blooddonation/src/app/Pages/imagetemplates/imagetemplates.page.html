@@ -252,109 +252,123 @@
     </div>
 
     <!-- Template 1 - ids2 -->
-    <ion-col class="image-container camera-container" *ngIf="temp==1">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+    <ion-col class="image-container" *ngIf="temp==1">
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/circleframe.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/circleframe.png" class="base-image1" alt="Base Image" />
     </ion-col>
 
     <!-- Template 2 - ids2 -->
     <ion-col class="image-container" *ngIf="temp==2">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/framelove.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/framelove.png" class="base-image1" alt="Base Image" />
     </ion-col>
 
     <!-- Template 3 - ids2 -->
     <ion-col class="image-container" *ngIf="temp==3">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/framepentagoncopy.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/framepentagoncopy.png" class="base-image1" alt="Base Image" />
     </ion-col>
 
     <!-- Template 4 - ids2 -->
     <ion-col class="image-container" *ngIf="temp==4">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/framepentagon.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/framepentagon.png" class="base-image1" alt="Base Image" />
     </ion-col>
 
     <!-- Template 5 - ids2 -->
     <ion-col class="image-container" *ngIf="temp==5">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/frame1.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/frame1.png" class="base-image1" alt="Base Image" />
     </ion-col>
 
     <!-- Template 6 - ids2 -->
     <ion-col class="image-container" *ngIf="temp==6">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/frame2.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/frame2.png" class="base-image1" alt="Base Image" />
     </ion-col>
 
     <!-- Template 7 - ids2 -->
     <ion-col class="image-container" *ngIf="temp==7">
-      <div class="capture-container camera-container22"
-           (touchstart)="onTouchStart($event)"
-           (touchmove)="onTouchMove($event)"
-           (touchend)="onTouchEnd($event)">
-        <img #adjustableImage
-             *ngIf="selectedImage"
-             [src]="selectedImage"
-             class="camera-image adjustable-image"
-             [ngStyle]="getImageTransformStyle()" />
+      <div class="posrelative template-composite" id="templateComposite">
+        <div class="capture-container camera-container"
+             (touchstart)="onTouchStart($event)"
+             (touchmove)="onTouchMove($event)"
+             (touchend)="onTouchEnd($event)">
+          <img #adjustableImage
+               *ngIf="selectedImage"
+               [src]="selectedImage"
+               class="camera-image adjustable-image"
+               [ngStyle]="getImageTransformStyle()" />
+        </div>
+        <img src="../../../assets/Images/leftlogo.png" class="base-image1" alt="Base Image" />
       </div>
-      <img src="../../../assets/Images/leftlogo.png" class="base-image1" alt="Base Image" />
-    </ion-col>>
+    </ion-col>
   </div>
 
   <ion-label>
