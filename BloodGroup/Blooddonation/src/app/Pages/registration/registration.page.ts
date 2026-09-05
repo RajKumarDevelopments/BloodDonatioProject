@@ -863,6 +863,8 @@ export class RegistrationPage {
                   const fullName = (result[0].FullName || `${result[0].FirstName || ''} ${result[0].SurName || ''}`.trim() || this.FirstName || '').trim();
                   this.memberId = result[0].UserProtalID ? result[0].UserProtalID : ('LH' + String(result[0].RegId).padStart(7, '0'));
                   
+                  const referralCode = (result[0].Reffercode || result[0].RefferCode || result[0].ReferralCode || result[0].ReferenceCode || localStorage.getItem('pendingReferralCode') || '').trim();
+                  
                   var emailForm = new FormData();
                   emailForm.append('Email', userEmail);
                   emailForm.append('FirstName', this.FirstName);
@@ -873,6 +875,8 @@ export class RegistrationPage {
                   emailForm.append('BloodGroup', (result[0].BLGName || '').trim());
                   emailForm.append('PhoneNumber', (result[0].Phonenumber || this.Mobile || '').trim());
                   emailForm.append('Title', 'Community Leader');
+                  emailForm.append('ReferralCode', referralCode);
+                  emailForm.append('ReferenceCode', referralCode);
                   
                   this.general.PostData('api/BG/SendLeaderWelcomeEmail', emailForm).subscribe(
                     () => {

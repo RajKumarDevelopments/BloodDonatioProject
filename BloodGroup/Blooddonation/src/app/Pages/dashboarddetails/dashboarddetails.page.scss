@@ -12,7 +12,7 @@ details summary::-webkit-details-marker {
   border-bottom: 1px solid #9b9b9b;
 }
 
-details[open] > summary:before {
+details[open]>summary:before {
   transform: rotate(90deg);
   transition: 0.45s transform ease;
 }
@@ -60,8 +60,9 @@ summary {
   padding: 6px;
 }
 
-.textend, p {
- // text-align: end;
+.textend,
+p {
+  // text-align: end;
   font-size: 13px !important;
   //color: #b7b9c8;
 }
@@ -196,31 +197,31 @@ input[type=radio][name=tabs] {
   z-index: -1;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content label {
+input[type=radio][name=tabs]:checked+.tab-label-content label {
   color: white;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {
+input[type=radio][name=tabs]:checked+.tab-label-content .tab-content {
   display: block;
 }
 
-input[type=radio][name=tabs]:nth-of-type(1):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(1):checked~.slide {
   left: calc((100% / 4) * 0);
 }
 
-input[type=radio][name=tabs]:nth-of-type(2):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(2):checked~.slide {
   left: 63%;
 }
 
-input[type=radio][name=tabs]:nth-of-type(3):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(3):checked~.slide {
   left: calc((100% / 4) * 2);
 }
 
-input[type=radio][name=tabs]:nth-of-type(4):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(4):checked~.slide {
   left: calc((100% / 4) * 3);
 }
 
-input[type=radio][name=tabs]:first-of-type:checked ~ .slide {
+input[type=radio][name=tabs]:first-of-type:checked~.slide {
   left: 27px;
 }
 
@@ -259,16 +260,17 @@ label {
   display: none;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content label {
+input[type=radio][name=tabs]:checked+.tab-label-content label {
   background-color: #ec1c2c;
   border-radius: 100px;
   box-shadow: 0 3px 10px rgba(17, 17, 17, .2);
   padding: 11px;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {
+input[type=radio][name=tabs]:checked+.tab-label-content .tab-content {
   display: block;
-  color: black; /* Change text color inside tab-content */
+  color: black;
+  /* Change text color inside tab-content */
 }
 
 input[type=radio][name=tabs] {
@@ -297,7 +299,7 @@ input {
 }
 
 @media only screen and (max-width:600px) {
-  input[type=radio][name=tabs]:checked + .tab-label-content label {
+  input[type=radio][name=tabs]:checked+.tab-label-content label {
     font-size: 13px;
   }
 
@@ -354,8 +356,8 @@ input {
       color: transparent;
     }
 
-    &:focus ~ .form-label,
-    &:not(:placeholder-shown).form-input:not(:focus) ~ .form-label {
+    &:focus~.form-label,
+    &:not(:placeholder-shown).form-input:not(:focus)~.form-label {
       top: -0.75rem;
       left: 0;
       font-size: 0.875rem;
@@ -391,16 +393,21 @@ input {
 }
 
 .disabled-row {
-  opacity: 0.5; /* Make the row look disabled */
-  pointer-events: none; /* Prevent clicks */
+  opacity: 0.5;
+  /* Make the row look disabled */
+  pointer-events: none;
+  /* Prevent clicks */
 }
 
 .title::before {
-  content: "▲"; /* Unicode character for down arrow */
+  content: "▲";
+  /* Unicode character for down arrow */
   display: inline-block;
   font-size: 12px;
-  color: red; /* Set the color of the content */
-  float: inline-end; /* Adjust alignment if needed */
+  color: red;
+  /* Set the color of the content */
+  float: inline-end;
+  /* Adjust alignment if needed */
 }
 
 

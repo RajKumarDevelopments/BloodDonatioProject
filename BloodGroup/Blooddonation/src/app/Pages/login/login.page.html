@@ -55,21 +55,36 @@
       </ion-col>
     </ion-row>
 
+    <!-- Main Login Action Buttons -->
+    <!-- Mobile: OTP received → Login -->
+    <div class="login-btn-wrapper" *ngIf="isNumeric(Mobile) && OTPFlag === 1 && Mobile?.length === 10">
+      <button class="red-button" [disabled]="isSubmitting" (click)="MobileLogin()">Login</button>
+    </div>
+
+    <!-- Mobile: OTP not yet sent → Send OTP -->
+    <div class="login-btn-wrapper" *ngIf="isNumeric(Mobile) && OTPFlag != 1 && Mobile?.length === 10">
+      <button class="red-button" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>
+    </div>
+
+    <!-- Email login → Login -->
+    <div class="login-btn-wrapper" *ngIf="Mobile?.length > 12 && !isNumeric(Mobile)">
+      <button class="red-button" [disabled]="isSubmitting" (click)="login()">Login</button>
+    </div>
+
     <!-- Signup and Register Section -->
-    <ion-row class="row-spacing">
+    <ion-row class="row-spacing" style="margin-top: 15px; margin-bottom: 25px;">
       <ion-col size="12">
         <div class="items_center">
           <div style="color:gray">Don't have an account?</div>
         </div>
-        <div class="items_center">
-          <div style="color:red" (click)="signup()">Register and donate</div>
+        <div class="items_center" style="margin-top: 4px;">
+          <div style="color:red; cursor: pointer; font-weight: 600;" (click)="signup()">Register and donate</div>
         </div>
       </ion-col>
     </ion-row>
 
   </ng-container>
 
-  
   <ng-container *ngIf="showForgotPassword">
 
     <!-- Back Button + Title -->
@@ -168,47 +183,25 @@
       </ion-col>
     </ion-row>
 
+    <!-- Forgot Password Action Buttons -->
+    <!-- Step 1: Send OTP -->
+    <div class="login-btn-wrapper" *ngIf="!forgotOTPFlag">
+      <button class="red-button" (click)="sendForgotPasswordOTP()">Continue</button>
+    </div>
+
+    <!-- Step 2: Verify OTP -->
+    <div class="login-btn-wrapper" *ngIf="forgotOTPFlag && !forgotOTPVerified">
+      <button class="red-button" (click)="verifyForgotOTP()">Verify OTP</button>
+    </div>
+
+    <!-- Step 3: Reset Password -->
+    <div class="login-btn-wrapper" *ngIf="forgotOTPVerified">
+      <button class="red-button" (click)="resetPassword()">Reset Password</button>
+    </div>
+
+    <div style="height: 30px;"></div>
+
   </ng-container>
 
 </ion-content>
-
-<!-- ══════════════════════════════════════════════════════
-     FOOTERS – Main Login Buttons
-═══════════════════════════════════════════════════════ -->
-<ng-container *ngIf="!showForgotPassword">
-  <!-- Mobile: OTP received → Login -->
-  <ion-footer *ngIf="isNumeric(Mobile) && OTPFlag === 1 && Mobile?.length === 10">
-    <button expand="full" class="red-button" [disabled]="isSubmitting" (click)="MobileLogin()">Login</button>
-  </ion-footer>
-
-  <!-- Mobile: OTP not yet sent → Send OTP -->
-  <ion-footer *ngIf="isNumeric(Mobile) && OTPFlag != 1 && Mobile?.length === 10">
-    <button expand="full" class="red-button" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>
-  </ion-footer>
-
-  <!-- Email login → Login -->
-  <ion-footer *ngIf="Mobile?.length > 12 && !isNumeric(Mobile)">
-    <button expand="full" class="red-button" [disabled]="isSubmitting" (click)="login()">Login</button>
-  </ion-footer>
-</ng-container>
-
-<!-- ══════════════════════════════════════════════════════
-     FOOTERS – Forgot Password Buttons
-═══════════════════════════════════════════════════════ -->
-<ng-container *ngIf="showForgotPassword">
-  <!-- Step 1: Send OTP -->
-  <ion-footer *ngIf="!forgotOTPFlag">
-    <button expand="full" class="red-button" (click)="sendForgotPasswordOTP()">Continue</button>
-  </ion-footer>
-
-  <!-- Step 2: Verify OTP -->
-  <ion-footer *ngIf="forgotOTPFlag && !forgotOTPVerified">
-    <button expand="full" class="red-button" (click)="verifyForgotOTP()">Verify OTP</button>
-  </ion-footer>
-
-  <!-- Step 3: Reset Password -->
-  <ion-footer *ngIf="forgotOTPVerified">
-    <button expand="full" class="red-button" (click)="resetPassword()">Reset Password</button>
-  </ion-footer>
-</ng-container>
 

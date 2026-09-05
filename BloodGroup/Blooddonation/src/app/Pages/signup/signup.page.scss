@@ -39,6 +39,37 @@ input {
   width: 85%;
 }
 
+.signup-action-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 16px 16px 8px 16px;
+  box-sizing: border-box;
+
+  button {
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background-color: red;
+    color: white;
+    width: 85%;
+    max-width: 400px;
+    font-size: 15px;
+    font-weight: 600;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: opacity 0.2s ease;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
 ion-footer {
   box-shadow: none;
   border: none;

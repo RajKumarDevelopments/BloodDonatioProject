@@ -5,14 +5,17 @@
 details summary::-webkit-details-marker {
   display: none;
 }
+
 .accordion-content {
   transition: max-height 0.3s ease-in-out;
   overflow: hidden;
-  max-height: 0; /* Start with zero height */
+  max-height: 0;
+  /* Start with zero height */
 }
 
 .accordion-content[style*="display: block"] {
-  max-height: 500px; /* Set max height when open */
+  max-height: 500px;
+  /* Set max height when open */
 }
 
 .accordionheader {
@@ -24,7 +27,7 @@ details summary::-webkit-details-marker {
   border-bottom: 1px solid #9b9b9b;
 }
 
-details[open] > summary:before {
+details[open]>summary:before {
   transform: rotate(90deg);
   transition: 0.45s transform ease;
 }
@@ -72,7 +75,8 @@ summary {
   padding: 6px;
 }
 
-.textend, p {
+.textend,
+p {
   text-align: end;
   font-size: 13px !important;
   //color: #b7b9c8;
@@ -92,26 +96,36 @@ ion-card {
 
 .center {
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 50vh; /* Full viewport height */
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  height: 50vh;
+  /* Full viewport height */
 }
+
 .card {
   border-radius: 150px;
   width: 315px;
   height: 315px;
   background-color: #f1f2f6;
-  display: flex; /* Use flexbox for centering */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  margin: 0; /* Remove margin to prevent shifting */
+  display: flex;
+  /* Use flexbox for centering */
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  margin: 0;
+  /* Remove margin to prevent shifting */
 }
 
 .card h4 {
   padding: 15px;
   text-align: center;
-  margin: 0; /* Remove margin to avoid misalignment */
-  /*color: #736b6b*/;
+  margin: 0;
+  /* Remove margin to avoid misalignment */
+  /*color: #736b6b*/
+  ;
 }
 
 /*.card {
@@ -235,7 +249,7 @@ input[type=radio][name=tabs] {
   z-index: -1;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content label,
+input[type=radio][name=tabs]:checked+.tab-label-content label,
 label.active {
   background-color: #ec1c2c;
   color: white;
@@ -243,27 +257,27 @@ label.active {
   box-shadow: 0 3px 10px rgba(17, 17, 17, .2);
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {
+input[type=radio][name=tabs]:checked+.tab-label-content .tab-content {
   display: block;
 }
 
-input[type=radio][name=tabs]:nth-of-type(1):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(1):checked~.slide {
   left: calc((100% / 4) * 0);
 }
 
-input[type=radio][name=tabs]:nth-of-type(2):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(2):checked~.slide {
   left: 63%;
 }
 
-input[type=radio][name=tabs]:nth-of-type(3):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(3):checked~.slide {
   left: calc((100% / 4) * 2);
 }
 
-input[type=radio][name=tabs]:nth-of-type(4):checked ~ .slide {
+input[type=radio][name=tabs]:nth-of-type(4):checked~.slide {
   left: calc((100% / 4) * 3);
 }
 
-input[type=radio][name=tabs]:first-of-type:checked ~ .slide {
+input[type=radio][name=tabs]:first-of-type:checked~.slide {
   left: 27px;
 }
 
@@ -302,16 +316,17 @@ label {
   display: none;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content label {
+input[type=radio][name=tabs]:checked+.tab-label-content label {
   background-color: #ec1c2c;
   border-radius: 100px;
   box-shadow: 0 3px 10px rgba(17, 17, 17, .2);
   padding: 11px;
 }
 
-input[type=radio][name=tabs]:checked + .tab-label-content .tab-content {
+input[type=radio][name=tabs]:checked+.tab-label-content .tab-content {
   display: block;
-  color: black; /* Change text color inside tab-content */
+  color: black;
+  /* Change text color inside tab-content */
 }
 
 input[type=radio][name=tabs] {
@@ -340,7 +355,7 @@ input {
 }
 
 @media only screen and (max-width:600px) {
-  input[type=radio][name=tabs]:checked + .tab-label-content label {
+  input[type=radio][name=tabs]:checked+.tab-label-content label {
     font-size: 13px;
   }
 
@@ -397,8 +412,8 @@ input {
       color: transparent;
     }
 
-    &:focus ~ .form-label,
-    &:not(:placeholder-shown).form-input:not(:focus) ~ .form-label {
+    &:focus~.form-label,
+    &:not(:placeholder-shown).form-input:not(:focus)~.form-label {
       top: -0.75rem;
       left: 0;
       font-size: 0.875rem;
@@ -423,23 +438,32 @@ input {
   font-size: 13px !important;
   color: gray !important;
 }
+
 .suraj {
   /*padding: 0px 10px 0px 24px*/
 }
+
 .pp {
   text-align: start;
   font-size: 13px !important;
 }
+
 .disabled-row {
-  opacity: 0.5; /* Make the row look disabled */
-  pointer-events: none; /* Prevent clicks */
+  opacity: 0.5;
+  /* Make the row look disabled */
+  pointer-events: none;
+  /* Prevent clicks */
 }
+
 .title::before {
-  content: "▲"; /* Unicode character for down arrow */
+  content: "▲";
+  /* Unicode character for down arrow */
   display: inline-block;
   font-size: 12px;
-  color: red; /* Set the color of the content */
-  float: inline-end; /* Adjust alignment if needed */
+  color: red;
+  /* Set the color of the content */
+  float: inline-end;
+  /* Adjust alignment if needed */
 }
 
 
@@ -454,41 +478,47 @@ input {
   color: gray !important;
 }
 
-.bgmr{    
-    color: red;
+.bgmr {
+  color: red;
 }
+
 .bgcl {
   background: #ff450030;
   border-radius: 50%;
   padding: 4px 4px 1px;
   margin-right: 2px;
 }
-.flexcenter{
-    display: flex;
-    align-items: center;
+
+.flexcenter {
+  display: flex;
+  align-items: center;
 }
+
 .flexend {
   display: flex;
-  justify-content:flex-end;
+  justify-content: flex-end;
 }
+
 .colorback {
   background: #ff00c80f;
   border-radius: 50%;
   padding: 2px 4px;
 }
+
 // Drawer Container Styles
 .drawer-container {
   width: 100%;
 }
+
 .drawer-item {
   padding: 0 16px;
   /*border-bottom: 1px solid #9b9b9b !important;*/
 }
 
 .drawer-item {
-  margin-bottom: 1px; 
-  overflow: hidden;  
-  
+  margin-bottom: 1px;
+  overflow: hidden;
+
 }
 
 .drawer-header {
@@ -519,12 +549,13 @@ input {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin: 0 -12px 0;
 }
-.drawer-inner-content{
-    margin: 5px 0;
+
+.drawer-inner-content {
+  margin: 5px 0;
 }
 
-.footer_card1{
-  padding: 5px 0!important;
+.footer_card1 {
+  padding: 5px 0 !important;
 }
 
 /* Standardized Premium UI Classes */

@@ -136,16 +136,16 @@
     </ion-col>
   </ion-row>
 
-  <ion-row class="row-spacing" *ngIf="DonorFlag != 1">
-  </ion-row>
+  <div class="signup-action-btn-container" *ngIf="OTPVerified == 1">
+    <button type="submit" [disabled]="isSubmitting" (click)="NextDetails()">Next</button>
+  </div>
+  <div class="signup-action-btn-container" *ngIf="OTPFlag == 1 && OTPVerified != 1">
+    <button type="submit" [disabled]="isSubmitting" (click)="CheckOTP()">Verify OTP</button>
+  </div>
+  <div class="signup-action-btn-container" *ngIf="OTPFlag != 1 && OTPVerified != 1">
+    <button type="submit" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>
+  </div>
+
+  <div style="height: 30px;"></div>
 </ion-content>
-<ion-footer *ngIf="OTPVerified == 1">
-  <button type="submit" [disabled]="isSubmitting" (click)="NextDetails()">Next</button>
-</ion-footer>
-<ion-footer *ngIf="OTPFlag == 1 && OTPVerified != 1">
-  <button type="submit" [disabled]="isSubmitting" (click)="CheckOTP()">Verify OTP</button>
-</ion-footer>
-<ion-footer *ngIf="OTPFlag != 1 && OTPVerified != 1">
-  <button type="submit" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>
-</ion-footer>
 

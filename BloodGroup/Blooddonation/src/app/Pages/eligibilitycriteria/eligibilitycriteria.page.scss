@@ -53,6 +53,7 @@
   width: 71px;
   height: 34px;
 }
+
 .acceptt {
   background-color: lightgray;
   color: white;
@@ -99,7 +100,8 @@
 }
 
 .item-content ion-label:not(.highlight) {
-  color: #6c757d; /* Gray color (adjust as needed) */
+  color: #6c757d;
+  /* Gray color (adjust as needed) */
 }
 
 .card {
@@ -164,6 +166,7 @@
   font-size: 14px;
   font-weight: 600;
 }
+
 //============
 /*ion-content {
   --background: transparent;
@@ -287,7 +290,7 @@ details summary::-webkit-details-marker {
   object-fit: contain;
 }
 
-details[open] > summary:before {
+details[open]>summary:before {
   transform: rotate(90deg);
   transition: 0.45s transform ease;
 }
@@ -340,7 +343,8 @@ summary {
   padding: 6px;
 }
 
-.textend, p {
+.textend,
+p {
   /*text-align: end;*/
   font-size: 13px !important;
   //color: #b7b9c8;
@@ -353,11 +357,13 @@ summary {
 .accordion-content {
   transition: max-height 0.3s ease-in-out;
   overflow: hidden;
-  max-height: 0; /* Start with zero height */
+  max-height: 0;
+  /* Start with zero height */
 }
 
 .accordion-content[style*="display: block"] {
-  max-height: 500px; /* Set max height when open */
+  max-height: 500px;
+  /* Set max height when open */
 }
 
 
@@ -434,8 +440,7 @@ ion-card {
   font-size: 10px
 }
 
-.highlight {
-}
+.highlight {}
 
 .item-content ion-label:not(.highlight) {
   color: #6c757d;
@@ -515,7 +520,7 @@ ion-segment-button:hover {
   transition: 0.2s ease;
 }
 
-input[type=radio][name=tabs]:checked + label,
+input[type=radio][name=tabs]:checked+label,
 .tab-label-content label.active {
   background-color: #ec1c2c;
   color: white;
@@ -529,8 +534,7 @@ input[type=radio][name=tabs]:checked + label,
   }
 }
 
-:host .ionicon {
-}
+:host .ionicon {}
 
 .round1 {
   margin-left: 125%
@@ -545,7 +549,8 @@ input {
 }
 
 @media only screen and (max-width:600px) {
-  input[type=radio][name=tabs]:checked + label,
+
+  input[type=radio][name=tabs]:checked+label,
   .tab-label-content label.active {
     font-size: 13px;
   }
@@ -602,8 +607,8 @@ input {
       color: transparent;
     }
 
-    &:focus ~ .form-label,
-    &:not(:placeholder-shown).form-input:not(:focus) ~ .form-label {
+    &:focus~.form-label,
+    &:not(:placeholder-shown).form-input:not(:focus)~.form-label {
       top: -0.75rem;
       left: 0;
       font-size: 0.875rem;
@@ -695,6 +700,7 @@ textarea {
   color: #b7b9c8;
   margin-left: 0 !important;
 }
+
 /* Hide default arrow indicators */
 ion-item.accordion-item::after {
   display: none;
@@ -733,11 +739,14 @@ ion-item.accordion-content {
 }
 
 .title::before {
-  content: "▲"; /* Unicode character for down arrow */
+  content: "▲";
+  /* Unicode character for down arrow */
   display: inline-block;
   font-size: 12px;
-  color: red; /* Set the color of the content */
-  float: inline-end; /* Adjust alignment if needed */
+  color: red;
+  /* Set the color of the content */
+  float: inline-end;
+  /* Adjust alignment if needed */
 }
 
 .imggg {
@@ -763,6 +772,7 @@ ion-item.accordion-content {
 .ramm {
   margin-bottom: -15px;
 }
+
 img {
   max-width: 100%;
   margin-top: 4px;
@@ -777,10 +787,11 @@ img {
 }
 
 .f-end {
-    
+
   //latest
-   margin-left:5rem;
-} 
+  margin-left: 5rem;
+}
+
 /*.t-endd {
   margin-left: 10rem;
 }*/
