@@ -116,9 +116,17 @@ ion-item {
   --padding-bottom: 4px;
   --min-height: 44px;
   
+  ion-label {
+    max-width: none;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   ion-toggle {
     --handle-background-checked: #fff;
-    --track-background-checked: var(--primary-red);
+    --track-background-checked: #3880ff;
     font-size: 15px;
     font-weight: 600;
     color: #333;

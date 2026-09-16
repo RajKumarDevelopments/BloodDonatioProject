@@ -4,7 +4,6 @@
       <ion-back-button defaultHref="/home" text="" icon="chevron-back"></ion-back-button>
     </ion-buttons>-->
     <ion-title class="ion-text-center">PERSONAL DATA</ion-title>
-    <ion-buttons slot="end" style="width: 48px;"></ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -295,9 +294,9 @@
   </div>
 
   <ion-footer style="flex-shrink: 0; background: white; border-top: 1px solid #eee;">
-    <div class="items_button">
+    <div class="items_button" style="padding: 16px 16px calc(85px + env(safe-area-inset-bottom, 0px)) 16px;">
       <button type="button" [disabled]="!leaderTermsAccepted" (click)="acceptLeaderTerms()"
-        style="opacity: {{ leaderTermsAccepted ? '1' : '0.5' }};">Accept</button>
+        style="opacity: {{ leaderTermsAccepted ? '1' : '0.5' }};">ACCEPT</button>
     </div>
   </ion-footer>
 </div>

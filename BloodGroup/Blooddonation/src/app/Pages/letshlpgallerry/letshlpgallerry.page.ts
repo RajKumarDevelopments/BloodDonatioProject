@@ -28,13 +28,19 @@ export class LetshlpgallerryPage implements OnInit {
   //leaderimgs: any;
   //selectedTab: number = 1;
   selectedTab: string = 'Self';
+  isLoading: boolean = false;
   showDownloadToast: boolean = false;
   downloadToastTimer: any;
   downloadedImageUrl: string = '';
   savedFilePath: string = '';
   showImagePreview: boolean = false;
   previewImageUrl: string = '';
+  previewRawImage: string = '';
+  downloadedImagesSet: Set<string> = new Set<string>();
+  isCurrentPreviewDownloaded: boolean = false;
+  isNotificationPreview: boolean = false;
 
+  userGalleryImages: any[] = []; // Only logged-in user's gallery images
   displayedOtherImgs: any[] = []; // Lazy-loaded "All" images
   displayedSelfImgs: any[] = []; // Lazy-loaded "Self" images
   displayedLeaderImgs: any[] = []; // Lazy-loaded "Leaders" images
@@ -52,73 +58,84 @@ export class LetshlpgallerryPage implements OnInit {
     private Http: HttpClient, private photoViewer: PhotoViewer, private loadingController: LoadingController,
     private platform: Platform) {
 
-    this.HomeUrl = localStorage.getItem("URL");
-    this.UserDetails1 = localStorage.getItem("UserDetails");
-    this.UserDetails = JSON.parse(this.UserDetails1);
-    if (this.UserDetails[0].Status == false) {
-      //  this.general.presentAlert("Alert", "Please activate the mail and proceed with the other operations in the application...");
-
-    } else {
-    }
+    this.HomeUrl = this.general?.getBaseUrl() || localStorage.getItem("URL") || 'https://localhost:44387/';
+    this.refreshUserDetails();
   }
 
   ngOnInit() {
+    this.HomeUrl = this.general?.getBaseUrl() || localStorage.getItem("URL") || this.HomeUrl || 'https://localhost:44387/';
+    this.refreshUserDetails();
     this.getgallery();
+  }
 
+  ionViewWillEnter() {
+    this.refreshUserDetails();
+    this.getgallery();
+  }
+
+  refreshUserDetails() {
+    try {
+      this.UserDetails1 = localStorage.getItem("UserDetails");
+      if (this.UserDetails1) {
+        this.UserDetails = JSON.parse(this.UserDetails1);
+      }
+    } catch (e) {
+      console.error('Error reading UserDetails from localStorage', e);
+    }
+  }
+
+  getLoggedInUserId(): any {
+    try {
+      const userStr = localStorage.getItem("UserDetails") || this.UserDetails1;
+      if (userStr) {
+        const userObj = JSON.parse(userStr);
+        if (Array.isArray(userObj) && userObj.length > 0) {
+          return userObj[0].RegId ?? userObj[0].UserId ?? userObj[0].RegistrationId;
+        } else if (userObj && typeof userObj === 'object') {
+          return userObj.RegId ?? userObj.UserId ?? userObj.RegistrationId;
+        }
+      }
+    } catch (e) {
+      console.error('Error getting logged-in user id:', e);
+    }
+    return this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : null;
   }
 
   back() {
-    this.val = 2
+    this.val = 2;
     this.getgallery();
   }
 
   change2(img: any) {
-
-    this.mygallery = img.GalleryImages
-    this.val = 1
+    this.openEnlargedPreview(img.GalleryImages);
   }
 
   selectgallery1(tab: number) {
     //this.selectedTab = tab;
-
   }
 
   async setTab(tab: string) {
-    // Show loader
-    const loading = await this.loadingController.create({
-      message: 'Please Wait...',
-      spinner: 'crescent',
-      duration: 5000, // Fallback timeout
-    });
-    await loading.present();
-
     if (this.selectedTab !== tab) {
       this.selectedTab = tab;
     }
 
-    try {
-      // Fetch data and reset displayed images for the selected tab
-      if (tab === 'All') {
-        this.myid = 1;
-        this.displayedOtherImgs = this.otherimgs.slice(0, this.itemsPerPage);
-      } else if (tab === 'Self') {
-        this.myid = 2;
-        this.displayedSelfImgs = this.selfimgs.slice(0, this.itemsPerPage);
-      } else if (tab === 'Leaders') {
-        this.myid = 3;
-        this.displayedLeaderImgs = this.leaderimgs.slice(0, this.itemsPerPage);
-      }
-    } finally {
-      // Dismiss the loader once data is ready
-      await loading.dismiss();
+    if (tab === 'All') {
+      this.myid = 1;
+      this.displayedOtherImgs = this.otherimgs.slice(0, this.itemsPerPage);
+    } else if (tab === 'Self') {
+      this.myid = 2;
+      this.displayedSelfImgs = this.selfimgs.slice(0, this.itemsPerPage);
+    } else if (tab === 'Leaders') {
+      this.myid = 3;
+      this.displayedLeaderImgs = this.leaderimgs.slice(0, this.itemsPerPage);
     }
   }
+
   setTab2(tab: string) {
     if (this.selectedTab !== tab) {
       this.selectedTab = tab;
     }
 
-    // Fetch data and reset displayed images for the selected tab
     if (tab === 'All') {
       this.myid = 1;
       this.displayedOtherImgs = this.otherimgs.slice(0, this.itemsPerPage);
@@ -132,34 +149,53 @@ export class LetshlpgallerryPage implements OnInit {
   }
 
   getgallery() {
+    this.isLoading = true;
     const obj = [{}];
     const uploadfile = new FormData();
     uploadfile.append('Param', JSON.stringify(obj));
     uploadfile.append('Flag', '6');
 
-    const url = 'api/BG/Gallery_Crud'; // Replace with your API endpoint
+    const url = 'api/BG/Gallery_Crud';
 
     this.general.PostData(url, uploadfile).subscribe((data: any) => {
+      this.isLoading = false;
       this.gallery = Array.isArray(data) ? data : [];
+      console.log('Gallery total loaded:', this.gallery.length);
 
-      // Filter images by category
-      this.otherimgs = this.gallery.filter((img: any) => img.RegId != this.UserDetails[0].RegId);
-      this.selfimgs = this.gallery.filter((img: any) => img.CreatedBy == this.UserDetails[0].RegId);
+      const currentRegId = this.getLoggedInUserId();
+      console.log('Filtering gallery for logged-in RegId:', currentRegId);
+
+      // Filter gallery images associated with the logged-in user considering both RegId and CreatedBy
+      this.userGalleryImages = this.gallery.filter((img: any) => {
+        if (!img || !img.GalleryImages) return false;
+        if (currentRegId !== undefined && currentRegId !== null) {
+          const matchRegId = img.RegId != null && String(img.RegId) === String(currentRegId);
+          const matchCreatedBy = img.CreatedBy != null && String(img.CreatedBy) === String(currentRegId);
+          return matchRegId || matchCreatedBy;
+        }
+        return false;
+      });
+
+      this.selfimgs = this.userGalleryImages;
+      this.displayedSelfImgs = this.userGalleryImages.slice(0, this.itemsPerPage);
+      this.otherimgs = this.gallery.filter((img: any) => {
+        if (currentRegId == null) return true;
+        const matchRegId = img.RegId != null && String(img.RegId) === String(currentRegId);
+        const matchCreatedBy = img.CreatedBy != null && String(img.CreatedBy) === String(currentRegId);
+        return !(matchRegId || matchCreatedBy);
+      });
       this.leaderimgs = this.gallery.filter((img: any) => img.RoleId == 4);
-
-      // Initialize lazy-loaded arrays for the first batch
-      this.displayedOtherImgs = this.otherimgs.slice(0, this.itemsPerPage);
-      this.displayedSelfImgs = this.selfimgs.slice(0, this.itemsPerPage);
-      this.displayedLeaderImgs = this.leaderimgs.slice(0, this.itemsPerPage);
     }, err => {
+      this.isLoading = false;
       this.gallery = [];
+      this.userGalleryImages = [];
       this.otherimgs = [];
       this.selfimgs = [];
       this.leaderimgs = [];
       this.displayedOtherImgs = [];
       this.displayedSelfImgs = [];
       this.displayedLeaderImgs = [];
-      this.general.presentToast("something went wrong");
+      this.general.presentToast("Could not load gallery images.");
     });
   }
 
@@ -204,13 +240,18 @@ export class LetshlpgallerryPage implements OnInit {
     }, 500); // Simulated delay for better UX
   }
 
-  change(item: any) {
-    this.mygallery = item.GalleryImages; // Update the gallery image
-    this.val = 1; // Update the view flag if needed
+  openEnlargedPreview(image: string) {
+    if (!image) return;
+    this.previewRawImage = image;
+    this.previewImageUrl = this.getImageUrl(image);
+    this.mygallery = image;
+    this.isNotificationPreview = false;
+    this.showImagePreview = true;
   }
 
-
-
+  change(item: any) {
+    this.openEnlargedPreview(item.GalleryImages);
+  }
 
   async shareCardViaWhatsApp(MySelectedImage: any) {
     if (!MySelectedImage) return;
@@ -222,16 +263,14 @@ export class LetshlpgallerryPage implements OnInit {
       });
       await loading.present();
 
-      // 1. Prepare fully qualified URL
-      let fullUrl = MySelectedImage;
-      if (!MySelectedImage.startsWith('data:') && !MySelectedImage.startsWith('http')) {
-        fullUrl = this.HomeUrl + MySelectedImage;
+      // 1. Prepare fully qualified URL or Data URI
+      let fullUrl = this.getImageUrl(MySelectedImage);
+      if (!this.isBase64Image(fullUrl)) {
+        fullUrl = encodeURI(fullUrl);
       }
-      fullUrl = encodeURI(fullUrl);
 
       // 2. Prepare Name
       const fileName = 'share_' + new Date().getTime() + '.jpg';
-      const text = "Blood donation is the real act of humanity. It costs nothing but saves a life. Donating blood is not just giving blood, it’s giving life. Every drop of blood is like a breath for someone out there. Donate and let them breathe.";
 
       this.savedFilePath = '';
       this.downloadedImageUrl = fullUrl;
@@ -257,12 +296,11 @@ export class LetshlpgallerryPage implements OnInit {
           });
 
           console.log('📤 Sending native gallery attachment:', uriResult.uri);
-          // SocialSharing is prime for WhatsApp/Social media file attachments
           await this.share.share(
-            '', // No message text
-            '', // No subject
-            uriResult.uri, // File
-            undefined // URL
+            '',
+            '',
+            uriResult.uri,
+            undefined
           );
         } catch (nativeErr) {
           console.error('❌ native share failed:', nativeErr);
@@ -279,13 +317,6 @@ export class LetshlpgallerryPage implements OnInit {
         });
       }
 
-      // Show success toast
-      this.showDownloadToast = true;
-      if (this.downloadToastTimer) clearTimeout(this.downloadToastTimer);
-      this.downloadToastTimer = setTimeout(() => {
-        this.showDownloadToast = false;
-      }, 6000);
-
     } catch (error: any) {
       console.error('Error sharing:', error);
       this.general.presentToast('Sharing failed: ' + (error.message || 'Unknown error'));
@@ -295,9 +326,7 @@ export class LetshlpgallerryPage implements OnInit {
   }
 
   public async Photozoom(url: any) {
-
     this.photoViewer.show(url, 'Image Zoom', { share: true });
-
     const options = {
       share: true,
       closeButton: true,
@@ -305,112 +334,336 @@ export class LetshlpgallerryPage implements OnInit {
       headers: "",
       piccasoOptions: {}
     };
-    //var url = this.HomeUrl;
     this.photoViewer.show(url, "", options);
   }
+
   selectgallery(id: any) {
-
-    if (id == 1) {
-      this.myid = 1
-      this.getgallery()
+    this.myid = Number(id);
+    if (!this.gallery || this.gallery.length === 0) {
+      this.getgallery();
     }
-    else if (id == 2) {
-      this.myid = 2
-      this.getgallery()
+  }
 
+  isBase64Image(str: string): boolean {
+    if (!str || typeof str !== 'string') return false;
+    const trimmed = str.trim();
+    if (trimmed.startsWith('data:image/') || trimmed.startsWith('data:')) {
+      return true;
     }
-    else if (id == 3) {
-      this.myid = 3
-      this.getgallery()
+    const hasImageExtension = /\.(png|jpe?g|gif|webp|bmp|svg)(\?.*)?$/i.test(trimmed);
+    if (hasImageExtension) {
+      return false;
+    }
+    if (
+      trimmed.startsWith('Image/') ||
+      trimmed.startsWith('/Image/') ||
+      trimmed.startsWith('Content/') ||
+      trimmed.startsWith('/Content/') ||
+      trimmed.startsWith('http://') ||
+      trimmed.startsWith('https://')
+    ) {
+      return false;
+    }
+    if (
+      trimmed.startsWith('iVBORw') ||
+      trimmed.startsWith('/9j/') ||
+      trimmed.startsWith('R0lGOD') ||
+      trimmed.startsWith('UklGR') ||
+      trimmed.length > 500
+    ) {
+      return true;
+    }
+    return false;
+  }
 
+  getImageUrl(image: string): string {
+    if (!image || typeof image !== 'string') return '';
+    const trimmed = image.trim();
+
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
     }
+
+    if (this.isBase64Image(trimmed)) {
+      if (trimmed.startsWith('data:')) {
+        return trimmed;
+      }
+      let mime = 'image/png';
+      if (trimmed.startsWith('/9j/')) {
+        mime = 'image/jpeg';
+      } else if (trimmed.startsWith('R0lGOD')) {
+        mime = 'image/gif';
+      } else if (trimmed.startsWith('UklGR')) {
+        mime = 'image/webp';
+      }
+      return `data:${mime};base64,${trimmed}`;
+    }
+
+    const baseUrl = (this.HomeUrl || this.general?.getBaseUrl() || localStorage.getItem('URL') || 'https://localhost:44387/').trim();
+    const formattedBaseUrl = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+    const cleanPath = trimmed.startsWith('/') ? trimmed.substring(1) : trimmed;
+
+    return formattedBaseUrl + cleanPath;
   }
 
   async downloadImage(imageUrl: string) {
     if (!imageUrl) {
-      this.general.presentToast('Image URL is missing.');
+      this.general.presentToast('Image is missing.');
       return;
     }
 
     const loading = await this.loadingController.create({
-      message: 'Downloading...',
+      message: 'Downloading image...',
       spinner: 'crescent',
     });
     await loading.present();
 
-    this.savedFilePath = ''; // Reset local path for new download action
+    this.savedFilePath = '';
     try {
-      const fileName = 'letshelp_' + new Date().getTime() + '.jpg';
-      let base64Data: string;
+      const isBase64 = this.isBase64Image(imageUrl);
+      const fullUrl = this.getImageUrl(imageUrl);
 
-      if (imageUrl.startsWith('data:')) {
-        // Already a Base64 data URI — extract the base64 part only
-        base64Data = imageUrl.split(',')[1];
+      // Determine file extension
+      let ext = '.jpg';
+      if (isBase64) {
+        if (imageUrl.includes('image/png') || imageUrl.startsWith('iVBORw')) ext = '.png';
+        else if (imageUrl.includes('image/webp') || imageUrl.startsWith('UklGR')) ext = '.webp';
       } else {
-        // It's a URL — build the full URL and fetch as blob
-        let fullUrl = imageUrl;
-        if (!imageUrl.startsWith('http')) {
-          fullUrl = this.HomeUrl + imageUrl;
+        const match = fullUrl.match(/\.(png|jpe?g|gif|webp|bmp)/i);
+        if (match) ext = match[0].toLowerCase();
+      }
+      const fileName = 'letshelp_' + Date.now() + ext;
+
+      const isNative = Capacitor.isNativePlatform() ||
+        this.platform.is('hybrid') ||
+        this.platform.is('android') ||
+        this.platform.is('ios') ||
+        this.platform.is('capacitor') ||
+        this.platform.is('cordova');
+
+      if (isNative) {
+        // 1. Resolve / create album
+        let albumId: string | undefined;
+        try {
+          await Media.createAlbum({ name: 'LetsHelp' });
+        } catch (e) { }
+
+        try {
+          const albums = await Media.getAlbums();
+          const letsHelpAlbum = albums?.albums?.find((a: any) => a.name === 'LetsHelp');
+          if (letsHelpAlbum) {
+            albumId = letsHelpAlbum.identifier;
+          }
+        } catch (e) { }
+
+        let cachedFileUri = '';
+
+        if (isBase64) {
+          // Base64 format: extract pure data and write to cache
+          let base64Data = imageUrl.trim();
+          if (base64Data.startsWith('data:')) {
+            base64Data = base64Data.split(',')[1] || '';
+          }
+          const savedFile = await Filesystem.writeFile({
+            path: fileName,
+            data: base64Data,
+            directory: Directory.Cache,
+          });
+          cachedFileUri = savedFile.uri;
+        } else {
+          // Folder / Server Path Image (e.g. Image/WelcomeTemplate/WelcomeCard_...png)
+          // Try 1: Filesystem.downloadFile (native background download, bypasses CORS)
+          try {
+            const dlRes = await Filesystem.downloadFile({
+              url: fullUrl,
+              path: fileName,
+              directory: Directory.Cache
+            });
+            if (dlRes?.path) {
+              cachedFileUri = dlRes.path;
+            }
+          } catch (dlErr) {
+            console.warn('Filesystem.downloadFile error:', dlErr);
+          }
+
+          // Try 2: CapacitorHttp (native HTTP request for blob)
+          if (!cachedFileUri) {
+            try {
+              const { CapacitorHttp } = await import('@capacitor/core');
+              const httpRes = await CapacitorHttp.get({
+                url: fullUrl,
+                responseType: 'blob'
+              });
+              if (httpRes?.status === 200 && httpRes.data) {
+                let data = httpRes.data;
+                if (data.includes(',')) data = data.split(',')[1];
+                const saved = await Filesystem.writeFile({
+                  path: fileName,
+                  data: data,
+                  directory: Directory.Cache
+                });
+                cachedFileUri = saved.uri;
+              }
+            } catch (httpErr) {
+              console.warn('CapacitorHttp download error:', httpErr);
+            }
+          }
+
+          // Try 3: Standard fetch blob fallback
+          if (!cachedFileUri) {
+            try {
+              const fetchRes = await fetch(fullUrl);
+              if (fetchRes.ok) {
+                const blob = await fetchRes.blob();
+                const dataUrl = await this.blobToBase64(blob);
+                const base64Data = dataUrl.split(',')[1];
+                const saved = await Filesystem.writeFile({
+                  path: fileName,
+                  data: base64Data,
+                  directory: Directory.Cache
+                });
+                cachedFileUri = saved.uri;
+              }
+            } catch (fetchErr) {
+              console.warn('Fetch fallback error:', fetchErr);
+            }
+          }
         }
-        const response = await fetch(fullUrl);
-        const blob = await response.blob();
-        const dataUrl = await this.blobToBase64(blob);
-        base64Data = dataUrl.split(',')[1];
-      }
 
-      // Write the base64 image to the cache directory
-      const savedFile = await Filesystem.writeFile({
-        path: fileName,
-        data: base64Data,
-        directory: Directory.Cache,
-      });
+        // Save directly to mobile Photos/Gallery via Media plugin
+        let savedToGallery = false;
+        if (cachedFileUri) {
+          try {
+            const result = await Media.savePhoto({
+              path: cachedFileUri,
+              albumIdentifier: albumId,
+              fileName: 'letshelp_' + Date.now(),
+            });
+            this.savedFilePath = result?.filePath || cachedFileUri;
+            savedToGallery = true;
+          } catch (mediaErr) {
+            console.warn('Media.savePhoto with cached URI failed:', mediaErr);
+          }
+        }
 
-      // Now save to gallery using the file URI
-      // On Android, savedFile.uri looks like: file:///data/...
-      const filePath = savedFile.uri;
+        // If not yet saved and it's a URL, Media.savePhoto natively supports web URLs
+        if (!savedToGallery && !isBase64) {
+          try {
+            const result = await Media.savePhoto({
+              path: fullUrl,
+              albumIdentifier: albumId,
+              fileName: 'letshelp_' + Date.now(),
+            });
+            this.savedFilePath = result?.filePath || fullUrl;
+            savedToGallery = true;
+          } catch (urlSaveErr) {
+            console.warn('Media.savePhoto with fullUrl failed:', urlSaveErr);
+          }
+        }
 
-      // Try to create the album first (ignore error if it already exists)
-      try {
-        await Media.createAlbum({ name: 'LetsHelp' });
-      } catch (e) {
-        // Album may already exist — that's OK
-      }
+        // If not saved and it's base64, try data URI directly
+        if (!savedToGallery && isBase64) {
+          try {
+            let dataUri = imageUrl.trim();
+            if (!dataUri.startsWith('data:')) {
+              dataUri = `data:image/jpeg;base64,${dataUri}`;
+            }
+            const result = await Media.savePhoto({
+              path: dataUri,
+              albumIdentifier: albumId,
+            });
+            this.savedFilePath = result?.filePath || cachedFileUri;
+            savedToGallery = true;
+          } catch (dataErr) {
+            console.warn('Media.savePhoto with dataUri failed:', dataErr);
+          }
+        }
 
-      // Get album list & find 'LetsHelp' album identifier
-      const albums = await Media.getAlbums();
-      const letsHelpAlbum = albums.albums.find((a: any) => a.name === 'LetsHelp');
+        if (!savedToGallery && !cachedFileUri) {
+          throw new Error('Could not download image file to device.');
+        }
 
-      if (letsHelpAlbum) {
-        const result = await Media.savePhoto({
-          path: filePath,
-          albumIdentifier: letsHelpAlbum.identifier,
-        });
-        this.savedFilePath = result?.filePath || filePath;
+        // Copy to Documents directory for file manager visibility
+        if (cachedFileUri) {
+          try {
+            const fileData = await Filesystem.readFile({
+              path: fileName,
+              directory: Directory.Cache
+            });
+            await Filesystem.writeFile({
+              path: fileName,
+              data: fileData.data,
+              directory: Directory.Documents
+            });
+          } catch (docErr) {
+            console.warn('Documents directory copy skipped:', docErr);
+          }
+        }
+
       } else {
-        // Fallback: save without specifying album
-        const result = await Media.savePhoto({
-          path: filePath,
-        });
-        this.savedFilePath = result?.filePath || filePath;
+        // Web / Desktop browser download
+        if (isBase64) {
+          let dataUri = imageUrl.trim();
+          if (!dataUri.startsWith('data:')) {
+            dataUri = `data:image/jpeg;base64,${dataUri}`;
+          }
+          const a = document.createElement('a');
+          a.href = dataUri;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.savedFilePath = dataUri;
+        } else {
+          try {
+            const res = await fetch(fullUrl);
+            if (res.ok) {
+              const blob = await res.blob();
+              const objectUrl = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = objectUrl;
+              a.download = fileName;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              setTimeout(() => URL.revokeObjectURL(objectUrl), 10000);
+              this.savedFilePath = objectUrl;
+            } else {
+              throw new Error('Fetch not ok');
+            }
+          } catch (webErr) {
+            const a = document.createElement('a');
+            a.href = fullUrl;
+            a.download = fileName;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            this.savedFilePath = fullUrl;
+          }
+        }
       }
 
-      // Store the downloaded image for display in the banner
-      if (imageUrl.startsWith('data:') || imageUrl.startsWith('http')) {
-        this.downloadedImageUrl = imageUrl;
-      } else {
-        this.downloadedImageUrl = this.HomeUrl + imageUrl;
-      }
-      // Show clickable download banner
+      this.downloadedImageUrl = fullUrl;
+      this.downloadedImagesSet.add(imageUrl);
+      this.downloadedImagesSet.add(fullUrl);
+      this.isCurrentPreviewDownloaded = true;
+
+      // Toast notification: Image downloaded successfully
+      await this.general.presentToast('Image downloaded successfully');
+
+      // Also trigger the top notification banner
       this.showDownloadToast = true;
-      // Auto-dismiss after 5 seconds
-      if (this.downloadToastTimer) {
-        clearTimeout(this.downloadToastTimer);
-      }
+      if (this.downloadToastTimer) clearTimeout(this.downloadToastTimer);
+      this.downloadToastTimer = setTimeout(() => {
+        this.showDownloadToast = false;
+      }, 5000);
+
     } catch (error: any) {
       console.error('Download error:', error);
-      this.general.presentToast('Failed: ' + (error?.message || JSON.stringify(error)));
+      await this.general.presentToast('Failed to download image. Please try again.');
     } finally {
-      loading.dismiss();
+      await loading.dismiss();
     }
   }
 
@@ -421,39 +674,51 @@ export class LetshlpgallerryPage implements OnInit {
     }
   }
 
-  async openGallery() {
-    this.dismissDownloadToast();
-    try {
-      // Show the saved image directly using PhotoViewer
-      let imageToShow = this.savedFilePath || this.downloadedImageUrl;
-      // If it's a relative URL, prepend the base URL
-      if (imageToShow && !imageToShow.startsWith('data:') && !imageToShow.startsWith('file:') && !imageToShow.startsWith('http') && !imageToShow.startsWith('content:')) {
-        imageToShow = this.HomeUrl + imageToShow;
-      }
-      this.photoViewer.show(imageToShow, 'LetsHelp Gallery', { share: true });
-    } catch (error) {
-      console.error('Could not open image:', error);
-      this.general.presentToast('Could not open the image.');
-    }
-  }
-
   openImagePreview() {
     this.dismissDownloadToast();
-
-    // Determine the image to show in the preview
-    // If we have a saved file path, convert it for display
-    if (this.savedFilePath) {
-      this.previewImageUrl = Capacitor.convertFileSrc(this.savedFilePath);
+    if (this.savedFilePath && !this.savedFilePath.startsWith('http') && !this.savedFilePath.startsWith('blob:') && !this.savedFilePath.startsWith('data:')) {
+      try {
+        this.previewImageUrl = Capacitor.convertFileSrc(this.savedFilePath);
+      } catch (e) {
+        this.previewImageUrl = this.downloadedImageUrl;
+      }
     } else {
       this.previewImageUrl = this.downloadedImageUrl;
     }
-
+    this.isNotificationPreview = true;
     this.showImagePreview = true;
   }
 
   closeImagePreview() {
     this.showImagePreview = false;
+    this.isNotificationPreview = false;
     this.previewImageUrl = '';
+    this.previewRawImage = '';
+  }
+
+  downloadViaXHR(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+      xhr.onload = async () => {
+        if (xhr.status === 200 || xhr.status === 0) {
+          try {
+            const blob = xhr.response;
+            const base64 = await this.blobToBase64(blob);
+            resolve(base64);
+          } catch (err) {
+            reject(new Error('Failed to convert blob to base64'));
+          }
+        } else {
+          reject(new Error(`Server error: ${xhr.status}`));
+        }
+      };
+      xhr.onerror = () => reject(new Error('Network error downloading image'));
+      xhr.ontimeout = () => reject(new Error('Image download timed out'));
+      xhr.timeout = 25000;
+      xhr.send();
+    });
   }
 
   private blobToBase64(blob: Blob): Promise<string> {

@@ -860,7 +860,12 @@ export class RegistrationPage {
 
                 if (isTargetRole && result && result.length > 0 && userEmail && userEmail !== 'undefined') {
                   this.FirstName = (result[0].FirstName || result[0].FullName || this.FirstName || '').trim();
-                  const fullName = (result[0].FullName || `${result[0].FirstName || ''} ${result[0].SurName || ''}`.trim() || this.FirstName || '').trim();
+                  const middleName = (result[0].MiddleName || this.MiddleName || '').trim();
+                  const surName = (result[0].SurName || result[0].Surname || result[0].LastName || this.SurName || this.LastName || '').trim();
+                  
+                  const nameParts = [this.FirstName, middleName, surName].filter(p => p && p.length > 0);
+                  const fullName = nameParts.length > 0 ? nameParts.join(' ') : (result[0].FullName || this.FirstName || '').trim();
+
                   this.memberId = result[0].UserProtalID ? result[0].UserProtalID : ('LH' + String(result[0].RegId).padStart(7, '0'));
                   
                   const referralCode = (result[0].Reffercode || result[0].RefferCode || result[0].ReferralCode || result[0].ReferenceCode || localStorage.getItem('pendingReferralCode') || '').trim();
@@ -868,6 +873,8 @@ export class RegistrationPage {
                   var emailForm = new FormData();
                   emailForm.append('Email', userEmail);
                   emailForm.append('FirstName', this.FirstName);
+                  emailForm.append('MiddleName', middleName);
+                  emailForm.append('SurName', surName);
                   emailForm.append('FullName', fullName);
                   emailForm.append('MemberId', this.memberId);
                   emailForm.append('RegId', result[0].RegId ? result[0].RegId.toString() : '');
