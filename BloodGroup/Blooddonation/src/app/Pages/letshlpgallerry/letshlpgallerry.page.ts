@@ -29,6 +29,7 @@ export class LetshlpgallerryPage implements OnInit {
   //selectedTab: number = 1;
   selectedTab: string = 'Self';
   isLoading: boolean = false;
+  isDownloading: boolean = false;
   showDownloadToast: boolean = false;
   downloadToastTimer: any;
   downloadedImageUrl: string = '';
@@ -260,61 +261,239 @@ export class LetshlpgallerryPage implements OnInit {
     try {
       loading = await this.loadingController.create({
         message: 'Preparing image for sharing...',
+        spinner: 'crescent',
       });
       await loading.present();
 
-      // 1. Prepare fully qualified URL or Data URI
-      let fullUrl = this.getImageUrl(MySelectedImage);
-      if (!this.isBase64Image(fullUrl)) {
-        fullUrl = encodeURI(fullUrl);
+      const isBase64 = this.isBase64Image(MySelectedImage);
+      const fullUrl = this.getImageUrl(MySelectedImage);
+
+      // Determine appropriate file extension
+      let ext = '.jpg';
+      if (isBase64) {
+        if (MySelectedImage.includes('image/png') || MySelectedImage.startsWith('iVBORw')) ext = '.png';
+        else if (MySelectedImage.includes('image/webp') || MySelectedImage.startsWith('UklGR')) ext = '.webp';
+      } else {
+        const match = fullUrl.match(/\.(png|jpe?g|gif|webp|bmp)/i);
+        if (match) ext = match[0].toLowerCase();
       }
+      const fileName = 'share_' + Date.now() + ext;
 
-      // 2. Prepare Name
-      const fileName = 'share_' + new Date().getTime() + '.jpg';
-
-      this.savedFilePath = '';
-      this.downloadedImageUrl = fullUrl;
-
-      // 3. Native Share (More robust platform detection)
-      const isNative = this.platform.is('hybrid') ||
+      const isNative = Capacitor.isNativePlatform() ||
+        this.platform.is('hybrid') ||
         this.platform.is('android') ||
         this.platform.is('ios') ||
         this.platform.is('capacitor') ||
         this.platform.is('cordova');
 
       if (isNative) {
-        try {
-          const downloadResult = await Filesystem.downloadFile({
-            url: fullUrl,
-            path: fileName,
-            directory: Directory.Cache
-          });
+        let cachedFileUri = '';
 
+        if (isBase64) {
+          // Extract base64 payload and write to Cache directory
+          let base64Data = MySelectedImage.trim();
+          if (base64Data.startsWith('data:')) {
+            base64Data = base64Data.split(',')[1] || '';
+          }
+          const savedFile = await Filesystem.writeFile({
+            path: fileName,
+            data: base64Data,
+            directory: Directory.Cache,
+          });
+          cachedFileUri = savedFile.uri;
+        } else {
+          // 1. Filesystem.downloadFile
+          try {
+            const dlRes = await Filesystem.downloadFile({
+              url: fullUrl,
+              path: fileName,
+              directory: Directory.Cache
+            });
+            if (dlRes?.path) {
+              cachedFileUri = dlRes.path;
+            }
+          } catch (dlErr) {
+            console.warn('Filesystem.downloadFile error:', dlErr);
+          }
+
+          // 2. CapacitorHttp fallback
+          if (!cachedFileUri) {
+            try {
+              const { CapacitorHttp } = await import('@capacitor/core');
+              const httpRes = await CapacitorHttp.get({
+                url: fullUrl,
+                responseType: 'blob'
+              });
+              if (httpRes?.status === 200 && httpRes.data) {
+                let data = httpRes.data;
+                if (data.includes(',')) data = data.split(',')[1];
+                const saved = await Filesystem.writeFile({
+                  path: fileName,
+                  data: data,
+                  directory: Directory.Cache
+                });
+                cachedFileUri = saved.uri;
+              }
+            } catch (httpErr) {
+              console.warn('CapacitorHttp download error:', httpErr);
+            }
+          }
+
+          // 3. fetch fallback
+          if (!cachedFileUri) {
+            try {
+              const fetchRes = await fetch(fullUrl);
+              if (fetchRes.ok) {
+                const blob = await fetchRes.blob();
+                const dataUrl = await this.blobToBase64(blob);
+                const base64Data = dataUrl.split(',')[1];
+                const saved = await Filesystem.writeFile({
+                  path: fileName,
+                  data: base64Data,
+                  directory: Directory.Cache
+                });
+                cachedFileUri = saved.uri;
+              }
+            } catch (fetchErr) {
+              console.warn('Fetch fallback error:', fetchErr);
+            }
+          }
+
+          // 4. downloadViaXHR fallback
+          if (!cachedFileUri) {
+            try {
+              const base64DataUrl = await this.downloadViaXHR(fullUrl);
+              const base64Data = base64DataUrl.split(',')[1];
+              const saved = await Filesystem.writeFile({
+                path: fileName,
+                data: base64Data,
+                directory: Directory.Cache
+              });
+              cachedFileUri = saved.uri;
+            } catch (xhrErr) {
+              console.warn('downloadViaXHR fallback error:', xhrErr);
+            }
+          }
+        }
+
+        // Ensure full native URI for sharing
+        let shareUri = cachedFileUri;
+        try {
           const uriResult = await Filesystem.getUri({
             path: fileName,
             directory: Directory.Cache
           });
+          if (uriResult?.uri) {
+            shareUri = uriResult.uri;
+          }
+        } catch (uriErr) {
+          console.warn('Filesystem.getUri error:', uriErr);
+        }
 
-          console.log('📤 Sending native gallery attachment:', uriResult.uri);
-          await this.share.share(
-            '',
-            '',
-            uriResult.uri,
-            undefined
-          );
-        } catch (nativeErr) {
-          console.error('❌ native share failed:', nativeErr);
+        if (!shareUri && !cachedFileUri) {
+          throw new Error('Unable to prepare image file for sharing.');
+        }
+
+        const targetFileUri = shareUri || cachedFileUri;
+        let sharedSuccessfully = false;
+
+        // Share Method 1: Capacitor Share plugin with files (native Android/iOS file sharing)
+        try {
+          const canShare = await Share.canShare();
+          if (canShare?.value) {
+            await Share.share({
+              title: 'Share Gallery Image',
+              dialogTitle: 'Share Gallery Image',
+              files: [targetFileUri]
+            });
+            sharedSuccessfully = true;
+          }
+        } catch (capErr: any) {
+          console.warn('Capacitor Share with files failed:', capErr);
+        }
+
+        // Share Method 2: Cordova SocialSharing fallback (attaches file directly to WhatsApp/etc.)
+        if (!sharedSuccessfully) {
+          try {
+            if (this.share) {
+              await this.share.share(
+                '',
+                '',
+                targetFileUri,
+                undefined
+              );
+              sharedSuccessfully = true;
+            }
+          } catch (socialErr: any) {
+            console.warn('SocialSharing failed:', socialErr);
+          }
+        }
+
+        // Share Method 3: If neither file share worked and it is an HTTP URL, fallback to URL share
+        if (!sharedSuccessfully && !isBase64) {
+          try {
+            await Share.share({
+              title: 'Share Gallery Image',
+              url: fullUrl
+            });
+            sharedSuccessfully = true;
+          } catch (urlErr) {
+            console.warn('URL Share failed:', urlErr);
+          }
+        }
+
+        if (!sharedSuccessfully) {
+          throw new Error('Sharing could not be completed on this device.');
+        }
+
+      } else {
+        // Web / Desktop / Mobile Browser Sharing
+        let webShared = false;
+        try {
+          if (navigator.canShare) {
+            let blob: Blob | null = null;
+            if (isBase64) {
+              let base64Pure = MySelectedImage.trim();
+              if (base64Pure.startsWith('data:')) {
+                base64Pure = base64Pure.split(',')[1] || '';
+              }
+              const byteCharacters = atob(base64Pure);
+              const byteNumbers = new Array(byteCharacters.length);
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              const mimeType = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
+              blob = new Blob([byteArray], { type: mimeType });
+            } else {
+              const fetchRes = await fetch(fullUrl);
+              if (fetchRes.ok) {
+                blob = await fetchRes.blob();
+              }
+            }
+
+            if (blob) {
+              const mimeType = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
+              const file = new File([blob], fileName, { type: mimeType });
+              if (navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                  files: [file],
+                  title: 'Share Gallery Image'
+                });
+                webShared = true;
+              }
+            }
+          }
+        } catch (webErr) {
+          console.warn('Web file share error:', webErr);
+        }
+
+        if (!webShared) {
           await Share.share({
             title: 'Share Gallery Image',
-            url: fullUrl
+            url: isBase64 ? undefined : fullUrl
           });
         }
-      } else {
-        // Web fallback
-        await Share.share({
-          title: 'Share Gallery Image',
-          url: fullUrl
-        });
       }
 
     } catch (error: any) {
@@ -411,6 +590,11 @@ export class LetshlpgallerryPage implements OnInit {
       this.general.presentToast('Image is missing.');
       return;
     }
+
+    if (this.isDownloading) {
+      return;
+    }
+    this.isDownloading = true;
 
     const loading = await this.loadingController.create({
       message: 'Downloading image...',
@@ -583,8 +767,8 @@ export class LetshlpgallerryPage implements OnInit {
           throw new Error('Could not download image file to device.');
         }
 
-        // Copy to Documents directory for file manager visibility
-        if (cachedFileUri) {
+        // If not saved to gallery yet, save to Documents directory as a fallback
+        if (!savedToGallery && cachedFileUri) {
           try {
             const fileData = await Filesystem.readFile({
               path: fileName,
@@ -595,8 +779,10 @@ export class LetshlpgallerryPage implements OnInit {
               data: fileData.data,
               directory: Directory.Documents
             });
+            this.savedFilePath = fileName;
+            savedToGallery = true;
           } catch (docErr) {
-            console.warn('Documents directory copy skipped:', docErr);
+            console.warn('Documents directory copy fallback failed:', docErr);
           }
         }
 
@@ -663,6 +849,7 @@ export class LetshlpgallerryPage implements OnInit {
       console.error('Download error:', error);
       await this.general.presentToast('Failed to download image. Please try again.');
     } finally {
+      this.isDownloading = false;
       await loading.dismiss();
     }
   }

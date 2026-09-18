@@ -36,7 +36,7 @@
         <div class="img-inner-wrap">
           <img [src]="getImageUrl(item.GalleryImages)" alt="Gallery Image" class="img1" loading="lazy" />
         </div>
-        <button class="grid-download-btn" (click)="$event.stopPropagation(); downloadImage(item.GalleryImages)" title="Download Image" aria-label="Download Image">
+        <button class="grid-download-btn" [disabled]="isDownloading" (click)="$event.stopPropagation(); downloadImage(item.GalleryImages)" title="Download Image" aria-label="Download Image">
           <ion-icon name="download-outline"></ion-icon>
         </button>
       </div>
@@ -48,7 +48,7 @@
         <img [src]="getImageUrl(mygallery)" alt="Enlarged Image" class="img2" />
       </div>
       <div class="single-view-actions">
-        <ion-button fill="outline" color="danger" (click)="downloadImage(mygallery)">
+        <ion-button fill="outline" color="danger" [disabled]="isDownloading" (click)="downloadImage(mygallery)">
           <ion-icon name="download-outline" slot="start"></ion-icon>
           Download
         </ion-button>
@@ -87,7 +87,7 @@
 
     <!-- Quick Actions in Enlarged Preview: Visible for normal gallery enlarged view, hidden only when opened from download-success notification -->
     <div class="preview-actions" *ngIf="!isNotificationPreview">
-      <button class="preview-action-btn download-btn" (click)="downloadImage(previewRawImage)">
+      <button class="preview-action-btn download-btn" [disabled]="isDownloading" (click)="$event.stopPropagation(); downloadImage(previewRawImage)">
         <ion-icon name="download-outline"></ion-icon>
         <span>Download</span>
       </button>
