@@ -53,10 +53,15 @@ export class ProfiledetailsPage implements OnInit {
   latitude: any;
   longitude: any;
 
-  // Toggle Statuses
+  // Toggle Statuses & Role Change
   Rolestatus: boolean = false;
   Availablestatus: boolean = false;
   Activestatus: boolean = true;
+  existingRoleId: number = 2;
+  isAlreadyLeader: boolean = false;
+  leaderModalOpen: boolean = false;
+  leaderTermsAccepted: boolean = false;
+  acceptedViaButton: boolean = false;
 
   // Master Data
   BloodGroups: any[] = [];
@@ -141,6 +146,9 @@ export class ProfiledetailsPage implements OnInit {
     // Initialize Other Fields
     if (this.UserDetails && this.UserDetails[0]) {
       const u = this.UserDetails[0];
+      this.existingRoleId = Number(u.RoleId) || 2;
+      this.isAlreadyLeader = (this.existingRoleId === 4);
+
       this.Gender = u.Gender;
       this.selectedGender = u.Gender;
       this.BloodType = u.BLGName;
@@ -160,7 +168,7 @@ export class ProfiledetailsPage implements OnInit {
       this.Pincode = u.Pincode;
       this.UserAddress = u.UserAddress;
 
-      this.Rolestatus = u.Rolestatus;
+      this.Rolestatus = this.isAlreadyLeader;
       this.Availablestatus = u.Availablestatus;
       this.Activestatus = u.Status;
     }
@@ -509,8 +517,78 @@ export class ProfiledetailsPage implements OnInit {
     }
   }
 
+  async onLeaderToggle(event: any) {
+    if (this.isAlreadyLeader) {
+      return;
+    }
+
+    if (event.detail.checked) {
+      if (this.acceptedViaButton) {
+        return;
+      }
+
+      const alert = await this.alertController.create({
+        header: 'Become a Leader',
+        message: 'Once you become a Leader, you cannot switch back to becoming a Donor. Do you want to continue?',
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              this.Rolestatus = false;
+              this.leaderTermsAccepted = false;
+              this.acceptedViaButton = false;
+            }
+          },
+          {
+            text: 'Confirm',
+            handler: () => {
+              this.leaderModalOpen = true;
+              this.leaderTermsAccepted = false;
+              this.acceptedViaButton = false;
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      this.Rolestatus = false;
+      this.leaderTermsAccepted = false;
+      this.acceptedViaButton = false;
+    }
+  }
+
+  acceptLeaderTerms() {
+    if (this.leaderTermsAccepted) {
+      this.acceptedViaButton = true;
+      this.Rolestatus = true;
+      this.leaderModalOpen = false;
+    } else {
+      this.general.presentToast('Please accept the terms and conditions');
+    }
+  }
+
+  cancelLeaderTerms() {
+    if (!this.acceptedViaButton) {
+      this.Rolestatus = false;
+      this.leaderTermsAccepted = false;
+    }
+    this.acceptedViaButton = false;
+    this.leaderModalOpen = false;
+  }
+
   UserRegistration(val: any) {
     if (this.ProfileForm.valid) {
+      const selectedRoleId = this.Rolestatus ? 4 : 2;
+      const isRoleChangeFrom2To4 = (this.existingRoleId === 2 && selectedRoleId === 4);
+
+      if (isRoleChangeFrom2To4 && !this.acceptedViaButton) {
+        this.general.presentToast('Please accept the terms and conditions to become a Leader.');
+        this.leaderModalOpen = true;
+        return;
+      }
+
       const obj = [{
         RegId: this.UserID,
         FullName: val.firstName,
@@ -531,7 +609,8 @@ export class ProfiledetailsPage implements OnInit {
         Pincode: this.Pincode || "",
         UserAddress: this.UserAddress,
         Rolestatus: this.Rolestatus,
-        RoleId: this.Rolestatus ? 4 : 2,
+        RoleId: selectedRoleId,
+        RoleStatus: this.Rolestatus,
         Availablestatus: this.Availablestatus,
         Status: this.Activestatus,
         Lastdonatedate: this.LastDonationValue,
@@ -553,8 +632,54 @@ export class ProfiledetailsPage implements OnInit {
             if (result && result !== "NOTEXIST") {
               localStorage.setItem("UserDetails", JSON.stringify(result));
             }
-            this.general.presentToast("Profile updated successfully!");
-            this.navCtrl.navigateRoot('/home');
+
+            const completeUpdate = () => {
+              this.general.presentToast("Profile updated successfully!");
+              this.navCtrl.navigateRoot('/home');
+            };
+
+            const userEmail = (result?.[0]?.Email || this.Email || this.UserDetails?.[0]?.Email || '').trim();
+
+            if (isRoleChangeFrom2To4 && result && result.length > 0 && userEmail && userEmail !== 'undefined') {
+              const firstName = (result[0].FirstName || result[0].FullName || val.firstName || this.UserName || '').trim();
+              const middleName = (result[0].MiddleName || val.middleName || '').trim();
+              const surName = (result[0].SurName || result[0].Surname || result[0].LastName || val.surName || '').trim();
+              
+              const nameParts = [firstName, middleName, surName].filter(p => p && p.length > 0);
+              const fullName = nameParts.length > 0 ? nameParts.join(' ') : (result[0].FullName || firstName || '').trim();
+
+              const memberId = result[0].UserProtalID ? result[0].UserProtalID : ('LH' + String(result[0].RegId).padStart(7, '0'));
+              
+              const referralCode = (result[0].Reffercode || result[0].RefferCode || result[0].ReferralCode || result[0].ReferenceCode || localStorage.getItem('pendingReferralCode') || '').trim();
+              
+              var emailForm = new FormData();
+              emailForm.append('Email', userEmail);
+              emailForm.append('FirstName', firstName);
+              emailForm.append('MiddleName', middleName);
+              emailForm.append('SurName', surName);
+              emailForm.append('FullName', fullName);
+              emailForm.append('MemberId', memberId);
+              emailForm.append('RegId', result[0].RegId ? result[0].RegId.toString() : (this.UserID ? this.UserID.toString() : ''));
+              emailForm.append('RoleId', '4');
+              emailForm.append('BloodGroup', (result[0].BLGName || this.BloodType || '').trim());
+              emailForm.append('PhoneNumber', (result[0].Phonenumber || this.Mobile || '').trim());
+              emailForm.append('Title', 'Community Leader');
+              emailForm.append('ReferralCode', referralCode);
+              emailForm.append('ReferenceCode', referralCode);
+              
+              this.general.PostData('api/BG/SendLeaderWelcomeEmail', emailForm).subscribe(
+                () => {
+                  console.log('Leader welcome email sent successfully');
+                  completeUpdate();
+                },
+                (err: any) => {
+                  console.error('Failed to send welcome email', err);
+                  completeUpdate();
+                }
+              );
+            } else {
+              completeUpdate();
+            }
           }, () => {
             // Fallback in case of error fetching refreshed data
             this.isSubmitting = false;
