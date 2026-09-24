@@ -22,16 +22,16 @@
               </ion-row>
             </div>
             <div class="content">
-              <ion-row routerLink="/dashboard" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/dashboard')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Dashboard </ion-col>
               </ion-row>
-              <ion-row routerLink="/registerdonation" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/registerdonation')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Share your service</ion-col>
               </ion-row>
               <ion-row *ngIf="Role && Role.length > 0; else defaultRole"
-                [routerLink]="Role[0]?.RoleId == 4 ? '/leaders' : '/leaderguide'" class="open_content line_text">
+                (click)="navigateFromMenu(Role[0]?.RoleId == 4 ? '/leaders' : '/leaderguide')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">
                   {{ Role[0]?.RoleId == 4 ? 'Leader Page' : 'Join as a Leader' }}
@@ -39,7 +39,7 @@
               </ion-row>
 
               <ng-template #defaultRole>
-                <ion-row [routerLink]="'/leaderguide'" class="open_content line_text">
+                <ion-row (click)="navigateFromMenu('/leaderguide')" class="open_content line_text">
                   <ion-col size="2"></ion-col>
                   <ion-col size="10">Join as a Leader</ion-col>
                 </ion-row>
@@ -70,19 +70,19 @@
               </ion-row>
             </div>
             <div class="content">
-              <ion-row routerLink="/donorguide" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/donorguide')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Guide</ion-col>
               </ion-row>
-              <ion-row routerLink="/quiz" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/quiz')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Quiz</ion-col>
               </ion-row>
-              <ion-row routerLink="/tutorial" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/tutorial')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Tutorial</ion-col>
               </ion-row>
-              <ion-row routerLink="/contact" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/contact')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Contact</ion-col>
               </ion-row>
@@ -105,19 +105,19 @@
               </ion-row>
             </div>
             <div class="content">
-              <ion-row routerLink="/profiledetails" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/profiledetails')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Profile</ion-col>
               </ion-row>
-              <ion-row routerLink="/usercontrol" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/usercontrol')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">User Controls</ion-col>
               </ion-row>
-              <ion-row routerLink="/general" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/general')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">General</ion-col>
               </ion-row>
-              <ion-row routerLink="/language" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/language')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Language</ion-col>
               </ion-row>
@@ -140,15 +140,15 @@
               </ion-row>
             </div>
             <div class="content ">
-              <ion-row routerLink="/about" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/about')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">About Us</ion-col>
               </ion-row>
-              <ion-row routerLink="/privacypolicyside" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/privacypolicyside')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Privacy Policy</ion-col>
               </ion-row>
-              <ion-row routerLink="/termsandconditionsside" class="open_content line_text">
+              <ion-row (click)="navigateFromMenu('/termsandconditionsside')" class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">Terms of use and disclaimer</ion-col>
               </ion-row>
@@ -174,7 +174,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="12">
-            <div class="version">Version(i8-c6-a17-V9.1.1)</div>
+            <div class="version">Version(i8-c6-a17-V9.1.2)</div>
           </ion-col>
         </ion-row>
       </ion-content>

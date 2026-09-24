@@ -131,40 +131,32 @@ export class GeneralPage implements OnInit {
 
 
   DeleteAcc() {
-
     var uploadfile = new FormData();
-
     uploadfile.append("Param1", "1");
     uploadfile.append("Param2", this.UserDetails[0].RegId);
-
     var url = "api/BG/DeleteAccount_Covert_as_Leader";
-
     this.general.PostData(url, uploadfile).subscribe((data: any) => {
-
       if (data == 'SUCCESS') {
-
-        this.general.presentAlert('SUCCESS', 'Your Account Has Deleted Permanently');
-
+        this.general.presentAlert('SUCCESS', 'Your Account Has Deleted Permanently' );
         const apiUrl = localStorage.getItem('URL') || "https://letshelp.in/webservices/";
         localStorage.clear();
         sessionStorage.clear();
+        // Keep API URL
         localStorage.setItem('URL', apiUrl);
-
-        this.NavCtl.navigateRoot('/login');
-
+        // Navigate to Login first
+        this.NavCtl.navigateRoot('/login').then(() => {
+          // Fully reload the application
+          window.location.reload();
+        });
       }
-
       else {
-
-        this.general.presentAlert('Error', 'Something Went Wrong');
-
+        this.general.presentAlert(
+          'Error',
+          'Something Went Wrong'
+        );
       }
-
     });
-
   }
-
-
 
   async logout() {
     const alert = await this.alertController.create({

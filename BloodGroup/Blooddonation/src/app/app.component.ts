@@ -50,6 +50,9 @@ export class AppComponent {
 
   lastBackTime: number = 0;
   isExitAlertOpen: boolean = false;
+  openedFromSideMenu: boolean = false;
+  urlBeforeSideMenu: string = '/home';
+  currentSideMenuTarget: string = '';
 
   constructor(private alertController: AlertController,private languageService: LanguageTranslatorService,
 private geolocationService: GeolocationserviceService,private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
@@ -79,7 +82,27 @@ private geolocationService: GeolocationserviceService,private permissionService:
     }
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.menu.close();  // Close the menu on navigation
+        const destUrl = (event.urlAfterRedirects || event.url || '').split(';')[0].split('?')[0];
+
+        // If user navigated to a page from the side menu and has now come back
+        if (this.openedFromSideMenu && this.currentSideMenuTarget && destUrl !== this.currentSideMenuTarget) {
+          const originUrl = this.urlBeforeSideMenu || '/home';
+          this.openedFromSideMenu = false;
+          this.currentSideMenuTarget = '';
+
+          // If the page navigated to /home but originated from another page, return to origin
+          if (destUrl === '/home' && originUrl !== '/home') {
+            this.navCtrl.navigateBack(originUrl);
+          }
+
+          // Re-open the side menu so the user remains in the side menu navigation flow
+          setTimeout(() => {
+            this.menu.enable(true, 'end');
+            this.menu.open('end');
+          }, 250);
+        } else if (!this.openedFromSideMenu) {
+          this.menu.close();
+        }
       }
     });
 
@@ -93,24 +116,28 @@ private geolocationService: GeolocationserviceService,private permissionService:
   setupBackButtonHandler() {
     this.platform.ready().then(() => {
       this.platform.backButton.subscribeWithPriority(10, async () => {
-        const currentUrl = (this.router.url || '').split(';')[0].split('?')[0];
-        const isRootPage = currentUrl === '/home' || currentUrl === '/login' || currentUrl === '/language' || currentUrl === '/';
-        const currentTime = new Date().getTime();
-
         if (this.isExitAlertOpen) {
           return;
         }
 
-        if (currentTime - this.lastBackTime < 2000 || (isRootPage && this.lastBackTime > 0 && currentTime - this.lastBackTime < 3000)) {
+        try {
+          const isMenuOpen = await this.menu.isOpen();
+          if (isMenuOpen) {
+            await this.menu.close();
+            return;
+          }
+        } catch (e) {
+          // ignore menu check error
+        }
+
+        const currentUrl = (this.router.url || '').split(';')[0].split('?')[0];
+        const isHomePage = currentUrl === '/home' || currentUrl === '/';
+
+        if (isHomePage) {
           this.showExitConfirmAlert();
         } else {
-          this.lastBackTime = currentTime;
-
-          if (isRootPage) {
-            this.general.presentToast('Press back again to exit');
-          } else {
-            this.navCtrl.back();
-          }
+          this.lastBackTime = 0;
+          this.navCtrl.back();
         }
       });
     });
@@ -149,6 +176,10 @@ private geolocationService: GeolocationserviceService,private permissionService:
       ]
     });
 
+    alert.onDidDismiss().then(() => {
+      this.isExitAlertOpen = false;
+    });
+
     await alert.present();
   }
 
@@ -177,9 +208,18 @@ private geolocationService: GeolocationserviceService,private permissionService:
     await alert.present();
   }
 
+  navigateFromMenu(path: string) {
+    if (!path) return;
+    const currentUrl = (this.router.url || '').split(';')[0].split('?')[0];
+    this.urlBeforeSideMenu = currentUrl || '/home';
+    this.currentSideMenuTarget = path.split(';')[0].split('?')[0];
+    this.openedFromSideMenu = true;
+    this.navCtrl.navigateForward(path);
+    this.menu.close();
+  }
+
   navigateTo(path: string) {
-    this.router.navigate([path]);
-    this.menu.close();  // Ensure the menu closes when a link is clicked
+    this.navigateFromMenu(path);
   }
   opn(id:any) {
     this.ids=id
@@ -319,7 +359,9 @@ private geolocationService: GeolocationserviceService,private permissionService:
       // Optionally, you can ensure that light mode styles are always applied
       document.body.style.setProperty('--ion-background-color', '#ffffff');
       document.body.style.setProperty('--ion-text-color', '#000000');
-      // Add any other light mode styles you want to enforce
+      // Ensure side menu is enabled and swipeable across all pages
+      this.menu.enable(true, 'end');
+      this.menu.swipeGesture(true, 'end');
 
       // Listen for Deep Links / App URL Open (Capacitor)
       try {

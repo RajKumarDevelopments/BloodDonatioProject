@@ -41,8 +41,50 @@ ion-card-content {
 
 .accordionheader {
   background: rgba(78, 78, 78, 0.1294117647);
-  padding: 0 3%;
+  padding: 0;
   border-bottom: 1px solid #9b9b9b;
+}
+
+ion-item-sliding {
+  width: 100%;
+}
+
+.slide-item {
+  --background: #f1f2f4;
+  --padding-start: 3%;
+  --padding-end: 3%;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --min-height: unset;
+  width: 100%;
+}
+
+.slide-content-item {
+  --background: #ffffff;
+  --padding-start: 2%;
+  --padding-end: 2%;
+}
+
+ion-item-options {
+  border-bottom: 1px solid #9b9b9b;
+}
+
+ion-item-option {
+  --color: #ffffff;
+  min-width: 52px;
+  width: 52px;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    font-size: 16px;
+    margin: auto;
+  }
 }
 
 .iconn_bell {
@@ -81,11 +123,11 @@ ion-card-content {
   font-size: 18px;
 }
 
-.singleline { 
-    white-space: nowrap;
-    width: 100% !important;
-    text-overflow: ellipsis;
-    overflow: hidden; 
+.singleline {
+  white-space: nowrap;
+  width: 100% !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .center {

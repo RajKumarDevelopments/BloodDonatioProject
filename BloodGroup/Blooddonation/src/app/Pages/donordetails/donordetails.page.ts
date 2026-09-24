@@ -430,6 +430,7 @@ closeModal() {
         {
           text: 'Yes',
           handler: async () => {
+            debugger
             await this.sendnotifications(obj);
             await this.sendMail(obj);          
             await this.sendSMSToDonor(obj);
@@ -454,6 +455,7 @@ closeModal() {
 
   sendnotifications(obj: any): Promise<void> {
     return new Promise((resolve) => {
+      debugger
       var UploadFile = new FormData();
       UploadFile.append("deviceId", obj.Devicetoken);
       UploadFile.append("message", `Dear ${obj.FullName}, ${this.UserDetails[0].FullName} urgently needs ${obj.BLGName} blood at ${this.UserDetails[0].CityName}. Your help can save a life. Please call: ${this.UserDetails[0].Phonenumber}`);
@@ -466,7 +468,7 @@ closeModal() {
         if (notificationData) {
           var arr = [{
             RegID: this.UserDetails[0].RegId,
-            NotiRecevieID: this.UserDetails[0].RegId,//Asif
+            NotiRecevieID: obj.RegId,//Asif
             CreatedBy: this.UserDetails[0].RegId,
             NotificationsDesc: `Dear ${obj.FullName} someone urgently needs your ${obj.BLGName} blood at ${this.UserDetails[0].CityName}. Your help can save a life.`,
           }];
