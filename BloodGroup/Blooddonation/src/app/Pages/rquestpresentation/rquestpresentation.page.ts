@@ -1202,6 +1202,8 @@ export class RquestpresentationPage implements OnInit {
         {
           text: 'Yes, Close',
           handler: () => {
+            // Send cancellation notifications to all accepted users for this presentation
+            this.sendPresentationCloseNotifications(rqst);
             this.ClosedRequest(rqst);
           }
         }
@@ -1210,8 +1212,6 @@ export class RquestpresentationPage implements OnInit {
 
     await alert.present();
   }
-
-
 
   ClosedRequest(value: any) {
     let obj = [];
@@ -1228,7 +1228,6 @@ export class RquestpresentationPage implements OnInit {
       (response: any) => {
         setTimeout(() => {
           this.GetRequestpresantaions();
-          this.ExpiredAcceptsendnotification(this.expiredlist);
           setTimeout(() => {
             this.setTab('closed');
           }, 100);
@@ -1238,6 +1237,153 @@ export class RquestpresentationPage implements OnInit {
       },
       (error: any) => {
         console.error("Error closing request:", error);
+      }
+    );
+  }
+
+  GetPresentationAcceptedUsers(presentationId: any, callback?: (data: any[]) => void) {
+    const formData = new FormData();
+    formData.append("Param1", presentationId);
+    const url = "api/BG/Get_PresentationAccetedDetails";
+    this.general.PostData(url, formData).subscribe((data: any) => {
+      let parsedData = data;
+      if (typeof data === 'string') {
+        try {
+          parsedData = JSON.parse(data);
+        } catch (e) {
+          console.error("Error parsing presentation accepted details:", e);
+        }
+      }
+      const acceptedUsers = Array.isArray(parsedData) ? parsedData : (parsedData ? [parsedData] : []);
+      if (callback) {
+        callback(acceptedUsers);
+      }
+    }, (error: any) => {
+      console.error('Error fetching presentation accepted users:', error);
+      if (callback) {
+        callback([]);
+      }
+    });
+  }
+
+  sendPresentationCloseNotifications(rqst: any) {
+    const presentationId = rqst.PresentationID || rqst.RPId;
+    if (!presentationId) {
+      console.warn("No presentation ID found to send close notifications.");
+      return;
+    }
+
+    this.GetPresentationAcceptedUsers(presentationId, (users: any[]) => {
+      if (!users || users.length === 0) {
+        console.log("No accepted users to notify for presentation:", presentationId);
+        return;
+      }
+
+      // Deduplicate accepted users by user identifier (RegId)
+      const uniqueUsers: any[] = [];
+      const seenUserIds = new Set<string>();
+
+      users.forEach((user: any) => {
+        const uid = (user.RegId || user.RegID || user.AcceptBy || user.regId || '').toString();
+        if (uid) {
+          if (!seenUserIds.has(uid)) {
+            seenUserIds.add(uid);
+            uniqueUsers.push(user);
+          }
+        } else {
+          uniqueUsers.push(user);
+        }
+      });
+
+      console.log(`Sending cancel notifications to ${uniqueUsers.length} accepted presentation users:`, uniqueUsers);
+
+      const dbNotifications: any[] = [];
+
+      uniqueUsers.forEach((user: any) => {
+        const fullName = (user.FullName || user.fullname || user.Contact_name || '').toString().trim();
+        const venueName = rqst.Venue_name || rqst.Venue || user.Venue_name || user.Venue || 'Presentation';
+
+        let displayDate = rqst.RequestDate || user.RequestDate || '';
+        try {
+          if (displayDate) {
+            const d = new Date(displayDate);
+            if (!isNaN(d.getTime())) {
+              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const year = d.getFullYear();
+              displayDate = `${day}/${month}/${year}`;
+            }
+          }
+        } catch (e) {
+          displayDate = rqst.RequestDate || '';
+        }
+
+        const message = fullName
+          ? `Dear ${fullName}, your accepted presentation request at ${venueName}, dated ${displayDate}, has been closed.`
+          : `Your accepted presentation request for ${venueName}, dated ${displayDate}, has been closed.`;
+
+        const recipientId = user.RegId || user.RegID || user.AcceptBy || user.regId;
+        const deviceToken = user.DeviceToken || user.Devicetoken || user.devicetoken || user.DeviceId || user.deviceId;
+
+        // 1. Send push notification if device token is directly present
+        if (deviceToken) {
+          this.sendPresentationFCMNotification(deviceToken, message);
+        } else if (recipientId) {
+          // Otherwise fetch device token for this recipient ID
+          this.user.getreferalcodeusers(recipientId.toString()).subscribe((res: any) => {
+            if (res && Array.isArray(res) && res.length > 0 && res[0].Devicetoken) {
+              this.sendPresentationFCMNotification(res[0].Devicetoken, message);
+            }
+          }, (err: any) => {
+            console.error("Error fetching device token for user:", recipientId, err);
+          });
+        }
+
+        // 2. Prepare in-app notification for DB
+        if (recipientId) {
+          dbNotifications.push({
+            RegID: recipientId,
+            NotiRecevieID: recipientId,
+            NotificationsDesc: message,
+            CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0
+          });
+        }
+      });
+
+      // Bulk insert in-app notifications into database
+      if (dbNotifications.length > 0) {
+        const notificationsUploadFile = new FormData();
+        notificationsUploadFile.append("Param", JSON.stringify(dbNotifications));
+        notificationsUploadFile.append("Flag", "1");
+        const notificationsUrl = "api/BG/Crud_Notifications";
+
+        this.general.PostData(notificationsUrl, notificationsUploadFile).subscribe(
+          (data: any) => {
+            console.log('Presentation cancel notification records saved for accepted users:', data);
+          },
+          (error: any) => {
+            console.error('Error saving presentation notifications in db:', error);
+          }
+        );
+      }
+    });
+  }
+
+  sendPresentationFCMNotification(deviceToken: string, message: string) {
+    const uploadFile = new FormData();
+    uploadFile.append("deviceId", deviceToken);
+    uploadFile.append("message", message);
+    uploadFile.append("senderName", "BloodGroup");
+    uploadFile.append("path", "eligibilitycriteria");
+    uploadFile.append("Img", "");
+
+    const notificationUrl = "api/BG/sendNotification";
+    this.general.PostData(notificationUrl, uploadFile).subscribe(
+      (res: any) => {
+        console.log('Presentation cancel push notification sent successfully:', res);
+      },
+      (error: any) => {
+        console.error('Error sending presentation push notification:', error);
       }
     );
   }

@@ -63,7 +63,7 @@ export class MyrequestPage implements OnInit {
   status: any;
   Count: any;
   BloodAcceptedDetalis: any;
-  constructor(public general: GeneralService, private loadingController: LoadingController, private nav: NavController,) {
+  constructor(public general: GeneralService, private loadingController: LoadingController, private nav: NavController, private alertController: AlertController) {
     this.userdetail = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.userdetail);
     if (this.UserDetails[0].Status == false) {
@@ -175,7 +175,6 @@ export class MyrequestPage implements OnInit {
     this.time = item.detail.value
   }
   Repost(detail: any) {
-
     var selectedDateTime = this.RepostDate;
     var selectedDate = selectedDateTime.split('T')[0];
     var selectedTime = selectedDateTime.split('T')[1];
@@ -222,14 +221,41 @@ export class MyrequestPage implements OnInit {
       }
     });
   }
-  closereq(BloodRequestID: any) {
-    var uploadfile = new FormData();
-    uploadfile.append("Param1", BloodRequestID);
-    var url = "api/BG/BloodRequestClosed";
-    this.general.PostData(url, uploadfile).subscribe((data: any) => {
-      this.general.presentAlert("Update", 'Your Request Details Updated')
-      this.requestdata();
-    })
+  async closereq(BloodRequestID: any, Name: string, BloodRequestDate: string) {
+    const reqId = BloodRequestID || (this.BloodRequestDetalis && this.BloodRequestDetalis[0] ? (this.BloodRequestDetalis[0].BloodRequestID || this.BloodRequestDetalis[0].UdId) : this.selecd);
+    const patientName = Name || (this.BloodRequestDetalis && this.BloodRequestDetalis[0] ? (this.BloodRequestDetalis[0].FullName || this.BloodRequestDetalis[0].patientname) : '');
+    const requestDate = BloodRequestDate || (this.BloodRequestDetalis && this.BloodRequestDetalis[0] ? this.BloodRequestDetalis[0].BloodRequestDate : '');
+
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message: 'Are you sure you want to close this request?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            // Cancel/revoke the action and keep request unchanged
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            // Send cancellation notifications to all accepted users
+            this.sendCloseNotifications(reqId, patientName, requestDate);
+
+            var uploadfile = new FormData();
+            uploadfile.append("Param1", reqId);
+            var url = "api/BG/BloodRequestClosed";
+            this.general.PostData(url, uploadfile).subscribe((data: any) => {
+              this.general.presentAlert("Update", 'Your Request Details Updated');
+              this.requestdata();
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
   openrequestfilt() {
     this.opendata = [];
@@ -346,7 +372,9 @@ export class MyrequestPage implements OnInit {
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.BloodRequestDetalis = data;
       if (this.BloodRequestDetalis && this.BloodRequestDetalis.length > 0) {
-        this.GetAcceptedCount(this.BloodRequestDetalis[0].BloodRequestID || this.BloodRequestDetalis[0].UdId || Val);
+        const reqId = this.BloodRequestDetalis[0].BloodRequestID || this.BloodRequestDetalis[0].UdId || Val;
+        this.GetAcceptedCount(reqId);
+        this.GetAcceptedUsers(reqId);
       }
     })
   }
@@ -416,21 +444,211 @@ export class MyrequestPage implements OnInit {
     var UploadFile = new FormData();
     UploadFile.append("Param1", Val);
     UploadFile.append("Param2", '2');
-    UploadFile.append("Param3", this.UserDetails[0].RegId);
+    UploadFile.append("Param3", '1');
     var url = "api/BG/BloodAcceptedUser";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.Count = data;
-    })
+    });
   }
-  GetAcceptedUsers(Val: any) {
+  GetAcceptedUsers(Val: any, callback?: (data: any[]) => void) {
     var UploadFile = new FormData();
     UploadFile.append("Param1", Val);
     UploadFile.append("Param2", '1');
-    UploadFile.append("Param3", this.UserDetails[0].RegId);
+    UploadFile.append("Param3", '1');
     var url = "api/BG/BloodAcceptedUser";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
-      this.BloodAcceptedDetalis = data;
-    })
+      let parsedData = data;
+      if (typeof data === 'string') {
+        try {
+          parsedData = JSON.parse(data);
+        } catch (e) {
+          console.error("Error parsing BloodAcceptedDetalis:", e);
+        }
+      }
+      this.BloodAcceptedDetalis = Array.isArray(parsedData) ? parsedData : (parsedData ? [parsedData] : []);
+      console.log('Accepted Users:', this.BloodAcceptedDetalis);
+      if (callback) {
+        callback(this.BloodAcceptedDetalis);
+      }
+    }, (error: any) => {
+      console.error('Error in GetAcceptedUsers:', error);
+      if (callback) {
+        callback(this.BloodAcceptedDetalis || []);
+      }
+    });
+  }
+
+  sendCloseNotifications(reqId: any, Name: string, BloodRequestDate: string) {
+    this.GetAcceptedUsers(reqId, (users: any[]) => {
+      const acceptedUsers = Array.isArray(users) && users.length > 0
+        ? users
+        : (Array.isArray(this.BloodAcceptedDetalis) ? this.BloodAcceptedDetalis : []);
+
+      if (!acceptedUsers || acceptedUsers.length === 0) {
+        console.log('No accepted users to notify for request:', reqId);
+        return;
+      }
+
+      // Deduplicate users by ID so each user receives only one notification
+      const uniqueUsers: any[] = [];
+      const seenUserIds = new Set<string>();
+
+      acceptedUsers.forEach((user: any) => {
+        const uid = (user.AcceptBy || user.RegId || user.RegID || user.regId || '').toString();
+        if (uid) {
+          if (!seenUserIds.has(uid)) {
+            seenUserIds.add(uid);
+            uniqueUsers.push(user);
+          }
+        } else {
+          uniqueUsers.push(user);
+        }
+      });
+
+      console.log(`Sending cancel notifications to ${uniqueUsers.length} accepted users:`, uniqueUsers);
+
+      const dbNotifications: any[] = [];
+
+      uniqueUsers.forEach((user: any) => {
+        const fullName = (user.FullName || user.fullname || user.Name || user.name || '').toString().trim();
+        let displayDate = BloodRequestDate || '';
+        try {
+          if (displayDate) {
+            const d = new Date(displayDate);
+            if (!isNaN(d.getTime())) {
+              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const year = d.getFullYear();
+              displayDate = `${day}/${month}/${year}`;
+            }
+          }
+        } catch (e) {
+          displayDate = BloodRequestDate;
+        }
+
+        const message = fullName
+          ? `Dear ${fullName}, your accepted blood donation request for ${Name || 'patient'}, dated ${displayDate}, has been closed.`
+          : `Your accepted blood donation request for ${Name || 'patient'}, dated ${displayDate}, has been closed.`;
+
+        const deviceToken = user.DeviceToken || user.Devicetoken || user.devicetoken || user.DeviceId || user.deviceId;
+        const recipientId = user.AcceptBy || user.RegId || user.RegID || user.regId;
+
+        // 1. Send push notification if device token is available
+        if (deviceToken) {
+          const uploadFile = new FormData();
+          uploadFile.append("deviceId", deviceToken);
+          uploadFile.append("message", message);
+          uploadFile.append("senderName", "BloodGroup");
+          uploadFile.append("path", "myrequest");
+          uploadFile.append("Img", "");
+
+          const notificationUrl = "api/BG/sendNotification";
+          this.general.PostData(notificationUrl, uploadFile).subscribe(
+            (res: any) => {
+              console.log('Push notification sent to:', fullName, res);
+            },
+            (error: any) => {
+              console.error('Error sending push notification:', error);
+            }
+          );
+        }
+
+        // 2. Prepare in-app notification in database
+        if (recipientId) {
+          dbNotifications.push({
+            RegID: recipientId,
+            NotiRecevieID: recipientId,
+            NotificationsDesc: message,
+            CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0
+          });
+        }
+      });
+
+      // Insert all in-app notifications in database in bulk
+      if (dbNotifications.length > 0) {
+        const notificationsUploadFile = new FormData();
+        notificationsUploadFile.append("Param", JSON.stringify(dbNotifications));
+        notificationsUploadFile.append("Flag", "1");
+        const notificationsUrl = "api/BG/Crud_Notifications";
+
+        this.general.PostData(notificationsUrl, notificationsUploadFile).subscribe(
+          (data: any) => {
+            console.log('Notification records saved for accepted users:', data);
+          },
+          (error: any) => {
+            console.error('Error saving notifications in db:', error);
+          }
+        );
+      }
+    });
+  }
+
+  sendCloseNotificationToUser(user: any, Name: string, BloodRequestDate: string) {
+    const fullName = (user.FullName || user.fullname || user.Name || user.name || '').toString().trim();
+    let displayDate = BloodRequestDate || '';
+    try {
+      if (displayDate) {
+        const d = new Date(displayDate);
+        if (!isNaN(d.getTime())) {
+          const day = String(d.getDate()).padStart(2, '0');
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const year = d.getFullYear();
+          displayDate = `${day}/${month}/${year}`;
+        }
+      }
+    } catch (e) {
+      displayDate = BloodRequestDate;
+    }
+
+    const message = fullName
+      ? `Dear ${fullName}, your accepted blood donation request for ${Name || 'patient'}, dated ${displayDate}, has been closed.`
+      : `Your accepted blood donation request for ${Name || 'patient'}, dated ${displayDate}, has been closed.`;
+    const deviceToken = user.DeviceToken || user.Devicetoken || user.devicetoken || user.DeviceId || user.deviceId;
+    const recipientId = user.AcceptBy || user.RegId || user.RegID || user.regId;
+
+    // 1. Send push notification if device token is available
+    if (deviceToken) {
+      const uploadFile = new FormData();
+      uploadFile.append("deviceId", deviceToken);
+      uploadFile.append("message", message);
+      uploadFile.append("senderName", "BloodGroup");
+      uploadFile.append("path", "myrequest");
+      uploadFile.append("Img", "");
+
+      const notificationUrl = "api/BG/sendNotification";
+      this.general.PostData(notificationUrl, uploadFile).subscribe(
+        (res: any) => {
+          console.log('Push notification sent to:', fullName, res);
+        },
+        (error: any) => {
+          console.error('Error sending push notification:', error);
+        }
+      );
+    }
+
+    // 2. Insert in-app notification in database
+    if (recipientId) {
+      const notifArr = [{
+        RegID: recipientId,
+        NotiRecevieID: recipientId,
+        NotificationsDesc: message,
+        CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0
+      }];
+
+      const notificationsUploadFile = new FormData();
+      notificationsUploadFile.append("Param", JSON.stringify(notifArr));
+      notificationsUploadFile.append("Flag", "1");
+      const notificationsUrl = "api/BG/Crud_Notifications";
+
+      this.general.PostData(notificationsUrl, notificationsUploadFile).subscribe(
+        (data: any) => {
+          console.log('Notification record saved for:', fullName, data);
+        },
+        (error: any) => {
+          console.error('Error saving notification in db:', error);
+        }
+      );
+    }
   }
   getValidCount() {
     if (this.Count === null || this.Count === undefined || this.Count === '') return 0;
@@ -450,5 +668,5 @@ export class MyrequestPage implements OnInit {
     });
   }
 
- 
+
 }

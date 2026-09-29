@@ -90,7 +90,7 @@
 
               <!-- Footer Actions -->
               <div class="footer-actions" style="margin-top: 10px; padding-left: 4%; display: flex; justify-content: space-between; align-items: center;">
-                <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase;" (click)="closereq(BloodRequestDetalis[0].BloodRequestID)">Close</div>
+                <div class="close-text" style="color: #ec1c2c; font-weight: bold; font-size: 13px; cursor: pointer; text-transform: uppercase;" (click)="closereq(BloodRequestDetalis[0].BloodRequestID,BloodRequestDetalis[0].FullName,BloodRequestDetalis[0].BloodRequestDate)">Close</div>
                 <div class="expand-toggle" style="margin-left: auto; cursor: pointer; display: flex; gap: 15px; align-items: center;">
                   <ion-icon name="share-outline" style="color: red; font-size: 18px;" (click)="shareRequest(obj)"></ion-icon>
                   <div style="cursor: pointer; color: #ec1c2c; font-size: 18px;" (click)="openDrawerId = null">▲</div>
