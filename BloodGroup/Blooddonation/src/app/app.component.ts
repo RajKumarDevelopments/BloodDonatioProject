@@ -53,6 +53,8 @@ export class AppComponent {
   openedFromSideMenu: boolean = false;
   urlBeforeSideMenu: string = '/home';
   currentSideMenuTarget: string = '';
+  showSplashScreen: boolean = true;
+  splashFading: boolean = false;
 
   constructor(private alertController: AlertController,private languageService: LanguageTranslatorService,
 private geolocationService: GeolocationserviceService,private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
@@ -62,6 +64,7 @@ private geolocationService: GeolocationserviceService,private permissionService:
     //.then(() => this.androidFullScreen.immersiveMode())
     //.catch(err => console.log(err));
     this.initializeApp();
+    this.initSplashScreen();
     this.Navigation();
     this.setupBackButtonHandler();
 
@@ -414,11 +417,14 @@ private geolocationService: GeolocationserviceService,private permissionService:
     });
   }
 
-
-
-   
-
-
+  initSplashScreen() {
+    setTimeout(() => {
+      this.splashFading = true;
+      setTimeout(() => {
+        this.showSplashScreen = false;
+      }, 600);
+    }, 2400);
+  }
 
 }
 

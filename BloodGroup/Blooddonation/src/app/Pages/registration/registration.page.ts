@@ -24,7 +24,7 @@ export class RegistrationPage {
   activePicker: 'dob' | 'gender' | 'blood' | 'lastDonation' | null = null;
   maxDate: string = new Date().toISOString();
   maxDOB: string = '';
-
+  acceptcomment: any;
   openPicker(pickerType: any) {
     this.activePicker = pickerType;
     if (pickerType === 'lastDonation') {
@@ -190,11 +190,11 @@ export class RegistrationPage {
     const passedSurName = this.activeRoute.snapshot.paramMap.get("SurName");
     this.Mobile = this.activeRoute.snapshot.paramMap.get("Mobile");
     this.InviteCode = this.activeRoute.snapshot.paramMap.get("InviteCode");
-    
+
     this.FirstName = passedFirstName || this.UserName;
     this.MiddleName = passedMiddleName;
     this.SurName = passedSurName;
-    
+
     this.registrationForm.controls['firstName'].setValue(this.FirstName);
     this.registrationForm.controls['middleName'].setValue(this.MiddleName);
     this.registrationForm.controls['surName'].setValue(this.SurName);
@@ -233,21 +233,21 @@ export class RegistrationPage {
       if (forceOverwrite) {
         this.general.present();
       }
-      
+
       const position = await Geolocation.getCurrentPosition({
         timeout: 10000,
         enableHighAccuracy: true,
         maximumAge: 0
       });
-      
+
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;
-      
+
       if (forceOverwrite) {
         this.general.dismiss();
       }
       this.getGeoLocation(this.latitude, this.longitude, forceOverwrite);
-      
+
       if (forceOverwrite) {
         this.general.presentToast("Location fetched successfully!");
       }
@@ -285,9 +285,9 @@ export class RegistrationPage {
   }
 
   openLocationSettings() {
-    NativeSettings.open({ 
+    NativeSettings.open({
       optionAndroid: AndroidSettings.Location,
-      optionIOS: IOSSettings.LocationServices 
+      optionIOS: IOSSettings.LocationServices
     });
   }
 
@@ -424,7 +424,7 @@ export class RegistrationPage {
       this.general.presentToast("something went wrong");
     })
   }
- 
+
   onManualAreaInput(event: any) {
     const val = event.target.value;
     this.Area = val;
@@ -436,7 +436,7 @@ export class RegistrationPage {
     this.Pincode = val;
     this.registrationForm.controls['pincode'].setValue(val);
   }
-  
+
   getGeoLocation(lat: any, lng: any, forceOverwrite: boolean = false) {
     const geocoder = new google.maps.Geocoder();
     const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
@@ -445,7 +445,7 @@ export class RegistrationPage {
       if (forceOverwrite) {
         this.general.dismiss();
       }
-      
+
       if (status === 'OK' && results[0]) {
         const result = results[0];
         const components = result.address_components;
@@ -455,35 +455,35 @@ export class RegistrationPage {
           this.StateID = 0;
           this.DistrictID = 0;
           this.CityID = 0;
-          
+
           this.selectedState = this.getAddressComponent(components, 'administrative_area_level_1');
-          this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') || 
-                                   this.getAddressComponent(components, 'administrative_area_level_2');
-          this.selectedCity = this.getAddressComponent(components, 'locality') || 
-                               this.getAddressComponent(components, 'sublocality_level_1');
-          this.Area = this.getAddressComponent(components, 'sublocality') || 
-                      this.getAddressComponent(components, 'sublocality_level_1');
+          this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') ||
+            this.getAddressComponent(components, 'administrative_area_level_2');
+          this.selectedCity = this.getAddressComponent(components, 'locality') ||
+            this.getAddressComponent(components, 'sublocality_level_1');
+          this.Area = this.getAddressComponent(components, 'sublocality') ||
+            this.getAddressComponent(components, 'sublocality_level_1');
           this.Pincode = this.getAddressComponent(components, 'postal_code');
-          
+
           // Update form immediately
           this.registrationForm.controls['area'].setValue(this.Area);
           this.registrationForm.controls['pincode'].setValue(this.Pincode);
-          
+
           this.general.presentToast("Location fetched from GPS!");
         } else {
           // Automatic fetch - only set if empty
           if (!this.selectedState) this.selectedState = this.getAddressComponent(components, 'administrative_area_level_1');
           if (!this.selectedDistrict) {
-            this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') || 
-                                   this.getAddressComponent(components, 'administrative_area_level_2');
+            this.selectedDistrict = this.getAddressComponent(components, 'administrative_area_level_3') ||
+              this.getAddressComponent(components, 'administrative_area_level_2');
           }
           if (!this.selectedCity) {
-            this.selectedCity = this.getAddressComponent(components, 'locality') || 
-                                 this.getAddressComponent(components, 'sublocality_level_1');
+            this.selectedCity = this.getAddressComponent(components, 'locality') ||
+              this.getAddressComponent(components, 'sublocality_level_1');
           }
           if (!this.Area) {
-            this.Area = this.getAddressComponent(components, 'sublocality') || 
-                        this.getAddressComponent(components, 'sublocality_level_1');
+            this.Area = this.getAddressComponent(components, 'sublocality') ||
+              this.getAddressComponent(components, 'sublocality_level_1');
             this.registrationForm.controls['area'].setValue(this.Area);
           }
           if (!this.Pincode) {
@@ -659,24 +659,24 @@ export class RegistrationPage {
       this.WeightKgs = this.Weight + " " + "kgs";
     }
     this.UserAddress = this.registrationForm.get('address')?.value;
-    
+
     // Only update from form if form has value, otherwise keep current variable value (from ngModel)
     const formArea = this.registrationForm.get('area')?.value;
     if (formArea) this.Area = formArea;
-    
+
     const formPincode = this.registrationForm.get('pincode')?.value;
     if (formPincode) this.Pincode = formPincode;
 
     this.Gender = this.selectedGender;
     this.BloodType = this.selectedBloodType;
-    try { this.modal?.dismiss(); } catch(e){}
-    try { this.modal2?.dismiss(); } catch(e){}
-    try { this.modal3?.dismiss(); } catch(e){}
-    try { this.modal4?.dismiss(); } catch(e){}
-    try { this.modal11?.dismiss(); } catch(e){}
-    try { this.modal6?.dismiss(); } catch(e){}
-    try { this.modal7?.dismiss(); } catch(e){}
-    try { this.modal8?.dismiss(); } catch(e){}
+    try { this.modal?.dismiss(); } catch (e) { }
+    try { this.modal2?.dismiss(); } catch (e) { }
+    try { this.modal3?.dismiss(); } catch (e) { }
+    try { this.modal4?.dismiss(); } catch (e) { }
+    try { this.modal11?.dismiss(); } catch (e) { }
+    try { this.modal6?.dismiss(); } catch (e) { }
+    try { this.modal7?.dismiss(); } catch (e) { }
+    try { this.modal8?.dismiss(); } catch (e) { }
     this.closePicker();
   }
 
@@ -751,14 +751,14 @@ export class RegistrationPage {
       const birthYear = parseInt(parts[0], 10);
       const birthMonth = parseInt(parts[1], 10) - 1;
       const birthDay = parseInt(parts[2], 10);
-      
+
       const today = new Date();
       let age = today.getFullYear() - birthYear;
       const monthDiff = today.getMonth() - birthMonth;
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
         age--;
       }
-      
+
       this.Age = age;
       if (this.Age < 18) {
         this.general.presentAlert("Alert", "You are below 18 yrs. So you are not eligible to register.");
@@ -786,7 +786,7 @@ export class RegistrationPage {
         const birthYear = parseInt(parts[0], 10);
         const birthMonth = parseInt(parts[1], 10) - 1;
         const birthDay = parseInt(parts[2], 10);
-        
+
         const today = new Date();
         let age = today.getFullYear() - birthYear;
         const monthDiff = today.getMonth() - birthMonth;
@@ -804,7 +804,7 @@ export class RegistrationPage {
         var obj = [{
           RegId: this.UserDetails[0].RegId,
           Email: this.UserDetails[0].Email,
-          Password: this.UserDetails[0].Password,         
+          Password: this.UserDetails[0].Password,
           FullName: this.FirstName,
           MiddleName: this.MiddleName,
           SurName: this.SurName,
@@ -846,30 +846,25 @@ export class RegistrationPage {
               this.general.dismiss();
               if (result != "NOTEXIST") {
                 localStorage.setItem("UserDetails", JSON.stringify(result));
-                console.log('Check', result);
-                
                 const completeRegistration = () => {
                   this.general.presentAlert("SUCCESS", "Your registration has been completed successfully.");
-                  this.navCtrl.navigateForward(['/home']).then(() => {
-                    window.location.reload();
-                  });
+                  window.location.reload();
+                  this.navCtrl.navigateForward(['/home']);
                 };
-
                 const userEmail = (result[0].Email || this.UserDetails?.[0]?.Email || '').trim();
                 const isTargetRole = (Number(this.roleId) === 4 || Number(this.roleId) === 2);
-
                 if (isTargetRole && result && result.length > 0 && userEmail && userEmail !== 'undefined') {
                   this.FirstName = (result[0].FirstName || result[0].FullName || this.FirstName || '').trim();
                   const middleName = (result[0].MiddleName || this.MiddleName || '').trim();
                   const surName = (result[0].SurName || result[0].Surname || result[0].LastName || this.SurName || this.LastName || '').trim();
-                  
+
                   const nameParts = [this.FirstName, middleName, surName].filter(p => p && p.length > 0);
                   const fullName = nameParts.length > 0 ? nameParts.join(' ') : (result[0].FullName || this.FirstName || '').trim();
 
                   this.memberId = result[0].UserProtalID ? result[0].UserProtalID : ('LH' + String(result[0].RegId).padStart(7, '0'));
-                  
+
                   const referralCode = (result[0].Reffercode || result[0].RefferCode || result[0].ReferralCode || result[0].ReferenceCode || localStorage.getItem('pendingReferralCode') || '').trim();
-                  
+
                   var emailForm = new FormData();
                   emailForm.append('Email', userEmail);
                   emailForm.append('FirstName', this.FirstName);
@@ -884,19 +879,26 @@ export class RegistrationPage {
                   emailForm.append('Title', 'Community Leader');
                   emailForm.append('ReferralCode', referralCode);
                   emailForm.append('ReferenceCode', referralCode);
-                  
+
+
                   this.general.PostData('api/BG/SendLeaderWelcomeEmail', emailForm).subscribe(
                     () => {
                       console.log('Welcome email sent successfully');
-                      completeRegistration();
+                      this.sendnotoifications(result, () => {
+                        completeRegistration();
+                      });
                     },
                     (err: any) => {
                       console.error('Failed to send welcome email', err);
-                      completeRegistration();
+                      this.sendnotoifications(result, () => {
+                        completeRegistration();
+                      });
                     }
                   );
                 } else {
-                  completeRegistration();
+                  this.sendnotoifications(result, () => {
+                    completeRegistration();
+                  });
                 }
               }
             }, (err: any) => {
@@ -934,4 +936,87 @@ export class RegistrationPage {
     this.selectedDonation = donation;
     this.registrationForm.patchValue({ donation });
   }
+
+  sendnotoifications(result: any[], onComplete?: () => void) {
+    if (!result || result.length === 0) {
+      console.error('User details not available for notification.');
+      if (onComplete) onComplete();
+      return;
+    }
+    const user = result[0];
+    const regId = user.RegId;
+    let deviceToken = (user.Devicetoken || '').toString().trim();
+    if (!deviceToken) {
+      try {
+        const localToken = localStorage.getItem('Token');
+        if (localToken) {
+          deviceToken = JSON.parse(localToken);
+        }
+      } catch (e) {
+        deviceToken = localStorage.getItem('Token') || '';
+      }
+    }
+    if (typeof deviceToken === 'string') {
+      deviceToken = deviceToken.trim();
+    }
+
+    const fullName = (user.FullName || this.FirstName || this.UserDetails?.[0]?.FullName || '').trim();
+    this.acceptcomment =
+      `Hi ${fullName},\n\n` +
+      `Welcome to our Blood Donation community! ❤️\n\n` +
+      `Your Welcome Card is ready and available in the Gallery. Please open the Gallery and check your Welcome Card.\n\n` +
+      `👉 Tap here to view your Welcome Card.\n\n` +
+      `Thank you for joining us and supporting blood donation 🩸`;
+
+    const arr = [{ RegID: regId, NotiRecevieID: regId, NotificationsDesc: this.acceptcomment, CreatedBy: regId }];
+    const notificationsUrl = "api/BG/Crud_Notifications";
+    const notificationsUploadFile = new FormData();
+    notificationsUploadFile.append("Param", JSON.stringify(arr));
+    notificationsUploadFile.append("Flag", "1");
+
+    this.general.PostData(notificationsUrl, notificationsUploadFile).subscribe(
+      (data: any) => {
+        if (data === 'SUCCESS') {
+          console.log('Notification saved successfully in Crud_Notifications.');
+        } else {
+          console.error('Crud_Notifications response:', data);
+        }
+        this.sendPushNotification(deviceToken, onComplete);
+      },
+      (err: any) => {
+        console.error('Error while saving notification in Crud_Notifications:', err);
+        this.sendPushNotification(deviceToken, onComplete);
+      }
+    );
+  }
+
+  sendPushNotification(deviceToken: string, onComplete?: () => void) {
+    if (deviceToken) {
+      const uploadFile = new FormData();
+      uploadFile.append("deviceId", deviceToken);
+      uploadFile.append("message", this.acceptcomment);
+      uploadFile.append("senderName", "Let's Help");
+      uploadFile.append("path", "letshlpgallerry");
+      uploadFile.append("Img", "");
+      const notificationUrl = "api/BG/sendNotification";
+      this.general.PostData(notificationUrl, uploadFile).subscribe(
+        (notificationData: any) => {
+          if (notificationData) {
+            console.log('Push notification sent successfully:', notificationData);
+          } else {
+            console.error('Push notification API returned empty/false response.');
+          }
+          if (onComplete) onComplete();
+        },
+        (err: any) => {
+          console.error('Error while sending push notification:', err);
+          if (onComplete) onComplete();
+        }
+      );
+    } else {
+      console.warn('Device token is empty. Push notification was not sent, but notification was saved in database.');
+      if (onComplete) onComplete();
+    }
+  }
+
 }

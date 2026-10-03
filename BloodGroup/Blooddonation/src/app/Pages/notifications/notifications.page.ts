@@ -283,4 +283,12 @@ export class NotificationsPage implements OnInit, OnDestroy {
   navigate() {
     this.navCtrl.navigateForward('/home');
   }
+
+  formatNotification(message: string): string {
+    if (!message) {
+      return '';
+    }
+
+    return message.replace(/\.\s*/g, '.\n');
+  }
 }

@@ -1,4 +1,29 @@
 <ion-app>
+  <!-- Animated Launch / Splash Screen -->
+  <div class="app-splash-screen" *ngIf="showSplashScreen" [class.splash-fade-out]="splashFading">
+    <div class="splash-background-glow"></div>
+    <div class="splash-content">
+      <div class="logo-wrapper">
+        <div class="logo-pulse-ring"></div>
+        <div class="logo-pulse-ring ring-2"></div>
+        <div class="logo-img-container">
+          <img class="splash-logo" src="../assets/Images/Project_logo_New.png" alt="Let's Help Logo" />
+        </div>
+      </div>
+
+      <div class="brand-text-container">
+        <h1 class="splash-title">Let's Help</h1>
+        <p class="splash-subtitle">
+          <span class="heart-pulse">❤️</span> Blood Donation • Save Lives
+        </p>
+      </div>
+
+      <div class="splash-loader-bar">
+        <div class="splash-loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
   <ion-split-pane contentId="main-content">
     <ion-menu side="end" contentId="main-content">
       <ion-content (click)="alrt()">
@@ -31,7 +56,8 @@
                 <ion-col size="10">Share your service</ion-col>
               </ion-row>
               <ion-row *ngIf="Role && Role.length > 0; else defaultRole"
-                (click)="navigateFromMenu(Role[0]?.RoleId == 4 ? '/leaders' : '/leaderguide')" class="open_content line_text">
+                (click)="navigateFromMenu(Role[0]?.RoleId == 4 ? '/leaders' : '/leaderguide')"
+                class="open_content line_text">
                 <ion-col size="2"></ion-col>
                 <ion-col size="10">
                   {{ Role[0]?.RoleId == 4 ? 'Leader Page' : 'Join as a Leader' }}

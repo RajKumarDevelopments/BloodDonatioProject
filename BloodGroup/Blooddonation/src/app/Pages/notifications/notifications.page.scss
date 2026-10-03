@@ -101,7 +101,7 @@ ion-item-option {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.acordion_p {
+.acordion_pp {
   padding: 0%;
   margin: 0%;
 }
@@ -152,4 +152,10 @@ ion-item-option {
   justify-content: center !important;
   align-items: center !important;
   height: 100% !important;
+}
+.acordion_p {
+  padding: 0%;
+  margin: 0%;
+  white-space: pre-line;
+  line-height: 1.5;
 }
