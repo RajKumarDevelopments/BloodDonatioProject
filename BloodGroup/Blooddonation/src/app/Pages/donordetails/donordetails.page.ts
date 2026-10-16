@@ -1,4 +1,4 @@
-import { Component, OnInit,  ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
 import { ActivatedRoute } from '@angular/router';
 import { IonModal, ModalController, NavController, } from '@ionic/angular';
@@ -13,6 +13,7 @@ export class DonordetailsPage implements OnInit {
 
 
   @ViewChild('reportModal') reportModal!: IonModal;
+  @ViewChild('accordionGroup', { static: false }) accordionGroup!: any;
 
   activeAccordion: number | null = null;
   Observationlist: any;
@@ -21,7 +22,6 @@ export class DonordetailsPage implements OnInit {
   selectedObservation: any;
   comments: any;
   closeReportModal: any;
-
   FilterData: any;
   FilterData1: any;
   FilterDataLength: any;
@@ -33,7 +33,7 @@ export class DonordetailsPage implements OnInit {
   ObsID: any;
   items = [];
   openIndex: number = -1;
- // FilterData: any[] = []; // Ensure FilterData is properly typed
+  // FilterData: any[] = []; // Ensure FilterData is properly typed
   accordionState: boolean[] = [];
   selectedId: any; //accordionState: any;
   UserDetails1: any;
@@ -43,7 +43,11 @@ export class DonordetailsPage implements OnInit {
   expirySmsstatus: any; expiryCallstatus: any;
   expiryWhatsappstatus: any;
   reportedUser: any = null;
-  constructor(private modal: ModalController, public navCtrl: NavController,private alertController: AlertController,public general: GeneralService, public activeRoute: ActivatedRoute, private toastController: ToastController,) {
+  Allow: boolean = true;
+  restrictionMessage: string = '';
+  PermanentBlocked: boolean = false;
+  isPermanentBlocked: boolean = false;
+  constructor(private modal: ModalController, public navCtrl: NavController, private alertController: AlertController, public general: GeneralService, public activeRoute: ActivatedRoute, private toastController: ToastController,) {
     this.UserDetails1 = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.UserDetails1);
 
@@ -78,7 +82,6 @@ export class DonordetailsPage implements OnInit {
     } else {
       this.State = ""; this.District = ""; this.City = ""; this.Pincode = ""; this.BloodGroup = "";
     }
-    this.ApplyFilter();
 
 
     this.Expirydays1 = localStorage.getItem("Expiry");
@@ -107,8 +110,13 @@ export class DonordetailsPage implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.ApplyFilter();
+  async ngOnInit() {
+    this.general.present();
+    const isEligible = await this.checkUserEligible();
+    this.general.dismiss();
+    if (isEligible) {
+      this.ApplyFilter();
+    }
     this.GetObservations();
   }
 
@@ -122,12 +130,34 @@ export class DonordetailsPage implements OnInit {
 
   }
 
-  toggleAccordion(index: number) {
-    this.activeAccordion = this.activeAccordion === index ? null : index;
-  }
-  open1(state: number) {
-    if (this.activeAccordion === state) {
+  onAccordionChange(event: any) {
+    const value = event?.detail?.value;
+    if (value === null || value === undefined || value === '') {
       this.activeAccordion = null;
+      return;
+    }
+    const index = parseInt(value, 10);
+    this.activeAccordion = !isNaN(index) ? index : null;
+  }
+
+  toggleAccordion(index: number) {
+    if (this.activeAccordion === index) {
+      this.activeAccordion = null;
+      if (this.accordionGroup) {
+        this.accordionGroup.value = null;
+      }
+    } else {
+      this.activeAccordion = index;
+      if (this.accordionGroup) {
+        this.accordionGroup.value = index.toString();
+      }
+    }
+  }
+
+  open1(state: number) {
+    this.activeAccordion = null;
+    if (this.accordionGroup) {
+      this.accordionGroup.value = null;
     }
   }
   toggleAccordion2(index: number) {
@@ -139,7 +169,7 @@ export class DonordetailsPage implements OnInit {
       this.openIndex = index;
     }
   }
- 
+
 
   DonorDetails(item: any) {
     item.DonorFlag = 0;
@@ -156,12 +186,12 @@ export class DonordetailsPage implements OnInit {
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.FilterData1 = Array.isArray(data) ? data : [];
 
-      this.FilterData = this.FilterData1.filter((fd: any) => fd.RegId != this.UserDetails[0].RegId);     
+      this.FilterData = this.FilterData1.filter((fd: any) => fd.RegId != this.UserDetails[0].RegId);
       this.FilterDataLength = this.FilterData.length;
       this.accordionState = Array(this.FilterData.length).fill(false);
 
       if (this.FilterData && this.FilterData.length > 0) {
-        this.FilterData.forEach((item: any, index: any) => {          
+        this.FilterData.forEach((item: any, index: any) => {
           item.subIndexName = this.getIndexName(index);
           item.DonorFlag = 1;
         });
@@ -182,6 +212,10 @@ export class DonordetailsPage implements OnInit {
   }
 
   SearchDonors() {
+    if (!this.Allow) {
+      this.FilterData = [];
+      return;
+    }
     if (!this.FilterData1) {
       this.FilterData = [];
       return;
@@ -202,7 +236,7 @@ export class DonordetailsPage implements OnInit {
     }
   }
 
-  getIndexName(index: number): string {    
+  getIndexName(index: number): string {
     const indexNames = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 
     if (index >= 0 && index < 10) {
@@ -225,6 +259,34 @@ export class DonordetailsPage implements OnInit {
             return `${index + 1}th`;
         }
       }
+    }
+  }
+
+  async onCallClick(event: Event, obj: any) {
+    event.preventDefault();
+    if (!this.Allow) {
+      await this.showLimitExpiredAlert(this.restrictionMessage);
+      return;
+    }
+
+    const isAllowed = await this.Addcount(obj.RegId);
+    if (isAllowed) {
+      this.updateCommunicationChannel(obj.RegId, 1);
+      window.location.href = `tel:${obj.Phonenumber}`;
+    }
+  }
+
+  async onWhatsAppClick(event: Event, obj: any) {
+    event.preventDefault();
+    if (!this.Allow) {
+      await this.showLimitExpiredAlert(this.restrictionMessage);
+      return;
+    }
+
+    const isAllowed = await this.Addcount(obj.RegId);
+    if (isAllowed) {
+      this.updateCommunicationChannel(obj.RegId, 2);
+      this.openWhatsApp(obj.Phonenumber);
     }
   }
 
@@ -314,7 +376,7 @@ export class DonordetailsPage implements OnInit {
       return;
     }
     const obj = [{
-      CreatedBy: this.reportedUser.RegId, 
+      CreatedBy: this.reportedUser.RegId,
       RegId: regId,
       Observation: this.selectedObservation?.ObservationReason || '',
       Comments: this.comments
@@ -340,18 +402,18 @@ export class DonordetailsPage implements OnInit {
     });
   }
 
- 
+
 
 
   openReportModal(obj: any) {
-  
+
     this.reportedUser = obj;   // <-- STORE clicked person here
   }
 
 
-closeModal() {
-  this.modal.dismiss();
-}
+  closeModal() {
+    this.modal.dismiss();
+  }
 
   submitReport1() {
     if (!this.selectedObservation) {
@@ -430,9 +492,8 @@ closeModal() {
         {
           text: 'Yes',
           handler: async () => {
-            debugger
             await this.sendnotifications(obj);
-            await this.sendMail(obj);          
+            await this.sendMail(obj);
             await this.sendSMSToDonor(obj);
 
             const toast = await this.toastController.create({
@@ -481,7 +542,7 @@ closeModal() {
             if (data === 'SUCCESS') {
               resolve();
             } else {
-              resolve(); 
+              resolve();
             }
           });
         } else {
@@ -516,10 +577,10 @@ closeModal() {
       const url = "api/BG/SendSMSToDonors";
 
       const phone = (this.UserDetails[0]?.Phonenumber || "").toString();
-      let fullName = (this.UserDetails[0]?.FullName || "").toString();  
-      let cityName = (this.UserDetails[0]?.CityName || "").toString();  
+      let fullName = (this.UserDetails[0]?.FullName || "").toString();
+      let cityName = (this.UserDetails[0]?.CityName || "").toString();
       const maxLength = 30;
-      const reservedForPhone = phone.length + 1; 
+      const reservedForPhone = phone.length + 1;
       const maxFullNameLength = maxLength - reservedForPhone;
 
       if (fullName.length > maxFullNameLength) {
@@ -543,6 +604,128 @@ closeModal() {
     });
   }
 
+  async showLimitExpiredAlert(customMsg?: string) {
+    const alert = await this.alertController.create({
+      header: 'Access Restricted',
+      message: customMsg || 'You have reached your donor search limit.',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 
+  public checkUserEligible(): Promise<boolean> {
+    return new Promise((resolve) => {
+      var UploadFile = new FormData();
+      UploadFile.append("Flag", "1");
+      UploadFile.append("UserID", this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : "");
+      UploadFile.append("DonorSearchLimitID", "");
+      UploadFile.append("ContactUsRequestID", "");
+      UploadFile.append("RequestTypeID", "");
+      UploadFile.append("Subject", "");
+      UploadFile.append("Description", "");
+      UploadFile.append("AdminRemarks", "");
+      UploadFile.append("ActionBy", "");
+      UploadFile.append("SearchedUserID", "");
+      var url = "api/BG/DonorSearchLimit_CRUD";
+      this.general.PostData(url, UploadFile).subscribe(
+        async (data: any) => {
+          if (Array.isArray(data) && data.length > 0) {
+            const isAllowed = data[0].IsAllowed === true || data[0].IsAllowed === 'true' || data[0].IsAllowed === 1;
+            this.Allow = isAllowed;
+            this.restrictionMessage = data[0].Message || 'You have reached your donor search limit.';
+            const isBlocked = data[0].PermanentBlocked === true || data[0].PermanentBlocked === 'true' || data[0].PermanentBlocked === 1;
+            this.PermanentBlocked = isBlocked;
+            this.isPermanentBlocked = isBlocked;
+            console.log('checkUserEligible Allow:', this.Allow, 'PermanentBlocked:', this.PermanentBlocked);
+            if (!this.Allow) {
+              this.FilterData = [];
+              this.FilterData1 = [];
+            }
+            resolve(this.Allow);
+          } else {
+            this.Allow = false;
+            this.PermanentBlocked = false;
+            this.isPermanentBlocked = false;
+            this.restrictionMessage = 'You have reached your donor search limit.';
+            this.FilterData = [];
+            this.FilterData1 = [];
+            resolve(false);
+          }
+        },
+        async (err) => {
+          console.error("checkUserEligible error:", err);
+          this.Allow = false;
+          this.PermanentBlocked = false;
+          this.isPermanentBlocked = false;
+          this.FilterData = [];
+          this.FilterData1 = [];
+          this.general.presentToast("something went wrong");
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  public Addcount(searchedUserId?: any): Promise<boolean> {
+    return new Promise((resolve) => {
+      var UploadFile = new FormData();
+      UploadFile.append("Flag", "2");
+      UploadFile.append("UserID", this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : "");
+      UploadFile.append("DonorSearchLimitID", "");
+      UploadFile.append("ContactUsRequestID", "");
+      UploadFile.append("RequestTypeID", "");
+      UploadFile.append("Subject", "");
+      UploadFile.append("Description", "");
+      UploadFile.append("AdminRemarks", "");
+      UploadFile.append("ActionBy", "");
+      UploadFile.append("SearchedUserID", searchedUserId !== undefined && searchedUserId !== null ? searchedUserId.toString() : "");
+      var url = "api/BG/DonorSearchLimit_CRUD";
+      this.general.PostData(url, UploadFile).subscribe(
+        async (data: any) => {
+          if (Array.isArray(data) && data.length > 0) {
+            const isAllowed = data[0].IsAllowed === true || data[0].IsAllowed === 'true' || data[0].IsAllowed === 1;
+            this.Allow = isAllowed;
+            this.restrictionMessage = data[0].Message || 'You have reached your donor search limit.';
+            const isBlocked = data[0].PermanentBlocked === true || data[0].PermanentBlocked === 'true' || data[0].PermanentBlocked === 1;
+            this.PermanentBlocked = isBlocked;
+            this.isPermanentBlocked = isBlocked;
+            if (!this.Allow) {
+              this.FilterData = [];
+              this.FilterData1 = [];
+              await this.showLimitExpiredAlert(this.restrictionMessage);
+            }
+            resolve(this.Allow);
+          } else {
+            this.Allow = false;
+            this.PermanentBlocked = false;
+            this.isPermanentBlocked = false;
+            this.restrictionMessage = 'You have reached your donor search limit.';
+            this.FilterData = [];
+            this.FilterData1 = [];
+            await this.showLimitExpiredAlert(this.restrictionMessage);
+            resolve(false);
+          }
+        },
+        async (err) => {
+          console.error("Addcount error:", err);
+          this.Allow = false;
+          this.PermanentBlocked = false;
+          this.isPermanentBlocked = false;
+          this.FilterData = [];
+          this.FilterData1 = [];
+          this.general.presentToast("something went wrong");
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  public Account(searchedUserId?: any): Promise<boolean> {
+    return this.Addcount(searchedUserId);
+  }
+
+  goToContact() {
+    this.navCtrl.navigateForward('/contact');
+  }
 
 }

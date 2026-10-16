@@ -17,7 +17,7 @@
 <ion-content [fullscreen]="true">
   <ion-row class="searchmargin">
     <ion-col size="10">
-      <ion-searchbar placeholder="Search Donor" [(ngModel)]="searchValue" (ionInput)="SearchDonors()"></ion-searchbar>
+      <ion-searchbar placeholder="Search Donor" [(ngModel)]="searchValue" (ionInput)="SearchDonors()" [disabled]="!Allow"></ion-searchbar>
     </ion-col>
     <ion-col size="2" routerLink="/searchdonors">
       <img src="../../../assets/Images/filter.png" style="width: 50%; margin-top: 1rem;" />
@@ -31,26 +31,32 @@
     <ion-icon name="add-circle-outline" slot="end" style="color:red" *ngIf="selectedPlace == null || selectedPlace =='' "></ion-icon>
     <ion-input formControlName="Place" [value]="selectedPlace" class="regright" *ngIf="selectedPlace != null  || selectedPlace !='' "></ion-input>
   </ion-item>-->
-  
-
-  <!-- No Records Found -->
-  <div *ngIf="!FilterData || FilterData.length === 0">
-    <ion-row>
-      <ion-col size="12">
-        <div class="center">
-          <div class="card">
-            <h4>No Records Found</h4>
-          </div>
-        </div>
-      </ion-col>
-    </ion-row>
+  <!-- Limit Expired / Restriction Message -->
+  <div *ngIf="!Allow" style="display: flex; justify-content: center; align-items: center; min-height: 55vh;">
+    <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 25px; box-sizing: border-box;">
+      <h4 style="color: #736b6b; margin: 0; padding: 0 10px; font-size: 15px; font-weight: 500; line-height: 1.4; text-align: center; height: auto;">
+        {{ restrictionMessage || 'You have reached your donor search limit.' }}
+      </h4>
+      <ion-button *ngIf="PermanentBlocked" (click)="goToContact()" color="danger" shape="round" style="margin-top: 18px; font-weight: 600; font-size: 14px; --border-radius: 20px;">
+        Contact Us
+      </ion-button>
+    </div>
   </div>
 
-  <div *ngIf="FilterData && FilterData.length > 0">
-    <ion-accordion-group>
-      <ion-accordion value="{{obj.subIndexName}}" *ngFor="let obj of FilterData;let i = index" [value]="activeAccordion === i ? obj.UdId : null">
-        <div slot="header" color="light" class="accordionheader">
-          <ion-row (click)="toggleAccordion(i)" *ngIf="activeAccordion !== i">
+  <!-- No Records Found -->
+  <div *ngIf="Allow && (!FilterData || FilterData.length === 0)" style="display: flex; justify-content: center; align-items: center; min-height: 55vh;">
+    <div class="card" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+      <h4 style="color: #736b6b; margin: 0; padding: 20px;">No Records Found</h4>
+    </div>
+  </div>
+
+  <div *ngIf="Allow && FilterData && FilterData.length > 0">
+    <ion-accordion-group #accordionGroup [multiple]="false" mode="md"
+      [value]="activeAccordion !== null ? activeAccordion.toString() : null"
+      (ionChange)="onAccordionChange($event)">
+      <ion-accordion *ngFor="let obj of FilterData; let i = index" [value]="i.toString()">
+        <div slot="header" color="light" class="accordionheader" [style.display]="activeAccordion === i ? 'none' : ''">
+          <ion-row>
             <ion-col size="2">
               <img src="../../../assets/Images/user.png" class="imgg" />
             </ion-col>
@@ -87,10 +93,10 @@
 
 
             <!--<ion-col size="6" class="p1" id="open-custom-dialog">
-    <span class="pp" style="color: red; text-transform: uppercase; font-size: 9px !important; letter-spacing: .5px;">
-      Report
-    </span>
-  </ion-col>-->
+              <span class="pp" style="color: red; text-transform: uppercase; font-size: 9px !important; letter-spacing: .5px;">
+                Report
+              </span>
+            </ion-col>-->
             <ion-col size="6" class="p1" id="open-custom-dialog"
                      (click)="openReportModal(obj)">
               <span class="pp">Report</span>
@@ -131,7 +137,7 @@
                     </ion-item>
 
                     <!-- <ion-textarea [(ngModel)]="comments"  placeholder="Enter your comments" class="entercomments"style="padding: 12px;"></ion-textarea>
-          -->
+                    -->
                     <!-- Submit button -->
                     <ion-item>
                       <ion-button expand="block" color="danger" slot="start" (click)="closeModal()">
@@ -159,14 +165,14 @@
 
               <!-- Call Icon -->
               <ion-col *ngIf="isPastDate(obj.PhoneCallNext) && obj.Status == true">
-                <a href="tel:{{obj.Phonenumber}}" (click)="updateCommunicationChannel(obj.RegId, 1)">
+                <a (click)="onCallClick($event, obj)">
                   <ion-icon name="call" class="callclr"></ion-icon>
                 </a>
               </ion-col>
 
               <!-- WhatsApp Icon -->
               <ion-col *ngIf="isPastDate(obj.WhatsAppNext) && obj.Status == true">
-                <a (click)="updateCommunicationChannel(obj.RegId, 2); $event.preventDefault(); openWhatsApp(obj.Phonenumber)">
+                <a (click)="onWhatsAppClick($event, obj)">
                   <ion-icon name="logo-whatsapp" style="color:forestgreen;font-size:22px;"></ion-icon>
                 </a>
               </ion-col>

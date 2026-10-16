@@ -52,6 +52,7 @@ export class ContactPage implements OnInit {
       { value: 'App Issues', label: 'App Issues' },
       { value: 'Feedback', label: 'Feedback' },
       { value: 'Complain', label: 'Complain' },
+      {valuw: 'Search Donors', label: 'Search Donors'},
       { value: 'Other', label: 'Other' }
     ];
 
@@ -110,10 +111,6 @@ Contactinsert() {
       }
     });
   }
-
-
-
-
 
   // Image upload functionality
   async selectImageSource() {
@@ -184,65 +181,130 @@ Contactinsert() {
         });
     }
   }
-  async SendEmail() {
-    if (!this.RequestForm.get('selectedReason')?.value) {
-      this.presentAlert('Validation Error', 'Please select a reason.');
-      return;
-    }
+  // async SendEmail() {
+  //   if (!this.RequestForm.get('selectedReason')?.value) {
+  //     this.presentAlert('Validation Error', 'Please select a reason.');
+  //     return;
+  //   }
 
-    const formValues = this.RequestForm.value;
+  //   const formValues = this.RequestForm.value;
 
-    if (this.fileToUpload) {
-      try {
-        await this.uploadImageToServer(this.fileToUpload);
-      } catch (error) {
-        this.presentAlert('Error', 'Image upload failed. Please try again.');
-        return;
-      }
-    }
+  //   if (this.fileToUpload) {
+  //     try {
+  //       await this.uploadImageToServer(this.fileToUpload);
+  //     } catch (error) {
+  //       this.presentAlert('Error', 'Image upload failed. Please try again.');
+  //       return;
+  //     }
+  //   }
     
 
-      await this.Contactinsert();
-    const formData = new FormData();
-    formData.append('Type', formValues.selectedReason);
-    formData.append('Fullname', formValues.Fullname);
-    formData.append('Phonenumber', formValues.Phonenumber);
-    formData.append('EmailID', formValues.email);
-    formData.append('Comments', formValues.Message || '');
-    formData.append('AttachmentPath',(this.URL ?? '') + (this.uploadedImagePath ?? ''));
+  //     await this.Contactinsert();
+  //   const formData = new FormData();
+  //   formData.append('Type', formValues.selectedReason);
+  //   formData.append('Fullname', formValues.Fullname);
+  //   formData.append('Phonenumber', formValues.Phonenumber);
+  //   formData.append('EmailID', formValues.email);
+  //   formData.append('Comments', formValues.Message || '');
+  //   formData.append('AttachmentPath',(this.URL ?? '') + (this.uploadedImagePath ?? ''));
 
 
-    const url = "api/BG/EnquiryMailTo_BloodCustomerr";
+  //   const url = "api/BG/EnquiryMailTo_BloodCustomerr";
 
-    const loading = await this.loadingController.create({
-      message: 'Sending mail...',
-      spinner: 'crescent'
-    });
-    await loading.present();
+  //   const loading = await this.loadingController.create({
+  //     message: 'Sending mail...',
+  //     spinner: 'crescent'
+  //   });
+  //   await loading.present();
 
-    this.general.PostData(url, formData).subscribe({
-      next: (data) => {
-        loading.dismiss();
-        this.general.presentToast('Mail sent Successfully');
-        this.navCtrl.navigateForward('/home');
-      },
-      error: (error) => {
-        loading.dismiss();
-        this.presentAlert('Error', 'Failed to send mail. Please try again.');
-        console.error('Error sending mail:', error);
-      }
-    });
+  //   this.general.PostData(url, formData).subscribe({
+  //     next: (data) => {
+  //       loading.dismiss();
+  //       this.general.presentToast('Mail sent Successfully');
+  //       this.navCtrl.navigateForward('/home');
+  //     },
+  //     error: (error) => {
+  //       loading.dismiss();
+  //       this.presentAlert('Error', 'Failed to send mail. Please try again.');
+  //       console.error('Error sending mail:', error);
+  //     }
+  //   });
+  // }
+
+  async SendEmail() {
+  if (!this.RequestForm.get('selectedReason')?.value) {
+    this.presentAlert('Validation Error', 'Please select a reason.');
+    return;
   }
 
+  const formValues = this.RequestForm.value;
+
+  // Upload image first
+  if (this.fileToUpload) {
+    try {
+      await this.uploadImageToServer(this.fileToUpload);
+    } catch (error) {
+      this.presentAlert('Error', 'Image upload failed. Please try again.');
+      return;
+    }
+  }
+
+  await this.Contactinsert();
+  const formData = new FormData();
+  formData.append('Type', formValues.selectedReason);
+  formData.append('Fullname', formValues.Fullname);
+  formData.append('Phonenumber', formValues.Phonenumber);
+  formData.append('EmailID', formValues.email);
+  formData.append('Comments', formValues.Message || '');
+  formData.append('AttachmentPath',(this.URL ?? '') + (this.uploadedImagePath ?? ''));
+  const url = 'api/BG/EnquiryMailTo_BloodCustomerr';
+  const loading = await this.loadingController.create({
+    message: 'Sending mail...',
+    spinner: 'crescent'
+  });
+
+  await loading.present();
+  this.general.PostData(url, formData).subscribe({
+    next: (data) => {
+      loading.dismiss();
+      if (formValues.selectedReason === ' Search Donors ') {
+        formData.append("Flag", "3");
+        formData.append("UserID", this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : "");
+        formData.append("DonorSearchLimitID", "");
+        formData.append("ContactUsRequestID", "");
+        formData.append("RequestTypeID", "1");
+        formData.append("Subject", "Request to re-enable donor search");
+        formData.append("Description", "Please review my donor search restriction.");
+        formData.append("AdminRemarks", "");
+        formData.append("ActionBy", "");
+        formData.append("SearchedUserID", "");
+        const donorSearchUrl = 'api/BG/DonorSearchLimit_CRUD';
+        this.general.PostData(donorSearchUrl, formData).subscribe({
+          next: (data) => {
+          },
+          error: (error) => {
+            console.error('Error calling DonorSearchLimit_CRUD:', error);
+          }
+        });
+      }
+
+      this.general.presentToast('Mail sent Successfully');
+      this.navCtrl.navigateForward('/home');
+
+    },
+    error: (error) => {
+      loading.dismiss();
+      this.presentAlert('Error', 'Failed to send mail. Please try again.');
+      console.error('Error sending mail:', error);
+    }
+  });
+}
 
  
-  async uploadImageToServer(file: File): Promise<string> {
-    
+  async uploadImageToServer(file: File): Promise<string> {   
     const formData = new FormData();
     formData.append("attachment", file);
-
     const url = "api/BG/UploadContactAttachmentImage";
-
     return new Promise<string>((resolve, reject) => {
       this.general.PostData(url, formData).subscribe({
         next: (response: any) => {
