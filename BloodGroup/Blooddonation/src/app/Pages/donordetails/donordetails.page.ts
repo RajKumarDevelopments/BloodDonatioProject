@@ -182,6 +182,7 @@ export class DonordetailsPage implements OnInit {
     var UploadFile = new FormData()
     UploadFile.append("Param1", this.Pincode);
     UploadFile.append("Param2", this.BloodGroup);
+    UploadFile.append("Param3", this.UserDetails[0].RegId);
     var url = "api/BG/Get_Searchdetails";
     this.general.PostData(url, UploadFile).subscribe((data: any) => {
       this.FilterData1 = Array.isArray(data) ? data : [];
