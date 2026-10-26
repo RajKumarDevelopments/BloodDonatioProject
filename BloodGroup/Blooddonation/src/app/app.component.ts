@@ -6,7 +6,7 @@ import { PushnotificationService } from '../app/Services/push/pushnotification.s
 import { Platform, AlertController } from '@ionic/angular';
 //import { register } from 'swiper/element/bundle';
 import { GeneralService } from './Services/Generalservice/generalservice.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { PermissionService } from './Services/permission/permission.service';
 import { AndroidSettings, IOSSettings, NativeSettings } from 'capacitor-native-settings';
@@ -26,27 +26,39 @@ export class AppComponent {
   UserDetails1: any;
   expiryCallstatus: any;
   Flag: any;
-  ids: any=1;
+  ids: any = this.getSavedAccordionId();
+
+  getSavedAccordionId(): any {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        const saved = sessionStorage.getItem('side_menu_accordion_id');
+        return saved !== null && saved !== undefined && saved !== '' ? Number(saved) : null;
+      }
+    } catch (e) {
+      // ignore
+    }
+    return null;
+  }
   currentLanguage = 'English';
   todaydate: any;
   WeeklyTimes2: any;
-    expirystatus: any;
-    expirydates: any;
-    expiryNotificationstatus: any;
-    expirySmsstatus: any;
-    expiryEmailstatus: any;
-    expiryWhatsappstatus: any;
+  expirystatus: any;
+  expirydates: any;
+  expiryNotificationstatus: any;
+  expirySmsstatus: any;
+  expiryEmailstatus: any;
+  expiryWhatsappstatus: any;
   UnlimiteTimes: any;
-  WeeklyTimes  :any;
-  MonthlyTimes :any;
-  dailyTimes   :any;
+  WeeklyTimes: any;
+  MonthlyTimes: any;
+  dailyTimes: any;
   onedayTimes: any;
   MonthlyTimes2: any; dailyTimes2: any; onedayTimes2: any;
   UnlimiteTimes2: any;
-    Noticeids: any;
+  Noticeids: any;
   Expirys: any;
   Expirydays1: any; Expirydays: any;
-    Role: any;
+  Role: any;
 
   lastBackTime: number = 0;
   isExitAlertOpen: boolean = false;
@@ -55,9 +67,10 @@ export class AppComponent {
   currentSideMenuTarget: string = '';
   showSplashScreen: boolean = true;
   splashFading: boolean = false;
+  isNavigatingAway: boolean = false;
 
-  constructor(private alertController: AlertController,private languageService: LanguageTranslatorService,
-private geolocationService: GeolocationserviceService,private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
+  constructor(private alertController: AlertController, private languageService: LanguageTranslatorService,
+    private geolocationService: GeolocationserviceService, private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
     private menu: MenuController, private router: Router,
     private push: PushnotificationService, private platform: Platform, private general: GeneralService) {
     this.androidFullScreen.isImmersiveModeSupported()
@@ -84,7 +97,18 @@ private geolocationService: GeolocationserviceService,private permissionService:
       }, 10000);
     }
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
+      if (event instanceof NavigationStart) {
+        const targetUrl = (event.url || '').split(';')[0].split('?')[0];
+        if (targetUrl === '/home' || targetUrl === '/') {
+          const wasOpen = sessionStorage.getItem('side_menu_was_open') === 'true';
+          if (wasOpen) {
+            this.ids = this.getSavedAccordionId();
+            this.openMenuInstant();
+          }
+        } else {
+          this.closeMenuInstant();
+        }
+      } else if (event instanceof NavigationEnd) {
         const destUrl = (event.urlAfterRedirects || event.url || '').split(';')[0].split('?')[0];
 
         // If user navigated to a page from the side menu and has now come back
@@ -97,14 +121,18 @@ private geolocationService: GeolocationserviceService,private permissionService:
           if (destUrl === '/home' && originUrl !== '/home') {
             this.navCtrl.navigateBack(originUrl);
           }
+        }
 
-          // Re-open the side menu so the user remains in the side menu navigation flow
-          setTimeout(() => {
-            this.menu.enable(true, 'end');
-            this.menu.open('end');
-          }, 250);
-        } else if (!this.openedFromSideMenu) {
-          this.menu.close();
+        if (destUrl === '/home' || destUrl === '/') {
+          const wasOpen = sessionStorage.getItem('side_menu_was_open') === 'true';
+          if (wasOpen) {
+            if (this.ids == null) {
+              this.ids = this.getSavedAccordionId();
+            }
+            this.openMenuInstant();
+          }
+        } else {
+          this.closeMenuInstant();
         }
       }
     });
@@ -211,30 +239,98 @@ private geolocationService: GeolocationserviceService,private permissionService:
     await alert.present();
   }
 
+  onMenuOpened() {
+    try {
+      sessionStorage.setItem('side_menu_was_open', 'true');
+    } catch (e) { }
+  }
+
+  onMenuClosed() {
+    if (!this.isNavigatingAway) {
+      try {
+        sessionStorage.setItem('side_menu_was_open', 'false');
+      } catch (e) { }
+    }
+  }
+
+  async openMenuInstant() {
+    try {
+      this.menu.enable(true, 'end');
+      const menuEl = await this.menu.get('end');
+      if (menuEl) {
+        await menuEl.setOpen(true, false);
+      } else {
+        await this.menu.open('end');
+      }
+    } catch (e) {
+      try {
+        await this.menu.open('end');
+      } catch (err) { }
+    }
+  }
+
+  async closeMenuInstant() {
+    try {
+      const menuEl = await this.menu.get('end');
+      if (menuEl) {
+        await menuEl.setOpen(false, false);
+      } else {
+        await this.menu.close('end');
+      }
+    } catch (e) {
+      try {
+        await this.menu.close('end');
+      } catch (err) { }
+    }
+  }
+
   navigateFromMenu(path: string) {
     if (!path) return;
     const currentUrl = (this.router.url || '').split(';')[0].split('?')[0];
     this.urlBeforeSideMenu = currentUrl || '/home';
     this.currentSideMenuTarget = path.split(';')[0].split('?')[0];
     this.openedFromSideMenu = true;
+    this.isNavigatingAway = true;
+    try {
+      sessionStorage.setItem('side_menu_was_open', 'true');
+      if (this.ids != null) {
+        sessionStorage.setItem('side_menu_accordion_id', String(this.ids));
+      }
+    } catch (e) { }
+    // Close menu instantly so destination page is displayed without side menu overlay
+    this.closeMenuInstant();
     this.navCtrl.navigateForward(path);
-    this.menu.close();
+    setTimeout(() => {
+      this.isNavigatingAway = false;
+    }, 400);
   }
 
   navigateTo(path: string) {
     this.navigateFromMenu(path);
   }
-  opn(id:any) {
-    this.ids=id
+  opn(id: any) {
+    this.ids = this.ids == id ? null : id;
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        if (this.ids != null) {
+          sessionStorage.setItem('side_menu_accordion_id', String(this.ids));
+        } else {
+          sessionStorage.removeItem('side_menu_accordion_id');
+        }
+      }
+    } catch (e) { }
   }
-   ngOnInit() {
+  ngOnInit() {
+    if (this.ids == null) {
+      this.ids = this.getSavedAccordionId();
+    }
     this.languageService.initGoogleTranslate();
 
     this.languageService.languageChanged.subscribe((language: any) => {
       this.currentLanguage = language;
 
     });
-     this.getRole();
+    this.getRole();
   }
 
   async showLocationAlert() {
@@ -316,7 +412,7 @@ private geolocationService: GeolocationserviceService,private permissionService:
     this.general.PostData(url, uploadFile).subscribe((result: any) => {
       if (result != "NOTEXIST") {
         localStorage.setItem("UserDetails", JSON.stringify(result));
-       // this.statusupdate();
+        // this.statusupdate();
       }
     })
   }
@@ -401,7 +497,7 @@ private geolocationService: GeolocationserviceService,private permissionService:
     this.todaydate = todayDateOnly
 
     console.log('dat', this.todaydate)
-   // this.getstatus();
+    // this.getstatus();
   }
 
   getRole() {
@@ -424,6 +520,73 @@ private geolocationService: GeolocationserviceService,private permissionService:
         this.showSplashScreen = false;
       }, 600);
     }, 2400);
+  }
+
+  /**
+   * Navigate to social media profile.
+   * Attempts to open the installed native app on mobile first; falls back to browser if not installed.
+   * Dummy links are used as placeholders and can be replaced with production account URLs/handles.
+   */
+  openSocialLink(platform: string, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const socialProfiles: Record<string, { appUrl: string; webUrl: string }> = {
+      facebook: {
+        appUrl: 'fb://facewebmodal/f?href=https://www.facebook.com/people/Lets-Help-Fdn/61591979917716/',
+        webUrl: 'https://www.facebook.com/people/Lets-Help-Fdn/61591979917716/'
+      },
+      instagram: {
+        appUrl: 'instagram://user?username=letshelp_fdn',
+        webUrl: 'https://www.instagram.com/letshelp_fdn?mdxt=N2F0NjFpNmdyaXZ4'
+      },
+      threads: {
+        appUrl: 'barcelona://user?username=letshelp_fdn',
+        webUrl: 'https://www.threads.com/@letshelp_fdn'
+      },
+      twitter: {
+        appUrl: 'twitter://user?screen_name=letshelp_Fdn',
+        webUrl: 'https://x.com/letshelp_Fdn'
+      },
+      linkedin: {
+        appUrl: 'linkedin://company/letshelpfoundation',
+        webUrl: 'https://www.linkedin.com/company/letshelpfoundation/'
+      }
+    };
+
+    const target = socialProfiles[platform];
+    if (!target) return;
+
+    const isNativeMobile = this.platform.is('hybrid') || this.platform.is('cordova') || this.platform.is('capacitor');
+
+    if (isNativeMobile) {
+      let appOpened = false;
+
+      const visibilityHandler = () => {
+        if (document.hidden) {
+          appOpened = true;
+        }
+      };
+
+      document.addEventListener('visibilitychange', visibilityHandler, { once: true });
+
+      try {
+        window.open(target.appUrl, '_system');
+      } catch (e) {
+        window.open(target.webUrl, '_system');
+        return;
+      }
+
+      setTimeout(() => {
+        document.removeEventListener('visibilitychange', visibilityHandler);
+        if (!appOpened && !document.hidden) {
+          window.open(target.webUrl, '_system');
+        }
+      }, 900);
+    } else {
+      window.open(target.webUrl, '_blank', 'noopener,noreferrer');
+    }
   }
 
 }

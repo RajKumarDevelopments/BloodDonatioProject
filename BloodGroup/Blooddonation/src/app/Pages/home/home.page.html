@@ -77,7 +77,8 @@
       </div>
 
       <div class="action_cards_section">
-        <div class="cards" (click)="back(0)">
+        <!-- Shown for non-leader users -->
+        <div class="cards" *ngIf="!isLeader" (click)="back(0)">
           <ion-row class="ion-align-items-center">
             <ion-col size="2" class="icon_img">
               <img src="../../../assets/client images/All Icons/Request a presentation.png" class="icon_imgs" />
@@ -87,6 +88,19 @@
                 Presentation</ion-label>
               <p style="font-size: 11px !important; color: #b9bcc5 !important">Unite for a Cause: Bring Us to Your Venue
               </p>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- Automatically replaces Request a Presentation once user joins as a Leader -->
+        <div class="cards" *ngIf="isLeader" (click)="organisePresentation()">
+          <ion-row class="ion-align-items-center">
+            <ion-col size="2" class="icon_img">
+              <img src="../../../assets/client shared icons/Organise a presentation.png" class="icon_imgs" />
+            </ion-col>
+            <ion-col size="10">
+              <ion-label class="head1 Arial font29" style="font-size: 13.5px !important;">Organise a presentation</ion-label>
+              <p style="font-size: 11px !important; color: #b9bcc5 !important">Host a Life-Changing Session for Your Team</p>
             </ion-col>
           </ion-row>
         </div>

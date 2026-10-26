@@ -21,17 +21,22 @@ export class HomePage implements OnInit, AfterViewInit {
 
   swiper: Swiper | undefined;
   NextEligibleDonateDate: any;
-    Count: any;
-    Counts: any;
+  Count: any;
+  Counts: any;
+  isLeader: boolean = false;
 
   constructor(private alertController: AlertController, public general: GeneralService, public navCtrl: NavController, public datePipe: DatePipe,
     private socialSharing: SocialSharing, private menuCtrl: MenuController) {
     this.UserDetails1 = localStorage.getItem("UserDetails");
-    this.UserDetails = JSON.parse(this.UserDetails1);
+    if (this.UserDetails1) {
+      try {
+        this.UserDetails = JSON.parse(this.UserDetails1);
+      } catch (e) {
+        console.error(e);
+      }
+    }
     this.HomeUrL = localStorage.getItem("URL");
-    if (this.UserDetails != null) {
-     
-    };
+    this.checkLeaderStatus();
   }
 
   ngOnInit() {
@@ -40,8 +45,13 @@ export class HomePage implements OnInit, AfterViewInit {
   ionViewWillEnter() {  
     this.UserDetails1 = localStorage.getItem("UserDetails");
     if (this.UserDetails1) {
-      this.UserDetails = JSON.parse(this.UserDetails1);
+      try {
+        this.UserDetails = JSON.parse(this.UserDetails1);
+      } catch (e) {
+        console.error(e);
+      }
     }
+    this.checkLeaderStatus();
     this.getNotificationCount();
     this.getdonatelast();
     this.GetBanners();
@@ -171,10 +181,72 @@ Download App: ${shareUrl}`;
     this.navCtrl.navigateForward(['/multipledonors', { id: val }])
   }
 
+  organisePresentation() {
+    this.navCtrl.navigateForward(['/myprofile', { from: 'home' }]);
+  }
+
+  getUser(): any {
+    if (!this.UserDetails) return null;
+    return Array.isArray(this.UserDetails) ? this.UserDetails[0] : this.UserDetails;
+  }
+
+  checkLeaderStatus() {
+    const user = this.getUser();
+    if (!user) {
+      this.isLeader = false;
+      return;
+    }
+
+    const roleId = Number(user.RoleId);
+    const hasLeaderRole =
+      roleId === 4 ||
+      user.Rolestatus === true ||
+      user.Rolestatus === 'true' ||
+      user.Rolestatus === 1 ||
+      user.Rolestatus === '1' ||
+      user.RoleStatus === true ||
+      user.RoleStatus === 'true' ||
+      user.RoleStatus === 1 ||
+      user.RoleStatus === '1';
+
+    this.isLeader = !!hasLeaderRole;
+
+    if (user.RegId) {
+      this.getLeaderStatusFromServer(user.RegId);
+    }
+  }
+
+  getLeaderStatusFromServer(regId: any) {
+    const uploadfile = new FormData();
+    uploadfile.append("Param1", regId);
+    uploadfile.append("Param2", '1');
+    const url = "api/BG/Get_RoleforRolechange";
+    this.general.PostData(url, uploadfile).subscribe(
+      (data: any) => {
+        if (data && data.length > 0) {
+          const serverRoleId = Number(data[0].RoleId);
+          if (serverRoleId === 4 || data[0].Rolestatus === true || data[0].RoleStatus === true) {
+            this.isLeader = true;
+          } else if (serverRoleId === 2 && !data[0].Rolestatus && !data[0].RoleStatus) {
+            const user = this.getUser();
+            if (user && Number(user.RoleId) !== 4 && user.Rolestatus !== true && user.Rolestatus !== 'true') {
+              this.isLeader = false;
+            }
+          }
+        }
+      },
+      (error: any) => {
+        console.error('Error fetching role for leader status:', error);
+      }
+    );
+  }
+
   getdonatelast() {
+    const user = this.getUser();
+    if (!user || !user.RegId) return;
     var uploadfile = new FormData();
-    uploadfile.append("Param1", this.UserDetails[0].RegId)
-    uploadfile.append("Param2", '2')
+    uploadfile.append("Param1", user.RegId);
+    uploadfile.append("Param2", '2');
     var url = "api/BG/Get_RoleforRolechange";
     this.general.PostData(url, uploadfile).subscribe((data: any) => {
       if (data && data.length > 0) {
@@ -186,9 +258,12 @@ Download App: ${shareUrl}`;
       console.error('Error fetching role:', error);
     });
   }
+
   getNotificationCount() {
+    const user = this.getUser();
+    if (!user || !user.RegId) return;
     var uploadfile = new FormData();
-    uploadfile.append("Param1", this.UserDetails[0].RegId);
+    uploadfile.append("Param1", user.RegId);
     uploadfile.append("Param2", '2');
     var url = "api/BG/UpdateNotificationstatus";
     this.general.PostData(url, uploadfile).subscribe((data: any) => {
@@ -202,8 +277,4 @@ Download App: ${shareUrl}`;
       console.error("Error updating notification status:", error);
     });
   }
- 
- 
-
-  
 }

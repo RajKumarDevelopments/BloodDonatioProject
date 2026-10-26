@@ -186,7 +186,8 @@ html {
   align-items: center;
 }
 
-.main-title:before, .main-title:after {
+.main-title:before,
+.main-title:after {
   content: "";
   display: block;
   margin: 0 0.2rem;
@@ -392,7 +393,8 @@ ion-menu.md ion-content {
   align-items: center;
 }
 
-.main-title:before, .main-title:after {
+.main-title:before,
+.main-title:after {
   content: "";
   display: block;
   margin: 0 0.2rem;
@@ -413,7 +415,8 @@ input[type=radio] {
   display: none;
 }
 
-input[type=radio]:checked + .item .title {
+.item.active .title,
+input[type=radio]:checked+.item .title {
   color: #c60f0f;
   background-color: rgb(241 242 246);
   width: 110%;
@@ -421,14 +424,16 @@ input[type=radio]:checked + .item .title {
   padding: 5px 25px 5px 25px;
 }
 
-input[type=radio]:checked + .item .title:after {
+.item.active .title:after,
+input[type=radio]:checked+.item .title:after {
   /*transform: rotate(180deg);*/
   font-size: 7px;
   transform: scaleX(2.5);
   rotate: 180deg;
 }
 
-input[type=radio]:checked + .item .content {
+.item.active .content,
+input[type=radio]:checked+.item .content {
   margin-top: -0.1rem;
   margin-bottom: 1.1rem;
   height: auto;
@@ -459,7 +464,7 @@ input[type=radio]:checked + .item .content {
   justify-content: space-between;
   align-items: center;
   width: 115% !important;
-  margin-left: -9%; 
+  margin-left: -9%;
 }
 
 .title:after {
@@ -488,29 +493,109 @@ input[type=radio]:checked + .item .content {
   box-shadow: none;
 }
 
-.footer_logo {
+/* =========================================================
+   SIDE MENU LAYOUT, SOCIAL ICONS & BOTTOM POSITIONING
+   ========================================================= */
+.side-menu-layout {
   display: flex;
-  justify-content: center;
-  align-items: center
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(80vh - 40px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.footer_logo img {
-  width: 70px;
-  //margin-top: 5px;
+.side-menu-top {
+  flex: 1 0 auto;
+}
+
+.side-menu-bottom {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 24px 14px 20px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Single horizontal line of small, clean social media icons with minimal spacing */
+.social-icons-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 22px; /* Generous gap between icons and "A Project supported by" / logo */
+  width: 100%;
+}
+
+.social-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f8f9fa;
+  border: 1px solid #eef0f4;
+  color: #c62828; /* Blood donation theme crimson accent */
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: #c62828;
+    color: #ffffff;
+    border-color: #c62828;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(198, 40, 40, 0.26);
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  .social-icon {
+    width: 13px;
+    height: 13px;
+    display: block;
+    fill: currentColor;
+    transition: fill 0.2s ease;
+  }
 }
 
 .psupport {
   color: #b4b7cf;
   text-align: center;
   font-size: 11px;
-  //margin-top: 2rem;
+  line-height: 1.3;
+  margin: 0 0 4px 0;
+}
+
+.footer_logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px 0 6px 0;
+}
+
+.footer_logo img {
+  width: 68px;
+  height: auto;
+  display: block;
 }
 
 .version {
   color: #b4b7cf;
   text-align: center;
   font-size: 11px;
-  margin-top: -7px;
+  line-height: 1.3;
+  margin-top: 2px;
 }
 
 .logout {
@@ -689,6 +774,7 @@ input[type=radio]:checked + .item .content {
     opacity: 0;
     transform: scale(0.65) translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -696,9 +782,12 @@ input[type=radio]:checked + .item .content {
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -709,10 +798,12 @@ input[type=radio]:checked + .item .content {
     transform: scale(0.85);
     opacity: 0.65;
   }
+
   50% {
     transform: scale(1.22);
     opacity: 0.22;
   }
+
   100% {
     transform: scale(1.48);
     opacity: 0;
@@ -724,6 +815,7 @@ input[type=radio]:checked + .item .content {
     transform: translate(-50%, -50%) scale(0.9);
     opacity: 0.6;
   }
+
   100% {
     transform: translate(-50%, -50%) scale(1.15);
     opacity: 1;
@@ -735,6 +827,7 @@ input[type=radio]:checked + .item .content {
     opacity: 0;
     transform: translateY(14px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -742,18 +835,24 @@ input[type=radio]:checked + .item .content {
 }
 
 @keyframes heartPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   14% {
     transform: scale(1.25);
   }
+
   28% {
     transform: scale(1);
   }
+
   42% {
     transform: scale(1.25);
   }
+
   70% {
     transform: scale(1);
   }
@@ -763,11 +862,12 @@ input[type=radio]:checked + .item .content {
   0% {
     transform: translateX(-100%);
   }
+
   50% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(100%);
   }
 }
-

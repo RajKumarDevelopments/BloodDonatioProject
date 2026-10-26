@@ -45,8 +45,16 @@ export class GeneralService {
     this.GetCasts();
   }
   getBaseUrl(): string {
+    const storedUrl = localStorage.getItem('URL');
+    if (storedUrl && storedUrl !== 'null' && storedUrl !== 'undefined') {
+      this.HomeUrl = storedUrl;
+    } else {
+      this.HomeUrl = "https://letshelp.in/webservices/";
+      localStorage.setItem('URL', this.HomeUrl);
+    }
     return this.HomeUrl;
   }
+
   async presentToast(message: any) {
     const toast = await this.toastController.create({
       message: message,
@@ -98,8 +106,8 @@ export class GeneralService {
   }
   GetData1(url: any): Observable<any> {
 
-    this.HomeUrl = localStorage.getItem('URL');
-    url = this.HomeUrl + url;
+    const baseUrl = this.getBaseUrl();
+    url = baseUrl + url;
     return this.http.get(url).pipe(map(res => res));
 
   }
@@ -117,8 +125,8 @@ export class GeneralService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${accessToken}`
         });
-        this.HomeUrl = localStorage.getItem('URL');
-        url = this.HomeUrl + url;
+        const baseUrl = this.getBaseUrl();
+        url = baseUrl + url;
         return this.http.get(url, { headers }).pipe(map(res => res));
       })
     );
@@ -164,16 +172,16 @@ export class GeneralService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${accessToken}` // Set the Authorization header with the Bearer token
         });
-        this.HomeUrl = localStorage.getItem('URL');
-        url = this.HomeUrl + url;
+        const baseUrl = this.getBaseUrl();
+        url = baseUrl + url;
         return this.http.post(url, formData, { headers }).pipe(map(res => res));
       })
     );
   }
 
   login(url: any, formData: any) {
-    this.HomeUrl = localStorage.getItem("URL");
-    var URL = this.HomeUrl + url;
+    const baseUrl = this.getBaseUrl();
+    var URL = baseUrl + url;
     return this.http.post(URL, formData).pipe(map(res => res))
   }
 
