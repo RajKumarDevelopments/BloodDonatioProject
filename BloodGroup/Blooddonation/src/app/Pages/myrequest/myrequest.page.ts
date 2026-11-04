@@ -505,8 +505,6 @@ export class MyrequestPage implements OnInit {
         }
       });
 
-      console.log(`Sending cancel notifications to ${uniqueUsers.length} accepted users:`, uniqueUsers);
-
       const dbNotifications: any[] = [];
 
       uniqueUsers.forEach((user: any) => {
@@ -559,7 +557,8 @@ export class MyrequestPage implements OnInit {
             RegID: recipientId,
             NotiRecevieID: recipientId,
             NotificationsDesc: message,
-            CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0
+            CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0,
+            RouterLink:"myrequest"
           });
         }
       });
@@ -632,7 +631,8 @@ export class MyrequestPage implements OnInit {
         RegID: recipientId,
         NotiRecevieID: recipientId,
         NotificationsDesc: message,
-        CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0
+        CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0,
+        RouterLink:"myrequest"
       }];
 
       const notificationsUploadFile = new FormData();
@@ -642,7 +642,6 @@ export class MyrequestPage implements OnInit {
 
       this.general.PostData(notificationsUrl, notificationsUploadFile).subscribe(
         (data: any) => {
-          console.log('Notification record saved for:', fullName, data);
         },
         (error: any) => {
           console.error('Error saving notification in db:', error);

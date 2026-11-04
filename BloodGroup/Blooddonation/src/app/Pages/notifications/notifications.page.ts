@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
 import { AlertController, IonAccordionGroup, IonItemSliding, NavController } from '@ionic/angular';
 import { App } from '@capacitor/app';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notifications',
@@ -25,7 +26,7 @@ export class NotificationsPage implements OnInit, OnDestroy {
   constructor(
     public general: GeneralService,
     private navCtrl: NavController,
-    private alertController: AlertController
+    private alertController: AlertController, private router: Router
   ) {
     this.loadUserData();
     if (this.UserDetails && this.UserDetails[0] && this.UserDetails[0].Status == false) {
@@ -290,5 +291,12 @@ export class NotificationsPage implements OnInit, OnDestroy {
     }
 
     return message.replace(/\.\s*/g, '.\n');
+  }
+  navigateToNotification(routerLink: string): void {
+    if (!routerLink) {
+      return;
+    }
+
+    this.router.navigateByUrl(routerLink);
   }
 }

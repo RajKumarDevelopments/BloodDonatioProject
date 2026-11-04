@@ -708,7 +708,8 @@ export class DonorssearchPage implements OnInit {
           RegID: this.UserDetails[0].RegId,
           NotiRecevieID: this.BloodRequestDetalis[0].CreatedBy,//Asif
           NotificationsDesc: this.comment,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink: 'myrequest'
         }];
         var notificationsUrl = "api/BG/Crud_Notifications";
         var notificationsUploadFile = new FormData();

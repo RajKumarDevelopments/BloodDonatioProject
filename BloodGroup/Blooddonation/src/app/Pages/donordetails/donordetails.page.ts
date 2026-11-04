@@ -532,7 +532,8 @@ export class DonordetailsPage implements OnInit {
             RegID: this.UserDetails[0].RegId,
             NotiRecevieID: obj.RegId,//Asif
             CreatedBy: this.UserDetails[0].RegId,
-            NotificationsDesc: `Dear ${obj.FullName} someone urgently needs your ${obj.BLGName} blood at ${this.UserDetails[0].CityName}. Your help can save a life.`,
+            NotificationsDesc: `Dear ${obj.FullName}, ${this.UserDetails[0].FullName} urgently needs ${obj.BLGName} blood at ${this.UserDetails[0].CityName}. Your help can save a life. Please call: ${this.UserDetails[0].Phonenumber}`,
+            RouterLink: 'searchdonors',
           }];
           var notificationsUrl = "api/BG/Crud_Notifications";
           var notificationsUploadFile = new FormData();

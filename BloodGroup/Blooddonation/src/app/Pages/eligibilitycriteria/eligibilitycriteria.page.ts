@@ -1034,7 +1034,8 @@ export class EligibilitycriteriaPage implements OnInit {
           this.test.push({
             RegID: currentCustomer.RegId,
             NotificationsDesc: message,
-            CreatedBy: this.UserDetails[0].RegId
+            CreatedBy: this.UserDetails[0].RegId,
+            RouterLink: 'rquestpresentation'
           });
 
           let notificationsUrl = "api/BG/Crud_Notifications";
@@ -1076,7 +1077,8 @@ export class EligibilitycriteriaPage implements OnInit {
           RegID: this.custmer[0].RegId, // Fixed incorrect index
           NotiRecevieID: this.custmer[0].RegId, // Asif
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink: 'rquestpresentation;rk=2'
         });
 
         var notificationsUrl = "api/BG/Crud_Notifications";
@@ -1118,7 +1120,8 @@ export class EligibilitycriteriaPage implements OnInit {
           RegID: this.custmer[0].RegId, // Fixed incorrect index
           NotiRecevieID: this.custmer[0].RegId, // Asif
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink: 'rquestpresentation'
         });
 
         var notificationsUrl = "api/BG/Crud_Notifications";
@@ -1175,7 +1178,8 @@ export class EligibilitycriteriaPage implements OnInit {
           this.test.push({
             RegID: this.leaderdevicetoken[i].RegId, // Fixed incorrect index
             NotificationsDesc: message,
-            CreatedBy: this.UserDetails[0].RegId
+            CreatedBy: this.UserDetails[0].RegId,
+            RouterLink: 'rquestpresentation'
           });
 
           var notificationsUrl = "api/BG/Crud_Notifications";
@@ -1225,7 +1229,8 @@ export class EligibilitycriteriaPage implements OnInit {
         this.test.push({
           RegID: this.UserDetails[0].RegId,
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink: 'rquestpresentation'
         });
 
         var notificationsUrl = "api/BG/Crud_Notifications";

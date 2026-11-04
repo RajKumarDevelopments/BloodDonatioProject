@@ -1295,8 +1295,6 @@ export class RquestpresentationPage implements OnInit {
         }
       });
 
-      console.log(`Sending cancel notifications to ${uniqueUsers.length} accepted presentation users:`, uniqueUsers);
-
       const dbNotifications: any[] = [];
 
       uniqueUsers.forEach((user: any) => {
@@ -1345,7 +1343,8 @@ export class RquestpresentationPage implements OnInit {
             RegID: recipientId,
             NotiRecevieID: recipientId,
             NotificationsDesc: message,
-            CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0
+            CreatedBy: this.UserDetails && this.UserDetails[0] ? this.UserDetails[0].RegId : 0,
+            RouterLink:"eligibilitycriteria"
           });
         }
       });
@@ -1528,7 +1527,8 @@ export class RquestpresentationPage implements OnInit {
         this.test.push({
           RegID: this.custmer[0].RegId,
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink:path
         });
 
         let notificationsUrl = "api/BG/Crud_Notifications";
@@ -1564,7 +1564,8 @@ export class RquestpresentationPage implements OnInit {
         this.test.push({
           RegID: this.custmer[0].RegId, // Fixed incorrect index
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink:path
         });
 
         var notificationsUrl = "api/BG/Crud_Notifications";
@@ -1606,7 +1607,8 @@ export class RquestpresentationPage implements OnInit {
           RegID: leader.RegId,
           NotiRecevieID: leader.RegId,
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink:path
         }];
         const dbUpload = new FormData();
         dbUpload.append("Param", JSON.stringify(notificationObj));
@@ -1649,7 +1651,8 @@ export class RquestpresentationPage implements OnInit {
           RegID: leader.RegId,
           NotiRecevieID: leader.RegId,
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink:path
         }];
 
         const dbUpload = new FormData();
@@ -1691,7 +1694,8 @@ export class RquestpresentationPage implements OnInit {
           RegID: admin.RegId,
           NotiRecevieID: admin.RegId,
           NotificationsDesc: message,
-          CreatedBy: this.UserDetails[0].RegId
+          CreatedBy: this.UserDetails[0].RegId,
+          RouterLink:path
         }];
 
         const dbUpload = new FormData();
