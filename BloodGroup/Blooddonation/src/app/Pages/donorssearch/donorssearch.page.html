@@ -30,19 +30,20 @@
     </div>
   </div>
 
-  <div *ngIf="!curnt" class="empty-state-wrapper">
-    <div class="center">
-      <div class="card" style="display: flex;justify-content: center;align-items: center;">
-        <h4 style="margin:0!important;padding:20px!important">{{msg}}</h4>
+  <!-- In Your Location Tab -->
+  <div *ngIf="selectedTab === 'open'">
+    <div *ngIf="!curnt" class="empty-state-wrapper">
+      <div class="center">
+        <div class="card" style="display: flex;justify-content: center;align-items: center;">
+          <h4 style="margin:0!important;padding:20px!important">{{msg}}</h4>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- In Your Location Tab -->
-  <div *ngIf="selectedTab === 'open' && curnt">
-    <ion-accordion-group [multiple]="false" #openAccordionGroup mode="md"
-      [value]="activeAccordionOpen !== null ? activeAccordionOpen.toString() : null"
-      (ionChange)="onOpenAccordionChange($event)">
+    <div *ngIf="curnt">
+      <ion-accordion-group [multiple]="false" #openAccordionGroup mode="md"
+        [value]="activeAccordionOpen !== null ? activeAccordionOpen.toString() : null"
+        (ionChange)="onOpenAccordionChange($event)">
       <ion-accordion *ngFor="let obj of currentloc; let i = index" [value]="i.toString()"
         [ngClass]="{'ion-accordion-active': activeAccordionOpen === i}">
         <div slot="header" class="guided-header" [ngClass]="{'open': activeAccordionOpen === i}"
@@ -134,6 +135,7 @@
         </div>
       </ion-accordion>
     </ion-accordion-group>
+    </div>
     <ion-modal #modal1 [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
       <ng-template>
         <ion-header>
@@ -152,27 +154,46 @@
   </div>
 
   <!-- Other Location Tab -->
-  <div *ngIf="selectedTab === 'closed' && curnt">
-    <div class="filter">
-      <ion-icon name="filter-outline" (click)="toggleFilter()" class="filter-icon"></ion-icon>
-      <div *ngIf="showDropdown" class="dropdown-container">
-        <ion-item lines="none" style="border-bottom:1px solid #333; margin-bottom: 2px;">
+  <div *ngIf="selectedTab === 'closed'">
+    <div class="filter-section">
+      <div class="filter-search-row">
+        <!-- Search input box shown on the same line when open -->
+        <div *ngIf="showDropdown" class="search-input-box">
+          <ion-icon name="search-outline" class="search-box-icon"></ion-icon>
           <ion-input [(ngModel)]="searchQuery" (ionInput)="filterPincodes()" maxlength="6"
-            placeholder="Enter Pincode"></ion-input>
-          <div class="ion-activatable ripple-parent rectangle" style="display: flex; gap: 5px;">
-            <ion-button (click)="Selectfilter(searchQuery)" class="buttonsubmit">Submit</ion-button>
-            <ion-button *ngIf="searchQuery" (click)="clearSearch()" class="buttonsubmit"
-              style="--color: gray;">Clear</ion-button>
-            <ion-ripple-effect></ion-ripple-effect>
+            placeholder="Enter Pincode" class="filter-pincode-input"></ion-input>
+          <div class="filter-actions-group">
+            <ion-button (click)="Selectfilter(searchQuery)" class="buttonsubmit" size="small">Submit</ion-button>
+            <ion-button *ngIf="searchQuery" (click)="clearSearch()" class="buttonsubmit clear-btn" size="small">Clear</ion-button>
           </div>
-        </ion-item>
-        <div *ngIf="selectedPincode.length === 0">
-          <p>No matching results found</p>
+        </div>
+
+        <!-- Search icon button shown on the same line when closed -->
+        <div *ngIf="!showDropdown" class="search-trigger-btn" (click)="toggleFilter()">
+          <ion-icon name="search-outline" class="filter-icon"></ion-icon>
+        </div>
+
+        <!-- Filter icon button (always on the same line) -->
+        <div class="filter-trigger-btn" (click)="toggleFilter()">
+          <ion-icon name="filter-outline" class="filter-icon" [class.active]="showDropdown"></ion-icon>
+        </div>
+      </div>
+
+      <div *ngIf="showDropdown && searchQuery && searchQuery.toString().trim() !== '' && (selectedPincode?.length === 0 || otherloc?.length === 0)" class="no-matching-results">
+        <p>No matching results found</p>
+      </div>
+    </div>
+
+    <div *ngIf="!curnt" class="empty-state-wrapper">
+      <div class="center">
+        <div class="card" style="display: flex;justify-content: center;align-items: center;">
+          <h4 style="margin:0!important;padding:20px!important">{{msg}}</h4>
         </div>
       </div>
     </div>
 
-    <ion-accordion-group [multiple]="false" #closedAccordionGroup mode="md"
+    <div *ngIf="curnt">
+      <ion-accordion-group [multiple]="false" #closedAccordionGroup mode="md"
       [value]="activeAccordionClosed !== null ? activeAccordionClosed.toString() : null"
       (ionChange)="onClosedAccordionChange($event)">
       <ion-accordion *ngFor="let obj of otherloc; let i = index" [value]="i.toString()"
@@ -266,6 +287,7 @@
         </div>
       </ion-accordion>
     </ion-accordion-group>
+    </div>
     <ion-modal #modal1 [initialBreakpoint]="0.35" [breakpoints]="[0, 1]">
       <ng-template>
         <ion-header>
