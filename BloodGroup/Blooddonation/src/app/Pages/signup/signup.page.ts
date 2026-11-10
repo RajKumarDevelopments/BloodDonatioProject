@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
 import { NavController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router'
-import { UserService } from '../../Services/user/user.service'
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { UserService } from '../../Services/user/user.service';
+import { registerPlugin } from '@capacitor/core';
+
+export interface SmsReceiverPluginInterface {
+  startListening(): Promise<{ status: string }>;
+  stopListening(): Promise<{ status: string }>;
+  addListener(eventName: 'otpReceived', listenerFunc: (data: { otp: string; message?: string }) => void): Promise<any>;
+  removeAllListeners(): Promise<void>;
+}
+
+const SmsReceiver = registerPlugin<SmsReceiverPluginInterface>('SmsReceiverPlugin');
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class SignupPage implements OnInit, OnDestroy {
   SignupForm!: FormGroup;
   submitAttempt: boolean = false;
   passwordType: string = 'password';
@@ -19,8 +30,8 @@ export class SignupPage implements OnInit {
   firstNameError: string | null = null;
   emailError: string | null = null;
   isSubmitting: boolean = false;
-  OTPFlag: any; SignFlag: any;
-  OTPVerified: any;
+  OTPFlag: any = 0; SignFlag: any;
+  OTPVerified: any = 0;
   //TandC: any; Policy: any;
   TandC: boolean = false;
   Policy: boolean = false;
@@ -43,6 +54,12 @@ export class SignupPage implements OnInit {
   timerInterval: any;
   canResend: boolean = false;
 
+  // 4-digit OTP individual boxes
+  otpDigits: string[] = ['', '', '', ''];
+  private otpAbortController?: AbortController;
+  private otpEventListener: any = null;
+  private smsPluginListener: any = null;
+
   startResendTimer() {
     this.resendTimer = 30;
     this.canResend = false;
@@ -56,26 +73,247 @@ export class SignupPage implements OnInit {
     }, 1000);
   }
 
-  async listenForOTP() {
-    if ('OTPCredential' in window) {
-      const ac = new AbortController();
-      setTimeout(() => { ac.abort(); }, 30 * 1000);
+  async startSmsAutoReader() {
+    this.stopSmsAutoReader();
+
+    // 1. Listen via DOM CustomEvent (dispatched directly from Android WebView evaluateJavascript)
+    if (typeof window !== 'undefined') {
+      this.otpEventListener = (event: any) => {
+        const otpCode = event?.detail;
+        if (otpCode) {
+          console.log('Signup OTP received via DOM CustomEvent:', otpCode);
+          this.handleAutoReadOtp(otpCode);
+        }
+      };
+      window.addEventListener('otpReceived', this.otpEventListener);
+    }
+
+    // 2. Listen via Capacitor Plugin (Google Play Services SMS User Consent)
+    try {
+      if (SmsReceiver) {
+        this.smsPluginListener = await SmsReceiver.addListener('otpReceived', (data: { otp: string }) => {
+          if (data && data.otp) {
+            console.log('Signup OTP received via Capacitor Plugin:', data.otp);
+            this.handleAutoReadOtp(data.otp);
+          }
+        });
+
+        const res = await SmsReceiver.startListening();
+        console.log('Signup SmsReceiver started listening:', res);
+      }
+    } catch (pluginErr) {
+      console.log('Signup SmsReceiver plugin not available:', pluginErr);
+    }
+
+    // 3. WebOTP API (as browser fallback)
+    this.listenForWebOTP();
+  }
+
+  handleAutoReadOtp(code: string) {
+    if (!code) return;
+    const cleanDigits = code.toString().replace(/\D/g, '').slice(0, 4);
+    if (cleanDigits.length === 4) {
+      this.ngZone.run(() => {
+        this.setOtpValue(cleanDigits);
+        this.generalservice.presentToast('OTP detected: ' + cleanDigits);
+        this.stopSmsAutoReader();
+      });
+    }
+  }
+
+  stopSmsAutoReader() {
+    if (typeof window !== 'undefined' && this.otpEventListener) {
+      window.removeEventListener('otpReceived', this.otpEventListener);
+      this.otpEventListener = null;
+    }
+
+    try {
+      if (this.smsPluginListener) {
+        this.smsPluginListener.remove();
+        this.smsPluginListener = null;
+      }
+      if (SmsReceiver) {
+        SmsReceiver.stopListening();
+        SmsReceiver.removeAllListeners();
+      }
+    } catch (e) {}
+
+    if (this.otpAbortController) {
+      try { this.otpAbortController.abort(); } catch (e) {}
+    }
+  }
+
+  async listenForWebOTP() {
+    if (typeof window !== 'undefined' && 'OTPCredential' in window) {
       try {
-        const otp: any = await navigator.credentials.get({
+        if (this.otpAbortController) {
+          try { this.otpAbortController.abort(); } catch (e) {}
+        }
+        this.otpAbortController = new AbortController();
+        const signal = this.otpAbortController.signal;
+        setTimeout(() => {
+          try { this.otpAbortController?.abort(); } catch (e) {}
+        }, 60 * 1000);
+
+        const otp: any = await (navigator.credentials as any).get({
           otp: { transport: ['sms'] },
-          signal: ac.signal
-        } as any);
+          signal: signal
+        });
         if (otp && otp.code) {
-          this.MobileOTP = otp.code;
+          this.handleAutoReadOtp(otp.code);
         }
       } catch (err) {
-        console.log('WebOTP Error:', err);
+        console.log('Signup WebOTP Error or aborted:', err);
       }
     }
   }
 
+  onMobileChange() {
+    this.otpDigits = ['', '', '', ''];
+    this.updateMobileOtp();
+    this.OTPFlag = 0;
+  }
+
+  updateMobileOtp() {
+    this.MobileOTP = this.otpDigits.join('');
+  }
+
+  isOtpComplete(): boolean {
+    if (!this.otpDigits || this.otpDigits.length !== 4) {
+      return false;
+    }
+    const allFilled = this.otpDigits.every(d => d !== '' && d !== null && d !== undefined);
+    const codeLen = (this.MobileOTP || '').toString().trim().length;
+    return allFilled && codeLen === 4;
+  }
+
+  isEmailPasswordValid(): boolean {
+    const email = (this.Email || '').toString().trim();
+    const pwd = (this.Password || '').toString().trim();
+    return email.length > 0 && pwd.length > 0;
+  }
+
+  setOtpValue(value: any) {
+    if (value === null || value === undefined) {
+      this.otpDigits = ['', '', '', ''];
+      this.updateMobileOtp();
+      return;
+    }
+    const digits = value.toString().replace(/\D/g, '').slice(0, 4);
+    for (let i = 0; i < 4; i++) {
+      this.otpDigits[i] = digits[i] || '';
+      const el = (document.getElementById('signup-otp-input-' + i) || document.getElementById('signup-donor-otp-input-' + i)) as HTMLInputElement;
+      if (el) {
+        el.value = this.otpDigits[i];
+      }
+    }
+    this.updateMobileOtp();
+    if (digits.length >= 4) {
+      this.focusOtpInput(3);
+    } else if (digits.length > 0) {
+      this.focusOtpInput(digits.length);
+    }
+  }
+
+  focusOtpInput(index: number) {
+    setTimeout(() => {
+      const el = (document.getElementById('signup-otp-input-' + index) || document.getElementById('signup-donor-otp-input-' + index)) as HTMLInputElement;
+      if (el) {
+        el.focus();
+        try {
+          el.select();
+        } catch (e) {}
+      }
+    }, 50);
+  }
+
+  onOtpFocus(index: number, event: any) {
+    setTimeout(() => {
+      if (event && event.target) {
+        try {
+          event.target.select();
+        } catch (e) {}
+      }
+    }, 0);
+  }
+
+  onOtpInput(event: any, index: number) {
+    const input = event.target as HTMLInputElement;
+    const rawVal = input ? input.value : '';
+    const digitsOnly = (rawVal || '').replace(/\D/g, '');
+
+    if (digitsOnly.length === 0) {
+      this.otpDigits[index] = '';
+      if (input) input.value = '';
+      this.updateMobileOtp();
+      return;
+    }
+
+    if (digitsOnly.length > 1) {
+      if (digitsOnly.length >= 4) {
+        this.setOtpValue(digitsOnly);
+        return;
+      }
+      const latestDigit = digitsOnly.slice(-1);
+      this.otpDigits[index] = latestDigit;
+      if (input) input.value = latestDigit;
+      this.updateMobileOtp();
+      if (index < 3) {
+        this.focusOtpInput(index + 1);
+      }
+      return;
+    }
+
+    this.otpDigits[index] = digitsOnly;
+    if (input) input.value = digitsOnly;
+    this.updateMobileOtp();
+
+    if (index < 3) {
+      this.focusOtpInput(index + 1);
+    }
+  }
+
+  onOtpKeyDown(event: KeyboardEvent, index: number) {
+    if (event.key === 'Backspace') {
+      const input = event.target as HTMLInputElement;
+      if (!this.otpDigits[index] && index > 0) {
+        event.preventDefault();
+        this.otpDigits[index - 1] = '';
+        this.updateMobileOtp();
+        this.focusOtpInput(index - 1);
+      } else {
+        this.otpDigits[index] = '';
+        if (input) input.value = '';
+        this.updateMobileOtp();
+      }
+    } else if (event.key === 'ArrowLeft' && index > 0) {
+      event.preventDefault();
+      this.focusOtpInput(index - 1);
+    } else if (event.key === 'ArrowRight' && index < 3) {
+      event.preventDefault();
+      this.focusOtpInput(index + 1);
+    }
+  }
+
+  onOtpPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const pasted = event.clipboardData?.getData('text') || '';
+    const digitsOnly = pasted.replace(/\D/g, '').slice(0, 4);
+    if (digitsOnly) {
+      this.setOtpValue(digitsOnly);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+    this.stopSmsAutoReader();
+  }
+
   constructor(private generalservice: GeneralService, public navCtrl: NavController,
-    private formBuilder: FormBuilder, public activeRoute: ActivatedRoute, public user: UserService) {
+    private formBuilder: FormBuilder, public activeRoute: ActivatedRoute, public user: UserService,
+    private ngZone: NgZone) {
     
     this.SignupForm = this.formBuilder.group({
       Email: ['', [Validators.required, Validators.email]],
@@ -107,6 +345,8 @@ export class SignupPage implements OnInit {
   }
 
   ngOnInit() {
+    this.OTPFlag = 0;
+    this.OTPVerified = 0;
     this.populateReferralCode();
     if (typeof window !== 'undefined') {
       window.addEventListener('referralCodeReceived', (e: any) => {
@@ -287,8 +527,6 @@ export class SignupPage implements OnInit {
   }
 
   SendOTPToMobile() {
-    
-    //this.OTPFlag = 1;
     this.OTP = Math.floor(1000 + Math.random() * 9000);
     var UploadFile = new FormData();
     console.log('OTP :', this.Mobile);
@@ -297,24 +535,30 @@ export class SignupPage implements OnInit {
     UploadFile.append("OTP", this.OTP);
     var url = "api/BG/SendOtpToMobile";
     this.generalservice.PostData(url, UploadFile).subscribe((data: any) => {
-      
       if (data == "SUCCESS") {
         this.OTPFlag = 1;
+        this.otpDigits = ['', '', '', ''];
+        this.updateMobileOtp();
+        this.generalservice.presentToast('OTP sent successfully!');
         this.startResendTimer();
-        this.listenForOTP();
+        this.startSmsAutoReader();
+        this.focusOtpInput(0);
+      } else {
+        this.generalservice.presentToast('Failed to send OTP. Please try again.');
       }
-    })
+    }, (err: any) => {
+      this.generalservice.presentToast('Failed to send OTP. Please try again.');
+    });
   }
 
   CheckOTP() {
-    
     if (this.MobileOTP == this.OTP) {
       this.OTPVerified = 1;
       this.OTPFlag = 0;
+      this.stopSmsAutoReader();
       if (this.DonorFlag == 1) {
         this.navCtrl.navigateForward(['/donor-registration', { Mobile: this.Mobile, DonorFlag: 1 }]);
       }
-
     } else {
       this.generalservice.presentToast('Please enter correct otp...!');
     }

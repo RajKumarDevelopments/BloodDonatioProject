@@ -25,17 +25,34 @@
         <!-- Mobile/Email Input -->
         <div>
           <div class="items_center">
-            <ion-icon name="call-outline" class="input_icon"></ion-icon>
-            <input type="text" placeholder="Enter Mobile or Email" [(ngModel)]="Mobile" class="input_field" />
+            <div class="input_container">
+              <ion-icon name="call-outline" class="input_icon"></ion-icon>
+              <input type="text" placeholder="Enter Mobile or Email" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" />
+            </div>
           </div>
 
-          <!-- OTP Input (Mobile = 10 digits) -->
-          <form (submit)="$event.preventDefault()" *ngIf="Mobile?.length === 10">
-            <div class="items_center">
-              <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-              <input type="text" inputmode="numeric" autocomplete="one-time-code" name="otp" id="otp" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <!-- OTP Input (Only displayed after OTP is sent: OTPFlag == 1) -->
+          <form (submit)="$event.preventDefault()" *ngIf="isNumeric(Mobile) && OTPFlag == 1 && Mobile?.length === 10">
+            <div class="otp-wrapper">
+              <p class="otp-instruction">Enter 4-digit OTP</p>
+              <div class="otp-inputs-container">
+                <input *ngFor="let digit of otpDigits; let i = index"
+                       type="tel"
+                       inputmode="numeric"
+                       pattern="[0-9]*"
+                       [id]="'otp-input-' + i"
+                       [name]="'otp_digit_' + i"
+                       [autocomplete]="i === 0 ? 'one-time-code' : 'off'"
+                       [class.filled]="otpDigits[i] !== ''"
+                       [value]="otpDigits[i]"
+                       (input)="onOtpInput($event, i)"
+                       (keydown)="onOtpKeyDown($event, i)"
+                       (paste)="onOtpPaste($event)"
+                       (focus)="onOtpFocus(i, $event)"
+                       class="otp-box" />
+              </div>
             </div>
-            <div class="items_center" *ngIf="OTPFlag === 1" style="margin-top: 5px;">
+            <div class="items_center" *ngIf="OTPFlag == 1" style="margin-top: 10px;">
               <span *ngIf="!canResend" style="color: gray; font-size: 14px;">Resend OTP in {{ resendTimer }}s</span>
               <span *ngIf="canResend" class="resend-link" style="color: red; cursor: pointer; text-decoration: underline; font-size: 14px;" (click)="SendOTPToMobile()">Resend OTP</span>
             </div>
@@ -57,8 +74,8 @@
 
     <!-- Main Login Action Buttons -->
     <!-- Mobile: OTP received → Login -->
-    <div class="login-btn-wrapper" *ngIf="isNumeric(Mobile) && OTPFlag === 1 && Mobile?.length === 10">
-      <button class="red-button" [disabled]="isSubmitting" (click)="MobileLogin()">Login</button>
+    <div class="login-btn-wrapper" *ngIf="isNumeric(Mobile) && OTPFlag == 1 && Mobile?.length === 10">
+      <button class="red-button" [disabled]="isSubmitting || !isOtpComplete()" (click)="MobileLogin()">Login</button>
     </div>
 
     <!-- Mobile: OTP not yet sent → Send OTP -->
@@ -68,7 +85,7 @@
 
     <!-- Email login → Login -->
     <div class="login-btn-wrapper" *ngIf="Mobile?.length > 12 && !isNumeric(Mobile)">
-      <button class="red-button" [disabled]="isSubmitting" (click)="login()">Login</button>
+      <button class="red-button" [disabled]="isSubmitting || !isEmailPasswordValid()" (click)="login()">Login</button>
     </div>
 
     <!-- Signup and Register Section -->
@@ -191,7 +208,7 @@
 
     <!-- Step 2: Verify OTP -->
     <div class="login-btn-wrapper" *ngIf="forgotOTPFlag && !forgotOTPVerified">
-      <button class="red-button" (click)="verifyForgotOTP()">Verify OTP</button>
+      <button class="red-button" [disabled]="isSubmitting || !forgotOTP || forgotOTP?.toString().length !== 4" (click)="verifyForgotOTP()">Verify OTP</button>
     </div>
 
     <!-- Step 3: Reset Password -->

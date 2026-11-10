@@ -112,6 +112,81 @@ ion-footer button:disabled {
   position: relative;
   /*margin-bottom: 15px;*/
 }
+
+.input_container {
+  position: relative;
+  width: 85%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  margin: 0 auto 5% auto;
+  box-sizing: border-box;
+
+  .input_icon {
+    position: absolute;
+    left: 20px;
+    font-size: 20px;
+    color: #777;
+    pointer-events: none;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  input.input_field,
+  input.mobile_input {
+    width: 100% !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    padding: 12px 20px 12px 52px !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 50px !important;
+    font-size: 15px !important;
+    color: #1a1a1a !important;
+    background-color: #f8f9fa !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    margin: 0 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+    &:hover {
+      border-color: #9ca3af !important;
+    }
+
+    &:focus {
+      border-color: red !important;
+      background-color: #ffffff !important;
+      box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.15) !important;
+    }
+  }
+}
+
+input.mobile_input {
+  width: 100% !important;
+  height: 54px !important;
+  min-height: 54px !important;
+  padding: 12px 20px 12px 52px !important;
+  border: 1.5px solid #d1d5db !important;
+  border-radius: 50px !important;
+  font-size: 15px !important;
+  color: #1a1a1a !important;
+  background-color: #f8f9fa !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+  &:hover {
+    border-color: #9ca3af !important;
+  }
+
+  &:focus {
+    border-color: red !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.15) !important;
+  }
+}
 .items_center1 {
   display: flex;
   align-items: center;
@@ -162,3 +237,73 @@ a {
   margin-top: 5%;
   margin-bottom: 5%;
 }
+
+/* ── 4-Digit OTP Input Styles ── */
+.otp-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+  max-width: 400px;
+  margin: 15px auto 10px auto;
+}
+
+.otp-instruction {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 12px 0;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.otp-inputs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.otp-inputs-container input.otp-box,
+input.otp-box {
+  width: 54px !important;
+  height: 54px !important;
+  max-width: 54px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #d1d5db !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  color: #1a1a1a !important;
+  background-color: #f8f9fa !important;
+  box-sizing: border-box !important;
+  caret-color: red !important;
+  outline: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  -webkit-appearance: none !important;
+
+  &:hover {
+    border-color: #9ca3af !important;
+  }
+
+  &:focus {
+    border-color: red !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-2px);
+  }
+
+  &.filled {
+    border-color: red !important;
+    background-color: #fffafa !important;
+    color: #111 !important;
+  }
+}
+

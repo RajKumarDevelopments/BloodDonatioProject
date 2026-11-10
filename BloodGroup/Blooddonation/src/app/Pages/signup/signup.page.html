@@ -18,26 +18,46 @@
         <h4 style="color:gray" *ngIf="OTPFlag == 1 && OTPVerified != 1">Fill in the details</h4>
         <h4 style="color:gray" *ngIf="OTPVerified == 1">Fill in the details</h4>
       </div><br />
+      <!-- Step 1: Enter Mobile Number (Before OTP sent) -->
       <div *ngIf="OTPFlag != 1 && OTPVerified != 1">
         <div class="items_center">
-          <ion-icon name="call-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
-        </div>
-        <div class="items_center">
-          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="text" inputmode="numeric" autocomplete="one-time-code" name="otp" id="otp" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="call-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+          </div>
         </div>
       </div>
+
+      <!-- Step 2: Mobile + 4-digit OTP Boxes (After OTP sent) -->
       <div *ngIf="OTPFlag == 1 && OTPVerified != 1">
         <div class="items_center">
-          <ion-icon name="call-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
+          <div class="input_container">
+            <ion-icon name="call-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+          </div>
         </div>
-        <div class="items_center">
-          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="text" inputmode="numeric" autocomplete="one-time-code" name="otp" id="otp" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+
+        <div class="otp-wrapper">
+          <p class="otp-instruction">Enter 4-digit OTP</p>
+          <div class="otp-inputs-container">
+            <input *ngFor="let digit of otpDigits; let i = index"
+                   type="tel"
+                   inputmode="numeric"
+                   pattern="[0-9]*"
+                   [id]="'signup-otp-input-' + i"
+                   [name]="'signup_otp_' + i"
+                   [autocomplete]="i === 0 ? 'one-time-code' : 'off'"
+                   [class.filled]="otpDigits[i] !== ''"
+                   [value]="otpDigits[i]"
+                   (input)="onOtpInput($event, i)"
+                   (keydown)="onOtpKeyDown($event, i)"
+                   (paste)="onOtpPaste($event)"
+                   (focus)="onOtpFocus(i, $event)"
+                   class="otp-box" />
+          </div>
         </div>
-        <div class="items_center" style="margin-top: 5px;">
+
+        <div class="items_center" style="margin-top: 10px;">
           <span *ngIf="!canResend" style="color: gray; font-size: 14px;">Resend OTP in {{ resendTimer }}s</span>
           <span *ngIf="canResend" style="color: red; cursor: pointer; text-decoration: underline; font-size: 14px;" (click)="SendOTPToMobile()">Resend OTP</span>
         </div>
@@ -109,26 +129,46 @@
       <div class="items_center">
         <h4 style="color:gray" *ngIf="OTPFlag != 1 && OTPVerified != 1">Add Donor</h4>
       </div><br />
+      <!-- Step 1: Enter Mobile Number (Before OTP sent) -->
       <div *ngIf="OTPFlag != 1 && OTPVerified != 1">
         <div class="items_center">
-          <ion-icon name="call-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
-        </div>
-        <div class="items_center">
-          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="text" inputmode="numeric" autocomplete="one-time-code" name="otp" id="otp" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="call-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+          </div>
         </div>
       </div>
+
+      <!-- Step 2: Mobile + 4-digit OTP Boxes (After OTP sent) -->
       <div *ngIf="OTPFlag == 1 && OTPVerified != 1">
         <div class="items_center">
-          <ion-icon name="call-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" class="input_field" [maxlength]="10" pattern="[0-9]{10}" />
+          <div class="input_container">
+            <ion-icon name="call-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+          </div>
         </div>
-        <div class="items_center">
-          <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-          <input type="text" inputmode="numeric" autocomplete="one-time-code" name="otp" id="otp" placeholder="Enter OTP" [(ngModel)]="MobileOTP" class="input_field" />
+
+        <div class="otp-wrapper">
+          <p class="otp-instruction">Enter 4-digit OTP</p>
+          <div class="otp-inputs-container">
+            <input *ngFor="let digit of otpDigits; let i = index"
+                   type="tel"
+                   inputmode="numeric"
+                   pattern="[0-9]*"
+                   [id]="'signup-otp-input-' + i"
+                   [name]="'signup_otp_' + i"
+                   [autocomplete]="i === 0 ? 'one-time-code' : 'off'"
+                   [class.filled]="otpDigits[i] !== ''"
+                   [value]="otpDigits[i]"
+                   (input)="onOtpInput($event, i)"
+                   (keydown)="onOtpKeyDown($event, i)"
+                   (paste)="onOtpPaste($event)"
+                   (focus)="onOtpFocus(i, $event)"
+                   class="otp-box" />
+          </div>
         </div>
-        <div class="items_center" style="margin-top: 5px;">
+
+        <div class="items_center" style="margin-top: 10px;">
           <span *ngIf="!canResend" style="color: gray; font-size: 14px;">Resend OTP in {{ resendTimer }}s</span>
           <span *ngIf="canResend" style="color: red; cursor: pointer; text-decoration: underline; font-size: 14px;" (click)="SendOTPToMobile()">Resend OTP</span>
         </div>
@@ -137,10 +177,10 @@
   </ion-row>
 
   <div class="signup-action-btn-container" *ngIf="OTPVerified == 1">
-    <button type="submit" [disabled]="isSubmitting" (click)="NextDetails()">Next</button>
+    <button type="submit" [disabled]="isSubmitting || !isEmailPasswordValid()" (click)="NextDetails()">Next</button>
   </div>
   <div class="signup-action-btn-container" *ngIf="OTPFlag == 1 && OTPVerified != 1">
-    <button type="submit" [disabled]="isSubmitting" (click)="CheckOTP()">Verify OTP</button>
+    <button type="submit" [disabled]="isSubmitting || !isOtpComplete()" (click)="CheckOTP()">Verify OTP</button>
   </div>
   <div class="signup-action-btn-container" *ngIf="OTPFlag != 1 && OTPVerified != 1">
     <button type="submit" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>

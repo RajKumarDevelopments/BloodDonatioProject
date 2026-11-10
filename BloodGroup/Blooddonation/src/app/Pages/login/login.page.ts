@@ -1,27 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, NavController } from '@ionic/angular';
 import { GeneralService } from '../../Services/Generalservice/generalservice.service';
+import { registerPlugin } from '@capacitor/core';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+
+export interface SmsReceiverPluginInterface {
+  startListening(): Promise<{ status: string }>;
+  stopListening(): Promise<{ status: string }>;
+  addListener(eventName: 'otpReceived', listenerFunc: (data: { otp: string; message?: string }) => void): Promise<any>;
+  removeAllListeners(): Promise<void>;
+}
+
+const SmsReceiver = registerPlugin<SmsReceiverPluginInterface>('SmsReceiverPlugin');
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   LoginForm!: FormGroup;
   submitAttempt: boolean = false;
   isSubmitting: boolean = false;
   passwordType: string = 'password';
   passwordIcon: string = 'eye-off-outline';
   Mobile: any; MobileOTP: any; OTP: any;
-  OTPFlag: any;
+  OTPFlag: any = 0;
   Token: any;
   Devicetoken: any;
   Devicetoken1: any;
   flag1: any;
   password: any; UserDetails1: any;
   UserDetails: any;
+
+  // 4-digit OTP individual boxes
+  otpDigits: string[] = ['', '', '', ''];
+  private otpAbortController?: AbortController;
+  private otpEventListener: any = null;
+  private smsPluginListener: any = null;
 
   // Forgot Password fields
   showForgotPassword: boolean = false;
@@ -56,22 +73,252 @@ export class LoginPage implements OnInit {
     }, 1000);
   }
 
-  async listenForOTP() {
-    if ('OTPCredential' in window) {
-      const ac = new AbortController();
-      setTimeout(() => { ac.abort(); }, 30 * 1000);
+  async startSmsAutoReader() {
+    this.stopSmsAutoReader();
+
+    // 1. Listen via DOM CustomEvent (dispatched directly from Android WebView evaluateJavascript)
+    if (typeof window !== 'undefined') {
+      this.otpEventListener = (event: any) => {
+        const otpCode = event?.detail;
+        if (otpCode) {
+          console.log('OTP received via DOM CustomEvent:', otpCode);
+          this.handleAutoReadOtp(otpCode);
+        }
+      };
+      window.addEventListener('otpReceived', this.otpEventListener);
+    }
+
+    // 2. Listen via Capacitor Plugin (Google Play Services SMS User Consent)
+    try {
+      if (SmsReceiver) {
+        this.smsPluginListener = await SmsReceiver.addListener('otpReceived', (data: { otp: string }) => {
+          if (data && data.otp) {
+            console.log('OTP received via Capacitor Plugin:', data.otp);
+            this.handleAutoReadOtp(data.otp);
+          }
+        });
+
+        const res = await SmsReceiver.startListening();
+        console.log('SmsReceiver started listening:', res);
+      }
+    } catch (pluginErr) {
+      console.log('SmsReceiver plugin not available:', pluginErr);
+    }
+
+    // 3. WebOTP API (as browser fallback)
+    this.listenForWebOTP();
+  }
+
+  handleAutoReadOtp(code: string) {
+    if (!code) return;
+    const cleanDigits = code.toString().replace(/\D/g, '').slice(0, 4);
+    if (cleanDigits.length === 4) {
+      // Must run inside NgZone so Angular immediately updates the UI
+      this.ngZone.run(() => {
+        this.setOtpValue(cleanDigits);
+        this.generalservice.presentToast('OTP detected: ' + cleanDigits);
+        this.stopSmsAutoReader();
+      });
+    }
+  }
+
+  stopSmsAutoReader() {
+    if (typeof window !== 'undefined' && this.otpEventListener) {
+      window.removeEventListener('otpReceived', this.otpEventListener);
+      this.otpEventListener = null;
+    }
+
+    try {
+      if (this.smsPluginListener) {
+        this.smsPluginListener.remove();
+        this.smsPluginListener = null;
+      }
+      if (SmsReceiver) {
+        SmsReceiver.stopListening();
+        SmsReceiver.removeAllListeners();
+      }
+    } catch (e) {}
+
+    if (this.otpAbortController) {
+      try { this.otpAbortController.abort(); } catch (e) {}
+    }
+  }
+
+  async listenForWebOTP() {
+    if (typeof window !== 'undefined' && 'OTPCredential' in window) {
       try {
-        const otp: any = await navigator.credentials.get({
+        if (this.otpAbortController) {
+          try { this.otpAbortController.abort(); } catch (e) {}
+        }
+        this.otpAbortController = new AbortController();
+        const signal = this.otpAbortController.signal;
+        setTimeout(() => {
+          try { this.otpAbortController?.abort(); } catch (e) {}
+        }, 60 * 1000);
+
+        const otp: any = await (navigator.credentials as any).get({
           otp: { transport: ['sms'] },
-          signal: ac.signal
-        } as any);
+          signal: signal
+        });
         if (otp && otp.code) {
-          this.MobileOTP = otp.code;
+          this.handleAutoReadOtp(otp.code);
         }
       } catch (err) {
-        console.log('WebOTP Error:', err);
+        console.log('WebOTP Error or aborted:', err);
       }
     }
+  }
+
+  onMobileChange() {
+    this.otpDigits = ['', '', '', ''];
+    this.updateMobileOtp();
+    this.OTPFlag = 0;
+  }
+
+  updateMobileOtp() {
+    this.MobileOTP = this.otpDigits.join('');
+  }
+
+  isOtpComplete(): boolean {
+    if (!this.otpDigits || this.otpDigits.length !== 4) {
+      return false;
+    }
+    const allFilled = this.otpDigits.every(d => d !== '' && d !== null && d !== undefined);
+    const codeLen = (this.MobileOTP || '').toString().trim().length;
+    return allFilled && codeLen === 4;
+  }
+
+  isEmailPasswordValid(): boolean {
+    const email = (this.Mobile || '').toString().trim();
+    const pwd = (this.MobileOTP || '').toString().trim();
+    return email.length > 0 && pwd.length > 0;
+  }
+
+  setOtpValue(value: any) {
+    if (value === null || value === undefined) {
+      this.otpDigits = ['', '', '', ''];
+      this.updateMobileOtp();
+      return;
+    }
+    const digits = value.toString().replace(/\D/g, '').slice(0, 4);
+    for (let i = 0; i < 4; i++) {
+      this.otpDigits[i] = digits[i] || '';
+      const el = document.getElementById('otp-input-' + i) as HTMLInputElement;
+      if (el) {
+        el.value = this.otpDigits[i];
+      }
+    }
+    this.updateMobileOtp();
+    if (digits.length >= 4) {
+      this.focusOtpInput(3);
+    } else if (digits.length > 0) {
+      this.focusOtpInput(digits.length);
+    }
+  }
+
+  focusOtpInput(index: number) {
+    setTimeout(() => {
+      const el = document.getElementById('otp-input-' + index) as HTMLInputElement;
+      if (el) {
+        el.focus();
+        try {
+          el.select();
+        } catch (e) {}
+      }
+    }, 50);
+  }
+
+  onOtpFocus(index: number, event: any) {
+    setTimeout(() => {
+      if (event && event.target) {
+        try {
+          event.target.select();
+        } catch (e) {}
+      }
+    }, 0);
+  }
+
+  onOtpInput(event: any, index: number) {
+    const input = event.target as HTMLInputElement;
+    const rawVal = input ? input.value : '';
+    const digitsOnly = (rawVal || '').replace(/\D/g, '');
+
+    if (digitsOnly.length === 0) {
+      this.otpDigits[index] = '';
+      if (input) input.value = '';
+      this.updateMobileOtp();
+      return;
+    }
+
+    if (digitsOnly.length > 1) {
+      // Auto-filled OTP from mobile SMS autofill or pasted into box
+      if (digitsOnly.length >= 4) {
+        this.setOtpValue(digitsOnly);
+        return;
+      }
+
+      // If user typed into an already filled box (length 2), keep the newest digit
+      const latestDigit = digitsOnly.slice(-1);
+      this.otpDigits[index] = latestDigit;
+      if (input) input.value = latestDigit;
+      this.updateMobileOtp();
+      if (index < 3) {
+        this.focusOtpInput(index + 1);
+      }
+      return;
+    }
+
+    // Exactly 1 digit
+    this.otpDigits[index] = digitsOnly;
+    if (input) input.value = digitsOnly;
+    this.updateMobileOtp();
+
+    if (index < 3) {
+      this.focusOtpInput(index + 1);
+    }
+  }
+
+  onOtpKeyDown(event: KeyboardEvent, index: number) {
+    if (event.key === 'Backspace') {
+      const input = event.target as HTMLInputElement;
+      if (!this.otpDigits[index] && index > 0) {
+        // Current box is empty, jump to previous box and clear it
+        event.preventDefault();
+        this.otpDigits[index - 1] = '';
+        this.updateMobileOtp();
+        this.focusOtpInput(index - 1);
+      } else {
+        // Clear current box
+        this.otpDigits[index] = '';
+        if (input) input.value = '';
+        this.updateMobileOtp();
+      }
+    } else if (event.key === 'ArrowLeft' && index > 0) {
+      event.preventDefault();
+      this.focusOtpInput(index - 1);
+    } else if (event.key === 'ArrowRight' && index < 3) {
+      event.preventDefault();
+      this.focusOtpInput(index + 1);
+    }
+  }
+
+  onOtpPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const pasted = event.clipboardData?.getData('text') || '';
+    const digitsOnly = pasted.replace(/\D/g, '').slice(0, 4);
+    if (digitsOnly) {
+      this.setOtpValue(digitsOnly);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+    if (this.forgotTimerInterval) {
+      clearInterval(this.forgotTimerInterval);
+    }
+    this.stopSmsAutoReader();
   }
 
   startForgotResendTimer() {
@@ -91,13 +338,16 @@ export class LoginPage implements OnInit {
     private formBuilder: FormBuilder,
     private loadingController: LoadingController,
     private navCtrl: NavController,
-    private generalservice: GeneralService
+    private generalservice: GeneralService,
+    private ngZone: NgZone,
+    private androidPermissions: AndroidPermissions
   ) {
     this.UserDetails1 = localStorage.getItem("UserDetails");
     this.UserDetails = JSON.parse(this.UserDetails1);
   }
 
   ngOnInit() {
+    this.OTPFlag = 0;
     this.LoginForm = this.formBuilder.group({
       Email: ['', [Validators.required, Validators.email]],
       Password: ['', Validators.compose([Validators.maxLength(30), Validators.minLength(6), Validators.required])]
@@ -167,9 +417,12 @@ export class LoginPage implements OnInit {
         this.generalservice.dismiss();
         if (data == "SUCCESS") {
           this.OTPFlag = 1;
+          this.otpDigits = ['', '', '', ''];
+          this.updateMobileOtp();
           this.generalservice.presentToast('OTP sent successfully!');
           this.startResendTimer();
-          this.listenForOTP();
+          this.startSmsAutoReader();
+          this.focusOtpInput(0);
         } else {
           this.generalservice.presentToast('Failed to send OTP. Please try again.');
         }
