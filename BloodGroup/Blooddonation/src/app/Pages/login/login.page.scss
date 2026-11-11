@@ -54,7 +54,9 @@ input {
   box-sizing: border-box;
 
   .red-button, button {
-    padding: 15px;
+    height: 48px;
+    min-height: 48px;
+    padding: 0 20px;
     border-radius: 50px;
     border: none;
     background-color: red;
@@ -63,7 +65,9 @@ input {
     max-width: 400px;
     font-size: 15px;
     font-weight: 600;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 auto;
     cursor: pointer;
     box-sizing: border-box;
@@ -89,7 +93,9 @@ ion-footer {
 }
 
 ion-footer button, .red-button {
-  padding: 15px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 20px;
   border-radius: 50px;
   border: none;
   background-color: red;
@@ -98,7 +104,9 @@ ion-footer button, .red-button {
   max-width: 400px;
   font-size: 15px;
   font-weight: 600;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
   cursor: pointer;
   box-sizing: border-box;
@@ -112,8 +120,10 @@ ion-footer button:disabled, .red-button:disabled {
 
 .items_center {
   display: flex;
+  justify-content: center;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
 .input_container {
@@ -122,13 +132,13 @@ ion-footer button:disabled, .red-button:disabled {
   max-width: 400px;
   display: flex;
   align-items: center;
-  margin: 0 auto 5% auto;
+  margin: 0 auto 14px auto;
   box-sizing: border-box;
 
   .input_icon {
     position: absolute;
-    left: 20px;
-    font-size: 20px;
+    left: 18px;
+    font-size: 19px;
     color: #777;
     pointer-events: none;
     z-index: 2;
@@ -136,12 +146,24 @@ ion-footer button:disabled, .red-button:disabled {
     transform: translateY(-50%);
   }
 
+  .eye_icon {
+    position: absolute;
+    right: 18px;
+    font-size: 20px;
+    color: #777;
+    cursor: pointer;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   input.input_field,
-  input.mobile_input {
+  input.mobile_input,
+  input {
     width: 100% !important;
-    height: 54px !important;
-    min-height: 54px !important;
-    padding: 12px 20px 12px 52px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 10px 48px 10px 48px !important;
     border: 1.5px solid #d1d5db !important;
     border-radius: 50px !important;
     font-size: 15px !important;
@@ -167,9 +189,9 @@ ion-footer button:disabled, .red-button:disabled {
 
 input.mobile_input {
   width: 100% !important;
-  height: 54px !important;
-  min-height: 54px !important;
-  padding: 12px 20px 12px 52px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  padding: 10px 48px 10px 48px !important;
   border: 1.5px solid #d1d5db !important;
   border-radius: 50px !important;
   font-size: 15px !important;
@@ -298,13 +320,13 @@ input.mobile_input {
   justify-content: center;
   width: 85%;
   max-width: 400px;
-  margin: 15px auto 10px auto;
+  margin: 12px auto 8px auto;
 }
 
 .otp-instruction {
   font-size: 13px;
   color: #666;
-  margin: 0 0 12px 0;
+  margin: 0 0 10px 0;
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -314,22 +336,22 @@ input.mobile_input {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  max-width: 320px;
+  max-width: 260px;
 }
 
 .otp-inputs-container input.otp-box,
 input.otp-box {
-  width: 54px !important;
-  height: 54px !important;
-  max-width: 54px !important;
+  width: 48px !important;
+  height: 48px !important;
+  max-width: 48px !important;
   padding: 0 !important;
   margin: 0 !important;
   margin-bottom: 0 !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   border: 1.5px solid #d1d5db !important;
-  font-size: 22px !important;
+  font-size: 20px !important;
   font-weight: 700 !important;
   text-align: center !important;
   color: #1a1a1a !important;

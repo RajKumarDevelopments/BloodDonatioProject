@@ -60,8 +60,11 @@
 
           <!-- Password Input (Email login: length > 12) -->
           <div class="items_center" *ngIf="Mobile?.length > 12">
-            <ion-icon name="lock-open-outline" class="input_icon"></ion-icon>
-            <input type="text" placeholder="Enter Password" [(ngModel)]="MobileOTP" class="input_field" />
+            <div class="input_container">
+              <ion-icon name="lock-closed-outline" class="input_icon"></ion-icon>
+              <input [type]="passwordType" placeholder="Enter Password" [(ngModel)]="MobileOTP" class="input_field mobile_input" />
+              <ion-icon [name]="passwordIcon" class="eye_icon" (click)="togglePassword()"></ion-icon>
+            </div>
           </div>
         </div>
 

@@ -39,6 +39,7 @@ export class LoginPage implements OnInit, OnDestroy {
   private otpAbortController?: AbortController;
   private otpEventListener: any = null;
   private smsPluginListener: any = null;
+  private hasAutoSubmitted: boolean = false;
 
   // Forgot Password fields
   showForgotPassword: boolean = false;
@@ -110,14 +111,22 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   handleAutoReadOtp(code: string) {
-    if (!code) return;
+    if (!code || this.hasAutoSubmitted) return;
     const cleanDigits = code.toString().replace(/\D/g, '').slice(0, 4);
     if (cleanDigits.length === 4) {
+      this.hasAutoSubmitted = true;
+      this.stopSmsAutoReader();
       // Must run inside NgZone so Angular immediately updates the UI
       this.ngZone.run(() => {
         this.setOtpValue(cleanDigits);
-        this.generalservice.presentToast('OTP detected: ' + cleanDigits);
-        this.stopSmsAutoReader();
+        this.generalservice.presentToast('OTP auto-filled: ' + cleanDigits);
+
+        // Automatically trigger Login once all 4 digits are auto-filled
+        setTimeout(() => {
+          if (!this.isSubmitting && this.isOtpComplete()) {
+            this.MobileLogin();
+          }
+        }, 300);
       });
     }
   }
@@ -173,6 +182,7 @@ export class LoginPage implements OnInit, OnDestroy {
     this.otpDigits = ['', '', '', ''];
     this.updateMobileOtp();
     this.OTPFlag = 0;
+    this.hasAutoSubmitted = false;
   }
 
   updateMobileOtp() {
@@ -417,6 +427,7 @@ export class LoginPage implements OnInit, OnDestroy {
         this.generalservice.dismiss();
         if (data == "SUCCESS") {
           this.OTPFlag = 1;
+          this.hasAutoSubmitted = false;
           this.otpDigits = ['', '', '', ''];
           this.updateMobileOtp();
           this.generalservice.presentToast('OTP sent successfully!');

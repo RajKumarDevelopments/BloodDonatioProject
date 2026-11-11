@@ -3,10 +3,9 @@
     <br />
     <br /><br />
   </ion-row>
-  <ion-row class="rows row-spacing" *ngIf="DonorFlag != 1">
+  <ion-row class="rows row-spacing" *ngIf="DonorFlag != 1 && OTPVerified != 1">
     <ion-col size="6"><p class="header_left" routerLink="/login">LOGIN</p></ion-col>
     <ion-col size="6"><p class="header_right">SIGNUP</p></ion-col>
-
   </ion-row>
   <ion-row class="row-spacing" *ngIf="DonorFlag != 1">
     <ion-col size="12">
@@ -23,7 +22,7 @@
         <div class="items_center">
           <div class="input_container">
             <ion-icon name="call-outline" class="input_icon"></ion-icon>
-            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+            <input type="tel" inputmode="numeric" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" (keypress)="preventNonNumeric($event)" (paste)="onMobilePaste($event)" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
           </div>
         </div>
       </div>
@@ -33,7 +32,7 @@
         <div class="items_center">
           <div class="input_container">
             <ion-icon name="call-outline" class="input_icon"></ion-icon>
-            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+            <input type="tel" inputmode="numeric" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" (keypress)="preventNonNumeric($event)" (paste)="onMobilePaste($event)" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
           </div>
         </div>
 
@@ -64,44 +63,55 @@
       </div>
       <div *ngIf="OTPVerified == 1">
         <div class="items_center">
-          <ion-icon name="person-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter First Name" [(ngModel)]="FirstName" (ngModelChange)="onFirstNameChange($event)" (keypress)="preventInvalidChars($event)" (paste)="onPasteSanitize($event)" [minlength]="3" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="person-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter First Name" [(ngModel)]="FirstName" (ngModelChange)="onFirstNameChange($event)" (keypress)="preventInvalidChars($event)" (paste)="onPasteSanitize($event)" [minlength]="3" class="input_field mobile_input" />
+          </div>
         </div>
-        <div *ngIf="firstNameError" style="color: red; font-size: 12px; padding-left: 45px; margin-top: 5px; margin-bottom: 5px;">
+        <div *ngIf="firstNameError" style="color: red; font-size: 12px; width: 85%; max-width: 400px; margin: -6px auto 10px auto; padding-left: 20px;">
           {{ firstNameError }}
         </div>
         <div class="items_center">
-          <ion-icon name="person-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Middle Name" [(ngModel)]="MiddleName" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="person-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Middle Name" [(ngModel)]="MiddleName" class="input_field mobile_input" />
+          </div>
         </div>
         <div class="items_center">
-          <ion-icon name="person-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Surname" [(ngModel)]="SurName" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="person-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Surname" [(ngModel)]="SurName" class="input_field mobile_input" />
+          </div>
         </div>
         <div class="items_center">
-          <ion-icon name="pencil-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Invite Code (optional)" [(ngModel)]="InviteCode" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="pencil-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Invite Code (optional)" [(ngModel)]="InviteCode" class="input_field mobile_input" />
+          </div>
         </div>
         <div class="items_center">
-          <ion-icon name="mail-outline" class="input_icon"></ion-icon>
-          <input type="text" placeholder="Enter Email Id" [(ngModel)]="Email" (ngModelChange)="onEmailChange($event)" class="input_field" />
+          <div class="input_container">
+            <ion-icon name="mail-outline" class="input_icon"></ion-icon>
+            <input type="text" placeholder="Enter Email Id" [(ngModel)]="Email" (ngModelChange)="onEmailChange($event)" class="input_field mobile_input" />
+          </div>
         </div>
-        <div *ngIf="emailError" style="color: red; font-size: 12px; padding-left: 45px; margin-top: 5px; margin-bottom: 5px;">
+        <div *ngIf="emailError" style="color: red; font-size: 12px; width: 85%; max-width: 400px; margin: -6px auto 10px auto; padding-left: 20px;">
           {{ emailError }}
         </div>
-        <div class="items_center1" >
-          <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="Password" placeholder="Enter Password" class="input_field passwordd" />
-          <ion-icon slot="end"  name="{{ showPassword ? 'eye' : 'eye-off' }}" (click)="togglePassword()" class="input_icon1"></ion-icon>
-
-          <!--<ion-icon name="eye-outline" class="input_icon"></ion-icon>
-    <input type="text" placeholder="Enter Your password" [(ngModel)]="Password" class="input_field" />-->
+        <div class="items_center">
+          <div class="input_container">
+            <ion-icon name="lock-closed-outline" class="input_icon"></ion-icon>
+            <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="Password" placeholder="Enter Password" class="input_field mobile_input" />
+            <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" (click)="togglePassword()" class="eye_icon"></ion-icon>
+          </div>
         </div>
        
-        <div class="items_center1" >
-          <input type="{{ reshowPassword ? 'text' : 'password' }}" [(ngModel)]="ConformPassword" [ngModelOptions]="{standalone: true}" placeholder="Confirm password" class="input_field passwordd" />
-          <ion-icon slot="end"  name="{{ reshowPassword ? 'eye' : 'eye-off' }}" (click)="retogglePassword()" class="input_icon1"></ion-icon>
-          <!--<ion-icon name="eye-outline" class="input_icon"></ion-icon>
-    <input type="text" placeholder="Enter Your confirm password" [(ngModel)]="ConformPassword" class="input_field" />-->
+        <div class="items_center">
+          <div class="input_container">
+            <ion-icon name="lock-closed-outline" class="input_icon"></ion-icon>
+            <input type="{{ reshowPassword ? 'text' : 'password' }}" [(ngModel)]="ConformPassword" [ngModelOptions]="{standalone: true}" placeholder="Confirm password" class="input_field mobile_input" />
+            <ion-icon [name]="reshowPassword ? 'eye-outline' : 'eye-off-outline'" (click)="retogglePassword()" class="eye_icon"></ion-icon>
+          </div>
         </div>
         <!--<ion-row style="padding-left:5%;margin-left: 15px;">
     <ion-col size="1"><input type="checkbox" [(ngModel)]="TandC" [class.readonly]="TandC" /></ion-col>
@@ -134,7 +144,7 @@
         <div class="items_center">
           <div class="input_container">
             <ion-icon name="call-outline" class="input_icon"></ion-icon>
-            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+            <input type="tel" inputmode="numeric" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" (keypress)="preventNonNumeric($event)" (paste)="onMobilePaste($event)" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
           </div>
         </div>
       </div>
@@ -144,7 +154,7 @@
         <div class="items_center">
           <div class="input_container">
             <ion-icon name="call-outline" class="input_icon"></ion-icon>
-            <input type="text" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
+            <input type="tel" inputmode="numeric" placeholder="Enter Mobile" [(ngModel)]="Mobile" (ngModelChange)="onMobileChange()" (keypress)="preventNonNumeric($event)" (paste)="onMobilePaste($event)" class="input_field mobile_input" [maxlength]="10" pattern="[0-9]{10}" />
           </div>
         </div>
 
@@ -183,7 +193,7 @@
     <button type="submit" [disabled]="isSubmitting || !isOtpComplete()" (click)="CheckOTP()">Verify OTP</button>
   </div>
   <div class="signup-action-btn-container" *ngIf="OTPFlag != 1 && OTPVerified != 1">
-    <button type="submit" [disabled]="isSubmitting" (click)="VerifyMobileEmail()">Send OTP</button>
+    <button type="submit" [disabled]="!isSendOtpEnabled()" (click)="VerifyMobileEmail()">Send OTP</button>
   </div>
 
   <div style="height: 30px;"></div>

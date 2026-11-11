@@ -59,6 +59,7 @@ export class SignupPage implements OnInit, OnDestroy {
   private otpAbortController?: AbortController;
   private otpEventListener: any = null;
   private smsPluginListener: any = null;
+  private hasAutoSubmitted: boolean = false;
 
   startResendTimer() {
     this.resendTimer = 30;
@@ -110,13 +111,21 @@ export class SignupPage implements OnInit, OnDestroy {
   }
 
   handleAutoReadOtp(code: string) {
-    if (!code) return;
+    if (!code || this.hasAutoSubmitted) return;
     const cleanDigits = code.toString().replace(/\D/g, '').slice(0, 4);
     if (cleanDigits.length === 4) {
+      this.hasAutoSubmitted = true;
+      this.stopSmsAutoReader();
       this.ngZone.run(() => {
         this.setOtpValue(cleanDigits);
-        this.generalservice.presentToast('OTP detected: ' + cleanDigits);
-        this.stopSmsAutoReader();
+        this.generalservice.presentToast('OTP auto-filled: ' + cleanDigits);
+
+        // Automatically trigger Verify OTP once all 4 digits are auto-filled
+        setTimeout(() => {
+          if (!this.isSubmitting && this.isOtpComplete()) {
+            this.CheckOTP();
+          }
+        }, 300);
       });
     }
   }
@@ -169,9 +178,40 @@ export class SignupPage implements OnInit, OnDestroy {
   }
 
   onMobileChange() {
+    if (this.Mobile !== undefined && this.Mobile !== null) {
+      const sanitized = this.Mobile.toString().replace(/\D/g, '').slice(0, 10);
+      if (this.Mobile !== sanitized) {
+        this.Mobile = sanitized;
+      }
+    }
     this.otpDigits = ['', '', '', ''];
     this.updateMobileOtp();
     this.OTPFlag = 0;
+    this.hasAutoSubmitted = false;
+  }
+
+  preventNonNumeric(event: any): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Allow only numeric digits: 0 (48) to 9 (57)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  onMobilePaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const pastedText = event.clipboardData?.getData('text') || '';
+    const digitsOnly = pastedText.replace(/\D/g, '').slice(0, 10);
+    this.Mobile = digitsOnly;
+    this.onMobileChange();
+  }
+
+  isSendOtpEnabled(): boolean {
+    if (this.isSubmitting) return false;
+    const mobileStr = (this.Mobile || '').toString().trim();
+    return /^\d{10}$/.test(mobileStr);
   }
 
   updateMobileOtp() {
@@ -537,6 +577,7 @@ export class SignupPage implements OnInit, OnDestroy {
     this.generalservice.PostData(url, UploadFile).subscribe((data: any) => {
       if (data == "SUCCESS") {
         this.OTPFlag = 1;
+        this.hasAutoSubmitted = false;
         this.otpDigits = ['', '', '', ''];
         this.updateMobileOtp();
         this.generalservice.presentToast('OTP sent successfully!');
