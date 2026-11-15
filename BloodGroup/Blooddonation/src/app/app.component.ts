@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen/ngx'
 import { NavController } from '@ionic/angular';
 import { PushnotificationService } from '../app/Services/push/pushnotification.service'
@@ -68,11 +68,21 @@ export class AppComponent {
   showSplashScreen: boolean = true;
   splashFading: boolean = false;
   isNavigatingAway: boolean = false;
-
+  Version: string = '';
+  showUpdateModal: boolean = false;
+  installedVersion: string = '';
+  latestVersion: string = '';
+  isUpdating: boolean = false;
+  updateReleaseNotes: string[] = [
+    'Bug fixes and overall performance improvements',
+    'Enhanced OTP auto-read & instant autofill verification',
+    'Improved user interface styling, stability, and speed'
+  ];
   constructor(private alertController: AlertController, private languageService: LanguageTranslatorService,
     private geolocationService: GeolocationserviceService, private permissionService: PermissionService, private androidFullScreen: AndroidFullScreen, public navCtrl: NavController,
     private menu: MenuController, private router: Router,
-    private push: PushnotificationService, private platform: Platform, private general: GeneralService) {
+    private push: PushnotificationService, private platform: Platform, private general: GeneralService,
+    private ngZone: NgZone, private cdr: ChangeDetectorRef) {
     this.androidFullScreen.isImmersiveModeSupported()
     //.then(() => this.androidFullScreen.immersiveMode())
     //.catch(err => console.log(err));
@@ -481,6 +491,30 @@ export class AppComponent {
           this.extractAndStoreReferralCode(document.referrer);
         }
       }
+
+      // Check app version and check for updates
+      this.getAppVersion();
+
+      // Listen for app resuming from background (e.g. after Google Play Store update)
+      try {
+        App.addListener('appStateChange', async (state: any) => {
+          if (state && state.isActive && this.isUpdating) {
+            this.isUpdating = false;
+            await this.verifyUpdatedVersion();
+          }
+        });
+      } catch (e) {
+        console.error('Error attaching appStateChange listener:', e);
+      }
+
+      if (typeof document !== 'undefined') {
+        document.addEventListener('visibilitychange', async () => {
+          if (!document.hidden && this.isUpdating) {
+            this.isUpdating = false;
+            await this.verifyUpdatedVersion();
+          }
+        });
+      }
     });
   }
 
@@ -588,6 +622,158 @@ export class AppComponent {
       window.open(target.webUrl, '_blank', 'noopener,noreferrer');
     }
   }
+  cleanVersionString(ver: any): string {
+    if (ver === null || ver === undefined) return '';
+    const str = String(ver).trim();
+    // Look for semantic version pattern first: e.g. 9.1.4 or 10.0.0
+    const semverMatch = str.match(/\b\d+(\.\d+)+\b/);
+    if (semverMatch) {
+      return semverMatch[0];
+    }
+    const generalMatch = str.match(/\d+/);
+    return generalMatch ? generalMatch[0] : str;
+  }
 
+  compareVersions(v1: string, v2: string): number {
+    const clean1 = this.cleanVersionString(v1);
+    const clean2 = this.cleanVersionString(v2);
+    if (!clean1 && !clean2) return 0;
+    if (!clean1) return -1;
+    if (!clean2) return 1;
+
+    const p1 = clean1.split('.').map(p => parseInt(p, 10) || 0);
+    const p2 = clean2.split('.').map(p => parseInt(p, 10) || 0);
+    const maxLen = Math.max(p1.length, p2.length);
+
+    for (let i = 0; i < maxLen; i++) {
+      const num1 = p1[i] !== undefined ? p1[i] : 0;
+      const num2 = p2[i] !== undefined ? p2[i] : 0;
+      if (num1 < num2) return -1;
+      if (num1 > num2) return 1;
+    }
+    return 0;
+  }
+
+  getAppVersion() {
+    try {
+      var url = "api/BG/BG_APPVersion";
+      this.general.GetData(url).subscribe(async (data: any) => {
+        this.Version = data;
+        console.log('AppUpdate -> Raw Version API response:', data);
+
+        // 1. Safely parse JSON if response is a string
+        let rawData = data;
+        if (typeof rawData === 'string') {
+          try {
+            const parsed = JSON.parse(rawData);
+            if (parsed) rawData = parsed;
+          } catch (e) {
+            // Keep as string
+          }
+        }
+
+        // 2. Extract VersionCode and release notes
+        let verCode = '';
+        let notes: string[] = [];
+
+        if (Array.isArray(rawData) && rawData.length > 0) {
+          const item = rawData[0];
+          if (typeof item === 'object' && item !== null) {
+            verCode = item.VersionCode || item.versionCode || item.versioncode || item.Version || item.version || item.VCode || '';
+            const rawNotes = item.ReleaseNotes || item.Notes || item.Description || item.changes;
+            if (rawNotes) {
+              notes = Array.isArray(rawNotes) ? rawNotes : [rawNotes];
+            }
+          } else if (typeof item === 'string' || typeof item === 'number') {
+            verCode = String(item);
+          }
+        } else if (typeof rawData === 'object' && rawData !== null) {
+          verCode = rawData.VersionCode || rawData.versionCode || rawData.versioncode || rawData.Version || rawData.version || rawData.VCode || '';
+          const rawNotes = rawData.ReleaseNotes || rawData.Notes || rawData.Description || rawData.changes;
+          if (rawNotes) {
+            notes = Array.isArray(rawNotes) ? rawNotes : [rawNotes];
+          }
+        } else if (typeof rawData === 'string' || typeof rawData === 'number') {
+          verCode = String(rawData);
+        }
+
+        if (verCode) {
+          this.latestVersion = this.cleanVersionString(verCode);
+        }
+
+        if (notes && notes.length > 0) {
+          this.updateReleaseNotes = notes;
+        }
+
+        // 3. Retrieve currently installed app version
+        try {
+          const info = await App.getInfo();
+          if (info && info.version) {
+            this.installedVersion = this.cleanVersionString(info.version);
+          }
+        } catch (e) {
+          console.warn('Error reading installed app info:', e);
+        }
+
+        console.log('AppUpdate -> Installed:', this.installedVersion, '| Latest from API:', this.latestVersion);
+
+        // 4. Compare installed version with latest version and update UI inside NgZone
+        this.ngZone.run(() => {
+          if (this.latestVersion && this.installedVersion) {
+            const cmp = this.compareVersions(this.installedVersion, this.latestVersion);
+            console.log('AppUpdate -> compareVersions result (negative means update available):', cmp);
+            if (cmp < 0) {
+              this.showUpdateModal = true;
+              this.showSplashScreen = false;
+            } else {
+              this.showUpdateModal = false;
+            }
+          }
+          this.cdr.detectChanges();
+        });
+      }, (error) => {
+        console.error('Error fetching app version:', error);
+      });
+    } catch (e) {
+      console.log('Error', e);
+    }
+  }
+
+  async verifyUpdatedVersion() {
+    try {
+      const info = await App.getInfo();
+      if (info && info.version) {
+        this.installedVersion = this.cleanVersionString(info.version);
+        if (this.latestVersion && this.compareVersions(this.installedVersion, this.latestVersion) >= 0) {
+          this.ngZone.run(() => {
+            this.showUpdateModal = false;
+            this.cdr.detectChanges();
+          });
+          window.location.reload();
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Error verifying updated version:', e);
+    }
+    this.getAppVersion();
+  }
+
+  openPlayStore() {
+    this.isUpdating = true;
+    const packageName = 'com.gg.Bloodgroup';
+    const marketUrl = `market://details?id=${packageName}`;
+    const webUrl = `https://play.google.com/store/apps/details?id=${packageName}`;
+
+    try {
+      if (this.platform.is('capacitor') || this.platform.is('android')) {
+        window.open(marketUrl, '_system');
+      } else {
+        window.open(webUrl, '_system');
+      }
+    } catch (e) {
+      window.open(webUrl, '_blank', 'noopener,noreferrer');
+    }
+  }
 }
 

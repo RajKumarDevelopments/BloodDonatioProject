@@ -7,12 +7,12 @@
         <div class="logo-pulse-ring"></div>
         <div class="logo-pulse-ring ring-2"></div>
         <div class="logo-img-container">
-          <img class="splash-logo" src="../assets/Images/Project_logo_New.png" alt="Let's Help Logo" />
+          <img class="splash-logo" src="../assets/Images/bg_logo.png" alt="Let's Help Logo" />
         </div>
       </div>
 
       <div class="brand-text-container">
-        <h1 class="splash-title">Let's Help</h1>
+        <h1 class="splash-title">Let's Help Foundation</h1>
         <p class="splash-subtitle">
           <span class="heart-pulse">❤️</span> Blood Donation • Save Lives
         </p>
@@ -20,6 +20,81 @@
 
       <div class="splash-loader-bar">
         <div class="splash-loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Update Available Modal / Card -->
+  <div class="update-modal-backdrop" *ngIf="showUpdateModal">
+    <div class="update-card-container">
+      <!-- Top Decorative Accent Bar -->
+      <div class="update-card-top-bar"></div>
+
+      <!-- Header Section with Brand Logo -->
+      <div class="update-header-section">
+        <div class="update-logo-wrapper">
+          <img src="../assets/Images/bg_logo.png" alt="Let's Help Logo" class="update-brand-logo" />
+        </div>
+        <div class="update-badge-pill">
+          <span class="pulse-dot"></span>
+          <span>New Update Available</span>
+        </div>
+      </div>
+
+      <div class="update-card-body">
+        <h2 class="update-title">Update Let's Help</h2>
+        <p class="update-subtitle">
+          A new version of <strong>Let's Help</strong> is available on Google Play with performance improvements & fixes.
+        </p>
+
+        <!-- Version Comparison Row -->
+        <div class="version-transition-card">
+          <div class="version-item current">
+            <span class="v-label">CURRENT</span>
+            <span class="v-number">v{{ installedVersion }}</span>
+          </div>
+          <div class="version-arrow-wrap">
+            <svg class="version-arrow-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </div>
+          <div class="version-item latest">
+            <span class="v-label">LATEST</span>
+            <span class="v-number">v{{ latestVersion }}</span>
+          </div>
+        </div>
+
+        <!-- Release Notes Section -->
+        <div class="update-notes-card">
+          <div class="notes-header">
+            <div class="notes-icon-badge">
+              <svg viewBox="0 0 24 24" class="notes-icon" fill="currentColor">
+                <path d="M12 2l2.4 7.2L21 10.5l-5.6 4.8 1.8 7.2-5.2-4.2-5.2 4.2 1.8-7.2-5.6-4.8 6.6-1.3L12 2z"/>
+              </svg>
+            </div>
+            <span class="notes-heading">What's New in v{{ latestVersion }}</span>
+          </div>
+          <ul class="notes-list">
+            <li *ngFor="let note of updateReleaseNotes">
+              <span class="check-icon-wrap">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </span>
+              <span class="note-desc">{{ note }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Action Button -->
+        <div class="update-actions">
+          <button type="button" class="btn-update-now" (click)="openPlayStore()">
+            <svg class="btn-play-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3.609 1.814L13.792 12 3.61 22.186c-.328-.277-.527-.69-.527-1.155V2.97c0-.466.199-.878.526-1.156zM15.207 13.414l2.298 2.298-11.45 6.44 9.152-8.738zm0-2.828L6.055 1.848l11.45 6.44-2.298 2.298zm1.414 1.414l3.155 1.775c.866.487.866 1.284 0 1.771l-3.155 1.775-2.029-2.029 2.029-2.092z"/>
+            </svg>
+            <span>Update on Google Play</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -228,7 +303,7 @@
       <div class="footer_logo">
         <img src="assets/Images/bg_logo.png" alt="Let's Help Logo" />
       </div>
-      <div class="version">Version(i8-c6-a17-V9.1.4)</div>
+      <div class="version">Version(i8-c6-a17-V9.1.9)</div>
     </div>
   </div>
 </ion-content>
