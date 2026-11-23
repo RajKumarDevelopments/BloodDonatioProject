@@ -14,6 +14,23 @@ import { GeolocationserviceService } from './Services/locationservice/geolocatio
 //register();
 import { LanguageTranslatorService } from './Services/LanguageServices/language-translator.service'
 import { App } from '@capacitor/app';
+import { registerPlugin } from '@capacitor/core';
+
+export interface AppUpdatePluginInterface {
+  checkAndStartUpdate(): Promise<{
+    status: string;
+    availableVersionCode?: number;
+    updateAvailability?: number;
+    error?: string;
+  }>;
+  addListener?(
+    eventName: string,
+    listenerFunc: (data: any) => void
+  ): Promise<any>;
+  resetAutoUpdateDismissed?(): Promise<any>;
+}
+
+const AppUpdatePlugin = registerPlugin<AppUpdatePluginInterface>('AppUpdatePlugin');
 
 //==============
 @Component({
@@ -70,6 +87,8 @@ export class AppComponent {
   isNavigatingAway: boolean = false;
   Version: string = '';
   showUpdateModal: boolean = false;
+  isUpdateMandatory: boolean = false;
+  autoUpdateDismissed: boolean = false;
   installedVersion: string = '';
   latestVersion: string = '';
   isUpdating: boolean = false;
@@ -158,6 +177,12 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.platform.backButton.subscribeWithPriority(10, async () => {
         if (this.isExitAlertOpen) {
+          return;
+        }
+
+        // If mandatory update is active, prevent back navigation and prompt to exit app
+        if (this.showUpdateModal || this.isUpdateMandatory) {
+          this.showExitConfirmAlert();
           return;
         }
 
@@ -295,6 +320,7 @@ export class AppComponent {
   }
 
   navigateFromMenu(path: string) {
+    if (this.showUpdateModal || this.isUpdateMandatory) return;
     if (!path) return;
     const currentUrl = (this.router.url || '').split(';')[0].split('?')[0];
     this.urlBeforeSideMenu = currentUrl || '/home';
@@ -492,14 +518,37 @@ export class AppComponent {
         }
       }
 
+      // Listen for In-App update results (e.g. user cancelled, closed or missed Google Play prompt)
+      try {
+        if (AppUpdatePlugin && typeof (AppUpdatePlugin as any).addListener === 'function') {
+          (AppUpdatePlugin as any).addListener('onUpdateResult', (data: any) => {
+            console.log('AppUpdatePlugin -> onUpdateResult received:', data);
+            if (data && (data.status === 'UPDATE_CANCELED' || data.status === 'UPDATE_FAILED' || data.status === 'UPDATE_NOT_COMPLETED')) {
+              this.handleUpdateDismissed();
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('Could not attach AppUpdatePlugin listener:', e);
+      }
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('appUpdateResult', (event: any) => {
+          console.log('window -> appUpdateResult received:', event?.detail);
+          const detail = event?.detail;
+          if (detail && (detail.status === 'UPDATE_CANCELED' || detail.status === 'UPDATE_FAILED' || detail.status === 'UPDATE_NOT_COMPLETED')) {
+            this.handleUpdateDismissed();
+          }
+        });
+      }
+
       // Check app version and check for updates
       this.getAppVersion();
 
       // Listen for app resuming from background (e.g. after Google Play Store update)
       try {
         App.addListener('appStateChange', async (state: any) => {
-          if (state && state.isActive && this.isUpdating) {
-            this.isUpdating = false;
+          if (state && state.isActive && (this.isUpdating || this.showUpdateModal || this.isUpdateMandatory)) {
             await this.verifyUpdatedVersion();
           }
         });
@@ -509,12 +558,23 @@ export class AppComponent {
 
       if (typeof document !== 'undefined') {
         document.addEventListener('visibilitychange', async () => {
-          if (!document.hidden && this.isUpdating) {
-            this.isUpdating = false;
+          if (!document.hidden && (this.isUpdating || this.showUpdateModal || this.isUpdateMandatory)) {
             await this.verifyUpdatedVersion();
           }
         });
       }
+    });
+  }
+
+  handleUpdateDismissed() {
+    this.ngZone.run(() => {
+      console.log('AppUpdate -> Automatic update was cancelled or dismissed. Showing manual update screen.');
+      this.autoUpdateDismissed = true;
+      this.isUpdateMandatory = true;
+      this.showSplashScreen = false;
+      this.showUpdateModal = true;
+      this.menu.enable(false, 'end');
+      this.cdr.detectChanges();
     });
   }
 
@@ -654,7 +714,61 @@ export class AppComponent {
     return 0;
   }
 
-  getAppVersion() {
+  async checkGooglePlayAutoUpdate(): Promise<boolean> {
+    if (this.autoUpdateDismissed) {
+      console.log('AppUpdate -> Automatic update was previously dismissed in this session. Skipping auto-update.');
+      return false;
+    }
+    if (!this.platform.is('capacitor') || !this.platform.is('android')) {
+      return false;
+    }
+    try {
+      const result = await AppUpdatePlugin.checkAndStartUpdate();
+      console.log('AppUpdate -> Google Play In-App Update result:', result);
+      if (result && (result.status === 'IN_APP_UPDATE_STARTED' || result.status === 'IN_APP_UPDATE_RESUMED')) {
+        console.log('AppUpdate -> Google Play automatic in-app update initiated successfully.');
+        return true;
+      }
+    } catch (err) {
+      console.warn('AppUpdate -> Google Play In-App Update check error / not supported:', err);
+    }
+    return false;
+  }
+
+  async getAppVersion() {
+    try {
+      // 1. Fetch latest version info from API (so latestVersion & release notes are loaded)
+      this.fetchAppVersionFromApi();
+
+      // If user has already dismissed automatic update, do not show it again during this session!
+      if (this.autoUpdateDismissed) {
+        return;
+      }
+
+      // 2. Check Google Play In-App Automatic Update first on Android
+      if (this.platform.is('capacitor') || this.platform.is('android')) {
+        const autoUpdateStarted = await this.checkGooglePlayAutoUpdate();
+        if (autoUpdateStarted) {
+          // Automatic update is being handled natively by Google Play.
+          // Keep manual update screen active underneath so if user cancels,
+          // skips, misses or closes the Google Play prompt, access to the app remains blocked
+          // and the Manual Update option is shown instead.
+          this.ngZone.run(() => {
+            this.isUpdateMandatory = true;
+            this.showSplashScreen = false;
+            this.showUpdateModal = true;
+            this.menu.enable(false, 'end');
+            this.cdr.detectChanges();
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Google Play auto update check bypassed:', e);
+    }
+  }
+
+  fetchAppVersionFromApi() {
     try {
       var url = "api/BG/BG_APPVersion";
       this.general.GetData(url).subscribe(async (data: any) => {
@@ -723,10 +837,16 @@ export class AppComponent {
             const cmp = this.compareVersions(this.installedVersion, this.latestVersion);
             console.log('AppUpdate -> compareVersions result (negative means update available):', cmp);
             if (cmp < 0) {
+              this.isUpdateMandatory = true;
               this.showUpdateModal = true;
               this.showSplashScreen = false;
+              this.menu.enable(false, 'end');
             } else {
-              this.showUpdateModal = false;
+              // If automatic update was NOT triggered by Google Play, allow normal app access
+              if (!this.isUpdateMandatory) {
+                this.showUpdateModal = false;
+                this.menu.enable(true, 'end');
+              }
             }
           }
           this.cdr.detectChanges();
@@ -746,9 +866,17 @@ export class AppComponent {
         this.installedVersion = this.cleanVersionString(info.version);
         if (this.latestVersion && this.compareVersions(this.installedVersion, this.latestVersion) >= 0) {
           this.ngZone.run(() => {
+            this.isUpdateMandatory = false;
+            this.autoUpdateDismissed = false;
             this.showUpdateModal = false;
+            this.menu.enable(true, 'end');
             this.cdr.detectChanges();
           });
+          try {
+            if (AppUpdatePlugin && typeof (AppUpdatePlugin as any).resetAutoUpdateDismissed === 'function') {
+              (AppUpdatePlugin as any).resetAutoUpdateDismissed();
+            }
+          } catch (e) { }
           window.location.reload();
           return;
         }
@@ -756,10 +884,24 @@ export class AppComponent {
     } catch (e) {
       console.warn('Error verifying updated version:', e);
     }
+
+    // If update is mandatory or auto update was already dismissed:
+    // Keep user on the Mandatory Manual Update card!
+    // Never re-trigger automatic update prompt!
+    if (this.isUpdateMandatory || this.autoUpdateDismissed) {
+      this.ngZone.run(() => {
+        this.showUpdateModal = true;
+        this.showSplashScreen = false;
+        this.menu.enable(false, 'end');
+        this.cdr.detectChanges();
+      });
+      return;
+    }
+
     this.getAppVersion();
   }
 
-  openPlayStore() {
+  async openPlayStore() {
     this.isUpdating = true;
     const packageName = 'com.gg.Bloodgroup';
     const marketUrl = `market://details?id=${packageName}`;

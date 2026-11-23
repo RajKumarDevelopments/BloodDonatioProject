@@ -14,6 +14,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         registerPlugin(SmsReceiverPlugin.class);
+        registerPlugin(AppUpdatePlugin.class);
         super.onCreate(savedInstanceState);
         checkInstallReferrer();
     }
@@ -91,6 +92,23 @@ public class MainActivity extends BridgeActivity {
             }
         } catch (Exception e) {
             Log.e(TAG, "Error handling referrer", e);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppUpdatePlugin.UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.d(TAG, "Google Play In-App Update cancelled or closed in MainActivity: resultCode=" + resultCode);
+                runOnUiThread(() -> {
+                    if (getBridge() != null && getBridge().getWebView() != null) {
+                        String js = "try { window.dispatchEvent(new CustomEvent('appUpdateResult', { detail: { status: 'UPDATE_CANCELED', resultCode: "
+                                + resultCode + " } })); } catch(e) {}";
+                        getBridge().getWebView().evaluateJavascript(js, null);
+                    }
+                });
+            }
         }
     }
 }

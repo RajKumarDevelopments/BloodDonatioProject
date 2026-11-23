@@ -354,6 +354,8 @@ export class FinalreviewPage implements OnInit {
     this.arr2 = [];
     this.arr2.push({
       FullName: this.UserDetails[0].FullName,
+      MiddleName: this.UserDetails[0].MiddleName,
+      SurName: this.UserDetails[0].SurName,
       Email: this.UserDetails[0].Email,
       Dateofservice: this.MyDonateddate,
     });
