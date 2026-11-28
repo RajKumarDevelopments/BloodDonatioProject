@@ -148,9 +148,32 @@ ion-item {
     font-weight: 700;
     text-transform: uppercase;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     &:active {
       opacity: 0.8;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-content {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-spinner {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+      --color: #fff;
     }
   }
 }
@@ -288,4 +311,187 @@ ion-item {
     display: flex;
     justify-content: center;
   }
+}
+
+// =========================================================================
+// Animated Blood-Drop Loader Overlay & Backdrop (Modern Floating Design)
+// =========================================================================
+.blood-loader-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  animation: fadeInBackdrop 0.25s ease-out forwards;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.blood-loader-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: scaleInCenter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleInCenter {
+  from {
+    transform: scale(0.88);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.blood-drop-animation-container {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+// Concentric Ripple Wave Rings
+.pulse-ring {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 60, 80, 0.45);
+  pointer-events: none;
+
+  &.ring-1 {
+    animation: rippleExpand 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  }
+  &.ring-2 {
+    animation: rippleExpand 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite 0.7s;
+  }
+  &.ring-3 {
+    animation: rippleExpand 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite 1.4s;
+  }
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}
+
+// Orbiting Ring
+.orbit-glow-ring {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  animation: orbitRotate 8s linear infinite;
+}
+
+@keyframes orbitRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Blood Drop Symbol & Heartbeat Pulse
+.blood-drop-symbol {
+  width: 65px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  animation: heartbeatPulse 1.8s ease-in-out infinite;
+
+  .blood-drop-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .vital-heartbeat {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: ecgStroke 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes heartbeatPulse {
+  0% { transform: scale(1); }
+  12% { transform: scale(1.14); }
+  24% { transform: scale(0.98); }
+  36% { transform: scale(1.08); }
+  50% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ecgStroke {
+  0% { stroke-dashoffset: 60; opacity: 0; }
+  15% { opacity: 1; }
+  60% { stroke-dashoffset: 0; opacity: 1; }
+  85% { stroke-dashoffset: 0; opacity: 0.4; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.loader-status-text {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+
+  .animated-dots {
+    display: inline-block;
+    width: 18px;
+    text-align: left;
+    animation: dotsCycle 1.5s infinite steps(4, jump-none);
+  }
+}
+
+.loader-instruction-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.2px;
+  text-align: center;
+  max-width: 290px;
+  margin-top: 10px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  padding: 0 12px;
+}
+
+@keyframes dotsCycle {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
 }

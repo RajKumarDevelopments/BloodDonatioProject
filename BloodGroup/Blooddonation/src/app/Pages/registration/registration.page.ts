@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, LoadingController, ActionSheetController, ModalController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
@@ -20,7 +20,27 @@ declare var google: any;
   templateUrl: './registration.page.html',
   styleUrls: ['./registration.page.scss'],
 })
-export class RegistrationPage {
+export class RegistrationPage implements OnInit, OnDestroy {
+  private backButtonSubscription?: any;
+
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: PopStateEvent) {
+    if (this.isSubmitting) {
+      try {
+        window.history.pushState({ isRegistering: true }, '', window.location.href);
+      } catch (e) {}
+      this.general.presentToast('Registration in progress. Please wait.');
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent) {
+    if (this.isSubmitting) {
+      event.preventDefault();
+      event.returnValue = 'Registration in progress. Please wait.';
+      return event.returnValue;
+    }
+  }
   activePicker: 'dob' | 'gender' | 'blood' | 'lastDonation' | null = null;
   maxDate: string = new Date().toISOString();
   maxDOB: string = '';
@@ -166,7 +186,8 @@ export class RegistrationPage {
     public navCtrl: NavController,
     public activeRoute: ActivatedRoute,
     public http: HttpClient,
-    private locationAccuracy: LocationAccuracy
+    private locationAccuracy: LocationAccuracy,
+    private platform: Platform
   ) {
     this.registrationForm = this.formBuilder.group({
       firstName: ['', [Validators.maxLength(50), Validators.minLength(3), Validators.required, Validators.pattern(/^[a-zA-Z]+$/), this.restrictedNameValidator]],
@@ -218,12 +239,29 @@ export class RegistrationPage {
   }
 
   ngOnInit() {
+    this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(99999, (processNextHandler) => {
+      if (this.isSubmitting) {
+        this.general.presentToast('Registration in progress. Please wait.');
+        return;
+      }
+      if (processNextHandler) {
+        processNextHandler();
+      }
+    });
     // Only fetch location if not already fetched
     if (!this.Pincode) {
       this.GetCurrentLocation(false);
     }
     this.GetBloodGroups();
     this.GetStates();
+  }
+
+  ngOnDestroy() {
+    if (this.backButtonSubscription) {
+      try {
+        this.backButtonSubscription.unsubscribe();
+      } catch (e) {}
+    }
   }
 
   async GetCurrentLocation(forceOverwrite: boolean = false) {
@@ -776,6 +814,9 @@ export class RegistrationPage {
   }
 
   UserRegistration() {
+    if (this.isSubmitting) {
+      return;
+    }
     if (!this.LastDonationDate || this.LastDonationDate === '') {
       this.general.presentToast('Please select Last Donation Date.');
       return;
@@ -801,6 +842,10 @@ export class RegistrationPage {
 
     if (this.registrationForm.valid && this.selectedState && this.selectedDistrict && this.selectedCity && this.Area && this.Pincode) {
       if (this.Age >= 18) {
+        this.isSubmitting = true;
+        try {
+          window.history.pushState({ isRegistering: true }, '', window.location.href);
+        } catch (e) {}
         var obj = [{
           RegId: this.UserDetails[0].RegId,
           Email: this.UserDetails[0].Email,
@@ -834,19 +879,17 @@ export class RegistrationPage {
         UploadFile.append("Param", JSON.stringify(obj));
         UploadFile.append("Flag", "2");
         var url = "api/BG/Insert_Update_DonersForm";
-        this.isSubmitting = true;
-        this.general.present('Registering your account, please wait...');
         this.general.PostData(url, UploadFile).subscribe((data: any) => {
           if (data == "SUCCESS") {
             let uploadFile = new FormData();
             uploadFile.append("Mobile", this.Mobile);
             var url2 = 'api/BG/checking_Mobile';
             this.general.PostData(url2, uploadFile).subscribe((result: any) => {
-              this.isSubmitting = false;
-              this.general.dismiss();
               if (result != "NOTEXIST") {
                 localStorage.setItem("UserDetails", JSON.stringify(result));
                 const completeRegistration = () => {
+                  this.isSubmitting = false;
+                  try { this.general.dismiss(); } catch (e) {}
                   this.general.presentAlert("SUCCESS", "Your registration has been completed successfully.");
                   window.location.reload();
                   this.navCtrl.navigateForward(['/home']);
@@ -900,20 +943,24 @@ export class RegistrationPage {
                     completeRegistration();
                   });
                 }
+              } else {
+                this.isSubmitting = false;
+                try { this.general.dismiss(); } catch (e) {}
+                this.general.presentToast('Something went wrong. Please try again later.');
               }
             }, (err: any) => {
               this.isSubmitting = false;
-              this.general.dismiss();
+              try { this.general.dismiss(); } catch (e) {}
               this.general.presentToast('Something went wrong. Please try again later.');
             });
           } else {
             this.isSubmitting = false;
-            this.general.dismiss();
+            try { this.general.dismiss(); } catch (e) {}
             this.general.presentToast('Something went wrong. Please try again later.');
           }
         }, (err: any) => {
           this.isSubmitting = false;
-          this.general.dismiss();
+          try { this.general.dismiss(); } catch (e) {}
           this.general.presentToast('Something went wrong. Please try again later.');
         });
       } else {

@@ -148,7 +148,13 @@
 
     <!-- Save Button inside ion-content to fix overlay layering -->
     <div class="items_button" *ngIf="DonorFlag != 1">
-      <button type="button" [disabled]="isSubmitting" (click)="UserRegistration()">Register</button>
+      <button type="button" [disabled]="isSubmitting" (click)="UserRegistration()">
+        <span class="btn-content">
+          <ion-spinner *ngIf="isSubmitting" name="crescent" class="btn-spinner"></ion-spinner>
+          <span *ngIf="!isSubmitting">Register</span>
+          <span *ngIf="isSubmitting">Registering...</span>
+        </span>
+      </button>
     </div>
 
     <div style="height: 30px;"></div>
@@ -299,4 +305,68 @@
         style="opacity: {{ leaderTermsAccepted ? '1' : '0.5' }};">ACCEPT</button>
     </div>
   </ion-footer>
+</div>
+
+<!-- ========================================================================= -->
+<!-- Clean Animated Blood-Drop Loader Overlay (Modern Floating Animation)       -->
+<!-- ========================================================================= -->
+<div class="blood-loader-backdrop" *ngIf="isSubmitting">
+  <div class="blood-loader-center">
+    <div class="blood-drop-animation-container">
+      <!-- Concentric Ripple Waves -->
+      <div class="pulse-ring ring-1"></div>
+      <div class="pulse-ring ring-2"></div>
+      <div class="pulse-ring ring-3"></div>
+
+      <!-- Rotating Orbit Ring -->
+      <div class="orbit-glow-ring"></div>
+
+      <!-- Animated Pulsing Blood Drop SVG -->
+      <div class="blood-drop-symbol">
+        <svg class="blood-drop-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bloodGradient" x1="0%" y1="0%" x2="80%" y2="100%">
+              <stop offset="0%" stop-color="#ff334b" />
+              <stop offset="45%" stop-color="#e60012" />
+              <stop offset="100%" stop-color="#800000" />
+            </linearGradient>
+            <radialGradient id="specularGleam" cx="35%" cy="30%" r="35%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+              <stop offset="40%" stop-color="#ffffff" stop-opacity="0.3" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <filter id="bloodGlowFilter" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#ff1a35" flood-opacity="0.65" />
+            </filter>
+          </defs>
+
+          <!-- Blood Drop Base with Glow -->
+          <path d="M50 6 C50 6, 14 58, 14 82 A36 36 0 0 0 86 82 C86 58, 50 6, 50 6 Z"
+                fill="url(#bloodGradient)"
+                filter="url(#bloodGlowFilter)" />
+
+          <!-- Specular Light Reflection -->
+          <path d="M38 34 C30 46, 22 62, 23 74 A22 22 0 0 1 22 56 C22 44, 38 34, 38 34 Z"
+                fill="url(#specularGleam)" />
+
+          <!-- Inner Heartbeat / Vital Line -->
+          <path class="vital-heartbeat"
+                d="M30 80 L40 80 L44 68 L50 92 L56 74 L60 80 L70 80"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Minimal Modern Status Indicator -->
+    <div class="loader-status-text">
+      <span>Registering Your Account</span><span class="animated-dots">...</span>
+    </div>
+    <div class="loader-instruction-text">
+      Please wait. Do not press the Back button or close the app until registration is completed.
+    </div>
+  </div>
 </div>
